@@ -1,4 +1,4 @@
-export interface ProductSummaryDTO {
+export interface ProductSummary {
 	productID: number;
 	name: string;
 	imgUrl: string;

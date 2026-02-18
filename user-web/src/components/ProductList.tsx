@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import ProductCart from './ProductCard';
-import { ProductSummaryDTO } from '@shared/models';
+import { ProductSummary } from '@/types/product-summary';
 
-const list: ProductSummaryDTO[] = [
+const list: ProductSummary[] = [
 	{
 		productID: 1,
 		name: 'Orange',
@@ -81,7 +81,7 @@ export default function ProductList(): JSX.Element {
 	return (
 		<div className='gap-6 grid grid-cols-2 sm:grid-cols-4 pt-6'>
 			{list.map(
-				(item: ProductSummaryDTO): JSX.Element => (
+				(item: ProductSummary): JSX.Element => (
 					<ProductCart
 						product={item}
 						key={item.productID}

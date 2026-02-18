@@ -2,11 +2,7 @@ import { JSX } from 'react';
 import Footer from '../../components/layout/Footer';
 import Header from '../../components/layout/Header';
 
-export default function AppLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}): JSX.Element {
+export default function AppLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
 		<div className='min-h-screen flex flex-col'>
 			<Header />
