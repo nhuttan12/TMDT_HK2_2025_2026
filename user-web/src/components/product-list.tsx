@@ -1,6 +1,6 @@
 import { JSX } from 'react';
-import ProductCart from './ProductCard';
-import { ProductSummary } from '@/types/product-summary';
+import ProductCart from './product-card';
+import { ProductSummary } from '@/types/products/ProductSummary';
 
 const list: ProductSummary[] = [
 	{
@@ -79,15 +79,19 @@ const list: ProductSummary[] = [
 
 export default function ProductList(): JSX.Element {
 	return (
-		<div className='gap-6 grid grid-cols-2 sm:grid-cols-4 pt-6'>
-			{list.map(
-				(item: ProductSummary): JSX.Element => (
-					<ProductCart
-						product={item}
-						key={item.productID}
-					/>
-				),
-			)}
-		</div>
+		<section className='mt-3'>
+			<div className='max-w-7xl mx-auto px-4'>
+				<div className='bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-6'>
+					<div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6'>
+						{list.map((item: ProductSummary) => (
+							<ProductCart
+								product={item}
+								key={item.productID}
+							/>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
 	);
 }

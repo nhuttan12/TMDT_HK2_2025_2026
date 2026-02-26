@@ -8,7 +8,7 @@ interface ReadMoreProps {
 	maxLines?: number;
 }
 
-export default function ReadMoreHTML({ html, maxLines = 3 }: ReadMoreProps): JSX.Element {
+export default function ReadMoreHtml({ html, maxLines = 3 }: ReadMoreProps): JSX.Element {
 	const [expanded, setExpanded] = useState(false);
 	const [isOverflowing, setIsOverflowing] = useState(false);
 	const contentRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);

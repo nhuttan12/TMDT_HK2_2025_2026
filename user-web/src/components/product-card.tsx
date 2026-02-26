@@ -1,11 +1,11 @@
 'use client';
 
-import { JSX } from 'react';
+import { JSX, useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ProductSummary } from '@/types/product-summary';
+import { ProductSummary } from '@/types/products/ProductSummary';
 
 interface ProductCardProps {
 	product: ProductSummary;
@@ -15,6 +15,8 @@ interface ProductCardProps {
 export default function ProductCard({ product, elementWidth }: ProductCardProps): JSX.Element {
 	const router = useRouter();
 
+	const [isWishlisted, setIsWishlisted] = useState(product.isInWishlist);
+
 	const hasDiscount: boolean = product.discount > 0;
 	const newPrice: number = hasDiscount
 		? product.price * (1 - product.discount / 100)
@@ -23,7 +25,7 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 	return (
 		<Card
 			onClick={() => router.push(`/products/${product.productID}`)}
-			className='relative cursor-pointer hover:shadow-md transition-shadow flex-shrink-0'
+			className='relative cursor-pointer hover:shadow-md transition-shadow shrink-0'
 			style={{ width: elementWidth ? `${elementWidth}px` : undefined }}
 		>
 			{/* Wishlist button */}
@@ -31,12 +33,18 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 				variant='ghost'
 				size='icon'
 				className='absolute top-2 right-2 z-20 bg-white/80 backdrop-blur'
-				onClick={(e) => {
+				onClick={async (e) => {
 					e.stopPropagation();
-					console.log('wishlist');
+					setIsWishlisted((prev) => !prev);
+
+					try {
+						// await toggleWishlistAPI(product.productID);
+					} catch (err) {
+						setIsWishlisted((prev) => !prev); // rollback nếu lỗi
+					}
 				}}
 			>
-				{product.isInWishlist ? (
+				{isWishlisted ? (
 					<Star
 						size={20}
 						fill='#dfe519'

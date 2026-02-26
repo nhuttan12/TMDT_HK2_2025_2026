@@ -1,4 +1,4 @@
-import { ShopReply } from '@/types/shop-reply';
+import { ShopReply } from '@/types/products/ShopReply';
 
 export interface CommentModel {
 	id: string;

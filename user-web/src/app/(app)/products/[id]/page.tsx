@@ -1,28 +1,58 @@
+import { CommentModel } from '@/types/products/CommentModel';
+import { ProductDetail } from '@/types/products/ProductDetail';
+import { ProductSummary } from '@/types/products/ProductSummary';
 import { JSX } from 'react';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Minus, Plus, ShieldCheck, Star, Truck } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import ProductCard from '@/components/ProductCard';
-import { ProductSummary } from '@/types/product-summary';
-import Rating from '@/components/Rating';
-import CommentItem from '@/components/CommentItem';
-import { CommentModel } from '@/types/comment-model';
-import { CarouselSize } from '@/components/CarouselSize';
-import ReadMoreHTML from '@/components/ReadMoreHTML';
+import ProductDetailClient from './product-detail-client';
+import notFound from '@/app/not-found';
 
 interface Props {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }
+
+/**
+ * SEO Metadata
+ */
+// export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// 	const product = await getProductById(params.id);
+
+// 	if (!product) {
+// 		return {
+// 			title: 'Sản phẩm không tồn tại',
+// 		};
+// 	}
+
+// 	return {
+// 		title: product.name,
+// 		description: product.description,
+// 		openGraph: {
+// 			title: product.name,
+// 			description: product.description,
+// 			images: [product.imageUrl],
+// 		},
+// 	};
+// }
 
 export default async function ProductListPage({ params }: Props): Promise<JSX.Element> {
 	const { id } = await params;
-	const mockProduct = {
-		id,
+
+	const numericID: number = Number(id);
+
+	if (!Number.isFinite(numericID)) {
+		notFound();
+	}
+
+	// TODO: Call API
+	// TODO: const product = await getProductById(id);
+
+	const mockProduct: ProductDetail = {
+		productID: numericID,
 		name: 'Khoai Tây Hồng VietGAP 500G (Túi)',
 		brand: 'Trường Phát',
 		price: 33000,
-		image: 'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
+		imageUrl:
+			'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
+		rating: 4.5,
+		discount: 0.5,
 		description:
 			'<p>\n' +
 			'  Khô mực Song Phương là sản phẩm hải sản khô chất lượng cao, được tuyển chọn từ\n' +
@@ -122,7 +152,6 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			'<p>\n' +
 			'  Tư vấn viên của Farmers Market rất vinh hạnh được giải đáp mọi thắc mắc của Quý Khách.\n' +
 			'</p>\n',
-		rating: 4.5,
 	};
 
 	const relatedProducts: ProductSummary[] = [
@@ -269,154 +298,10 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 	];
 
 	return (
-		<div className='w-full px-10 py-10'>
-			<div className='grid grid-cols-1 lg:grid-cols-5 gap-10'>
-				{/* LEFT SIDE */}
-				<div className='flex flex-col gap-10 lg:col-span-3'>
-					{/* IMAGE */}
-					<div className='relative w-full h-125 rounded-2xl overflow-hidden bg-muted'>
-						<Image
-							src={mockProduct.image}
-							alt={mockProduct.name}
-							fill
-							className='object-cover'
-							priority
-						/>
-					</div>
-
-					{/* RELATED PRODUCTS */}
-					<div>
-						<h2 className='text-2xl font-semibold pb-6'>Sản phẩm liên quan</h2>
-
-						<CarouselSize products={relatedProducts} />
-					</div>
-
-					{/* PRODUCT DESCRIPTION */}
-					<div>
-						<h1 className='font-bold text-2xl! pb-4'>
-							<strong>Mô tả sản phẩm</strong>
-						</h1>
-
-						{/*<div*/}
-						{/*	className='prose max-w-none'*/}
-						{/*	dangerouslySetInnerHTML={{*/}
-						{/*		__html: mockProduct.description,*/}
-						{/*	}}*/}
-						{/*/>*/}
-						<ReadMoreHTML
-							html={mockProduct.description}
-							maxLines={10}
-						/>
-					</div>
-
-					{/* PRODUCT RATING */}
-					<div>
-						<h1 className='font-bold text-2xl! pb-4'>
-							<strong>Đánh giá sản phẩm</strong>
-						</h1>
-
-						<Rating rating={mockProduct.rating} />
-					</div>
-
-					{/*COMMENT*/}
-					<div>
-						{mockComments.map(
-							(comment: CommentModel): JSX.Element => (
-								<CommentItem
-									comment={comment}
-									key={comment.id}
-								/>
-							),
-						)}
-					</div>
-				</div>
-
-				{/* RIGHT - INFO */}
-				<div className='flex flex-col space-y-6 lg:col-span-2'>
-					{/* Brand */}
-					<div className='text-sm text-muted-foreground'>
-						Thương hiệu:{' '}
-						<span className='font-medium text-black'>{mockProduct.brand}</span>
-					</div>
-
-					{/* Title */}
-					<h1 className='text-3xl font-semibold leading-tight'>{mockProduct.name}</h1>
-
-					{/* SKU */}
-					<div className='text-sm text-muted-foreground'>
-						Mã sản phẩm: <span className='font-medium'>{mockProduct.id}</span>
-					</div>
-
-					{/* Price */}
-					<div className='text-3xl font-bold text-red-600'>
-						{mockProduct.price.toLocaleString()}đ
-					</div>
-
-					{/* Quantity */}
-					<div className='flex items-center gap-4'>
-						<div className='flex items-center border rounded-full overflow-hidden'>
-							<Button
-								variant='ghost'
-								size='icon'
-								className='rounded-none cursor-pointer'
-							>
-								<Minus size={16} />
-							</Button>
-
-							<span className='px-6 font-medium'>1</span>
-
-							<Button
-								variant='ghost'
-								size='icon'
-								className='rounded-none cursor-pointer'
-							>
-								<Plus size={16} />
-							</Button>
-						</div>
-					</div>
-
-					{/* Actions */}
-					<div className='flex flex-col gap-4'>
-						<div className='rounded-full border! border-orange-500!'>
-							<Button
-								variant='outline'
-								className='w-full rounded-full border-0 text-orange-600 hover:bg-orange-500 hover:text-white cursor-pointer'
-							>
-								THÊM VÀO GIỎ
-							</Button>
-						</div>
-
-						<Button className='rounded-full bg-orange-500 hover:bg-orange-600 cursor-pointer'>
-							MUA NGAY
-						</Button>
-					</div>
-
-					<Separator />
-
-					{/* Policy */}
-					<div className='grid gap-4 text-sm text-muted-foreground sm:grid-cols-2'>
-						<div className='flex items-center gap-2'>
-							<Truck size={18} />
-							Giao hàng nội thành 4 giờ
-						</div>
-
-						<div className='flex items-center gap-2'>
-							<Truck size={18} />
-							Giao hàng toàn quốc
-						</div>
-
-						<div className='flex items-center gap-2'>
-							<ShieldCheck size={18} />
-							Kiểm tra khi nhận hàng
-						</div>
-
-						<div className='flex items-center gap-2'>
-							<ShieldCheck size={18} />
-							Đổi trả trong 48 giờ
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<ProductDetailClient
+			product={mockProduct}
+			relatedProducts={relatedProducts}
+			comments={mockComments}
+		/>
 	);
 }

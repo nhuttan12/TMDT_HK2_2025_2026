@@ -1,13 +1,12 @@
 'use client';
 
+import { ListOrdered, LogOut, Search, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode } from 'react';
-import { Search, User, ListOrdered, LogOut } from 'lucide-react';
+import { JSX, ReactNode } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,12 +16,12 @@ import {
 import {
 	NavigationMenu,
 	NavigationMenuItem,
-	NavigationMenuList,
 	NavigationMenuLink,
+	NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 
-import { cn } from '@/lib/utils';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import { cn } from '@/lib/utils';
 
 /* ---------- Logo ---------- */
 
@@ -71,8 +70,14 @@ const profileElements: RedirectElement[] = [
 	{
 		key: 'orders',
 		label: 'Đơn mua',
-		href: '/orders',
+		href: '/profile/invoices',
 		icon: <ListOrdered className='h-4 w-4' />,
+	},
+	{
+		key: 'cart',
+		label: 'Giỏ hàng',
+		href: '/carts',
+		icon: <ShoppingCart className='h-4 w-4' />,
 	},
 	{
 		key: 'logout',
@@ -98,7 +103,7 @@ export default function Header() {
 						className='flex items-center gap-2'
 					>
 						<AcmeLogo />
-						<span className='hidden sm:block font-bold'>ACME</span>
+						<span className='hidden text-xl sm:block font-bold'>ACME</span>
 					</Link>
 
 					<NavigationMenu className='hidden sm:flex'>
@@ -111,7 +116,7 @@ export default function Header() {
 										<NavigationMenuLink
 											asChild
 											className={cn(
-												'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+												'rounded-md px-3 py-2 text-base font-medium transition-colors',
 												isActive
 													? 'bg-slate-100 text-black'
 													: 'text-slate-600 hover:text-black',
@@ -151,15 +156,17 @@ export default function Header() {
 							align='end'
 							className='w-48'
 						>
-							{profileElements.map((item) => (
-								<DropdownMenuItem
-									key={item.key}
-									onClick={() => router.push(item.href)}
-									className='flex items-center justify-between'
-								>
-									{item.label}
-									{item.icon}
-								</DropdownMenuItem>
+							{profileElements.map((item: RedirectElement): JSX.Element => (
+								<Link href={item.href} key={item.key}>
+									<DropdownMenuItem
+										key={item.key}
+										onClick={() => router.push(item.href)}
+										className='flex items-center justify-between'
+									>
+										{item.label}
+										{item.icon}
+									</DropdownMenuItem>
+								</Link>
 							))}
 						</DropdownMenuContent>
 					</DropdownMenu>

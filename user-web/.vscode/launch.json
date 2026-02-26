@@ -5,13 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Bun: Server-side",
+            "name": "Dev: Bun (No Debug)",
             "type": "node-terminal",
             "request": "launch",
             "command": "bun dev"
         },
         {
-            "name": "Brave: Client-side",
+            "name": "Debug: Bun Server",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "bun",
+            "runtimeArgs": [
+                "--inspect",
+                "dev"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug: Brave Client",
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:3000",
@@ -21,10 +32,10 @@
     ],
     "compounds": [
         {
-            "name": "Next.js Full Stack (Bun + Brave)",
+            "name": "Full Debug (Server + Client)",
             "configurations": [
-                "Bun: Server-side",
-                "Brave: Client-side"
+                "Debug: Bun Server",
+                "Debug: Brave Client"
             ]
         }
     ]
