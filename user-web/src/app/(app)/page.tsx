@@ -1,6 +1,6 @@
-import ProductList from '../../components/product-list';
+import ProductList from '../../components/user/product-list';
 import { JSX } from 'react';
-import HomeBannerCarousel from '@/components/home-banner-carousel';
+import HomeBannerCarousel from '@/components/user/home-banner-carousel';
 import { HomeBanner } from '@/types/uis/HomeBanner';
 import Link from 'next/link';
 
@@ -39,7 +39,7 @@ export default function Index(): JSX.Element {
 	return (
 		<>
 			{/* HERO BANNER */}
-			<div className='w-full'>
+			<div className='w-full mt-10 rounded-2xl drop-shadow-lg'>
 				<HomeBannerCarousel banners={homeBanners} />
 			</div>
 

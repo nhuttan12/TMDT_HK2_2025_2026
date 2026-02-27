@@ -1,9 +1,9 @@
 'use client';
 
-import { CarouselSize } from '@/components/carousel-size';
-import CommentItem from '@/components/comment-item';
-import Rating from '@/components/rating';
-import ReadMoreHtml from '@/components/read-more-html';
+import { CarouselSize } from '@/components/user/carousel-size';
+import CommentItem from '@/components/user/comment-item';
+import Rating from '@/components/user/rating';
+import ReadMoreHtml from '@/components/user/read-more-html';
 import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/stores/cart.store';
 import { useCheckoutStore } from '@/stores/checkout.store';
@@ -15,7 +15,8 @@ import { Separator } from '@radix-ui/react-separator';
 import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { JSX } from 'react';
+import { JSX, useState } from 'react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface Props {
 	product: ProductDetail;
@@ -23,10 +24,24 @@ interface Props {
 	comments: CommentModel[];
 }
 
-export default function ProductDetailClient({ product, relatedProducts, comments }: Props): JSX.Element {
-	const addItem = useCartStore((state) => state.addItem);
+export default function ProductDetailClient({
+	product,
+	relatedProducts,
+	comments,
+}: Props): JSX.Element {
+	const [quantity, setQuantity] = useState(1);
+	const router: AppRouterInstance = useRouter();
+
+	const addItem = useCartStore((state) => state.addToCart);
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems);
-	const router = useRouter();
+
+	const increaseQuantity = () => {
+		setQuantity((prev) => prev + 1);
+	};
+
+	const decreaseQuantity = () => {
+		setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+	};
 
 	const handleAddToCart = () => {
 		addItem({
@@ -34,7 +49,7 @@ export default function ProductDetailClient({ product, relatedProducts, comments
 			name: product.name,
 			price: product.price,
 			imageUrl: product.imageUrl,
-			quantity: 1,
+			quantity: quantity,
 		});
 	};
 
@@ -44,7 +59,7 @@ export default function ProductDetailClient({ product, relatedProducts, comments
 			name: product.name,
 			price: product.price,
 			imageUrl: product.imageUrl,
-			quantity: 1,
+			quantity: quantity,
 		};
 
 		setCheckoutItems([item]);
@@ -54,7 +69,7 @@ export default function ProductDetailClient({ product, relatedProducts, comments
 	};
 
 	return (
-		<div className='w-full px-10 py-10'>
+		<div className='bg-white w-full px-10 py-10 mt-10 rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.06)]'>
 			<div className='grid grid-cols-1 lg:grid-cols-5 gap-10'>
 				{/* LEFT SIDE */}
 				<div className='flex flex-col gap-10 lg:col-span-3'>
@@ -113,12 +128,14 @@ export default function ProductDetailClient({ product, relatedProducts, comments
 				{/* RIGHT - INFO */}
 				<div className='flex flex-col space-y-6 lg:col-span-2'>
 					{/* Brand */}
-					<div className='text-sm text-muted-foreground'>
+					<div className='text-md text-muted-foreground'>
 						Thương hiệu: <span className='font-medium text-black'>{product.brand}</span>
 					</div>
 
 					{/* Title */}
-					<h1 className='text-3xl font-semibold leading-tight'>{product.name}</h1>
+					<h3 className='text-2xl font-semibold leading-tight'>
+						{product.name}
+					</h3>
 
 					{/* SKU */}
 					<div className='text-sm text-muted-foreground'>
@@ -137,16 +154,18 @@ export default function ProductDetailClient({ product, relatedProducts, comments
 								variant='ghost'
 								size='icon'
 								className='rounded-none cursor-pointer'
+								onClick={decreaseQuantity}
 							>
 								<Minus size={16} />
 							</Button>
 
-							<span className='px-6 font-medium'>1</span>
+							<span className='px-6 font-medium'>{quantity}</span>
 
 							<Button
 								variant='ghost'
 								size='icon'
 								className='rounded-none cursor-pointer'
+								onClick={increaseQuantity}
 							>
 								<Plus size={16} />
 							</Button>

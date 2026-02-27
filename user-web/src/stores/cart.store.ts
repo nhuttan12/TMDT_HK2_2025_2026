@@ -4,27 +4,29 @@ import { persist } from 'zustand/middleware';
 
 interface CartStore {
 	items: CartItem[];
-	addItem: (item: CartItem) => void;
+	addToCart: (item: CartItem) => void;
 	removeItem: (id: number) => void;
 	clearItems: () => void;
+	updateQuantity: (productId: number, quantity: number) => void;
 }
 
 export const useCartStore = create<CartStore>()(
 	persist(
 		(set) => ({
 			items: [],
-			addItem: (item) => {
-				set((state) => {
-					const existing = state.items.find(
-						(i: CartItem) => i.productID === item.productID,
+			addToCart: (item: CartItem) => {
+				set((state: CartStore) => {
+					const existing: CartItem | undefined = state.items.find(
+						(i: CartItem): boolean => i.productID === item.productID,
 					);
 
 					if (existing) {
 						return {
-							items: state.items.map((i: CartItem) =>
-								i.productID === item.productID
-									? { ...i, quantity: i.quantity + item.quantity }
-									: i,
+							items: state.items.map(
+								(i: CartItem): CartItem =>
+									i.productID === item.productID
+										? { ...i, quantity: i.quantity + item.quantity }
+										: i,
 							),
 						};
 					}
@@ -34,12 +36,29 @@ export const useCartStore = create<CartStore>()(
 					};
 				});
 			},
-			removeItem: (productID) => {
-				return set((state) => ({
-					items: state.items.filter((i) => i.productID !== productID),
+			removeItem: (productID: number): void => {
+				set((state: CartStore) => ({
+					items: state.items.filter((i: CartItem): boolean => i.productID !== productID),
 				}));
 			},
-			clearItems: () => set({ items: [] }),
+			clearItems: (): void => set({ items: [] }),
+			updateQuantity: (productID: number, quantity: number): void =>
+				set((state: CartStore) => {
+					if (quantity < 1) {
+						return {
+							items: state.items.filter(
+								(i: CartItem): boolean => i.productID !== productID,
+							),
+						};
+					}
+
+					return {
+						items: state.items.map(
+							(i: CartItem): CartItem =>
+								i.productID === productID ? { ...i, quantity } : i,
+						),
+					};
+				}),
 		}),
 		{
 			name: 'cart-storage',

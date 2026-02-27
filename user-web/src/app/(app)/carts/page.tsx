@@ -16,6 +16,7 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { JSX, useCallback, useMemo, useState } from 'react';
+import { useCartStore } from '@/stores/cart.store';
 
 const mockCart: CartItem[] = [
 	{
@@ -46,24 +47,10 @@ export default function Cart({ params }: Props): JSX.Element {
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems);
 	const router = useRouter();
 
-	const updateQuantity = useCallback((id: number, newQuantity: number) => {
-		if (newQuantity < 1) {
-			removeItem(id);
-			// TODO: await cartApi.removeProductFromCart(id, newQuantity)
-		}
 
-		setCartItems((prev) =>
-			prev.map((item) => (item.productID === id ? { ...item, quantity: newQuantity } : item)),
-		);
-
-		// TODO: await cartApi.updateQuantity(id, newQuantity)
-	}, []);
-
-	const removeItem = useCallback((id: number) => {
-		setCartItems((prev) => prev.filter((item) => item.productID !== id));
-
-		// TODO: await cartApi.removeItem(id)
-	}, []);
+	const updateQuantity = useCartStore((s) => s.updateQuantity);
+	const items: CartItem[] = useCartStore((s): CartItem[] => s.items);
+	const removeItem = useCartStore((s) => s.removeItem);
 
 	const toggleSelect = useCallback((id: number) => {
 		setSelectedIds((prev) =>

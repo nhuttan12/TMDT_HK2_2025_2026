@@ -99,7 +99,7 @@ export default function Header() {
 				{/* Left */}
 				<div className='flex items-center gap-6'>
 					<Link
-						href='/'
+						href='/public'
 						className='flex items-center gap-2'
 					>
 						<AcmeLogo />

@@ -1,6 +1,7 @@
 import { JSX } from 'react';
-import Footer from '../../components/layout/footer';
-import Header from '../../components/layout/header';
+import Footer from '../../components/user/footer';
+import Header from '../../components/user/header';
+import ChatBox from '@/components/user/chatbox';
 
 export default function AppLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
@@ -9,6 +10,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }): 
 
 			<main className='flex-1'>
 				<div className='mx-auto max-w-275'>{children}</div>
+				<ChatBox />
 			</main>
 
 			<Footer />
