@@ -1,6 +1,6 @@
-import { CommentModel } from '@/types/products/CommentModel';
-import { ProductDetail } from '@/types/products/ProductDetail';
-import { ProductSummary } from '@/types/products/ProductSummary';
+import { CommentModel } from '@/types/products/user/CommentModel';
+import { ProductDetail } from '@/types/products/user/ProductDetail';
+import { ProductCard } from '@/types/products/user/ProductCard';
 import { JSX } from 'react';
 import ProductDetailClient from './product-detail-client';
 import notFound from '@/app/not-found';
@@ -49,7 +49,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 		name: 'Khoai Tây Hồng VietGAP 500G (Túi)',
 		brand: 'Trường Phát',
 		price: 33000,
-		imageUrl:
+		image:
 			'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
 		rating: 4.5,
 		discount: 0.5,
@@ -154,14 +154,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			'</p>\n',
 	};
 
-	const relatedProducts: ProductSummary[] = [
+	const relatedProducts: ProductCard[] = [
 		{
 			productID: 2,
 			name: 'Xà lách Romaine VietGAP 200G',
 			price: 25000,
 			discount: 10,
 			rating: 4.5,
-			imgUrl: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?q=80&w=800',
+			image: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?q=80&w=800',
 			isInWishlist: false,
 		},
 		{
@@ -170,7 +170,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			price: 32000,
 			discount: 0,
 			rating: 4.8,
-			imgUrl: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?q=80&w=800',
+			image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?q=80&w=800',
 			isInWishlist: false,
 		},
 		{
@@ -179,7 +179,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			price: 40000,
 			discount: 5,
 			rating: 4.6,
-			imgUrl: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRLhT2Ikxp2a-v-AqVFxWZZFMtT6_m602j8zdlMUuGelpUwuFRp',
+			image: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRLhT2Ikxp2a-v-AqVFxWZZFMtT6_m602j8zdlMUuGelpUwuFRp',
 			isInWishlist: false,
 		},
 		{
@@ -188,7 +188,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			price: 169000,
 			discount: 5,
 			rating: 4.6,
-			imgUrl: 'https://product.hstatic.net/1000141988/product/pizza_ristorante_piccola_margherita_dr._oetker_270_g_bd46821fd58b4ae48d55375ca25590e6_master.jpg',
+			image: 'https://product.hstatic.net/1000141988/product/pizza_ristorante_piccola_margherita_dr._oetker_270_g_bd46821fd58b4ae48d55375ca25590e6_master.jpg',
 			isInWishlist: false,
 		},
 		{
@@ -197,14 +197,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			price: 235000,
 			discount: 5,
 			rating: 4.6,
-			imgUrl: 'https://cdn.hstatic.net/products/1000141988/kh__m_c_size_s_70_-_80_song_ph__ng_150_g___h_p___878c79ee628a476f8e32807009fa9289_master.jpg',
+			image: 'https://cdn.hstatic.net/products/1000141988/kh__m_c_size_s_70_-_80_song_ph__ng_150_g___h_p___878c79ee628a476f8e32807009fa9289_master.jpg',
 			isInWishlist: false,
 		},
 	];
 
 	const mockComments: CommentModel[] = [
 		{
-			id: 'cmt-001',
+			commentID: 'cmt-001',
 			userName: 'Nguyễn Minh Anh',
 			createdAt: '2026-02-10T08:15:00Z',
 			rating: 5,
@@ -215,14 +215,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			id: 'cmt-002',
+			commentID: 'cmt-002',
 			userName: 'Trần Quốc Bảo',
 			createdAt: '2026-02-09T14:20:00Z',
 			rating: 4,
 			content: 'Chất lượng ổn trong tầm giá, nhưng giao hàng hơi chậm.',
 		},
 		{
-			id: 'cmt-003',
+			commentID: 'cmt-003',
 			userName: 'Lê Thu Trang',
 			createdAt: '2026-02-08T11:05:00Z',
 			rating: 4.5,
@@ -233,14 +233,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			id: 'cmt-004',
+			commentID: 'cmt-004',
 			userName: 'Phạm Gia Hưng',
 			createdAt: '2026-02-07T18:40:00Z',
 			rating: 3,
 			content: 'Dùng tạm ổn, chưa thật sự xuất sắc như mong đợi.',
 		},
 		{
-			id: 'cmt-005',
+			commentID: 'cmt-005',
 			userName: 'Hoàng Mỹ Linh',
 			createdAt: '2026-02-07T09:22:00Z',
 			rating: 5,
@@ -251,7 +251,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			id: 'cmt-006',
+			commentID: 'cmt-006',
 			userName: 'Đặng Thanh Tùng',
 			createdAt: '2026-02-06T15:30:00Z',
 			rating: 2,
@@ -263,28 +263,28 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			id: 'cmt-007',
+			commentID: 'cmt-007',
 			userName: 'Võ Thảo Nhi',
 			createdAt: '2026-02-05T20:10:00Z',
 			rating: 5,
 			content: 'Quá tuyệt vời, không có gì để chê.',
 		},
 		{
-			id: 'cmt-008',
+			commentID: 'cmt-008',
 			userName: 'Bùi Quang Huy',
 			createdAt: '2026-02-04T13:55:00Z',
 			rating: 4,
 			content: 'Mọi thứ đều ổn, đóng gói chắc chắn.',
 		},
 		{
-			id: 'cmt-009',
+			commentID: 'cmt-009',
 			userName: 'Phan Ngọc Mai',
 			createdAt: '2026-02-03T10:12:00Z',
 			rating: 4.5,
 			content: 'Chất lượng tốt, giá hợp lý.',
 		},
 		{
-			id: 'cmt-010',
+			commentID: 'cmt-010',
 			userName: 'Lý Đức Anh',
 			createdAt: '2026-02-02T16:45:00Z',
 			rating: 1,

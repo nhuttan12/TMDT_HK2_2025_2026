@@ -8,10 +8,10 @@ import {
 	CarouselPrevious,
 } from '@/components/ui/carousel';
 import ProductCard from '@/components/user/product-card';
-import { ProductSummary } from '@/types/products/ProductSummary';
+import { ProductCard } from '@/types/products/user/ProductCard';
 
 interface Props {
-	products: ProductSummary[];
+	products: ProductCard[];
 }
 
 export function CarouselSize({ products }: Props): JSX.Element {
@@ -24,7 +24,7 @@ export function CarouselSize({ products }: Props): JSX.Element {
 		>
 			<CarouselContent>
 				{products.map(
-					(product: ProductSummary): JSX.Element => (
+					(product: ProductCard): JSX.Element => (
 						<CarouselItem
 							key={product.productID}
 							className='basis-1/2 lg:basis-1/3'

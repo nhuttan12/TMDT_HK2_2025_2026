@@ -1,0 +1,1 @@
+export type AdminFormType = 'update' | 'add new'

@@ -1,7 +1,7 @@
-import { ShopReply } from '@/types/products/ShopReply';
+import { ShopReply } from '@/types/products/user/ShopReply';
 
 export interface CommentModel {
-	id: string;
+	commentID: string;
 	userName: string;
 	createdAt: string;
 	rating: number;

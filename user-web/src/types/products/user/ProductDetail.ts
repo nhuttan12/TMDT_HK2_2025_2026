@@ -1,9 +1,10 @@
-export interface ProductSummary {
+export interface ProductDetail {
 	productID: number;
 	name: string;
-	imgUrl: string;
+	brand: string;
 	price: number;
+	image: string;
 	discount: number;
 	rating: number;
-	isInWishlist: boolean;
+	description: string;
 }

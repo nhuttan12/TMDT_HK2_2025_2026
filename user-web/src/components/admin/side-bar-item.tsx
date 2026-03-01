@@ -37,7 +37,7 @@ export  default function SidebarItem({ item, pathname }: ItemProps): JSX.Element
 					</Button>
 				</CollapsibleTrigger>
 
-				<CollapsibleContent className='ml-6 mt-1 space-y-1'>
+				<CollapsibleContent className='ml-6 space-y-1'>
 					{item.children.map((child: SidebarItemInterface, i: number): JSX.Element => {
 						const active: boolean = pathname === child.href;
 
@@ -48,7 +48,7 @@ export  default function SidebarItem({ item, pathname }: ItemProps): JSX.Element
 							>
 								<Button
 									variant={active ? 'secondary' : 'ghost'}
-									className='w-full justify-start gap-2'
+									className='w-full justify-start gap-2 mt-2'
 								>
 									{child.icon}
 									{child.title}

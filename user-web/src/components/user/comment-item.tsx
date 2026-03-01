@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import Rating from './rating';
-import { CommentModel } from '@/types/products/CommentModel';
+import { CommentModel } from '@/types/products/user/CommentModel';
 
 interface Props {
 	comment: CommentModel;

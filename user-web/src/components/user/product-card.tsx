@@ -5,10 +5,10 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ProductSummary } from '@/types/products/ProductSummary';
+import { ProductCard } from '@/types/products/user/ProductCard';
 
 interface ProductCardProps {
-	product: ProductSummary;
+	product: ProductCard;
 	elementWidth?: number;
 }
 
@@ -57,7 +57,7 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 
 			<CardContent className='p-0'>
 				<img
-					src={product.imgUrl}
+					src={product.image}
 					alt={product.name}
 					className='w-full h-35 object-cover rounded-t-xl'
 				/>

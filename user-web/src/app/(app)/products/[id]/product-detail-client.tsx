@@ -8,9 +8,9 @@ import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/stores/cart.store';
 import { useCheckoutStore } from '@/stores/checkout.store';
 import { CartItem } from '@/types/carts/CartItem';
-import { CommentModel } from '@/types/products/CommentModel';
-import { ProductDetail } from '@/types/products/ProductDetail';
-import { ProductSummary } from '@/types/products/ProductSummary';
+import { CommentModel } from '@/types/products/user/CommentModel';
+import { ProductDetail } from '@/types/products/user/ProductDetail';
+import { ProductCard } from '@/types/products/user/ProductCard';
 import { Separator } from '@radix-ui/react-separator';
 import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
 import Image from 'next/image';
@@ -20,7 +20,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 
 interface Props {
 	product: ProductDetail;
-	relatedProducts: ProductSummary[];
+	relatedProducts: ProductCard[];
 	comments: CommentModel[];
 }
 
@@ -48,7 +48,7 @@ export default function ProductDetailClient({
 			productID: product.productID,
 			name: product.name,
 			price: product.price,
-			imageUrl: product.imageUrl,
+			imageUrl: product.image,
 			quantity: quantity,
 		});
 	};
@@ -58,7 +58,7 @@ export default function ProductDetailClient({
 			productID: product.productID,
 			name: product.name,
 			price: product.price,
-			imageUrl: product.imageUrl,
+			imageUrl: product.image,
 			quantity: quantity,
 		};
 
@@ -76,7 +76,7 @@ export default function ProductDetailClient({
 					{/* IMAGE */}
 					<div className='relative w-full h-125 rounded-2xl overflow-hidden bg-muted'>
 						<Image
-							src={product.imageUrl}
+							src={product.image}
 							alt={product.name}
 							fill
 							className='object-cover'
@@ -118,7 +118,7 @@ export default function ProductDetailClient({
 							(comment: CommentModel): JSX.Element => (
 								<CommentItem
 									comment={comment}
-									key={comment.id}
+									key={comment.commentID}
 								/>
 							),
 						)}
