@@ -1,6 +1,6 @@
-import ProductList from '../../components/user/product-list';
+import ProductList from '../../components/product/user/product-list';
 import { JSX } from 'react';
-import HomeBannerCarousel from '@/components/user/home-banner-carousel';
+import HomeBannerCarousel from '@/app/(app)/_components/home-banner-carousel';
 import { HomeBanner } from '@/types/uis/HomeBanner';
 import Link from 'next/link';
 

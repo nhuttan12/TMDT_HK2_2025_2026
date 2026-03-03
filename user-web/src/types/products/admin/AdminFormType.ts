@@ -1,1 +1,1 @@
-export type AdminFormType = 'update' | 'add new'
+export type AdminFormType = 'update' | 'create' | 'view'

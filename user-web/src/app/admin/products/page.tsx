@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminTable from '@/app/admin/products/product-admin-table';
+import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
 import { ProductAdmin } from '@/types/products/admin/ProductAdmin';
 import {
 	ProductAdminSortField,

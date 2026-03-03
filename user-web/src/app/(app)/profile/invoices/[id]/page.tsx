@@ -1,5 +1,5 @@
 import { InvoiceDetail } from '@/types/invoices/InvoiceDetail';
-import InvoiceDetailClient from './invoices-detail-client';
+import InvoiceDetailClient from './_components/invoices-detail-client';
 
 interface Props {
 	params: { invoiceID: string };

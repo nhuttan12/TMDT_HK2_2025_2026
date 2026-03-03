@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import AdminSidebarWrapper from '@/components/admin/admin-sidebar-wrapper';
+import AdminSidebarWrapper from '@/components/layout/admin/admin-sidebar-wrapper';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (

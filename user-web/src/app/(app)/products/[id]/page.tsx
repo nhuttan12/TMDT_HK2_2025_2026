@@ -1,8 +1,8 @@
 import { CommentModel } from '@/types/products/user/CommentModel';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
-import { ProductCard } from '@/types/products/user/ProductCard';
+import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { JSX } from 'react';
-import ProductDetailClient from './product-detail-client';
+import ProductDetailClient from './_components/product-detail-client';
 import notFound from '@/app/not-found';
 
 interface Props {
@@ -154,7 +154,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			'</p>\n',
 	};
 
-	const relatedProducts: ProductCard[] = [
+	const relatedProducts: ProductUserCard[] = [
 		{
 			productID: 2,
 			name: 'Xà lách Romaine VietGAP 200G',

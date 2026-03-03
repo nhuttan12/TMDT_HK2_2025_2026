@@ -1,7 +1,7 @@
 import { JSX } from 'react';
-import Footer from '../../components/user/footer';
-import Header from '../../components/user/header';
-import ChatBox from '@/components/user/chatbox';
+import Footer from '../../components/layout/user/footer';
+import Header from '../../components/layout/user/header';
+import ChatBox from '@/components/user/user/chatbox';
 
 export default function AppLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
