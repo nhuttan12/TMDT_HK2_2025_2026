@@ -23,12 +23,12 @@ import { Ban, ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'luci
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/utils/date';
-import { UserAdmin } from '@/types/users/admin/UserAdmin';
+import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 import { UserAdminSortField, UserAdminSortOrder } from '@/types/users/admin/UserAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface Props {
-	users: UserAdmin[];
+	users: UserListAdmin[];
 	mode: 'customer' | 'staff';
 }
 
@@ -183,7 +183,7 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 								</TableCell>
 
 								<TableCell>
-									{user.isActive ? (
+									{user.status ? (
 										<Badge>Hoạt động</Badge>
 									) : (
 										<Badge variant='secondary'>Bị khóa</Badge>
@@ -200,6 +200,7 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 											<Button
 												variant='ghost'
 												size='icon'
+												className='cursor-pointer'
 											>
 												<MoreHorizontal size={16} />
 											</Button>
@@ -207,9 +208,10 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 
 										<DropdownMenuContent align='end'>
 											<DropdownMenuItem
-												onClick={(): void =>
-													handleRedirectToEditStaffEditMode(user.userID)
-												}
+												onClick={(e): void => {
+													e.stopPropagation();
+													handleRedirectToEditStaffEditMode(user.userID);
+												}}
 											>
 												<Pencil
 													size={14}

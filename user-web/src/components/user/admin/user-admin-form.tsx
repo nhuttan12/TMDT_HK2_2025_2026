@@ -5,26 +5,46 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { AdminFormType } from '@/types/products/admin/AdminFormType';
-import { ImageFormAdmin } from '@/types/products/admin/ImageFormAdmin';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { UserRole } from '@/types/users/UserRole';
+import Image from 'next/image';
+import { formatDate } from '@/utils/date';
+import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
 
 interface Props {
 	formType: AdminFormType;
 }
 
+const mockUser: UserDetailInfoAdmin = {
+	userID: 1,
+	fullName: 'Nguyễn Văn A',
+	email: 'nguyenvana@example.com',
+	phone: '0901234567',
+	avatar: 'https://i.pravatar.cc/300',
+	role: 'STAFF',
+	status: true,
+	createdAt: new Date().toISOString(),
+	updatedAt: new Date().toISOString(),
+};
+
+const emptyUser: UserDetailInfoAdmin = {
+	userID: 0,
+	fullName: '',
+	email: '',
+	phone: '',
+	avatar: '',
+	role: 'CUSTOMER',
+	status: true,
+	createdAt: '',
+	updatedAt: '',
+};
+
 export default function UserAdminForm({ formType }: Props): JSX.Element {
-	const FILE_INPUT_ID = 'user-avatar';
 	const isView: boolean = formType === 'view';
 
-	const [form, setForm] = useState({
-		fullName: '',
-		email: '',
-		password: '',
-		phone: '',
-		role: 'CUSTOMER' as UserRole,
-		isActive: true,
-		avatar: undefined as ImageFormAdmin | undefined,
+	const [form, setForm] = useState<UserDetailInfoAdmin>((): UserDetailInfoAdmin => {
+		if (isView) return mockUser;
+		return emptyUser;
 	});
 
 	// ===== TEXT INPUT =====
@@ -45,37 +65,6 @@ export default function UserAdminForm({ formType }: Props): JSX.Element {
 		}));
 	};
 
-	// ===== AVATAR =====
-	const handleAddAvatar = (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (!file) return;
-
-		const avatar: ImageFormAdmin = {
-			file,
-			preview: URL.createObjectURL(file),
-			isPrimary: true,
-			order: 0,
-		};
-
-		setForm((prev) => ({
-			...prev,
-			avatar,
-		}));
-
-		e.target.value = '';
-	};
-
-	const handleRemoveAvatar = () => {
-		if (form.avatar?.preview) {
-			URL.revokeObjectURL(form.avatar.preview);
-		}
-
-		setForm((prev) => ({
-			...prev,
-			avatar: undefined,
-		}));
-	};
-
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		console.log('Submit user:', form);
@@ -87,7 +76,11 @@ export default function UserAdminForm({ formType }: Props): JSX.Element {
 				<div>
 					<h1 className='text-2xl font-bold'>Quản lý người dùng</h1>
 					<p className='text-sm text-muted-foreground'>
-						Tạo hoặc chỉnh sửa người dùng trong hệ thống
+						{formType === 'create'
+							? 'Tạo người dùng mới'
+							: formType === 'update'
+								? 'Cập nhật thông tin người dùng'
+								: 'Xem thông tin người dùng'}
 					</p>
 				</div>
 			</div>
@@ -133,21 +126,6 @@ export default function UserAdminForm({ formType }: Props): JSX.Element {
 					/>
 				</div>
 
-				{/* Password */}
-				{formType === 'create' && (
-					<div className='space-y-2'>
-						<Label htmlFor='password'>Mật khẩu</Label>
-						<Input
-							id='password'
-							name='password'
-							type='password'
-							value={form.password}
-							onChange={handleInputChange}
-							disabled={isView}
-						/>
-					</div>
-				)}
-
 				{/* Role */}
 				<div className='space-y-2'>
 					<Label>Vai trò</Label>
@@ -164,63 +142,46 @@ export default function UserAdminForm({ formType }: Props): JSX.Element {
 				</div>
 
 				{/* Active */}
-				{formType !== 'create' && (
-					<div className='flex items-center gap-3'>
-						<Switch
-							checked={form.isActive}
-							onCheckedChange={(checked) =>
-								setForm((prev) => ({ ...prev, isActive: checked }))
-							}
-							disabled={isView}
-						/>
-						<span>Hoạt động</span>
+				<div className='flex items-center gap-3'>
+					<Switch
+						checked={form.status}
+						onCheckedChange={(checked) =>
+							setForm((prev) => ({ ...prev, status: checked }))
+						}
+						disabled={isView}
+					/>
+					<span>Hoạt động</span>
+				</div>
+
+				{/* Avatar */}
+				{form.avatar && (
+					<div className='space-y-2'>
+						<Label>Avatar</Label>
+						<div className='relative w-32 h-32 rounded-full overflow-hidden border'>
+							<Image
+								src={form.avatar}
+								alt={form.fullName}
+								fill
+								className='object-cover'
+							/>
+						</div>
 					</div>
 				)}
 
-				{/* Avatar */}
-				<div className='space-y-4'>
-					<div className='flex justify-between items-center'>
-						<Label>Avatar</Label>
-
-						<Input
-							id={FILE_INPUT_ID}
-							type='file'
-							accept='image/*'
-							className='hidden'
-							onChange={handleAddAvatar}
-							disabled={isView}
-						/>
-
-						<Label
-							htmlFor={isView ? undefined : FILE_INPUT_ID}
-							className={isView ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
-						>
-							<Button type='button' asChild disabled={isView}>
-								<span>Chọn ảnh</span>
-							</Button>
-						</Label>
-					</div>
-
-					{form.avatar && (
-						<div className='mt-4 space-y-3'>
-							<img
-								src={form.avatar.preview}
-								alt=''
-								className='w-32 h-32 object-cover rounded-full border'
-							/>
-
-							{!isView && (
-								<Button
-									type='button'
-									variant='destructive'
-									onClick={handleRemoveAvatar}
-								>
-									Xoá avatar
-								</Button>
-							)}
+				{/* Created / Updated (view only) */}
+				{formType !== 'create' && (
+					<div className='grid grid-cols-2 gap-4 text-sm text-muted-foreground'>
+						<div>
+							<p className='font-medium text-black'>Ngày tạo</p>
+							<p>{formatDate(form.createdAt)}</p>
 						</div>
-					)}
-				</div>
+
+						<div>
+							<p className='font-medium text-black'>Cập nhật lần cuối</p>
+							<p>{formatDate(form.updatedAt)}</p>
+						</div>
+					</div>
+				)}
 
 				{/* Submit */}
 				{!isView && (

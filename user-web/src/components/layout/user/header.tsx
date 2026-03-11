@@ -144,7 +144,7 @@ export default function Header() {
 
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40'>
+							<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
 								<Avatar className='h-8 w-8'>
 									<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
 									<AvatarFallback>U</AvatarFallback>
@@ -161,7 +161,7 @@ export default function Header() {
 									<DropdownMenuItem
 										key={item.key}
 										onClick={() => router.push(item.href)}
-										className='flex items-center justify-between'
+										className='flex items-center justify-between cursor-pointer'
 									>
 										{item.label}
 										{item.icon}

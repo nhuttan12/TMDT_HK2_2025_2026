@@ -20,7 +20,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { ProductAdmin } from '@/types/products/admin/ProductAdmin';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { formatDate } from '@/utils/date';
@@ -31,7 +31,7 @@ import {
 import Link from 'next/link';
 
 interface Props {
-	products: ProductAdmin[];
+	products: ProductListInfoAdmin[];
 	sortField: ProductAdminSortField;
 	sortOrder: ProductAdminSortOrder;
 }
@@ -106,7 +106,7 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 					</p>
 				</div>
 
-				<Button onClick={handleRedirectToAddNewProduct}>+ Thêm sản phẩm</Button>
+				<Button className='cursor-pointer' onClick={handleRedirectToAddNewProduct}>+ Thêm sản phẩm</Button>
 			</div>
 
 			{/* Search */}
@@ -154,16 +154,6 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 
 							<TableHead
 								className='cursor-pointer select-none'
-								onClick={() => handleSort('stock')}
-							>
-								<div className='flex items-center justify-start gap-1'>
-									<span>Tồn kho</span>
-									{renderSortIcon('stock')}
-								</div>
-							</TableHead>
-
-							<TableHead
-								className='cursor-pointer select-none'
 								onClick={() => handleSort('isActive')}
 							>
 								<div className='flex items-center justify-start gap-1'>
@@ -198,7 +188,7 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 
 					<TableBody>
 						{products.map(
-							(product: ProductAdmin): JSX.Element => (
+							(product: ProductListInfoAdmin): JSX.Element => (
 								<TableRow
 									key={product.productID}
 									className='cursor-pointer'
@@ -229,18 +219,9 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 									{/* Price */}
 									<TableCell>{product.price.toLocaleString()}₫</TableCell>
 
-									{/* Stock */}
-									<TableCell>
-										{product.stock > 0 ? (
-											<span>{product.stock}</span>
-										) : (
-											<Badge variant='destructive'>Hết hàng</Badge>
-										)}
-									</TableCell>
-
 									{/* Status */}
 									<TableCell>
-										{product.isActive ? (
+										{product.status ? (
 											<Badge>Đang bán</Badge>
 										) : (
 											<Badge variant='secondary'>Ẩn</Badge>
@@ -264,6 +245,7 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 												<Button
 													variant='ghost'
 													size='icon'
+													className='cursor-pointer'
 												>
 													<MoreHorizontal size={16} />
 												</Button>
@@ -271,11 +253,14 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 
 											<DropdownMenuContent align='end'>
 												<DropdownMenuItem
-													onClick={(): void =>
+													onClick={(
+														e,
+													): void => {
+														e.stopPropagation();
 														handleRedirectToEditProductEditMode(
 															product.productID,
-														)
-													}
+														);
+													}}
 												>
 													<Pencil
 														size={14}

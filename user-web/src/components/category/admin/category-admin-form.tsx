@@ -5,25 +5,60 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { ImageFormAdmin } from '@/types/products/admin/ImageFormAdmin';
-import { AdminFormType } from '@/types/products/admin/AdminFormType';
+import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
-import { CategoryInputForm } from '@/types/categories/admin/CategoryInputForm';
+import { CategoryDetailInfoAdmin } from '@/types/categories/admin/CategoryDetailInfoAdmin';
+import {
+	mapCategoryFormToCreateDTO,
+	mapCategoryFormToUpdateDTO,
+	mapCategoryResponseToAdmin,
+} from '@/utils/mappers/categories/admin-categories';
+import { generateSlug } from '@/utils/mappers/shared/slug';
+import { CategoryCreateDTO } from '@/types/categories/admin/CategoryCreateDTO';
+import { CategoryUpdateDTO } from '@/types/categories/admin/CategoryUpdateDTO';
+import { CategoryResponse } from '@/types/categories/admin/CategoryResponse';
 
 interface Props {
 	formType: AdminFormType;
 }
 
+const mockCategoryResponse: CategoryResponse = {
+	categoryID: 1,
+	name: 'Điện thoại',
+	slug: 'dien-thoai',
+	description: 'Danh mục điện thoại cao cấp',
+	status: true,
+	productCount: 120,
+	imageUrl:
+		'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_1.png',
+	createdAt: '2024-01-01T10:00:00Z',
+	updatedAt: '2024-02-01T10:00:00Z',
+};
+
+const emptyCategory: CategoryDetailInfoAdmin = {
+	categoryID: 0,
+	name: '',
+	slug: '',
+	description: '',
+	status: true,
+	image: undefined,
+	productCount: 0,
+	createdAt: '',
+	updatedAt: '',
+};
+
 export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 	const FILE_INPUT_ID = 'category-image';
+	const isCreate: boolean = formType === 'create';
+	const isUpdate: boolean = formType === 'update';
 	const isView: boolean = formType === 'view';
 
-	const [form, setForm] = useState({
-		name: '',
-		slug: '',
-		description: '',
-		isActive: true,
-		image: undefined as ImageFormAdmin | undefined,
+	const [form, setForm] = useState<CategoryDetailInfoAdmin>(() => {
+		if (formType === 'view' || formType === 'update') {
+			return mapCategoryResponseToAdmin(mockCategoryResponse);
+		}
+		return emptyCategory;
 	});
 
 	// ===== TEXT INPUT =====
@@ -33,6 +68,7 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 		setForm((prev) => ({
 			...prev,
 			[name]: value,
+			slug: name === 'name' ? generateSlug(value) : prev.slug,
 		}));
 	};
 
@@ -41,11 +77,10 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
-		const image: ImageFormAdmin = {
+		const image = {
 			file,
 			preview: URL.createObjectURL(file),
-			isPrimary: true,
-			order: 0,
+			url: undefined,
 		};
 
 		setForm((prev) => ({
@@ -57,10 +92,6 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 	};
 
 	const handleRemoveImage = () => {
-		if (form.image?.preview) {
-			URL.revokeObjectURL(form.image.preview);
-		}
-
 		setForm((prev) => ({
 			...prev,
 			image: undefined,
@@ -69,7 +100,16 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		console.log('Submit category:', form);
+
+		if (formType === 'create') {
+			const dto: CategoryCreateDTO = mapCategoryFormToCreateDTO(form);
+			console.log('Create DTO:', dto);
+		}
+
+		if (formType === 'update') {
+			const dto: CategoryUpdateDTO = mapCategoryFormToUpdateDTO(form);
+			console.log('Update DTO:', dto);
+		}
 	};
 
 	return (
@@ -117,7 +157,7 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 					<RichTextEditor
 						value={form.description}
 						onChange={(val: string): void =>
-							setForm((prev: CategoryInputForm) => ({
+							setForm((prev) => ({
 								...prev,
 								description: val,
 							}))
@@ -126,13 +166,13 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 					/>
 				</div>
 
-				{/* Active */}
-				{formType === 'update' && (
+				{/* Status */}
+				{(isUpdate || isView) && (
 					<div className='flex items-center gap-3'>
 						<Switch
-							checked={form.isActive}
+							checked={form.status}
 							onCheckedChange={(checked) =>
-								setForm((prev) => ({ ...prev, isActive: checked }))
+								setForm((prev) => ({ ...prev, status: checked }))
 							}
 							disabled={isView}
 						/>
@@ -176,21 +216,25 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 								className='w-40 h-40 object-cover rounded border'
 							/>
 
-							<Button
-								type='button'
-								variant='destructive'
-								onClick={handleRemoveImage}
-								className='cursor-pointer'
-							>
-								Xoá ảnh
-							</Button>
+							{(isCreate || isUpdate) && (
+								<Button
+									type='button'
+									variant='destructive'
+									onClick={handleRemoveImage}
+									className='cursor-pointer'
+								>
+									Xoá ảnh
+								</Button>
+							)}
 						</div>
 					)}
 				</div>
 
-				{!isView && <Button type='submit'>
-					{formType === 'create' ? 'Thêm danh mục' : 'Cập nhật danh mục'}
-				</Button>}
+				{!isView && (
+					<Button type='submit'>
+						{formType === 'create' ? 'Thêm danh mục' : 'Cập nhật danh mục'}
+					</Button>
+				)}
 			</form>
 		</>
 	);

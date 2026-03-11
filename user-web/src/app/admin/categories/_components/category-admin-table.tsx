@@ -19,18 +19,17 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { CategoryAdmin } from '@/types/categories/admin/CategoryAdmin';
+import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import {
 	CategoryAdminSortField,
 	CategoryAdminSortOrder,
 } from '@/types/categories/admin/CategoryAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import Link from 'next/link';
 import Image from 'next/image';
 
 interface Props {
-	categories: CategoryAdmin[];
+	categories: CategoryListItemAdmin[];
 }
 
 export default function CategoryAdminTable({ categories }: Props): JSX.Element {
@@ -87,8 +86,8 @@ export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 		router.push(`/admin/categories/${categoryID}`);
 	};
 
-	const handleRedirectToEditCategoryEditMode = (userID: number) => {
-		router.push(`/admin/categories/update/${userID}`);
+	const handleRedirectToEditCategoryEditMode = (categoryID: number) => {
+		router.push(`/admin/categories/update/${categoryID}`);
 	};
 
 	return (
@@ -184,7 +183,7 @@ export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 
 					<TableBody>
 						{categories.map(
-							(category: CategoryAdmin): JSX.Element => (
+							(category: CategoryListItemAdmin): JSX.Element => (
 								<TableRow
 									key={category.categoryID}
 									className='cursor-pointer'
@@ -240,6 +239,7 @@ export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 												<Button
 													variant='ghost'
 													size='icon'
+													className='cursor-pointer'
 												>
 													<MoreHorizontal size={16} />
 												</Button>
@@ -247,11 +247,12 @@ export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 
 											<DropdownMenuContent align='end'>
 												<DropdownMenuItem
-													onClick={(): void =>
+													onClick={(e): void => {
+														e.stopPropagation();
 														handleRedirectToEditCategoryEditMode(
 															category.categoryID,
-														)
-													}
+														);
+													}}
 												>
 													<Pencil
 														size={14}

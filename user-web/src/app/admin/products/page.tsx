@@ -1,12 +1,12 @@
 import { JSX } from 'react';
 import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
-import { ProductAdmin } from '@/types/products/admin/ProductAdmin';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import {
 	ProductAdminSortField,
 	ProductAdminSortOrder,
 } from '@/types/products/admin/ProductAdminSort';
 
-const mockProducts: ProductAdmin[] = [
+const mockProducts: ProductListInfoAdmin[] = [
 	{
 		productID: 1,
 		name: 'iPhone 15 Pro Max 256GB',
@@ -14,7 +14,7 @@ const mockProducts: ProductAdmin[] = [
 		image: 'https://picsum.photos/seed/iphone15/400/400',
 		price: 34990000,
 		stock: 12,
-		isActive: true,
+		status: true,
 		createdAt: '2024-01-10T10:00:00Z',
 		updatedAt: '2024-02-01T15:30:00Z',
 	},
@@ -25,7 +25,7 @@ const mockProducts: ProductAdmin[] = [
 		image: 'https://picsum.photos/seed/macbookm3/400/400',
 		price: 28990000,
 		stock: 5,
-		isActive: true,
+		status: true,
 		createdAt: '2024-01-10T10:00:00Z',
 		updatedAt: '2024-02-01T15:30:00Z',
 	},
@@ -36,7 +36,7 @@ const mockProducts: ProductAdmin[] = [
 		image: 'https://picsum.photos/seed/airpodspro2/400/400',
 		price: 5990000,
 		stock: 0,
-		isActive: false,
+		status: false,
 		createdAt: '2024-01-10T10:00:00Z',
 		updatedAt: '2024-02-01T15:30:00Z',
 	},
@@ -47,7 +47,7 @@ const mockProducts: ProductAdmin[] = [
 		image: 'https://picsum.photos/seed/ipadpro/400/400',
 		price: 21990000,
 		stock: 7,
-		isActive: true,
+		status: true,
 		createdAt: '2024-01-10T10:00:00Z',
 		updatedAt: '2024-02-01T15:30:00Z',
 	},
@@ -58,7 +58,7 @@ const mockProducts: ProductAdmin[] = [
 		image: 'https://picsum.photos/seed/applewatch9/400/400',
 		price: 10990000,
 		stock: 3,
-		isActive: false,
+		status: false,
 		createdAt: '2024-01-10T10:00:00Z',
 		updatedAt: '2024-02-01T15:30:00Z',
 	},

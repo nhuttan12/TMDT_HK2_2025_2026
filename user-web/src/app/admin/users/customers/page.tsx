@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import UserAdminTable from '@/app/admin/users/_components/user-admin-table';
-import { UserAdmin } from '@/types/users/admin/UserAdmin';
+import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 
-const mockCustomers: UserAdmin[] = [
+const mockCustomers: UserListAdmin[] = [
 	{
 		userID: 101,
 		fullName: 'Nguyễn Văn An',
@@ -10,9 +10,8 @@ const mockCustomers: UserAdmin[] = [
 		phone: '0909123456',
 		avatar: 'https://i.pravatar.cc/150?img=11',
 		role: 'CUSTOMER',
-		isActive: true,
+		status: true,
 		createdAt: '2024-01-05T08:30:00Z',
-		updatedAt: '2024-02-01T10:15:00Z',
 	},
 	{
 		userID: 102,
@@ -21,9 +20,8 @@ const mockCustomers: UserAdmin[] = [
 		phone: '0911222333',
 		avatar: 'https://i.pravatar.cc/150?img=12',
 		role: 'CUSTOMER',
-		isActive: false,
+		status: false,
 		createdAt: '2024-01-10T09:00:00Z',
-		updatedAt: '2024-02-03T14:20:00Z',
 	},
 	{
 		userID: 103,
@@ -32,9 +30,8 @@ const mockCustomers: UserAdmin[] = [
 		phone: '0933444555',
 		avatar: 'https://i.pravatar.cc/150?img=13',
 		role: 'CUSTOMER',
-		isActive: true,
+		status: true,
 		createdAt: '2024-01-25T07:20:00Z',
-		updatedAt: '2024-02-07T12:00:00Z',
 	},
 ];
 
