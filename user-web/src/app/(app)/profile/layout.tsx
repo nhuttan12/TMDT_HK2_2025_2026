@@ -2,7 +2,6 @@ import { ProfileSidebar } from '@/components/category/user/profile-sidebar';
 import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
 import { KeyRound, Receipt, TicketPercent, User } from 'lucide-react';
 import { JSX } from 'react';
-import { Separator } from '@/components/ui/separator';
 
 const items: SidebarItemInterface[] = [
 	{

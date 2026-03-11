@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { CategoryDetailInfoAdmin } from '@/types/categories/admin/CategoryDetailInfoAdmin';
@@ -18,6 +17,8 @@ import { generateSlug } from '@/utils/mappers/shared/slug';
 import { CategoryCreateDTO } from '@/types/categories/admin/CategoryCreateDTO';
 import { CategoryUpdateDTO } from '@/types/categories/admin/CategoryUpdateDTO';
 import { CategoryResponse } from '@/types/categories/admin/CategoryResponse';
+import Image from 'next/image';
+import { CategoryImage } from '@/types/images/admin/CategoryImage';
 
 interface Props {
 	formType: AdminFormType;
@@ -79,7 +80,6 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 
 		const image = {
 			file,
-			preview: URL.createObjectURL(file),
 			url: undefined,
 		};
 
@@ -110,6 +110,16 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 			const dto: CategoryUpdateDTO = mapCategoryFormToUpdateDTO(form);
 			console.log('Update DTO:', dto);
 		}
+	};
+
+	const getImageSrc = (img?: CategoryImage): string | undefined => {
+		if (!img) return undefined;
+
+		if (img.file) {
+			return URL.createObjectURL(img.file);
+		}
+
+		return img.imageUrl;
 	};
 
 	return (
@@ -210,9 +220,11 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 
 					{form.image && (
 						<div className='mt-4 space-y-3'>
-							<img
-								src={form.image.preview}
-								alt=''
+							<Image
+								src={getImageSrc(form.image)!}
+								alt={''}
+								width={128}
+								height={128}
 								className='w-40 h-40 object-cover rounded border'
 							/>
 

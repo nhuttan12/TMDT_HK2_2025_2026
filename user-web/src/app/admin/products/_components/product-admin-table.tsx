@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +28,6 @@ import {
 	ProductAdminSortField,
 	ProductAdminSortOrder,
 } from '@/types/products/admin/ProductAdminSort';
-import Link from 'next/link';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -106,7 +105,12 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 					</p>
 				</div>
 
-				<Button className='cursor-pointer' onClick={handleRedirectToAddNewProduct}>+ Thêm sản phẩm</Button>
+				<Button
+					className='cursor-pointer'
+					onClick={handleRedirectToAddNewProduct}
+				>
+					+ Thêm sản phẩm
+				</Button>
 			</div>
 
 			{/* Search */}
@@ -253,9 +257,7 @@ export default function ProductAdminTable({ products }: Props): JSX.Element {
 
 											<DropdownMenuContent align='end'>
 												<DropdownMenuItem
-													onClick={(
-														e,
-													): void => {
+													onClick={(e): void => {
 														e.stopPropagation();
 														handleRedirectToEditProductEditMode(
 															product.productID,

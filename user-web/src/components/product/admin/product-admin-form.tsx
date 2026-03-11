@@ -16,6 +16,7 @@ import {
 import { generateSlug } from '@/utils/mappers/shared/slug';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import Image from 'next/image';
+import { CategoryImage } from '@/types/images/admin/CategoryImage';
 
 interface Props {
 	formType: AdminFormType;
@@ -179,7 +180,17 @@ export default function ProductAdminForm({ formType }: Props): JSX.Element {
 	};
 
 	const getImageSrc = (img: SortableImageForm): string =>
-		img.file ? URL.createObjectURL(img.file) : img.imageUrl;
+		img.file ? URL.createObjectURL(img.file) : img.imageUrl!;
+
+	// const getImageSrc = (img?: SortableImageForm): string | undefined => {
+	// 	if (!img) return undefined;
+	//
+	// 	if (img.file) {
+	// 		return URL.createObjectURL(img.file);
+	// 	}
+	//
+	// 	return img.imageUrl;
+	// };
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
@@ -202,7 +213,7 @@ export default function ProductAdminForm({ formType }: Props): JSX.Element {
 				<div>
 					<h1 className='text-2xl font-bold'>Quản lý sản phẩm</h1>
 					<p className='text-sm text-muted-foreground'>
-						Quản lý toàn bộ sản phẩm trong hệ thống
+						Quản lý thông tin chi tiết của sản phẩm
 					</p>
 				</div>
 			</div>

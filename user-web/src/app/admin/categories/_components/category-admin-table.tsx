@@ -218,7 +218,7 @@ export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 									</TableCell>
 
 									<TableCell>
-										{category.isActive ? (
+										{category.status ? (
 											<Badge>Hoạt động</Badge>
 										) : (
 											<Badge variant='secondary'>Ẩn</Badge>

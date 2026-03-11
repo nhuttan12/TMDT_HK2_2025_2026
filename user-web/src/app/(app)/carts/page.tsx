@@ -47,7 +47,6 @@ export default function Cart({ params }: Props): JSX.Element {
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems);
 	const router = useRouter();
 
-
 	const updateQuantity = useCartStore((s) => s.updateQuantity);
 	const items: CartItem[] = useCartStore((s): CartItem[] => s.items);
 	const removeItem = useCartStore((s) => s.removeItem);

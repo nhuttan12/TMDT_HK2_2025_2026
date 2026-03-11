@@ -5,4 +5,6 @@ export interface CategoryListItemAdmin {
 	image: string;
 	productCount: number;
 	status: boolean;
+	createdAt: string;
+	updatedAt: string;
 }

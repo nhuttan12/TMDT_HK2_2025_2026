@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation';
 import {
 	Boxes,
-	CalendarCheck,
 	CheckCircle2,
 	ClipboardList,
 	Download,
@@ -32,6 +31,14 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { JSX } from 'react';
 import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
 import SidebarItem from '@/components/layout/admin/side-bar-item';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 const sidebarData: SidebarItemInterface[] = [
 	{
@@ -99,14 +106,14 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 			{
 				title: 'Phân quyền nhân viên',
-				href: '/admin/users/staff/roles',
+				href: '/admin/users/roles',
 				icon: <Shield size={18} />,
 			},
-			{
-				title: 'Lịch chấm công',
-				href: '/admin/users/attendance',
-				icon: <CalendarCheck size={18} />,
-			},
+			// {
+			// 	title: 'Lịch chấm công',
+			// 	href: '/admin/users/attendance',
+			// 	icon: <CalendarCheck size={18} />,
+			// },
 			{
 				title: 'Nhiệm vụ phân công',
 				href: '/admin/users/tasks',
@@ -181,7 +188,69 @@ export default function AdminSidebar(): JSX.Element {
 
 	return (
 		<aside className='h-screen w-64 border-r rounded-xl shadow-lg bg-background flex flex-col'>
-			<div className='h-16 flex items-center px-6 font-bold text-lg'>Admin Panel</div>
+			<div className='h-16 flex items-center justify-between px-6'>
+				<div className='font-bold text-lg'>Admin Panel</div>
+
+				<DropdownMenu>
+					<DropdownMenuTrigger className='cursor-pointer'>
+						<div className='relative'>
+							<Avatar className='h-9 w-9'>
+								<AvatarImage src='/avatar.jpg' />
+								<AvatarFallback>AD</AvatarFallback>
+							</Avatar>
+
+							{/* notification dot */}
+							<Badge
+								className='absolute -top-1 -right-1 h-3 w-3 rounded-full p-0'
+								variant='destructive'
+							/>
+						</div>
+					</DropdownMenuTrigger>
+
+					<DropdownMenuContent
+						align='end'
+						className='w-80'
+					>
+						<div className='px-3 py-2 font-semibold'>Thông báo</div>
+
+						<div className='max-h-64 overflow-y-auto'>
+							<DropdownMenuItem className='flex gap-3'>
+								<Package
+									size={16}
+									className='text-muted-foreground mt-1'
+								/>
+
+								<div className='flex flex-col'>
+									<span className='font-medium'>Đơn hàng mới</span>
+									<span className='text-sm text-muted-foreground'>
+										Khách hàng vừa tạo đơn
+									</span>
+								</div>
+							</DropdownMenuItem>
+
+							<DropdownMenuItem className='flex flex-col items-start'>
+								<span className='font-medium'>Sản phẩm sắp hết</span>
+								<span className='text-sm text-muted-foreground'>
+									Adidas UltraBoost còn 2 sản phẩm
+								</span>
+							</DropdownMenuItem>
+
+							<DropdownMenuItem className='flex flex-col items-start'>
+								<span className='font-medium'>Người dùng mới</span>
+								<span className='text-sm text-muted-foreground'>
+									Có user mới đăng ký
+								</span>
+							</DropdownMenuItem>
+						</div>
+
+						<div className='border-t mt-2 pt-2'>
+							<DropdownMenuItem className='justify-center text-sm text-blue-500'>
+								Xem tất cả
+							</DropdownMenuItem>
+						</div>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
 
 			<Separator />
 

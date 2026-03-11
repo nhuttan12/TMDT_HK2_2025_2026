@@ -3,30 +3,24 @@ import { CategoryCreateDTO } from '@/types/categories/admin/CategoryCreateDTO';
 import { CategoryUpdateDTO } from '@/types/categories/admin/CategoryUpdateDTO';
 import { CategoryResponse } from '@/types/categories/admin/CategoryResponse';
 
-export const mapCategoryFormToCreateDTO = (
-	form: CategoryDetailInfoAdmin
-): CategoryCreateDTO => ({
+export const mapCategoryFormToCreateDTO = (form: CategoryDetailInfoAdmin): CategoryCreateDTO => ({
 	name: form.name,
 	slug: form.slug,
 	description: form.description,
 	status: form.status,
-	image: form.image!,
+	image: form.image!.imageUrl!,
 });
 
-export const mapCategoryFormToUpdateDTO = (
-	form: CategoryDetailInfoAdmin
-): CategoryUpdateDTO => ({
+export const mapCategoryFormToUpdateDTO = (form: CategoryDetailInfoAdmin): CategoryUpdateDTO => ({
 	categoryID: form.categoryID,
 	name: form.name,
 	slug: form.slug,
 	description: form.description,
 	status: form.status,
-	image: form.image,
+	image: form.image?.imageUrl,
 });
 
-export const mapCategoryResponseToAdmin = (
-	data: CategoryResponse
-): CategoryDetailInfoAdmin => {
+export const mapCategoryResponseToAdmin = (data: CategoryResponse): CategoryDetailInfoAdmin => {
 	return {
 		categoryID: data.categoryID,
 		name: data.name,
@@ -37,12 +31,8 @@ export const mapCategoryResponseToAdmin = (
 		createdAt: data.createdAt,
 		updatedAt: data.updatedAt,
 
-		image: data.imageUrl
-			? {
-				file: undefined,
-				preview: data.imageUrl,
-				url: data.imageUrl,
-			}
-			: undefined,
+		image: {
+			imageUrl: data.imageUrl!,
+		},
 	};
 };
