@@ -1,9 +1,9 @@
 'use client';
 
-import { InvoiceDetail } from '@/types/invoices/InvoiceDetail';
-import { getInvoiceStatusLabel } from '@/types/invoices/InvoiceStatus';
-import { getPaymentMethodLabel } from '@/types/invoices/PaymentMethod';
-import { getShippingStatusLabel } from '@/types/invoices/ShippingStatus';
+import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
+import { getInvoiceStatusLabel } from '@/types/invoices/user/InvoiceStatus';
+import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethod';
+import { getShippingStatusLabel } from '@/types/invoices/user/ShippingStatus';
 
 interface Props {
 	invoice: InvoiceDetail;

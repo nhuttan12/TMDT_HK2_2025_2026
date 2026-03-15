@@ -36,8 +36,10 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const sortField = searchParams.get('sort') as UserAdminSortField | null;
-	const sortOrder = searchParams.get('order') as UserAdminSortOrder;
+	const sortField: UserAdminSortField | null = searchParams.get(
+		'sort',
+	) as UserAdminSortField | null;
+	const sortOrder: UserAdminSortOrder = searchParams.get('order') as UserAdminSortOrder;
 
 	const handleSort = (field: UserAdminSortField) => {
 		const currentSort: string | null = searchParams.get('sort');
@@ -58,17 +60,24 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 
 	const renderSortIcon = (field: UserAdminSortField) => {
 		if (sortField !== field) return null;
-		return sortOrder === 'asc' ? (
-			<ChevronUp
-				size={14}
-				className='inline ml-1'
-			/>
-		) : (
-			<ChevronDown
-				size={14}
-				className='inline ml-1'
-			/>
-		);
+
+		if (sortOrder === 'asc')
+			return (
+				<ChevronUp
+					size={14}
+					className='ml-1'
+				/>
+			);
+
+		if (sortOrder === 'desc')
+			return (
+				<ChevronDown
+					size={14}
+					className='ml-1'
+				/>
+			);
+
+		return null;
 	};
 
 	const handleRedirectToStaffInfoViewMode = (userID: number) => {
@@ -114,14 +123,20 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 								onClick={() => handleSort('fullName')}
 								className='cursor-pointer'
 							>
-								Họ tên {renderSortIcon('fullName')}
+								<div className='flex items-center gap-1'>
+									<span>Họ tên</span>
+									{renderSortIcon('fullName')}
+								</div>
 							</TableHead>
 
 							<TableHead
 								onClick={() => handleSort('email')}
 								className='cursor-pointer'
 							>
-								Email {renderSortIcon('email')}
+								<div className='flex items-center gap-1'>
+									<span>Email</span>
+									{renderSortIcon('email')}
+								</div>
 							</TableHead>
 
 							<TableHead>SĐT</TableHead>
@@ -130,21 +145,30 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 								onClick={() => handleSort('role')}
 								className='cursor-pointer'
 							>
-								Vai trò {renderSortIcon('role')}
+								<div className='flex items-center gap-1'>
+									<span>Vai trò</span>
+									{renderSortIcon('role')}
+								</div>
 							</TableHead>
 
 							<TableHead
 								onClick={() => handleSort('isActive')}
 								className='cursor-pointer'
 							>
-								Trạng thái {renderSortIcon('isActive')}
+								<div className='flex items-center gap-1'>
+									<span>Trạng thái</span>
+									{renderSortIcon('isActive')}
+								</div>
 							</TableHead>
 
 							<TableHead
 								onClick={() => handleSort('createdAt')}
 								className='cursor-pointer'
 							>
-								Ngày tạo {renderSortIcon('createdAt')}
+								<div className='flex items-center gap-1'>
+									<span>Ngày tạo</span>
+									{renderSortIcon('createdAt')}
+								</div>
 							</TableHead>
 
 							<TableHead className='text-right'>Hành động</TableHead>

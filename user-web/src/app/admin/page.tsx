@@ -1,3 +1,1 @@
-export default function AdminPage() {
-
-}
+export default function AdminPage() {}

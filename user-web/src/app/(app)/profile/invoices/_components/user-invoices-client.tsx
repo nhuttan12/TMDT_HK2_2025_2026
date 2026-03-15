@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import { UserInvoice } from '@/types/invoices/UserInvoice';
+import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { useRouter } from 'next/navigation';
 import { JSX, useState } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';

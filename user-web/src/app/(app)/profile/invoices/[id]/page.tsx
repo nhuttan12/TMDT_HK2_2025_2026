@@ -1,4 +1,4 @@
-import { InvoiceDetail } from '@/types/invoices/InvoiceDetail';
+import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import InvoiceDetailClient from './_components/invoices-detail-client';
 
 interface Props {

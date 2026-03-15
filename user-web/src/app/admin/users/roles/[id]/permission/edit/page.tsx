@@ -36,5 +36,10 @@ const rolePermissions: RolePermission[] = [
 ];
 
 export default function Page(): JSX.Element {
-	return <RolePermissionForm permissions={rolePermissions} formType={'update'} />;
+	return (
+		<RolePermissionForm
+			permissions={rolePermissions}
+			formType={'update'}
+		/>
+	);
 }

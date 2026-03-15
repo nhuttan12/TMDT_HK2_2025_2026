@@ -1,7 +1,9 @@
-export type InvoiceStatus = 'PENDING' | 'PAID' | 'CANCELLED' | 'COMPLETED';
+export type InvoiceStatus = 'PENDING_APPROVAL' | 'PENDING' | 'PAID' | 'CANCELLED' | 'COMPLETED';
 
 export function getInvoiceStatusLabel(status: InvoiceStatus): string {
 	switch (status) {
+		case 'PENDING_APPROVAL':
+			return 'Chờ phê duyệt';
 		case 'PENDING':
 			return 'Chờ thanh toán';
 		case 'PAID':

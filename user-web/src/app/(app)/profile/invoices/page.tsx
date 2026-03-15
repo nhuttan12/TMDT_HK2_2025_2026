@@ -1,4 +1,4 @@
-import { UserInvoice } from '@/types/invoices/UserInvoice';
+import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import UserInvoicesClient from './_components/user-invoices-client';
 
 const mockInvoices: UserInvoice[] = [

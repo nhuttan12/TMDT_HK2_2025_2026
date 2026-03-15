@@ -5,6 +5,6 @@ interface Props {
 	params: { categoryID: string };
 }
 
-export default function Index({params}: Props): JSX.Element {
-	return <CategoryAdminForm formType={'view'}/>;
+export default function Index({ params }: Props): JSX.Element {
+	return <CategoryAdminForm formType={'view'} />;
 }

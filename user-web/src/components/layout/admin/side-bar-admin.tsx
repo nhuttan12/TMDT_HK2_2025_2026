@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
 	Boxes,
 	CheckCircle2,
@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
 import SidebarItem from '@/components/layout/admin/side-bar-item';
 import {
@@ -39,6 +39,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const sidebarData: SidebarItemInterface[] = [
 	{
@@ -56,7 +57,7 @@ const sidebarData: SidebarItemInterface[] = [
 	},
 	{
 		title: 'Đơn hàng',
-		href: '/admin/orders',
+		href: '/admin/invoices',
 		icon: <ShoppingCart size={18} />,
 	},
 	{
@@ -185,6 +186,12 @@ const sidebarData: SidebarItemInterface[] = [
 
 export default function AdminSidebar(): JSX.Element {
 	const pathname: string = usePathname();
+	const router: AppRouterInstance = useRouter();
+
+	const handleRedirectToShowAllNotification = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.stopPropagation();
+		router.push('/admin/notifications');
+	};
 
 	return (
 		<aside className='h-screen w-64 border-r rounded-xl shadow-lg bg-background flex flex-col'>
@@ -192,10 +199,10 @@ export default function AdminSidebar(): JSX.Element {
 				<div className='font-bold text-lg'>Admin Panel</div>
 
 				<DropdownMenu>
-					<DropdownMenuTrigger className='cursor-pointer'>
+					<DropdownMenuTrigger className='cursor-pointer outline-none focus:outline-none focus:ring-0'>
 						<div className='relative'>
 							<Avatar className='h-9 w-9'>
-								<AvatarImage src='/avatar.jpg' />
+								<AvatarImage src='/avatar.png' />
 								<AvatarFallback>AD</AvatarFallback>
 							</Avatar>
 
@@ -208,18 +215,14 @@ export default function AdminSidebar(): JSX.Element {
 					</DropdownMenuTrigger>
 
 					<DropdownMenuContent
-						align='end'
+						align='start'
+						side='right'
 						className='w-80'
 					>
 						<div className='px-3 py-2 font-semibold'>Thông báo</div>
 
 						<div className='max-h-64 overflow-y-auto'>
 							<DropdownMenuItem className='flex gap-3'>
-								<Package
-									size={16}
-									className='text-muted-foreground mt-1'
-								/>
-
 								<div className='flex flex-col'>
 									<span className='font-medium'>Đơn hàng mới</span>
 									<span className='text-sm text-muted-foreground'>
@@ -244,7 +247,12 @@ export default function AdminSidebar(): JSX.Element {
 						</div>
 
 						<div className='border-t mt-2 pt-2'>
-							<DropdownMenuItem className='justify-center text-sm text-blue-500'>
+							<DropdownMenuItem
+								className='justify-center text-sm text-blue-500'
+								onClick={(e: React.MouseEvent<HTMLDivElement>): void =>
+									handleRedirectToShowAllNotification(e)
+								}
+							>
 								Xem tất cả
 							</DropdownMenuItem>
 						</div>

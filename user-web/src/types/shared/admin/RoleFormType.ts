@@ -1,1 +1,1 @@
-export type RoleFormType = 'update' | 'view'
+export type RoleFormType = 'update' | 'view';

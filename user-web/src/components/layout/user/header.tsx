@@ -156,18 +156,23 @@ export default function Header() {
 							align='end'
 							className='w-48'
 						>
-							{profileElements.map((item: RedirectElement): JSX.Element => (
-								<Link href={item.href} key={item.key}>
-									<DropdownMenuItem
+							{profileElements.map(
+								(item: RedirectElement): JSX.Element => (
+									<Link
+										href={item.href}
 										key={item.key}
-										onClick={() => router.push(item.href)}
-										className='flex items-center justify-between cursor-pointer'
 									>
-										{item.label}
-										{item.icon}
-									</DropdownMenuItem>
-								</Link>
-							))}
+										<DropdownMenuItem
+											key={item.key}
+											onClick={() => router.push(item.href)}
+											className='flex items-center justify-between cursor-pointer'
+										>
+											{item.label}
+											{item.icon}
+										</DropdownMenuItem>
+									</Link>
+								),
+							)}
 						</DropdownMenuContent>
 					</DropdownMenu>
 

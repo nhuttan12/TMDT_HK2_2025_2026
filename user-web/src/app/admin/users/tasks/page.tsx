@@ -1,0 +1,34 @@
+import { JSX } from 'react';
+import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
+import TaskListForStaffTable from '@/app/admin/users/tasks/_components/task-list-for-staff-table';
+
+const mockTasks: TaskAssignmentList[] = [
+	{
+		taskID: 1,
+		title: 'Kiểm tra tồn kho',
+		description: 'Kiểm tra số lượng giày Adidas',
+		assignee: 'Nguyễn Văn A',
+		date: '2026-03-12',
+		status: 'pending',
+	},
+	{
+		taskID: 2,
+		title: 'Xử lý đơn hàng',
+		description: 'Đóng gói đơn #1021',
+		assignee: 'Trần Văn B',
+		date: '2026-03-12',
+		status: 'in-progress',
+	},
+	{
+		taskID: 3,
+		title: 'Cập nhật sản phẩm',
+		description: 'Thêm sản phẩm Nike mới',
+		assignee: 'Lê Văn C',
+		date: '2026-03-11',
+		status: 'done',
+	},
+];
+
+export default function Page(): JSX.Element {
+	return <TaskListForStaffTable tasks={mockTasks} />;
+}

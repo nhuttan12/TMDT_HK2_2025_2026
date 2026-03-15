@@ -5,6 +5,6 @@ interface Props {
 	params: { productID: string };
 }
 
-export default function Index({params}: Props): JSX.Element {
-	return <ProductAdminForm formType={'view'}/>;
+export default function Index({ params }: Props): JSX.Element {
+	return <ProductAdminForm formType={'view'} />;
 }

@@ -1,1 +1,1 @@
-export type AdminFormType = 'update' | 'create' | 'view'
+export type AdminFormType = 'update' | 'create' | 'view';

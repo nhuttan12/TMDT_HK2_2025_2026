@@ -133,9 +133,7 @@ export default function ProductDetailClient({
 					</div>
 
 					{/* Title */}
-					<h3 className='text-2xl font-semibold leading-tight'>
-						{product.name}
-					</h3>
+					<h3 className='text-2xl font-semibold leading-tight'>{product.name}</h3>
 
 					{/* SKU */}
 					<div className='text-sm text-muted-foreground'>

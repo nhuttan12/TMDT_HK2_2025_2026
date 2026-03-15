@@ -11,7 +11,7 @@ interface ItemProps {
 	pathname: string;
 }
 
-export  default function SidebarItem({ item, pathname }: ItemProps): JSX.Element {
+export default function SidebarItem({ item, pathname }: ItemProps): JSX.Element {
 	const [open, setOpen] = useState(true);
 
 	// Nếu có children → render collapsible

@@ -1,42 +1,36 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Dev: Bun (No Debug)",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "bun dev"
-        },
-        {
-            "name": "Debug: Bun Server",
-            "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "bun",
-            "runtimeArgs": [
-                "--inspect",
-                "dev"
-            ],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Debug: Brave Client",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}",
-            "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Full Debug (Server + Client)",
-            "configurations": [
-                "Debug: Bun Server",
-                "Debug: Brave Client"
-            ]
-        }
-    ]
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Dev: Bun (No Debug)",
+			"type": "node-terminal",
+			"request": "launch",
+			"command": "bun dev"
+		},
+		{
+			"name": "Debug: Bun Server",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "bun",
+			"runtimeArgs": ["--inspect", "dev"],
+			"console": "integratedTerminal"
+		},
+		{
+			"name": "Debug: Brave Client",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:3000",
+			"webRoot": "${workspaceFolder}",
+			"runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Full Debug (Server + Client)",
+			"configurations": ["Debug: Bun Server", "Debug: Brave Client"]
+		}
+	]
 }

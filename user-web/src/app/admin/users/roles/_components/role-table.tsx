@@ -55,8 +55,7 @@ export default function RoleTable({ roles }: Props): JSX.Element {
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead className='w-[80px]'>ID</TableHead>
-							<TableHead>Tên role</TableHead>
+							<TableHead>Tên quyền</TableHead>
 							<TableHead>Mô tả</TableHead>
 							<TableHead>Trạng thái</TableHead>
 							<TableHead className='text-right'>Hành động</TableHead>
@@ -73,8 +72,6 @@ export default function RoleTable({ roles }: Props): JSX.Element {
 										handleRedirectToRolePermissionViewMode(e, role.name)
 									}
 								>
-									<TableCell>{role.roleID}</TableCell>
-
 									<TableCell className='font-medium'>{role.name}</TableCell>
 
 									<TableCell className='text-muted-foreground'>

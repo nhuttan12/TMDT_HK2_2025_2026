@@ -39,6 +39,11 @@ interface Props {
 	params: { productID: string };
 }
 
-export default function Page({params}: Props): JSX.Element {
-	return <RolePermissionForm permissions={rolePermissions} formType={'view'} />;
+export default function Page({ params }: Props): JSX.Element {
+	return (
+		<RolePermissionForm
+			permissions={rolePermissions}
+			formType={'view'}
+		/>
+	);
 }

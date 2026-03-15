@@ -49,8 +49,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 		name: 'Khoai Tây Hồng VietGAP 500G (Túi)',
 		brand: 'Trường Phát',
 		price: 33000,
-		image:
-			'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
+		image: 'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
 		rating: 4.5,
 		discount: 0.5,
 		description:
