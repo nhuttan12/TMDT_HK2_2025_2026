@@ -21,13 +21,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { formatDate } from '@/utils/date';
 import {
 	ProductAdminSortField,
 	ProductAdminSortOrder,
 } from '@/types/products/admin/ProductAdminSort';
+import { useTableSort } from '@/hooks/use-table-sort';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -37,28 +38,8 @@ interface Props {
 
 export default function ProductAdminTable({ products }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const sortField = searchParams.get('sort') as ProductAdminSortField | null;
-	const sortOrder = searchParams.get('order') as ProductAdminSortOrder;
-
-	const handleSort = (field: ProductAdminSortField) => {
-		const currentSort: string | null = searchParams.get('sort');
-		const currentOrder: string | null = searchParams.get('order');
-
-		let newOrder: ProductAdminSortOrder = 'asc';
-
-		if (currentSort === field) {
-			if (currentOrder === 'asc') newOrder = 'desc';
-			else newOrder = 'asc';
-		}
-
-		const params = new URLSearchParams(searchParams.toString());
-		params.set('sort', field);
-		params.set('order', newOrder);
-
-		router.push(`?${params.toString()}`);
-	};
+	const { sortField, sortOrder, handleSort } = useTableSort<ProductAdminSortField>();
 
 	const renderSortIcon = (field: ProductAdminSortField) => {
 		if (sortField !== field) return null;

@@ -29,56 +29,56 @@ export default function InvoiceDetailAdmin({ invoice }: Props): JSX.Element {
 
 				<CardContent className='grid grid-cols-2 gap-6'>
 					<div className='space-y-2'>
-						<p>
+						<div>
 							<strong>Ngày tạo:</strong>{' '}
 							{new Date(invoice.createdAt).toLocaleString()}
-						</p>
+						</div>
 
-						<p>
+						<div>
 							<strong>Thanh toán:</strong>{' '}
 							{getPaymentMethodLabel(invoice.paymentMethod)}
-						</p>
+						</div>
 
-						<p>
+						<div>
 							<strong>Trạng thái hóa đơn:</strong>{' '}
 							<InvoiceStatusBadge status={invoice.status} />
-						</p>
+						</div>
 
-						<p>
+						<div>
 							<strong>Trạng thái giao hàng:</strong>{' '}
 							<ShippingStatusBadge status={invoice.shippingStatus} />
-						</p>
+						</div>
 					</div>
 
 					<div className='space-y-2'>
-						<p>
+						<div>
 							<strong>Mã vận đơn:</strong> {invoice.trackingCode}
-						</p>
+						</div>
 
-						<p>
+						<div>
 							<strong>Dự kiến giao:</strong>{' '}
 							{new Date(invoice.estimatedDelivery).toLocaleDateString()}
-						</p>
+						</div>
 
 						{invoice.paidAt && (
-							<p>
+							<div>
 								<strong>Thanh toán lúc:</strong>{' '}
 								{new Date(invoice.paidAt).toLocaleString()}
-							</p>
+							</div>
 						)}
 
 						{invoice.completedAt && (
-							<p>
+							<div>
 								<strong>Hoàn tất:</strong>{' '}
 								{new Date(invoice.completedAt).toLocaleString()}
-							</p>
+							</div>
 						)}
 
 						{invoice.cancelledAt && (
-							<p>
+							<div>
 								<strong>Đã hủy:</strong>{' '}
 								{new Date(invoice.cancelledAt).toLocaleString()}
-							</p>
+							</div>
 						)}
 					</div>
 				</CardContent>

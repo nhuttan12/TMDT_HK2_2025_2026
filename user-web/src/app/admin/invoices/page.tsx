@@ -6,7 +6,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		invoiceID: 1001,
 		createdAt: '2026-03-10T10:12:00',
-		status: 'PENDING',
+		status: 'PENDING_APPROVAL',
 		paymentMethod: 'COD',
 		totalAmount: 750000,
 		totalItems: 2,

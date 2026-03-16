@@ -20,13 +20,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import {
-	CategoryAdminSortField,
-	CategoryAdminSortOrder,
-} from '@/types/categories/admin/CategoryAdminSort';
+import { useRouter } from 'next/navigation';
+import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import Image from 'next/image';
+import { useTableSort } from '@/hooks/use-table-sort';
 
 interface Props {
 	categories: CategoryListItemAdmin[];
@@ -34,27 +32,8 @@ interface Props {
 
 export default function CategoryAdminTable({ categories }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const sortField = searchParams.get('sort') as CategoryAdminSortField | null;
-	const sortOrder = searchParams.get('order') as CategoryAdminSortOrder;
-
-	const handleSort = (field: CategoryAdminSortField): void => {
-		const currentSort = searchParams.get('sort');
-		const currentOrder = searchParams.get('order');
-
-		let newOrder: CategoryAdminSortOrder = 'asc';
-
-		if (currentSort === field) {
-			newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-		}
-
-		const params = new URLSearchParams(searchParams.toString());
-		params.set('sort', field);
-		params.set('order', newOrder);
-
-		router.push(`?${params.toString()}`);
-	};
+	const { sortField, sortOrder, handleSort } = useTableSort<CategoryAdminSortField>();
 
 	const renderSortIcon = (field: CategoryAdminSortField): JSX.Element | null => {
 		if (sortField !== field) return null;

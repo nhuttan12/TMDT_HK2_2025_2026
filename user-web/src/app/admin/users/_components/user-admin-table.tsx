@@ -19,13 +19,15 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Ban, ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { Ban, ChevronDown, ChevronUp, MoreHorizontal, Pencil } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { formatDate } from '@/utils/date';
 import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
-import { UserAdminSortField, UserAdminSortOrder } from '@/types/users/admin/UserAdminSort';
+import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useTableSort } from '@/hooks/use-table-sort';
+import { getUserRoleLabel } from '@/types/users/UserRole';
+import UserStatusBadge from '@/components/user/admin/user-status-badge';
 
 interface Props {
 	users: UserListAdmin[];
@@ -34,29 +36,8 @@ interface Props {
 
 export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const sortField: UserAdminSortField | null = searchParams.get(
-		'sort',
-	) as UserAdminSortField | null;
-	const sortOrder: UserAdminSortOrder = searchParams.get('order') as UserAdminSortOrder;
-
-	const handleSort = (field: UserAdminSortField) => {
-		const currentSort: string | null = searchParams.get('sort');
-		const currentOrder: string | null = searchParams.get('order');
-
-		let newOrder: UserAdminSortOrder = 'asc';
-
-		if (currentSort === field) {
-			newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-		}
-
-		const params = new URLSearchParams(searchParams.toString());
-		params.set('sort', field);
-		params.set('order', newOrder);
-
-		router.push(`?${params.toString()}`);
-	};
+	const { sortField, sortOrder, handleSort } = useTableSort<UserAdminSortField>();
 
 	const renderSortIcon = (field: UserAdminSortField) => {
 		if (sortField !== field) return null;
@@ -203,15 +184,11 @@ export default function UserAdminTable({ users, mode }: Props): JSX.Element {
 								<TableCell>{user.phone}</TableCell>
 
 								<TableCell>
-									<Badge variant='secondary'>{user.role}</Badge>
+									<Badge variant='secondary'>{getUserRoleLabel(user.role)}</Badge>
 								</TableCell>
 
 								<TableCell>
-									{user.status ? (
-										<Badge>Hoạt động</Badge>
-									) : (
-										<Badge variant='secondary'>Bị khóa</Badge>
-									)}
+									<UserStatusBadge status={user.status} />
 								</TableCell>
 
 								<TableCell className='text-muted-foreground'>

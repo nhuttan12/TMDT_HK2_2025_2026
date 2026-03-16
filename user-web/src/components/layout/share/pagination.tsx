@@ -7,42 +7,30 @@ import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/naviga
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface PaginationProps {
+	currentPage: number;
 	totalPages: number;
+	onPageChange: (page: number) => void;
 }
 
-export default function Pagination({ totalPages }: PaginationProps): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
-
-	const currentPage: number = Number(searchParams.get('page')) || 1;
-
-	const changePage = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.set('page', String(page));
-
-		router.push(`?${params.toString()}`, { scroll: false });
-
-		// Scroll lên top mượt
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth',
-		});
-	};
-
+export default function Pagination({
+	currentPage,
+	totalPages,
+	onPageChange,
+}: PaginationProps): JSX.Element {
 	const handlePrev = () => {
-		if (currentPage > 1) changePage(currentPage - 1);
+		if (currentPage > 1) onPageChange(currentPage - 1);
 	};
 
 	const handleNext = () => {
-		if (currentPage < totalPages) changePage(currentPage + 1);
+		if (currentPage < totalPages) onPageChange(currentPage + 1);
 	};
 
 	const generatePages = () => {
 		const pages: (number | string)[] = [];
 
 		const siblingCount = 1;
-		const left: number = Math.max(currentPage - siblingCount, 1);
-		const right: number = Math.min(currentPage + siblingCount, totalPages);
+		const left = Math.max(currentPage - siblingCount, 1);
+		const right = Math.min(currentPage + siblingCount, totalPages);
 
 		if (left > 1) {
 			pages.push(1);
@@ -53,7 +41,6 @@ export default function Pagination({ totalPages }: PaginationProps): JSX.Element
 			pages.push(i);
 		}
 
-		// Always show last page
 		if (right < totalPages) {
 			if (right < totalPages - 1) pages.push('...');
 			pages.push(totalPages);
@@ -90,14 +77,15 @@ export default function Pagination({ totalPages }: PaginationProps): JSX.Element
 						<Button
 							key={index}
 							variant='outline'
-							onClick={(): void => changePage(Number(page))}
+							onClick={(): void => onPageChange(Number(page))}
 							className={`px-3 py-1 rounded-md text-sm font-medium
-							transition-all duration-200 hover:scale-105
-							${
-								currentPage === page
-									? 'bg-black text-white shadow-md'
-									: 'bg-white border border-gray-200 hover:bg-gray-100'
-							}`}
+								transition-all duration-200 hover:scale-105
+								${
+									currentPage === page
+										? 'bg-black text-white shadow-md'
+										: 'bg-white border border-gray-200 hover:bg-gray-100'
+								}
+							`}
 						>
 							{page}
 						</Button>

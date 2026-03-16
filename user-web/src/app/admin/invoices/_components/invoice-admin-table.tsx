@@ -8,9 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import { useRouter } from 'next/navigation';
-import { JSX, useState } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import React, { JSX, useState } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
@@ -22,19 +20,22 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { getPaymentMethodLabel, PaymentMethod } from '@/types/invoices/user/PaymentMethod';
+import { CheckedState } from '@radix-ui/react-checkbox';
 
 interface Props {
 	invoices: UserInvoice[];
+	onRedirectToDetail: (invoiceID: number) => void;
 }
 
-export default function InvoiceAdminTable({ invoices }: Props): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-
+export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Props): JSX.Element {
 	const [selected, setSelected] = useState<number[]>([]);
 
-	const toggleSelect = (id: number): void => {
+	const toggleSelect = (invoiceID: number): void => {
 		setSelected((prev: number[]): number[] =>
-			prev.includes(id) ? prev.filter((x: number): boolean => x !== id) : [...prev, id],
+			prev.includes(invoiceID)
+				? prev.filter((x: number): boolean => x !== invoiceID)
+				: [...prev, invoiceID],
 		);
 	};
 
@@ -53,18 +54,17 @@ export default function InvoiceAdminTable({ invoices }: Props): JSX.Element {
 		// await updateInvoiceStatus(id, status)
 	};
 
-	const handleRedirectToInvoiceDetailAdmin = (id: number): void => {
-		router.push(`/admin/invoices/${id}`);
-	};
-
 	return (
-		<Table>
+		<Table className='h-[calc(100vh-8.2rem)]'>
 			<TableHeader>
 				<TableRow>
 					<TableHead className='w-[40px]'>
 						<Checkbox
 							checked={selected.length === invoices.length}
 							onCheckedChange={toggleSelectAll}
+							className="
+								border-2! border-gray-200
+							"
 						/>
 					</TableHead>
 					<TableHead>ID</TableHead>
@@ -83,14 +83,18 @@ export default function InvoiceAdminTable({ invoices }: Props): JSX.Element {
 						<TableRow
 							key={invoice.invoiceID}
 							className='cursor-pointer'
-							onClick={(): void =>
-								handleRedirectToInvoiceDetailAdmin(invoice.invoiceID)
-							}
+							onClick={(): void => onRedirectToDetail(invoice.invoiceID)}
 						>
 							<TableCell>
 								<Checkbox
 									checked={selected.includes(invoice.invoiceID)}
-									onCheckedChange={() => toggleSelect(invoice.invoiceID)}
+									onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+										e.stopPropagation()
+									}
+									onCheckedChange={(): void => toggleSelect(invoice.invoiceID)}
+									className="
+										border-2! border-gray-200
+									"
 								/>
 							</TableCell>
 
@@ -104,7 +108,9 @@ export default function InvoiceAdminTable({ invoices }: Props): JSX.Element {
 								<InvoiceStatusBadge status={invoice.status} />
 							</TableCell>
 
-							<TableCell>{invoice.paymentMethod}</TableCell>
+							<TableCell>
+								{getPaymentMethodLabel(invoice.paymentMethod as PaymentMethod)}
+							</TableCell>
 
 							<TableCell>{invoice.totalItems}</TableCell>
 
@@ -124,13 +130,22 @@ export default function InvoiceAdminTable({ invoices }: Props): JSX.Element {
 									</SelectTrigger>
 
 									<SelectContent>
-										<SelectItem value='PENDING'>Pending</SelectItem>
+										{invoice.status === 'PENDING_APPROVAL' ? (
+											<>
+												<SelectItem value='APPROVE'>Duyệt đơn</SelectItem>
+												<SelectItem value='CANCEL'>Huỷ đơn</SelectItem>
+											</>
+										) : (
+											<>
+												<SelectItem value='PENDING'>Chờ thanh toán</SelectItem>
 
-										<SelectItem value='PAID'>Paid</SelectItem>
+												<SelectItem value='PAID'>Đã thanh toán</SelectItem>
 
-										<SelectItem value='COMPLETED'>Completed</SelectItem>
+												<SelectItem value='COMPLETED'>Hoàn tất</SelectItem>
 
-										<SelectItem value='CANCELLED'>Cancelled</SelectItem>
+												<SelectItem value='CANCELLED'>Đã huỷ</SelectItem>
+											</>
+										)}
 									</SelectContent>
 								</Select>
 							</TableCell>

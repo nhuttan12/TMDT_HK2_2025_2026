@@ -14,10 +14,11 @@ import {
 import React, { JSX, useEffect, useState } from 'react';
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
 import { Timeout } from '@radix-ui/primitive';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { TaskAdminSortField, TaskAdminSortOrder } from '@/types/users/admin/TaskAdminSortField';
+import { TaskAdminSortField } from '@/types/users/admin/TaskAdminSortField';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useTableSort } from '@/hooks/use-table-sort';
 
 interface Props {
 	tasks: TaskAssignmentList[];
@@ -25,10 +26,8 @@ interface Props {
 
 export default function TaskListForStaffTable({ tasks }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const sortField = searchParams.get('sort') as TaskAdminSortField | null;
-	const sortOrder = searchParams.get('order') as TaskAdminSortOrder | null;
+	const { sortField, sortOrder, handleSort } = useTableSort<TaskAdminSortField>();
 
 	const [data, setData] = useState<TaskAssignmentList[]>(tasks);
 	const [search, setSearch] = useState('');
@@ -38,12 +37,12 @@ export default function TaskListForStaffTable({ tasks }: Props): JSX.Element {
 	const fetchTasks = async () => {
 		setLoading(true);
 
-		const filtered = tasks.filter((task) => {
+		const filtered: TaskAssignmentList[] = tasks.filter((task: TaskAssignmentList): boolean => {
 			const matchSearch =
 				task.title.toLowerCase().includes(search.toLowerCase()) ||
 				task.assignee.toLowerCase().includes(search.toLowerCase());
 
-			const matchDate = dateFilter ? task.date === dateFilter : true;
+			const matchDate: boolean = dateFilter ? task.date === dateFilter : true;
 
 			return matchSearch && matchDate;
 		});
@@ -51,23 +50,6 @@ export default function TaskListForStaffTable({ tasks }: Props): JSX.Element {
 		setData(filtered);
 
 		setLoading(false);
-	};
-
-	const handleSort = (field: TaskAdminSortField): void => {
-		const currentSort = searchParams.get('sort');
-		const currentOrder = searchParams.get('order');
-
-		let newOrder: TaskAdminSortOrder = 'asc';
-
-		if (currentSort === field) {
-			newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-		}
-
-		const params = new URLSearchParams(searchParams.toString());
-		params.set('sort', field);
-		params.set('order', newOrder);
-
-		router.push(`?${params.toString()}`);
 	};
 
 	const renderSortIcon = (field: TaskAdminSortField): JSX.Element | null => {
@@ -153,7 +135,7 @@ export default function TaskListForStaffTable({ tasks }: Props): JSX.Element {
 
 			{/* Table */}
 			<div className='border rounded-lg'>
-				<Table className='text-base'>
+				<Table>
 					<TableHeader>
 						<TableRow className='text-'>
 							<TableHead

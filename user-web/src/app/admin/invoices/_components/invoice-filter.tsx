@@ -5,8 +5,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { JSX, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,42 +15,44 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { getPaymentMethodLabel, PaymentMethod } from '@/types/invoices/user/PaymentMethod';
+import { InvoiceFilters } from '@/types/invoices/admin/InvoiceFilters';
 
-export default function InvoiceFilter(): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
+const paymentMethods: PaymentMethod[] = ['COD', 'VNPAY', 'MoMo', 'CREDIT_CARD', 'BANK_TRANSFER'];
 
-	const [status, setStatus] = useState<InvoiceStatus | 'ALL'>(
-		(searchParams.get('status') as InvoiceStatus) || 'ALL',
-	);
+interface Props {
+	onApply: (filters: InvoiceFilters) => void;
+}
 
-	const [dateFrom, setDateFrom] = useState(searchParams.get('dateFrom') || '');
-	const [dateTo, setDateTo] = useState(searchParams.get('dateTo') || '');
+export default function InvoiceFilter({ onApply }: Props): JSX.Element {
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | 'ALL'>('ALL');
 
-	const [minTotal, setMinTotal] = useState(searchParams.get('minTotal') || '');
-	const [maxTotal, setMaxTotal] = useState(searchParams.get('maxTotal') || '');
+	const [dateFrom, setDateFrom] = useState('');
+	const [dateTo, setDateTo] = useState('');
 
-	const [minItems, setMinItems] = useState(searchParams.get('minItems') || '');
+	const [minTotal, setMinTotal] = useState('');
+	const [maxTotal, setMaxTotal] = useState('');
+
+	const [minItems, setMinItems] = useState('');
 
 	function applyFilter(): void {
-		const params = new URLSearchParams();
+		const filters: InvoiceFilters = {};
 
-		if (status !== 'ALL') params.set('status', status);
+		if (paymentMethod !== 'ALL') filters.paymentMethod = paymentMethod;
 
-		if (dateFrom) params.set('dateFrom', dateFrom);
-		if (dateTo) params.set('dateTo', dateTo);
+		if (dateFrom) filters.dateFrom = dateFrom;
+		if (dateTo) filters.dateTo = dateTo;
 
-		if (minTotal) params.set('minTotal', minTotal);
-		if (maxTotal) params.set('maxTotal', maxTotal);
+		if (minTotal) filters.minTotal = minTotal;
+		if (maxTotal) filters.maxTotal = maxTotal;
 
-		if (minItems) params.set('minItems', minItems);
+		if (minItems) filters.minItems = minItems;
 
-		router.push(`/admin/invoices?${params.toString()}`);
+		onApply(filters);
 	}
 
 	function resetFilter(): void {
-		setStatus('ALL');
+		setPaymentMethod('ALL');
 		setDateFrom('');
 		setDateTo('');
 		setMinTotal('');
@@ -63,7 +63,7 @@ export default function InvoiceFilter(): JSX.Element {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant='outline'>Lọc</Button>
+				<Button className='rounded-full'>Lọc</Button>
 			</DialogTrigger>
 
 			<DialogContent className='max-w-lg'>
@@ -72,24 +72,31 @@ export default function InvoiceFilter(): JSX.Element {
 				</DialogHeader>
 
 				<div className='space-y-4'>
-					{/* STATUS */}
+					{/* PAYMENT METHOD */}
 					<div className='space-y-2'>
-						<p className='text-sm font-medium'>Trạng thái</p>
+						<p className='text-sm font-medium'>Phương thức thanh toán</p>
 
 						<Select
-							value={status}
-							onValueChange={(v) => setStatus(v as InvoiceStatus | 'ALL')}
+							value={paymentMethod}
+							onValueChange={(v) => setPaymentMethod(v as PaymentMethod | 'ALL')}
 						>
 							<SelectTrigger>
-								<SelectValue placeholder='Trạng thái' />
+								<SelectValue placeholder='Phương thức thanh toán' />
 							</SelectTrigger>
 
 							<SelectContent>
 								<SelectItem value='ALL'>Tất cả</SelectItem>
-								<SelectItem value='PENDING'>Chờ thanh toán</SelectItem>
-								<SelectItem value='PAID'>Đã thanh toán</SelectItem>
-								<SelectItem value='COMPLETED'>Hoàn tất</SelectItem>
-								<SelectItem value='CANCELLED'>Đã hủy</SelectItem>
+
+								{paymentMethods.map(
+									(method: PaymentMethod): JSX.Element => (
+										<SelectItem
+											key={method}
+											value={method}
+										>
+											{getPaymentMethodLabel(method)}
+										</SelectItem>
+									),
+								)}
 							</SelectContent>
 						</Select>
 					</div>

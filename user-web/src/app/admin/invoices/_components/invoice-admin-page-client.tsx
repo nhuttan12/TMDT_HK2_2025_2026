@@ -6,12 +6,19 @@ import { Input } from '@/components/ui/input';
 import InvoiceFilter from '@/app/admin/invoices/_components/invoice-filter';
 import InvoiceAdminTable from '@/app/admin/invoices/_components/invoice-admin-table';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import InvoiceStatusButtonFilter from '@/app/admin/invoices/_components/invoice-status-button-filter';
+import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { InvoiceFilters } from '@/types/invoices/admin/InvoiceFilters';
 
 interface Props {
 	invoices: UserInvoice[];
 }
 
 export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element {
+	const router: AppRouterInstance = useRouter();
+	const searchParams: ReadonlyURLSearchParams = useSearchParams();
+
 	const [search, setSearch] = useState('');
 	const [status, setStatus] = useState<InvoiceStatus | 'ALL'>('ALL');
 
@@ -22,6 +29,30 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 
 		return matchStatus && matchSearch;
 	});
+
+	const currentStatus: InvoiceStatus | null = searchParams.get('status') as InvoiceStatus | null;
+
+	function handleStatusChange(status: InvoiceStatus): void {
+		const params = new URLSearchParams(searchParams.toString());
+
+		params.set('status', status);
+
+		router.push(`/admin/invoices?${params.toString()}`);
+	}
+
+	function handleApplyFilter(filters: InvoiceFilters) {
+		const params = new URLSearchParams(searchParams.toString());
+
+		Object.entries(filters).forEach(([key, value]) => {
+			if (value) params.set(key, String(value));
+		});
+
+		router.push(`/admin/invoices?${params.toString()}`);
+	}
+
+	const handleRedirectToInvoiceDetailAdmin = (invoiceID: number): void => {
+		router.push(`/admin/invoices/${invoiceID}`);
+	};
 
 	return (
 		<div className='space-y-6'>
@@ -35,13 +66,18 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 					className='w-[250px]'
 				/>
 
-				<InvoiceFilter
-					// value={status}
-					// onChange={setStatus}
+				<InvoiceFilter onApply={handleApplyFilter} />
+
+				<InvoiceStatusButtonFilter
+					onClick={handleStatusChange}
+					currentStatus={currentStatus}
 				/>
 			</div>
 
-			<InvoiceAdminTable invoices={filtered} />
+			<InvoiceAdminTable
+				invoices={filtered}
+				onRedirectToDetail={handleRedirectToInvoiceDetailAdmin}
+			/>
 		</div>
 	);
 }
