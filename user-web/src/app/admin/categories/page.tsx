@@ -2,7 +2,7 @@
 
 import { JSX } from 'react';
 import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
-import CategoryAdminTable from '@/app/admin/categories/_components/category-admin-table';
+import CategoryAdminClient from '@/app/admin/categories/_components/category-admin-client';
 
 const mockCategories: CategoryListItemAdmin[] = [
 	{
@@ -38,5 +38,5 @@ const mockCategories: CategoryListItemAdmin[] = [
 ];
 
 export default function CategoriesPage(): JSX.Element {
-	return <CategoryAdminTable categories={mockCategories} />;
+	return <CategoryAdminClient categories={mockCategories} />;
 }

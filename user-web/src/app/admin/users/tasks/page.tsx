@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
-import TaskListForStaffTable from '@/app/admin/users/tasks/_components/task-list-for-staff-table';
+import TaskListForStaffClient from '@/app/admin/users/tasks/_components/task-list-for-staff-client';
 
 const mockTasks: TaskAssignmentList[] = [
 	{
@@ -30,5 +30,5 @@ const mockTasks: TaskAssignmentList[] = [
 ];
 
 export default function Page(): JSX.Element {
-	return <TaskListForStaffTable tasks={mockTasks} />;
+	return <TaskListForStaffClient tasks={mockTasks} />;
 }

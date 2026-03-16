@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import RoleTable from '@/app/admin/users/roles/_components/role-table';
+import RoleClient from '@/app/admin/users/roles/_components/role-client';
 import { Role } from '@/types/users/admin/Role';
 
 const roles: Role[] = [
@@ -30,5 +30,5 @@ const roles: Role[] = [
 ];
 
 export default function Page(): JSX.Element {
-	return <RoleTable roles={roles} />;
+	return <RoleClient roles={roles} />;
 }

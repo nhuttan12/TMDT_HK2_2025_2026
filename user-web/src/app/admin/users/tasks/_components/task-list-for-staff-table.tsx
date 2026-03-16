@@ -1,8 +1,3 @@
-'use client';
-
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
 	Table,
 	TableBody,
@@ -11,220 +6,89 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import React, { JSX, useEffect, useState } from 'react';
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
-import { Timeout } from '@radix-ui/primitive';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import React, { JSX } from 'react';
+import ProductStatusBadge from '@/components/user/admin/task-status-badge';
 import { TaskAdminSortField } from '@/types/users/admin/TaskAdminSortField';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useTableSort } from '@/hooks/use-table-sort';
 
 interface Props {
 	tasks: TaskAssignmentList[];
+	handleSort: (field: TaskAdminSortField) => void;
+	renderSortIcon: (field: TaskAdminSortField) => JSX.Element | null;
 }
 
-export default function TaskListForStaffTable({ tasks }: Props): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-
-	const { sortField, sortOrder, handleSort } = useTableSort<TaskAdminSortField>();
-
-	const [data, setData] = useState<TaskAssignmentList[]>(tasks);
-	const [search, setSearch] = useState('');
-	const [dateFilter, setDateFilter] = useState('');
-	const [loading, setLoading] = useState(false);
-
-	const fetchTasks = async () => {
-		setLoading(true);
-
-		const filtered: TaskAssignmentList[] = tasks.filter((task: TaskAssignmentList): boolean => {
-			const matchSearch =
-				task.title.toLowerCase().includes(search.toLowerCase()) ||
-				task.assignee.toLowerCase().includes(search.toLowerCase());
-
-			const matchDate: boolean = dateFilter ? task.date === dateFilter : true;
-
-			return matchSearch && matchDate;
-		});
-
-		setData(filtered);
-
-		setLoading(false);
-	};
-
-	const renderSortIcon = (field: TaskAdminSortField): JSX.Element | null => {
-		if (sortField !== field) return null;
-
-		if (sortOrder === 'asc')
-			return (
-				<ChevronUp
-					size={14}
-					className='ml-1'
-				/>
-			);
-
-		if (sortOrder === 'desc')
-			return (
-				<ChevronDown
-					size={14}
-					className='ml-1'
-				/>
-			);
-
-		return null;
-	};
-
-	// gọi API khi search hoặc filter thay đổi
-	useEffect(() => {
-		const debounce: Timeout = setTimeout((): void => {
-			fetchTasks();
-		}, 400);
-
-		return (): void => clearTimeout(debounce);
-	}, [search, dateFilter]);
-
-	const handleRedirectToTaskAssignmentForStaff = (
-		e: React.MouseEvent<HTMLButtonElement>,
-	): void => {
-		e.stopPropagation();
-		router.push('/admin/users/tasks/assign');
-	};
-
+export default function TaskListForStaffTable({
+	tasks,
+	handleSort,
+	renderSortIcon,
+}: Props): JSX.Element {
 	return (
-		<div className='space-y-6'>
-			<h1 className='text-2xl font-bold'>Phân công nhiệm vụ</h1>
-
-			{/* Search + Filter + Task Assign */}
-			<div className='flex justify-between items-center'>
-				<div className='flex gap-4'>
-					<Input
-						placeholder='Tìm kiếm nhiệm vụ...'
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						className='max-w-sm'
-					/>
-
-					<Input
-						type='date'
-						value={dateFilter}
-						onChange={(e) => setDateFilter(e.target.value)}
-						className='w-[200px]'
-					/>
-
-					<Button
-						variant='secondary'
-						onClick={() => {
-							setSearch('');
-							setDateFilter('');
-						}}
-						className='cursor-pointer transition-all duration-200 hover:bg-gray-200 hover:shadow-md active:scale-95'
+		<Table>
+			<TableHeader>
+				<TableRow className='text-'>
+					<TableHead
+						className='cursor-pointer select-none'
+						onClick={() => handleSort('title')}
 					>
-						Xóa lọc
-					</Button>
-				</div>
+						<div className='flex items-center gap-1'>
+							<span>Nhiệm vụ</span>
+							{renderSortIcon('title')}
+						</div>
+					</TableHead>
 
-				<Button
-					onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-						handleRedirectToTaskAssignmentForStaff(e)
-					}
-					className='cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.03] active:scale-95'
-				>
-					Phân công nhiệm vụ cho nhân viên
-				</Button>
-			</div>
+					<TableHead>Mô tả</TableHead>
 
-			{/* Table */}
-			<div className='border rounded-lg'>
-				<Table>
-					<TableHeader>
-						<TableRow className='text-'>
-							<TableHead
-								className='cursor-pointer select-none'
-								onClick={() => handleSort('title')}
-							>
-								<div className='flex items-center gap-1'>
-									<span>Nhiệm vụ</span>
-									{renderSortIcon('title')}
-								</div>
-							</TableHead>
+					<TableHead
+						className='cursor-pointer select-none'
+						onClick={() => handleSort('assignee')}
+					>
+						<div className='flex items-center gap-1'>
+							<span>Nhân viên</span>
+							{renderSortIcon('assignee')}
+						</div>
+					</TableHead>
 
-							<TableHead>Mô tả</TableHead>
+					<TableHead
+						className='cursor-pointer select-none'
+						onClick={() => handleSort('date')}
+					>
+						<div className='flex items-center gap-1'>
+							<span>Ngày</span>
+							{renderSortIcon('date')}
+						</div>
+					</TableHead>
 
-							<TableHead
-								className='cursor-pointer select-none'
-								onClick={() => handleSort('assignee')}
-							>
-								<div className='flex items-center gap-1'>
-									<span>Nhân viên</span>
-									{renderSortIcon('assignee')}
-								</div>
-							</TableHead>
+					<TableHead
+						className='cursor-pointer select-none'
+						onClick={() => handleSort('status')}
+					>
+						<div className='flex items-center gap-1'>
+							<span>Trạng thái</span>
+							{renderSortIcon('status')}
+						</div>
+					</TableHead>
+				</TableRow>
+			</TableHeader>
 
-							<TableHead
-								className='cursor-pointer select-none'
-								onClick={() => handleSort('date')}
-							>
-								<div className='flex items-center gap-1'>
-									<span>Ngày</span>
-									{renderSortIcon('date')}
-								</div>
-							</TableHead>
+			<TableBody>
+				{tasks.map(
+					(task: TaskAssignmentList): JSX.Element => (
+						<TableRow key={task.taskID}>
+							<TableCell className='font-medium'>{task.title}</TableCell>
 
-							<TableHead
-								className='cursor-pointer select-none'
-								onClick={() => handleSort('status')}
-							>
-								<div className='flex items-center gap-1'>
-									<span>Trạng thái</span>
-									{renderSortIcon('status')}
-								</div>
-							</TableHead>
+							<TableCell>{task.description}</TableCell>
+
+							<TableCell>{task.assignee}</TableCell>
+
+							<TableCell>{task.date}</TableCell>
+
+							<TableCell>
+								<ProductStatusBadge status={task.status} />
+							</TableCell>
 						</TableRow>
-					</TableHeader>
-
-					<TableBody>
-						{loading && (
-							<TableRow>
-								<TableCell
-									colSpan={6}
-									className='text-center'
-								>
-									Đang tải...
-								</TableCell>
-							</TableRow>
-						)}
-
-						{!loading &&
-							tasks.map(
-								(task: TaskAssignmentList): JSX.Element => (
-									<TableRow key={task.taskID}>
-										<TableCell className='font-medium'>{task.title}</TableCell>
-
-										<TableCell>{task.description}</TableCell>
-
-										<TableCell>{task.assignee}</TableCell>
-
-										<TableCell>{task.date}</TableCell>
-
-										<TableCell>
-											{task.status === 'pending' && (
-												<Badge variant='secondary'>Chưa bắt đầu</Badge>
-											)}
-
-											{task.status === 'in-progress' && (
-												<Badge>Đang làm</Badge>
-											)}
-
-											{task.status === 'done' && (
-												<Badge className='bg-green-600'>Hoàn thành</Badge>
-											)}
-										</TableCell>
-									</TableRow>
-								),
-							)}
-					</TableBody>
-				</Table>
-			</div>
-		</div>
+					),
+				)}
+			</TableBody>
+		</Table>
 	);
 }

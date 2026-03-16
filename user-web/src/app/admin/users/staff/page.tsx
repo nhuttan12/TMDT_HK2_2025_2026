@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import UserAdminTable from '@/app/admin/users/_components/user-admin-table';
+import UserAdminClient from '@/app/admin/users/_components/user-admin-client';
 import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 
 const mockStaff: UserListAdmin[] = [
@@ -40,7 +40,7 @@ const mockStaff: UserListAdmin[] = [
 
 export default function Index(): JSX.Element {
 	return (
-		<UserAdminTable
+		<UserAdminClient
 			users={mockStaff}
 			mode={'staff'}
 		/>

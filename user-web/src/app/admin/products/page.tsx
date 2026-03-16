@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
+import ProductAdminClient from '@/app/admin/products/_components/product-admin-client';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import {
 	ProductAdminSortField,
@@ -72,7 +72,7 @@ export default function ProductsPage({ searchParams }: Props): JSX.Element {
 	const order: string = searchParams.order ?? 'desc';
 
 	return (
-		<ProductAdminTable
+		<ProductAdminClient
 			products={mockProducts}
 			sortField={sort as ProductAdminSortField}
 			sortOrder={order as ProductAdminSortOrder}
