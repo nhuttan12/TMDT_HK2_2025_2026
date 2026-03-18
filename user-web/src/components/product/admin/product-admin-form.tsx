@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, JSX, useState } from 'react';
+import { ChangeEvent, FormEvent, JSX, SetStateAction, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,18 +12,19 @@ import {
 	mapFormToCreateDTO,
 	mapFormToUpdateDTO,
 	mapProductAdminToFormState,
-} from '@/utils/mappers/products/admin-product';
-import { generateSlug } from '@/utils/mappers/shared/slug';
+} from '@/utils/products/mappers/admin-product';
+import { generateSlug } from '@/utils/shared/mappers/slug';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import Image from 'next/image';
 import { CategoryImage } from '@/types/images/admin/CategoryImage';
+import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 
 interface Props {
 	formType: AdminFormType;
 }
 
 const mockProductAdmin: ProductDetailInfoAdmin = {
-	productID: 1,
+	id: 1,
 	name: 'iPhone 15 Pro Max 256GB',
 	slug: 'iphone-15-pro-max-256gb',
 	brand: 'Apple',
@@ -35,16 +36,22 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 
 	images: [
 		{
+			localID: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-1.jpg',
 			order: 0,
 			isPrimary: true,
+			status: 'done',
+			progress: 100,
 		},
 		{
+			localID: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-2.jpg',
 			order: 1,
 			isPrimary: false,
+			status: 'done',
+			progress: 100,
 		},
 	],
 
@@ -53,7 +60,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 };
 
 const emptyProduct: ProductDetailInfoAdmin = {
-	productID: 0,
+	id: 0,
 	name: '',
 	slug: '',
 	brand: '',
@@ -97,10 +104,13 @@ export default function ProductAdminForm({ formType }: Props): JSX.Element {
 		const startOrder: number = form.images.length;
 
 		const newImages: SortableImageForm[] = Array.from(files).map((file, index) => ({
+			localID: crypto.randomUUID(),
 			file,
 			isPrimary: startOrder === 0 && index === 0,
 			order: startOrder + index,
 			imageUrl: '',
+			status: 'uploading',
+			progress: 0,
 		}));
 
 		setForm((prev) => ({
@@ -314,101 +324,19 @@ export default function ProductAdminForm({ formType }: Props): JSX.Element {
 
 				{/* Images Section */}
 				<div className='space-y-4'>
-					<div className='flex justify-between items-center'>
-						<Label>Hình ảnh</Label>
+					<Label>Hình ảnh</Label>
 
-						<Input
-							id={FILE_INPUT_ID}
-							type='file'
-							accept='image/*'
-							multiple
-							className='hidden'
-							onChange={handleAddImage}
-							disabled={isView}
-						/>
-						<Label
-							htmlFor={isView ? undefined : FILE_INPUT_ID}
-							className={isView ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
-						>
-							<Button
-								type='button'
-								asChild
-								disabled={isView}
-							>
-								<span>Thêm ảnh</span>
-							</Button>
-						</Label>
-					</div>
-
-					{form.images.map(
-						(img: SortableImageForm, index: number): JSX.Element => (
-							<div
-								key={`${img.order}-${index}`}
-								className='border p-4 rounded space-y-3'
-							>
-								<div className='flex gap-4 items-start'>
-									{/* IMAGE PREVIEW */}
-									<Image
-										src={getImageSrc(img)}
-										alt=''
-										width={128}
-										height={128}
-										className='object-cover rounded border'
-									/>
-
-									<div className='flex flex-col gap-2 flex-1'>
-										{/* PRIMARY BUTTON */}
-										<Button
-											type='button'
-											variant={img.isPrimary ? 'default' : 'outline'}
-											onClick={() => handleSetPrimary(index)}
-											className='cursor-pointer'
-											disabled={isView}
-										>
-											{img.isPrimary ? 'Ảnh chính' : 'Chọn làm ảnh chính'}
-										</Button>
-
-										{/* MOVE UP */}
-										{index > 0 && (
-											<Button
-												type='button'
-												variant='outline'
-												onClick={() => handleMoveUp(index)}
-												className='cursor-pointer'
-												disabled={isView}
-											>
-												↑ Lên
-											</Button>
-										)}
-
-										{/* MOVE DOWN */}
-										{index < form.images.length - 1 && (
-											<Button
-												type='button'
-												variant='outline'
-												onClick={() => handleMoveDown(index)}
-												className='cursor-pointer'
-												disabled={isView}
-											>
-												↓ Xuống
-											</Button>
-										)}
-
-										{/* DELETE */}
-										<Button
-											type='button'
-											variant='destructive'
-											onClick={() => handleRemoveImage(index)}
-											className='cursor-pointer'
-											disabled={isView}
-										>
-											Xoá
-										</Button>
-									</div>
-								</div>
-							</div>
-						),
-					)}
+					<MultiImageUpload
+						value={form.images}
+						onChange={(updater: SetStateAction<SortableImageForm[]>): void =>
+							setForm((prev: ProductDetailInfoAdmin) => ({
+								...prev,
+								images:
+									typeof updater === 'function' ? updater(prev.images) : updater,
+							}))
+						}
+						disabled={isView}
+					/>
 				</div>
 
 				{!isView && (

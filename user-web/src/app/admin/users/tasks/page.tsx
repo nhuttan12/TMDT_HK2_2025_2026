@@ -29,6 +29,10 @@ const mockTasks: TaskAssignmentList[] = [
 	},
 ];
 
+export const metadata = {
+	title: 'Quản lý công việc phân công',
+};
+
 export default function Page(): JSX.Element {
 	return <TaskListForStaffClient tasks={mockTasks} />;
 }

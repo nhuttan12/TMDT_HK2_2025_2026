@@ -1,5 +1,5 @@
 export interface CategoryListItemAdmin {
-	categoryID: number;
+	id: number;
 	name: string;
 	slug: string;
 	image: string;

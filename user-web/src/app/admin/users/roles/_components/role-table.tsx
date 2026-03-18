@@ -1,4 +1,4 @@
-import { JSX, MouseEvent } from 'react';
+import React, { JSX, MouseEvent } from 'react';
 import {
 	Table,
 	TableBody,
@@ -11,63 +11,70 @@ import { Role } from '@/types/users/admin/Role';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
+import { Column } from '@/types/uis/Column';
+import { DataTable } from '@/components/layout/admin/data-table';
 
 interface Props {
 	roles: Role[];
-	onView: (e: MouseEvent<HTMLTableRowElement>, roleNName: string) => void;
-	onEdit: (e: MouseEvent<HTMLButtonElement>, roleNName: string) => void;
+	onView: (roleNName: string) => void;
+	onEdit: (roleNName: string) => void;
 }
 
 export default function RoleTable({ roles, onView, onEdit }: Props): JSX.Element {
+	const columns: Column<Role>[] = [
+		{
+			key: 'name',
+			header: 'Tên quyền',
+			render: (row: Role): JSX.Element => <span className='font-medium'>{row.name}</span>,
+		},
+		{
+			key: 'description',
+			header: 'Mô tả',
+			render: (row: Role): JSX.Element => (
+				<span className='text-muted-foreground'>{row.description}</span>
+			),
+		},
+		{
+			key: 'isActive',
+			header: 'Trạng thái',
+			render: (row: Role): JSX.Element =>
+				row.isActive ? (
+					<Badge>Hoạt động</Badge>
+				) : (
+					<Badge variant='secondary'>Tạm khóa</Badge>
+				),
+		},
+		{
+			key: 'actions',
+			header: <span className='text-right block'>Hành động</span>,
+			render: (row: Role): JSX.Element => (
+				<div
+					className='text-right'
+					onClick={(e: React.MouseEvent<HTMLDivElement>): void => e.stopPropagation()}
+				>
+					<Button
+						className='cursor-pointer'
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+							e.stopPropagation();
+							onEdit(row.name);
+						}}
+					>
+						<Pencil
+							size={14}
+							className='mr-2'
+						/>
+						Chỉnh sửa
+					</Button>
+				</div>
+			),
+		},
+	];
+
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead>Tên quyền</TableHead>
-					<TableHead>Mô tả</TableHead>
-					<TableHead>Trạng thái</TableHead>
-					<TableHead className='text-right'>Hành động</TableHead>
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{roles.map(
-					(role: Role): JSX.Element => (
-						<TableRow
-							className='cursor-pointer'
-							key={role.roleID}
-							onClick={(e) => onView(e, role.name)}
-						>
-							<TableCell className='font-medium'>{role.name}</TableCell>
-
-							<TableCell className='text-muted-foreground'>
-								{role.description}
-							</TableCell>
-
-							<TableCell>
-								{role.isActive ? (
-									<Badge>Hoạt động</Badge>
-								) : (
-									<Badge variant='secondary'>Tạm khóa</Badge>
-								)}
-							</TableCell>
-
-							<TableCell className='text-right'>
-								<Button
-									className='cursor-pointer'
-									onClick={(e) => onEdit(e, role.name)}
-								>
-									<Pencil
-										size={14}
-										className='mr-2'
-									/>
-									Chỉnh sửa
-								</Button>
-							</TableCell>
-						</TableRow>
-					),
-				)}
-			</TableBody>
-		</Table>
+		<DataTable
+			data={roles}
+			columns={columns}
+			onRowClick={(row: Role): void => onView(row.name)}
+		/>
 	);
 }

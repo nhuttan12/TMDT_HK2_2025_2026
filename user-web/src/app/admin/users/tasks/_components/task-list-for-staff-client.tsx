@@ -30,7 +30,7 @@ export default function TaskListForStaffClient({ tasks }: Props): JSX.Element {
 		setLoading(true);
 
 		const filtered: TaskAssignmentList[] = tasks.filter((task: TaskAssignmentList): boolean => {
-			const matchSearch =
+			const matchSearch: boolean =
 				task.title.toLowerCase().includes(search.toLowerCase()) ||
 				task.assignee.toLowerCase().includes(search.toLowerCase());
 

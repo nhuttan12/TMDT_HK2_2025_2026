@@ -1,7 +1,7 @@
 import { CouponType } from './CouponType';
 
 export interface Coupon {
-	couponID: string;
+	id: string;
 	title: string;
 	couponType: CouponType;
 	description: string;

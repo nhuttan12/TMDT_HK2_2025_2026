@@ -67,14 +67,14 @@ export default function UserInvoicesClient({ invoices }: Props): JSX.Element {
 							{invoices.map(
 								(invoice: UserInvoice): JSX.Element => (
 									<TableRow
-										key={invoice.invoiceID}
+										key={invoice.id}
 										className='cursor-pointer hover:bg-muted/50 transition-colors'
 										onClick={() =>
-											handleRedirectInvoiceDetail(invoice.invoiceID)
+											handleRedirectInvoiceDetail(invoice.id)
 										}
 									>
 										<TableCell className='font-medium'>
-											#{invoice.invoiceID}
+											#{invoice.id}
 										</TableCell>
 
 										<TableCell>

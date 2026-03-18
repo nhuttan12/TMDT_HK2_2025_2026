@@ -8,6 +8,8 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useTableSort } from '@/hooks/use-table-sort';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import CategoryAdminTable from '@/app/admin/categories/_components/category-admin-table';
+import { usePagination } from '@/hooks/use-pagination';
+import Pagination from '@/components/layout/share/pagination';
 
 interface Props {
 	categories: CategoryListItemAdmin[];
@@ -17,6 +19,7 @@ export default function CategoryAdminClient({ categories }: Props): JSX.Element 
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<CategoryAdminSortField>();
+	const { currentPage, changePage } = usePagination();
 
 	const handleRedirectToAddNewProduct = () => {
 		router.push('/admin/categories/add-new');
@@ -51,6 +54,13 @@ export default function CategoryAdminClient({ categories }: Props): JSX.Element 
 					onEdit={handleRedirectToEditCategoryEditMode}
 				/>
 			</div>
+
+			{/* Pagination */}
+			<Pagination
+				currentPage={currentPage}
+				totalPages={10}
+				onPageChange={changePage}
+			/>
 		</div>
 	);
 }

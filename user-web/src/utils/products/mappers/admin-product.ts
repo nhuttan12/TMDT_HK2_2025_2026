@@ -4,7 +4,7 @@ import { ProductUpdateDTO } from '@/types/products/admin/ProductUpdateDTO';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 
 export const mapProductAdminToFormState = (product: ProductDetailInfoAdmin): ProductFormState => ({
-	productID: product.productID,
+	id: product.id,
 	name: product.name,
 	slug: product.slug,
 	brand: product.brand,
@@ -31,7 +31,7 @@ export const mapFormToCreateDTO = (form: ProductFormState): ProductCreateDTO => 
 });
 
 export const mapFormToUpdateDTO = (form: ProductFormState): ProductUpdateDTO => ({
-	productID: form.productID,
+	id: form.id,
 	name: form.name,
 	slug: form.slug,
 	brand: form.brand,

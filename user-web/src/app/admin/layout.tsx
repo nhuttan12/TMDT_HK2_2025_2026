@@ -1,6 +1,13 @@
 import React, { JSX } from 'react';
 import AdminSidebarWrapper from '@/components/layout/admin/admin-sidebar-wrapper';
 
+export const metadata = {
+	title: {
+		default: 'Admin',
+		template: '%s | Admin',
+	},
+};
+
 export default function AdminLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
 		<div className='h-screen bg-slate-50 flex overflow-hidden'>

@@ -35,11 +35,12 @@ const rolePermissions: RolePermission[] = [
 	},
 ];
 
-interface Props {
-	params: { productID: string };
-}
+export const metadata = {
+	title: 'Quản lý quyền truy cập của nhân viên',
+};
 
-export default function Page({ params }: Props): JSX.Element {
+
+export default function Page(): JSX.Element {
 	return (
 		<RolePermissionForm
 			permissions={rolePermissions}

@@ -45,7 +45,7 @@ export default function ProductDetailClient({
 
 	const handleAddToCart = () => {
 		addItem({
-			productID: product.productID,
+			productID: product.id,
 			name: product.name,
 			price: product.price,
 			imageUrl: product.image,
@@ -55,7 +55,7 @@ export default function ProductDetailClient({
 
 	const handleBuyNow = () => {
 		const item: CartItem = {
-			productID: product.productID,
+			productID: product.id,
 			name: product.name,
 			price: product.price,
 			imageUrl: product.image,
@@ -118,7 +118,7 @@ export default function ProductDetailClient({
 							(comment: CommentModel): JSX.Element => (
 								<CommentItem
 									comment={comment}
-									key={comment.commentID}
+									key={comment.id}
 								/>
 							),
 						)}
@@ -137,7 +137,7 @@ export default function ProductDetailClient({
 
 					{/* SKU */}
 					<div className='text-sm text-muted-foreground'>
-						Mã sản phẩm: <span className='font-medium'>{product.productID}</span>
+						Mã sản phẩm: <span className='font-medium'>{product.id}</span>
 					</div>
 
 					{/* Price */}

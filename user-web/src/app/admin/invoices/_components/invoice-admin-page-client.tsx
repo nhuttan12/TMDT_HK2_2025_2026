@@ -10,6 +10,8 @@ import InvoiceStatusButtonFilter from '@/app/admin/invoices/_components/invoice-
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { InvoiceFilters } from '@/types/invoices/admin/InvoiceFilters';
+import { usePagination } from '@/hooks/use-pagination';
+import Pagination from '@/components/layout/share/pagination';
 
 interface Props {
 	invoices: UserInvoice[];
@@ -21,11 +23,12 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 
 	const [search, setSearch] = useState('');
 	const [status, setStatus] = useState<InvoiceStatus | 'ALL'>('ALL');
+	const { currentPage, changePage } = usePagination();
 
 	const filtered: UserInvoice[] = invoices.filter((invoice: UserInvoice): boolean => {
 		const matchStatus: boolean = status === 'ALL' || invoice.status === status;
 
-		const matchSearch: boolean = invoice.invoiceID.toString().includes(search);
+		const matchSearch: boolean = invoice.id.toString().includes(search);
 
 		return matchStatus && matchSearch;
 	});
@@ -77,6 +80,13 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 			<InvoiceAdminTable
 				invoices={filtered}
 				onRedirectToDetail={handleRedirectToInvoiceDetailAdmin}
+			/>
+
+			{/* Pagination */}
+			<Pagination
+				currentPage={currentPage}
+				totalPages={10}
+				onPageChange={changePage}
 			/>
 		</div>
 	);

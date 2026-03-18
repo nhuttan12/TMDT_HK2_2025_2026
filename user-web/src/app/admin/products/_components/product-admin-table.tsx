@@ -1,16 +1,8 @@
-import { JSX } from 'react';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
+import { JSX, useState } from 'react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import Image from 'next/image';
 import ProductStatusBadge from '@/components/product/admin/product-status-badge';
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/utils/shared/date';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -20,12 +12,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
+import { Column } from '@/types/uis/Column';
+import { DataTable } from '@/components/layout/admin/data-table';
 
 interface Props {
 	products: ProductListInfoAdmin[];
 	handleSort: (field: ProductAdminSortField) => void;
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
-
 	onView: (id: number) => void;
 	onEdit: (id: number) => void;
 }
@@ -37,159 +30,165 @@ export default function ProductAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
+	const [selected, setSelected] = useState<number[]>([]);
+
+	const toggleSelect = (productID: number): void => {
+		setSelected((prev: number[]): number[] =>
+			prev.includes(productID)
+				? prev.filter((x: number): boolean => x !== productID)
+				: [...prev, productID],
+		);
+	};
+
+	const toggleSelectAll = (): void => {
+		if (selected.length === products.length) {
+			setSelected([]);
+		} else {
+			setSelected(products.map((i: ProductListInfoAdmin): number => i.id));
+		}
+	};
+
+	const columns: Column<ProductListInfoAdmin>[] = [
+		{
+			key: 'name',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Sản phẩm</span>
+					{renderSortIcon('name')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('name'),
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<div className='flex items-center gap-3'>
+					<div className='relative w-12 h-12 rounded-md overflow-hidden border'>
+						<Image
+							src={row.image}
+							alt={row.name}
+							fill
+							className='object-cover'
+						/>
+					</div>
+					<span className='font-medium'>{row.name}</span>
+				</div>
+			),
+		},
+		{
+			key: 'slug',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Slug</span>
+					{renderSortIcon('slug')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('slug'),
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>{row.slug}</span>
+			),
+		},
+		{
+			key: 'price',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Giá</span>
+					{renderSortIcon('price')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('price'),
+			render: (row: ProductListInfoAdmin): string => `${row.price.toLocaleString()}₫`,
+		},
+		{
+			key: 'status',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Trạng thái</span>
+					{renderSortIcon('isActive')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('isActive'),
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<ProductStatusBadge status={row.status} />
+			),
+		},
+		{
+			key: 'createdAt',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Ngày thêm</span>
+					{renderSortIcon('createdAt')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('createdAt'),
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>{formatDate(row.createdAt)}</span>
+			),
+		},
+		{
+			key: 'updatedAt',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer select-none'
+					onClick={() => handleSort('updatedAt')}
+				>
+					<span>Ngày điều chỉnh</span>
+					{renderSortIcon('updatedAt')}
+				</div>
+			),
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>{formatDate(row.updatedAt)}</span>
+			),
+		},
+		{
+			key: 'actions',
+			header: <span className='text-right block'>Hành động</span>,
+			render: (row: ProductListInfoAdmin): JSX.Element => (
+				<div
+					className='text-right'
+					onClick={(e) => e.stopPropagation()}
+				>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant='ghost'
+								size='icon'
+							>
+								<MoreHorizontal size={16} />
+							</Button>
+						</DropdownMenuTrigger>
+
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem onClick={() => onEdit(row.id)}>
+								<Pencil
+									size={14}
+									className='mr-2'
+								/>
+								Chỉnh sửa
+							</DropdownMenuItem>
+
+							<DropdownMenuItem className='text-red-500'>
+								<Trash
+									size={14}
+									className='mr-2'
+								/>
+								Xóa
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+			),
+		},
+	];
+
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('name')}
-					>
-						<div className='flex items-center justify-start gap-1'>
-							<span>Sản phẩm</span>
-							{renderSortIcon('name')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('slug')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Slug</span>
-							{renderSortIcon('slug')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('price')}
-					>
-						<div className='flex items-center justify-start gap-1'>
-							<span>Giá</span>
-							{renderSortIcon('price')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('isActive')}
-					>
-						<div className='flex items-center justify-start gap-1'>
-							<span>Trạng thái</span>
-							{renderSortIcon('isActive')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('createdAt')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Ngày thêm</span>
-							{renderSortIcon('createdAt')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('updatedAt')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Ngày điều chỉnh</span>
-							{renderSortIcon('updatedAt')}
-						</div>
-					</TableHead>
-
-					<TableHead className='text-right'>Hành động</TableHead>
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{products.map(
-					(product: ProductListInfoAdmin): JSX.Element => (
-						<TableRow
-							key={product.productID}
-							className='cursor-pointer'
-							onClick={(): void => onView(product.productID)}
-						>
-							{/* Product Info */}
-							<TableCell>
-								<div className='flex items-center gap-3'>
-									<div className='relative w-12 h-12 rounded-md overflow-hidden border'>
-										<Image
-											src={product.image}
-											alt={product.name}
-											fill
-											className='object-cover'
-										/>
-									</div>
-									<span className='font-medium'>{product.name}</span>
-								</div>
-							</TableCell>
-
-							{/*Slug*/}
-							<TableCell className='text-muted-foreground'>{product.slug}</TableCell>
-
-							{/* Price */}
-							<TableCell>{product.price.toLocaleString()}₫</TableCell>
-
-							{/* Status */}
-							<TableCell>
-								<ProductStatusBadge status={product.status} />
-							</TableCell>
-
-							{/* Create At */}
-							<TableCell className='text-muted-foreground'>
-								{formatDate(product.createdAt)}
-							</TableCell>
-
-							{/* Update At */}
-							<TableCell className='text-muted-foreground'>
-								{formatDate(product.updatedAt)}
-							</TableCell>
-
-							{/* Actions */}
-							<TableCell className='text-right'>
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											variant='ghost'
-											size='icon'
-											className='cursor-pointer'
-										>
-											<MoreHorizontal size={16} />
-										</Button>
-									</DropdownMenuTrigger>
-
-									<DropdownMenuContent align='end'>
-										<DropdownMenuItem
-											onClick={(e): void => {
-												e.stopPropagation();
-												onEdit(product.productID);
-											}}
-										>
-											<Pencil
-												size={14}
-												className='mr-2'
-											/>
-											Chỉnh sửa
-										</DropdownMenuItem>
-
-										<DropdownMenuItem className='text-red-500'>
-											<Trash
-												size={14}
-												className='mr-2'
-											/>
-											Xóa
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</TableCell>
-						</TableRow>
-					),
-				)}
-			</TableBody>
-		</Table>
+		<DataTable
+			data={products}
+			columns={columns}
+			onRowClick={(row: ProductListInfoAdmin): void => onView(row.id)}
+			getRowKey={(row: ProductListInfoAdmin): number => row.id}
+			selectable={{
+				selected: selected,
+				onToggle: toggleSelect,
+				onToggleAll: toggleSelectAll,
+			}}
+		/>
 	);
 }

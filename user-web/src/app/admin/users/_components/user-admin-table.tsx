@@ -1,17 +1,9 @@
-import { JSX } from 'react';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
+import { JSX, useState } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getUserRoleLabel } from '@/types/users/UserRole';
 import UserStatusBadge from '@/components/user/admin/user-status-badge';
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/utils/shared/date';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -22,6 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Ban, MoreHorizontal, Pencil } from 'lucide-react';
 import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
+import { Column } from '@/types/uis/Column';
+import { DataTable } from '@/components/layout/admin/data-table';
 
 interface Props {
 	users: UserListAdmin[];
@@ -39,142 +33,164 @@ export default function UserAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
+	const [selected, setSelected] = useState<number[]>([]);
+
+	const toggleSelect = (userID: number): void => {
+		setSelected((prev: number[]): number[] =>
+			prev.includes(userID)
+				? prev.filter((x: number): boolean => x !== userID)
+				: [...prev, userID],
+		);
+	};
+
+	const toggleSelectAll = (): void => {
+		if (selected.length === users.length) {
+			setSelected([]);
+		} else {
+			setSelected(users.map((i: UserListAdmin): number => i.id));
+		}
+	};
+
+	const columns: Column<UserListAdmin>[] = [
+		{
+			key: 'fullName',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('fullName')}
+				>
+					<span>Họ tên</span>
+					{renderSortIcon('fullName')}
+				</div>
+			),
+			render: (row: UserListAdmin): JSX.Element => (
+				<div className='flex items-center gap-3'>
+					<div className='relative w-10 h-10 rounded-full overflow-hidden border'>
+						<Image
+							src={row.avatar}
+							alt={row.fullName}
+							fill
+							className='object-cover'
+						/>
+					</div>
+					<span className='font-medium'>{row.fullName}</span>
+				</div>
+			),
+		},
+		{
+			key: 'email',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('email')}
+				>
+					<span>Email</span>
+					{renderSortIcon('email')}
+				</div>
+			),
+			render: (row: UserListAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>{row.email}</span>
+			),
+		},
+		{
+			key: 'phone',
+			header: <span>SĐT</span>,
+		},
+		{
+			key: 'role',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('role')}
+				>
+					<span>Vai trò</span>
+					{renderSortIcon('role')}
+				</div>
+			),
+			render: (row: UserListAdmin): JSX.Element => (
+				<Badge variant='secondary'>{getUserRoleLabel(row.role)}</Badge>
+			),
+		},
+		{
+			key: 'status',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('isActive')}
+				>
+					<span>Trạng thái</span>
+					{renderSortIcon('isActive')}
+				</div>
+			),
+			render: (row: UserListAdmin): JSX.Element => <UserStatusBadge status={row.status} />,
+		},
+		{
+			key: 'createdAt',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('createdAt')}
+				>
+					<span>Ngày tạo</span>
+					{renderSortIcon('createdAt')}
+				</div>
+			),
+			render: (row: UserListAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>{formatDate(row.createdAt)}</span>
+			),
+		},
+		{
+			key: 'actions',
+			header: <span className='text-right block'>Hành động</span>,
+			render: (row: UserListAdmin): JSX.Element => (
+				<div
+					className='text-right'
+					onClick={(e) => e.stopPropagation()}
+				>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant='ghost'
+								size='icon'
+							>
+								<MoreHorizontal size={16} />
+							</Button>
+						</DropdownMenuTrigger>
+
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem onClick={() => onEdit(row.id)}>
+								<Pencil
+									size={14}
+									className='mr-2'
+								/>
+								Chỉnh sửa
+							</DropdownMenuItem>
+
+							<DropdownMenuItem className='text-red-500'>
+								<Ban
+									size={14}
+									className='mr-2'
+								/>
+								Cấm tài khoản
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+			),
+		},
+	];
+
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead
-						onClick={() => handleSort('fullName')}
-						className='cursor-pointer'
-					>
-						<div className='flex items-center gap-1'>
-							<span>Họ tên</span>
-							{renderSortIcon('fullName')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						onClick={() => handleSort('email')}
-						className='cursor-pointer'
-					>
-						<div className='flex items-center gap-1'>
-							<span>Email</span>
-							{renderSortIcon('email')}
-						</div>
-					</TableHead>
-
-					<TableHead>SĐT</TableHead>
-
-					<TableHead
-						onClick={() => handleSort('role')}
-						className='cursor-pointer'
-					>
-						<div className='flex items-center gap-1'>
-							<span>Vai trò</span>
-							{renderSortIcon('role')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						onClick={() => handleSort('isActive')}
-						className='cursor-pointer'
-					>
-						<div className='flex items-center gap-1'>
-							<span>Trạng thái</span>
-							{renderSortIcon('isActive')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						onClick={() => handleSort('createdAt')}
-						className='cursor-pointer'
-					>
-						<div className='flex items-center gap-1'>
-							<span>Ngày tạo</span>
-							{renderSortIcon('createdAt')}
-						</div>
-					</TableHead>
-
-					<TableHead className='text-right'>Hành động</TableHead>
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{users.map((user) => (
-					<TableRow
-						key={user.userID}
-						className='cursor-pointer'
-						onClick={(): void => onView(user.userID)}
-					>
-						<TableCell>
-							<div className='flex items-center gap-3'>
-								<div className='relative w-10 h-10 rounded-full overflow-hidden border'>
-									<Image
-										src={user.avatar}
-										alt={user.fullName}
-										fill
-										className='object-cover'
-									/>
-								</div>
-								<span className='font-medium'>{user.fullName}</span>
-							</div>
-						</TableCell>
-
-						<TableCell className='text-muted-foreground'>{user.email}</TableCell>
-
-						<TableCell>{user.phone}</TableCell>
-
-						<TableCell>
-							<Badge variant='secondary'>{getUserRoleLabel(user.role)}</Badge>
-						</TableCell>
-
-						<TableCell>
-							<UserStatusBadge status={user.status} />
-						</TableCell>
-
-						<TableCell className='text-muted-foreground'>
-							{formatDate(user.createdAt)}
-						</TableCell>
-
-						<TableCell className='text-right'>
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										variant='ghost'
-										size='icon'
-										className='cursor-pointer'
-									>
-										<MoreHorizontal size={16} />
-									</Button>
-								</DropdownMenuTrigger>
-
-								<DropdownMenuContent align='end'>
-									<DropdownMenuItem
-										onClick={(e): void => {
-											e.stopPropagation();
-											onEdit(user.userID);
-										}}
-									>
-										<Pencil
-											size={14}
-											className='mr-2'
-										/>
-										Chỉnh sửa
-									</DropdownMenuItem>
-
-									<DropdownMenuItem className='text-red-500'>
-										<Ban
-											size={14}
-											className='mr-2'
-										/>
-										Cấm tài khoản
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+		<DataTable
+			data={users}
+			columns={columns}
+			onRowClick={(row: UserListAdmin): void => onView(row.id)}
+			getRowKey={(row: UserListAdmin): number => row.id}
+			selectable={{
+				selected: selected,
+				onToggle: toggleSelect,
+				onToggleAll: toggleSelectAll,
+			}}
+		/>
 	);
 }

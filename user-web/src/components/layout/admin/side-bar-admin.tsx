@@ -102,7 +102,7 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 			{
 				title: 'Nhân viên',
-				href: '/admin/users/staff',
+				href: '/admin/users/staffs',
 				icon: <UserCog size={18} />,
 			},
 			{

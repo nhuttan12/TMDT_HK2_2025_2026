@@ -7,7 +7,7 @@ import { JSX } from 'react';
 
 const coupons: Coupon[] = [
 	{
-		couponID: '1',
+		id: '1',
 		title: 'Giảm 20%',
 		couponType: 'Sale',
 		description: 'Giảm tối đa 100.000đ cho đơn từ 500.000đ',
@@ -15,7 +15,7 @@ const coupons: Coupon[] = [
 		code: 'SALE20',
 	},
 	{
-		couponID: '2',
+		id: '2',
 		title: 'Freeship',
 		couponType: 'Ship',
 		description: 'Miễn phí vận chuyển cho đơn từ 200.000đ',
@@ -39,7 +39,7 @@ export default function CouponsPage(): JSX.Element {
 					{coupons.map(
 						(coupon: Coupon): JSX.Element => (
 							<Card
-								key={coupon.couponID}
+								key={coupon.id}
 								className='flex overflow-hidden rounded-2xl shadow-sm border border-slate-200'
 							>
 								{/* Left */}

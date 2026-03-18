@@ -23,7 +23,7 @@ import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-re
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/utils/shared/date';
 import {
 	ProductAdminSortField,
 	ProductAdminSortOrder,
@@ -32,6 +32,8 @@ import { useTableSort } from '@/hooks/use-table-sort';
 import ProductStatusBadge from '@/components/product/admin/product-status-badge';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
+import { usePagination } from '@/hooks/use-pagination';
+import Pagination from '@/components/layout/share/pagination';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -41,6 +43,7 @@ export default function ProductAdminClient({ products }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<ProductAdminSortField>();
+	const { currentPage, changePage } = usePagination();
 
 	const handleRedirectToAddNewProduct = () => {
 		router.push('/admin/products/add-new');
@@ -75,6 +78,12 @@ export default function ProductAdminClient({ products }: Props): JSX.Element {
 					onEdit={handleRedirectToEditProductEditMode}
 				/>
 			</div>
+
+			<Pagination
+				currentPage={currentPage}
+				totalPages={10}
+				onPageChange={changePage}
+			/>
 		</div>
 	);
 }

@@ -12,20 +12,24 @@ import {
 	mapCategoryFormToCreateDTO,
 	mapCategoryFormToUpdateDTO,
 	mapCategoryResponseToAdmin,
-} from '@/utils/mappers/categories/admin-categories';
-import { generateSlug } from '@/utils/mappers/shared/slug';
+} from '@/utils/categories/mappers/admin-categories';
+import { generateSlug } from '@/utils/shared/mappers/slug';
 import { CategoryCreateDTO } from '@/types/categories/admin/CategoryCreateDTO';
 import { CategoryUpdateDTO } from '@/types/categories/admin/CategoryUpdateDTO';
 import { CategoryResponse } from '@/types/categories/admin/CategoryResponse';
 import Image from 'next/image';
 import { CategoryImage } from '@/types/images/admin/CategoryImage';
+import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
+import Field from '@/components/layout/admin/field';
+import SingleImageUpload from '@/components/image/admin/single-image-upload';
+import { BaseImage } from '@/types/images/admin/BaseImage';
 
 interface Props {
 	formType: AdminFormType;
 }
 
 const mockCategoryResponse: CategoryResponse = {
-	categoryID: 1,
+	id: 1,
 	name: 'Điện thoại',
 	slug: 'dien-thoai',
 	description: 'Danh mục điện thoại cao cấp',
@@ -38,7 +42,7 @@ const mockCategoryResponse: CategoryResponse = {
 };
 
 const emptyCategory: CategoryDetailInfoAdmin = {
-	categoryID: 0,
+	id: 0,
 	name: '',
 	slug: '',
 	description: '',
@@ -123,131 +127,58 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 	};
 
 	return (
-		<>
-			<div className='flex justify-between items-center'>
-				<div>
-					<h1 className='text-2xl font-bold'>Quản lý danh mục</h1>
-					<p className='text-sm text-muted-foreground'>
-						Tạo hoặc chỉnh sửa danh mục sản phẩm
-					</p>
-				</div>
-			</div>
-
-			<form
-				onSubmit={handleSubmit}
-				className='space-y-6 w-full max-w-3xl mx-auto mt-5 shadow-xl pt-3 p-7 rounded-2xl border'
-			>
-				{/* Name */}
-				<div className='space-y-2'>
-					<Label htmlFor='name'>Tên danh mục</Label>
-					<Input
-						id='name'
-						name='name'
-						value={form.name}
-						onChange={handleInputChange}
-						disabled={isView}
-					/>
-				</div>
-
-				{/* Slug */}
-				<div className='space-y-2'>
-					<Label htmlFor='slug'>Slug</Label>
-					<Input
-						id='slug'
-						name='slug'
-						value={form.slug}
-						onChange={handleInputChange}
-						disabled={isView}
-					/>
-				</div>
-
-				{/* Description */}
-				<div className='space-y-2'>
-					<Label htmlFor='description'>Mô tả</Label>
-					<RichTextEditor
-						value={form.description}
-						onChange={(val: string): void =>
-							setForm((prev) => ({
-								...prev,
-								description: val,
-							}))
-						}
-						disabled={isView}
-					/>
-				</div>
-
-				{/* Status */}
-				{(isUpdate || isView) && (
-					<div className='flex items-center gap-3'>
-						<Switch
-							checked={form.status}
-							onCheckedChange={(checked) =>
-								setForm((prev) => ({ ...prev, status: checked }))
-							}
-							disabled={isView}
-						/>
-						<span>Hoạt động</span>
-					</div>
-				)}
-
-				{/* Image */}
-				<div className='space-y-4'>
-					<div className='flex justify-between items-center'>
-						<Label>Hình đại diện</Label>
-
-						<Input
-							id={FILE_INPUT_ID}
-							type='file'
-							accept='image/*'
-							className='hidden'
-							onChange={handleAddImage}
-							disabled={isView}
-						/>
-
-						<Label
-							htmlFor={isView ? undefined : FILE_INPUT_ID}
-							className={isView ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
-						>
-							<Button
-								type='button'
-								asChild
-								disabled={isView}
-							>
-								<span>Chọn ảnh</span>
-							</Button>
-						</Label>
-					</div>
-
-					{form.image && (
-						<div className='mt-4 space-y-3'>
-							<Image
-								src={getImageSrc(form.image)!}
-								alt={''}
-								width={128}
-								height={128}
-								className='w-40 h-40 object-cover rounded border'
-							/>
-
-							{(isCreate || isUpdate) && (
-								<Button
-									type='button'
-									variant='destructive'
-									onClick={handleRemoveImage}
-									className='cursor-pointer'
-								>
-									Xoá ảnh
-								</Button>
-							)}
-						</div>
-					)}
-				</div>
-
-				{!isView && (
-					<Button type='submit'>
-						{formType === 'create' ? 'Thêm danh mục' : 'Cập nhật danh mục'}
+		<AdminFormWrapper
+			title="Quản lý danh mục"
+			description="Tạo hoặc chỉnh sửa danh mục"
+			onSubmit={handleSubmit}
+			actions={
+				!isView && (
+					<Button type="submit">
+						{isCreate ? 'Thêm danh mục' : 'Cập nhật danh mục'}
 					</Button>
-				)}
-			</form>
-		</>
+				)
+			}
+		>
+			<Field label="Tên danh mục">
+				<Input
+					name="name"
+					value={form.name}
+					onChange={handleInputChange}
+					disabled={isView}
+				/>
+			</Field>
+
+			<Field label="Slug">
+				<Input
+					name="slug"
+					value={form.slug}
+					onChange={handleInputChange}
+					disabled={isView}
+				/>
+			</Field>
+
+			<Field label="Mô tả">
+				<RichTextEditor
+					value={form.description}
+					onChange={(val: string): void =>
+						setForm((prev: CategoryDetailInfoAdmin) => ({ ...prev, description: val }))
+					}
+					disabled={isView}
+				/>
+			</Field>
+
+			<Field label="Hình ảnh">
+				<SingleImageUpload
+					value={form.image}
+					onChange={(img: BaseImage | undefined): void =>
+						setForm((prev: CategoryDetailInfoAdmin) => ({
+							...prev,
+							image: img,
+						}))
+					}
+					disabled={isView}
+				/>
+			</Field>
+		</AdminFormWrapper>
 	);
 }

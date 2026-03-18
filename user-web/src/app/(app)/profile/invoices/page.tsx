@@ -3,7 +3,7 @@ import UserInvoicesClient from './_components/user-invoices-client';
 
 const mockInvoices: UserInvoice[] = [
 	{
-		invoiceID: 1,
+		id: 1,
 		createdAt: '2026-02-15T10:30:00',
 		status: 'PAID',
 		paymentMethod: 'Chuyển khoản ngân hàng',
@@ -11,7 +11,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 3,
 	},
 	{
-		invoiceID: 2,
+		id: 2,
 		createdAt: '2026-02-14T14:12:00',
 		status: 'PENDING',
 		paymentMethod: 'Thanh toán khi nhận hàng (COD)',
@@ -19,7 +19,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 2,
 	},
 	{
-		invoiceID: 3,
+		id: 3,
 		createdAt: '2026-02-12T09:45:00',
 		status: 'CANCELLED',
 		paymentMethod: 'Ví MoMo',
@@ -27,7 +27,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 1,
 	},
 	{
-		invoiceID: 4,
+		id: 4,
 		createdAt: '2026-02-10T16:20:00',
 		status: 'PAID',
 		paymentMethod: 'Thẻ tín dụng',
@@ -35,7 +35,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 4,
 	},
 	{
-		invoiceID: 5,
+		id: 5,
 		createdAt: '2026-02-08T11:05:00',
 		status: 'PAID',
 		paymentMethod: 'Chuyển khoản ngân hàng',

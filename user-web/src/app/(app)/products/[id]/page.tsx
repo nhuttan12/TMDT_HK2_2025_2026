@@ -45,7 +45,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 	// TODO: const product = await getProductById(id);
 
 	const mockProduct: ProductDetail = {
-		productID: numericID,
+		id: numericID,
 		name: 'Khoai Tây Hồng VietGAP 500G (Túi)',
 		brand: 'Trường Phát',
 		price: 33000,
@@ -203,7 +203,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 
 	const mockComments: CommentModel[] = [
 		{
-			commentID: 'cmt-001',
+			id: 'cmt-001',
 			userName: 'Nguyễn Minh Anh',
 			createdAt: '2026-02-10T08:15:00Z',
 			rating: 5,
@@ -214,14 +214,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			commentID: 'cmt-002',
+			id: 'cmt-002',
 			userName: 'Trần Quốc Bảo',
 			createdAt: '2026-02-09T14:20:00Z',
 			rating: 4,
 			content: 'Chất lượng ổn trong tầm giá, nhưng giao hàng hơi chậm.',
 		},
 		{
-			commentID: 'cmt-003',
+			id: 'cmt-003',
 			userName: 'Lê Thu Trang',
 			createdAt: '2026-02-08T11:05:00Z',
 			rating: 4.5,
@@ -232,14 +232,14 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			commentID: 'cmt-004',
+			id: 'cmt-004',
 			userName: 'Phạm Gia Hưng',
 			createdAt: '2026-02-07T18:40:00Z',
 			rating: 3,
 			content: 'Dùng tạm ổn, chưa thật sự xuất sắc như mong đợi.',
 		},
 		{
-			commentID: 'cmt-005',
+			id: 'cmt-005',
 			userName: 'Hoàng Mỹ Linh',
 			createdAt: '2026-02-07T09:22:00Z',
 			rating: 5,
@@ -250,7 +250,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			commentID: 'cmt-006',
+			id: 'cmt-006',
 			userName: 'Đặng Thanh Tùng',
 			createdAt: '2026-02-06T15:30:00Z',
 			rating: 2,
@@ -262,28 +262,28 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			},
 		},
 		{
-			commentID: 'cmt-007',
+			id: 'cmt-007',
 			userName: 'Võ Thảo Nhi',
 			createdAt: '2026-02-05T20:10:00Z',
 			rating: 5,
 			content: 'Quá tuyệt vời, không có gì để chê.',
 		},
 		{
-			commentID: 'cmt-008',
+			id: 'cmt-008',
 			userName: 'Bùi Quang Huy',
 			createdAt: '2026-02-04T13:55:00Z',
 			rating: 4,
 			content: 'Mọi thứ đều ổn, đóng gói chắc chắn.',
 		},
 		{
-			commentID: 'cmt-009',
+			id: 'cmt-009',
 			userName: 'Phan Ngọc Mai',
 			createdAt: '2026-02-03T10:12:00Z',
 			rating: 4.5,
 			content: 'Chất lượng tốt, giá hợp lý.',
 		},
 		{
-			commentID: 'cmt-010',
+			id: 'cmt-010',
 			userName: 'Lý Đức Anh',
 			createdAt: '2026-02-02T16:45:00Z',
 			rating: 1,

@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { UserRole } from '@/types/users/UserRole';
 import Image from 'next/image';
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/utils/shared/date';
 import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const mockUser: UserDetailInfoAdmin = {
-	userID: 1,
+	id: 1,
 	fullName: 'Nguyễn Văn A',
 	email: 'nguyenvana@example.com',
 	phone: '0901234567',
@@ -28,7 +28,7 @@ const mockUser: UserDetailInfoAdmin = {
 };
 
 const emptyUser: UserDetailInfoAdmin = {
-	userID: 0,
+	id: 0,
 	fullName: '',
 	email: '',
 	phone: '',

@@ -1,4 +1,4 @@
 export interface CategoryForSelectionAdmin {
-	categoryID: number;
+	id: number;
 	name: string;
 }

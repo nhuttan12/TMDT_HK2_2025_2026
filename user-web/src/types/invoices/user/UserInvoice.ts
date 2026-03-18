@@ -1,7 +1,7 @@
 import { InvoiceStatus } from './InvoiceStatus';
 
 export interface UserInvoice {
-	invoiceID: number;
+	id: number;
 	createdAt: string;
 
 	status: InvoiceStatus;

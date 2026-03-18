@@ -43,8 +43,6 @@ export function useTableSort<T extends string>() {
 	};
 
 	return {
-		sortField,
-		sortOrder,
 		handleSort,
 		renderSortIcon,
 	};

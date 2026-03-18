@@ -2,7 +2,7 @@ import { BaseProduct } from './ProductBaseDTO';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 
 export interface ProductFormState extends BaseProduct {
-	productID: number;
+	id: number;
 	images: SortableImageForm[];
 	brand: string;
 	description: string;

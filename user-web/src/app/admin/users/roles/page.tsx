@@ -29,6 +29,10 @@ const roles: Role[] = [
 	},
 ];
 
+export const metadata = {
+	title: 'Quản lý thông tin chức vụ',
+};
+
 export default function Page(): JSX.Element {
 	return <RoleClient roles={roles} />;
 }

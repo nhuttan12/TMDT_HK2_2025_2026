@@ -1,5 +1,5 @@
 export interface RolePermission {
-	permissionID: number;
+	id: number;
 	permission: string;
 	code: string;
 	isActive: boolean;

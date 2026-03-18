@@ -1,15 +1,9 @@
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
-import React, { JSX } from 'react';
+import React, { JSX, useState } from 'react';
 import ProductStatusBadge from '@/components/user/admin/task-status-badge';
 import { TaskAdminSortField } from '@/types/users/admin/TaskAdminSortField';
+import { Column } from '@/types/uis/Column';
+import { DataTable } from '@/components/layout/admin/data-table';
 
 interface Props {
 	tasks: TaskAssignmentList[];
@@ -22,73 +16,85 @@ export default function TaskListForStaffTable({
 	handleSort,
 	renderSortIcon,
 }: Props): JSX.Element {
+	const [selected, setSelected] = useState<number[]>([]);
+
+	const toggleSelect = (taskID: number): void => {
+		setSelected((prev: number[]): number[] =>
+			prev.includes(taskID)
+				? prev.filter((x: number): boolean => x !== taskID)
+				: [...prev, taskID],
+		);
+	};
+
+	const toggleSelectAll = (): void => {
+		if (selected.length === tasks.length) {
+			setSelected([]);
+		} else {
+			setSelected(tasks.map((i: TaskAssignmentList): number => i.id));
+		}
+	};
+
+	const columns: Column<TaskAssignmentList>[] = [
+		{
+			key: 'title',
+			header: (
+				<div className='flex items-center gap-1'>
+					<span>Nhiệm vụ</span>
+					{renderSortIcon('title')}
+				</div>
+			),
+			onHeaderClick: () => handleSort('title'),
+		},
+		{
+			key: 'description',
+			header: 'Mô tả',
+		},
+		{
+			key: 'assignee',
+			header: (
+				<div className='flex items-center gap-1'>
+					<span>Nhân viên</span>
+					{renderSortIcon('assignee')}
+				</div>
+			),
+			onHeaderClick: () => handleSort('assignee'),
+		},
+		{
+			key: 'date',
+			header: (
+				<div className='flex items-center gap-1'>
+					<span>Ngày</span>
+					{renderSortIcon('date')}
+				</div>
+			),
+			onHeaderClick: () => handleSort('date'),
+		},
+		{
+			key: 'status',
+			header: (
+				<div className='flex items-center gap-1'>
+					<span>Trạng thái</span>
+					{renderSortIcon('status')}
+				</div>
+			),
+			onHeaderClick: () => handleSort('status'),
+
+			render: (task: TaskAssignmentList): JSX.Element => (
+				<ProductStatusBadge status={task.status} />
+			),
+		},
+	];
+
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow className='text-'>
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('title')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Nhiệm vụ</span>
-							{renderSortIcon('title')}
-						</div>
-					</TableHead>
-
-					<TableHead>Mô tả</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('assignee')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Nhân viên</span>
-							{renderSortIcon('assignee')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('date')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Ngày</span>
-							{renderSortIcon('date')}
-						</div>
-					</TableHead>
-
-					<TableHead
-						className='cursor-pointer select-none'
-						onClick={() => handleSort('status')}
-					>
-						<div className='flex items-center gap-1'>
-							<span>Trạng thái</span>
-							{renderSortIcon('status')}
-						</div>
-					</TableHead>
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{tasks.map(
-					(task: TaskAssignmentList): JSX.Element => (
-						<TableRow key={task.taskID}>
-							<TableCell className='font-medium'>{task.title}</TableCell>
-
-							<TableCell>{task.description}</TableCell>
-
-							<TableCell>{task.assignee}</TableCell>
-
-							<TableCell>{task.date}</TableCell>
-
-							<TableCell>
-								<ProductStatusBadge status={task.status} />
-							</TableCell>
-						</TableRow>
-					),
-				)}
-			</TableBody>
-		</Table>
+		<DataTable
+			data={tasks}
+			columns={columns}
+			getRowKey={(row: TaskAssignmentList): number => row.id}
+			selectable={{
+				selected: selected,
+				onToggle: toggleSelect,
+				onToggleAll: toggleSelectAll,
+			}}
+		/>
 	);
 }

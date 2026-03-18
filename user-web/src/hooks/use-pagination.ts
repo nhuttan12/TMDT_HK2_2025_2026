@@ -7,7 +7,8 @@ export function usePagination() {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const currentPage: number = Number(searchParams.get('page')) || 1;
+	const pageParam: number = Number(searchParams.get('page'));
+	const currentPage: number = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
 	const changePage = (page: number) => {
 		const params = new URLSearchParams(searchParams.toString());

@@ -1,5 +1,5 @@
 export interface ProductUserCard {
-	productID: number;
+	id: number;
 	name: string;
 	image: string;
 	price: number;

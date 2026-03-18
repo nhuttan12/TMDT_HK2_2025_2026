@@ -12,7 +12,7 @@ export const mapCategoryFormToCreateDTO = (form: CategoryDetailInfoAdmin): Categ
 });
 
 export const mapCategoryFormToUpdateDTO = (form: CategoryDetailInfoAdmin): CategoryUpdateDTO => ({
-	categoryID: form.categoryID,
+	id: form.id,
 	name: form.name,
 	slug: form.slug,
 	description: form.description,
@@ -22,7 +22,7 @@ export const mapCategoryFormToUpdateDTO = (form: CategoryDetailInfoAdmin): Categ
 
 export const mapCategoryResponseToAdmin = (data: CategoryResponse): CategoryDetailInfoAdmin => {
 	return {
-		categoryID: data.categoryID,
+		id: data.id,
 		name: data.name,
 		slug: data.slug,
 		description: data.description,

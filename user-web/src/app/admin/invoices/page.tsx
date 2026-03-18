@@ -4,7 +4,7 @@ import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 
 const mockInvoices: UserInvoice[] = [
 	{
-		invoiceID: 1001,
+		id: 1001,
 		createdAt: '2026-03-10T10:12:00',
 		status: 'PENDING_APPROVAL',
 		paymentMethod: 'COD',
@@ -12,7 +12,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 2,
 	},
 	{
-		invoiceID: 1002,
+		id: 1002,
 		createdAt: '2026-03-10T12:40:00',
 		status: 'PAID',
 		paymentMethod: 'VNPAY',
@@ -20,7 +20,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 3,
 	},
 	{
-		invoiceID: 1003,
+		id: 1003,
 		createdAt: '2026-03-11T09:20:00',
 		status: 'COMPLETED',
 		paymentMethod: 'MoMo',
@@ -28,7 +28,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 5,
 	},
 	{
-		invoiceID: 1004,
+		id: 1004,
 		createdAt: '2026-03-11T13:15:00',
 		status: 'PAID',
 		paymentMethod: 'CREDIT_CARD',
@@ -36,7 +36,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 2,
 	},
 	{
-		invoiceID: 1005,
+		id: 1005,
 		createdAt: '2026-03-12T08:00:00',
 		status: 'CANCELLED',
 		paymentMethod: 'COD',
@@ -44,7 +44,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 1,
 	},
 	{
-		invoiceID: 1006,
+		id: 1006,
 		createdAt: '2026-03-12T10:30:00',
 		status: 'PENDING',
 		paymentMethod: 'BANK_TRANSFER',
@@ -52,7 +52,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 4,
 	},
 	{
-		invoiceID: 1007,
+		id: 1007,
 		createdAt: '2026-03-12T16:45:00',
 		status: 'COMPLETED',
 		paymentMethod: 'MoMo',
@@ -60,7 +60,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 6,
 	},
 	{
-		invoiceID: 1008,
+		id: 1008,
 		createdAt: '2026-03-13T09:10:00',
 		status: 'PAID',
 		paymentMethod: 'VNPAY',
@@ -68,7 +68,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 2,
 	},
 	{
-		invoiceID: 1009,
+		id: 1009,
 		createdAt: '2026-03-13T14:22:00',
 		status: 'PENDING',
 		paymentMethod: 'COD',
@@ -76,7 +76,7 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 1,
 	},
 	{
-		invoiceID: 1010,
+		id: 1010,
 		createdAt: '2026-03-14T11:05:00',
 		status: 'COMPLETED',
 		paymentMethod: 'CREDIT_CARD',
@@ -84,6 +84,10 @@ const mockInvoices: UserInvoice[] = [
 		totalItems: 4,
 	},
 ];
+
+export const metadata = {
+	title: 'Quản lý đơn mua',
+};
 
 export default function Page(): JSX.Element {
 	return <InvoiceAdminPageClient invoices={mockInvoices} />

@@ -1,13 +1,5 @@
 'use client';
 
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
 import React, { JSX, useState } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
@@ -21,7 +13,8 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { getPaymentMethodLabel, PaymentMethod } from '@/types/invoices/user/PaymentMethod';
-import { CheckedState } from '@radix-ui/react-checkbox';
+import { Column } from '@/types/uis/Column';
+import { DataTable } from '@/components/layout/admin/data-table';
 
 interface Props {
 	invoices: UserInvoice[];
@@ -43,7 +36,7 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 		if (selected.length === invoices.length) {
 			setSelected([]);
 		} else {
-			setSelected(invoices.map((i: UserInvoice): number => i.invoiceID));
+			setSelected(invoices.map((i: UserInvoice): number => i.id));
 		}
 	};
 
@@ -54,105 +47,82 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 		// await updateInvoiceStatus(id, status)
 	};
 
+	const columns: Column<UserInvoice>[] = [
+		{
+			key: 'id',
+			header: 'ID',
+			render: (row) => `#${row.id}`,
+		},
+		{
+			key: 'createdAt',
+			header: 'Ngày tạo',
+			render: (row) => new Date(row.createdAt).toLocaleDateString(),
+		},
+		{
+			key: 'status',
+			header: 'Trạng thái',
+			render: (row) => <InvoiceStatusBadge status={row.status} />,
+		},
+		{
+			key: 'paymentMethod',
+			header: 'Thanh toán',
+			render: (row) => getPaymentMethodLabel(row.paymentMethod as PaymentMethod),
+		},
+		{
+			key: 'totalItems',
+			header: 'Số sản phẩm',
+		},
+		{
+			key: 'totalAmount',
+			header: 'Tổng tiền',
+			render: (row) => `${row.totalAmount.toLocaleString()} đ`,
+		},
+		{
+			key: 'actions',
+			header: 'Hành động',
+			render: (row) => (
+				<Select
+					defaultValue={row.status}
+					onValueChange={(value) => changeStatus(row.id, value as InvoiceStatus)}
+				>
+					<SelectTrigger
+						className='w-[160px]'
+						onClick={(e) => e.stopPropagation()}
+					>
+						<SelectValue />
+					</SelectTrigger>
+
+					<SelectContent>
+						{row.status === 'PENDING_APPROVAL' ? (
+							<>
+								<SelectItem value='APPROVE'>Duyệt đơn</SelectItem>
+								<SelectItem value='CANCEL'>Huỷ đơn</SelectItem>
+							</>
+						) : (
+							<>
+								<SelectItem value='PENDING'>Chờ thanh toán</SelectItem>
+								<SelectItem value='PAID'>Đã thanh toán</SelectItem>
+								<SelectItem value='COMPLETED'>Hoàn tất</SelectItem>
+								<SelectItem value='CANCELLED'>Đã huỷ</SelectItem>
+							</>
+						)}
+					</SelectContent>
+				</Select>
+			),
+		},
+	];
+
 	return (
-		<Table className='h-[calc(100vh-8.2rem)]'>
-			<TableHeader>
-				<TableRow>
-					<TableHead className='w-[40px]'>
-						<Checkbox
-							checked={selected.length === invoices.length}
-							onCheckedChange={toggleSelectAll}
-							className="
-								border-2! border-gray-200
-							"
-						/>
-					</TableHead>
-					<TableHead>ID</TableHead>
-					<TableHead>Ngày tạo</TableHead>
-					<TableHead>Trạng thái</TableHead>
-					<TableHead>Thanh toán</TableHead>
-					<TableHead>Số sản phẩm</TableHead>
-					<TableHead>Tổng tiền</TableHead>
-					<TableHead className='w-[200px]'>Hành động</TableHead>
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{invoices.map(
-					(invoice: UserInvoice): JSX.Element => (
-						<TableRow
-							key={invoice.invoiceID}
-							className='cursor-pointer'
-							onClick={(): void => onRedirectToDetail(invoice.invoiceID)}
-						>
-							<TableCell>
-								<Checkbox
-									checked={selected.includes(invoice.invoiceID)}
-									onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
-										e.stopPropagation()
-									}
-									onCheckedChange={(): void => toggleSelect(invoice.invoiceID)}
-									className="
-										border-2! border-gray-200
-									"
-								/>
-							</TableCell>
-
-							<TableCell>#{invoice.invoiceID}</TableCell>
-
-							<TableCell>
-								{new Date(invoice.createdAt).toLocaleDateString()}
-							</TableCell>
-
-							<TableCell>
-								<InvoiceStatusBadge status={invoice.status} />
-							</TableCell>
-
-							<TableCell>
-								{getPaymentMethodLabel(invoice.paymentMethod as PaymentMethod)}
-							</TableCell>
-
-							<TableCell>{invoice.totalItems}</TableCell>
-
-							<TableCell className='font-medium'>
-								{invoice.totalAmount.toLocaleString()} đ
-							</TableCell>
-
-							<TableCell>
-								<Select
-									defaultValue={invoice.status}
-									onValueChange={(value: string): void =>
-										changeStatus(invoice.invoiceID, value as InvoiceStatus)
-									}
-								>
-									<SelectTrigger className='w-[160px]'>
-										<SelectValue />
-									</SelectTrigger>
-
-									<SelectContent>
-										{invoice.status === 'PENDING_APPROVAL' ? (
-											<>
-												<SelectItem value='APPROVE'>Duyệt đơn</SelectItem>
-												<SelectItem value='CANCEL'>Huỷ đơn</SelectItem>
-											</>
-										) : (
-											<>
-												<SelectItem value='PENDING'>Chờ thanh toán</SelectItem>
-
-												<SelectItem value='PAID'>Đã thanh toán</SelectItem>
-
-												<SelectItem value='COMPLETED'>Hoàn tất</SelectItem>
-
-												<SelectItem value='CANCELLED'>Đã huỷ</SelectItem>
-											</>
-										)}
-									</SelectContent>
-								</Select>
-							</TableCell>
-						</TableRow>
-					),
-				)}
-			</TableBody>
-		</Table>
+		<DataTable
+			data={invoices}
+			columns={columns}
+			onRowClick={(row: UserInvoice): void => onRedirectToDetail(row.id)}
+			getRowKey={(row: UserInvoice): number => row.id}
+			selectable={{
+				selected: selected,
+				onToggle: toggleSelect,
+				onToggleAll: toggleSelectAll,
+			}}
+		/>
 	);
 }

@@ -4,7 +4,7 @@ import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 
 const mockCustomers: UserListAdmin[] = [
 	{
-		userID: 101,
+		id: 101,
 		fullName: 'Nguyễn Văn An',
 		email: 'an.nguyen@gmail.com',
 		phone: '0909123456',
@@ -14,7 +14,7 @@ const mockCustomers: UserListAdmin[] = [
 		createdAt: '2024-01-05T08:30:00Z',
 	},
 	{
-		userID: 102,
+		id: 102,
 		fullName: 'Trần Thị Bình',
 		email: 'binh.tran@gmail.com',
 		phone: '0911222333',
@@ -24,7 +24,7 @@ const mockCustomers: UserListAdmin[] = [
 		createdAt: '2024-01-10T09:00:00Z',
 	},
 	{
-		userID: 103,
+		id: 103,
 		fullName: 'Đỗ Thanh Tùng',
 		email: 'tung.do@gmail.com',
 		phone: '0933444555',
@@ -34,6 +34,10 @@ const mockCustomers: UserListAdmin[] = [
 		createdAt: '2024-01-25T07:20:00Z',
 	},
 ];
+
+export const metadata = {
+	title: 'Quản lý khách hàng',
+};
 
 export default function Index(): JSX.Element {
 	return (

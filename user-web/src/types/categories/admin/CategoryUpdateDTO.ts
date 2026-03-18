@@ -1,6 +1,6 @@
 import { BaseCategory } from '@/types/categories/admin/BaseCategory';
 
 export type CategoryUpdateDTO = Partial<BaseCategory> & {
-	categoryID: number;
+	id: number;
 	image?: string;
 };
