@@ -6,6 +6,7 @@ export interface ProductFormState extends BaseProduct {
 	images: SortableImageForm[];
 	brand: string;
 	description: string;
+	importPrice: number;
 	discount?: number;
 	categoryID: number;
 	createdAt: string;

@@ -1,24 +1,52 @@
 'use client';
 
-import { JSX } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
+import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
+import { FilterField } from '@/types/uis/FilterField';
+import { useQueryFilter } from '@/hooks/use-query-filter';
+import { Timeout } from '@radix-ui/primitive';
 
-interface Props {
+interface Props<T> {
 	title: string;
 	description: string;
 	searchPlaceholder?: string;
+	searchKey?: keyof T;
 	onAdd?: () => void;
 	addLabel?: string;
+	filter?: boolean;
+	filterField?: FilterField<T>[];
 }
 
-export default function AdminTableHeader({
+export default function AdminTableHeader<T extends object>({
 	title,
 	description,
 	searchPlaceholder,
+	searchKey,
 	onAdd,
 	addLabel,
-}: Props): JSX.Element {
+	filter = false,
+	filterField,
+}: Props<T>): JSX.Element {
+	const { applyFilters } = useQueryFilter<T>();
+
+	// Search + debounce
+	const [search, setSearch] = useState('');
+
+	useEffect(() => {
+		const timeout: Timeout = setTimeout((): void => {
+			if (!searchKey) return;
+
+			applyFilters({
+				[searchKey]: search || undefined,
+			} as Partial<T>);
+		}, 500);
+
+		return (): void => clearTimeout(timeout);
+	}, [search, searchKey, applyFilters]);
+
 	return (
 		<div className='space-y-4'>
 			{/* Title */}
@@ -38,15 +66,43 @@ export default function AdminTableHeader({
 				)}
 			</div>
 
-			{/* Search */}
-			{searchPlaceholder && (
-				<div className='flex justify-between items-center'>
-					<Input
-						placeholder={searchPlaceholder}
-						className='max-w-sm'
+			<div className='flex gap-4'>
+				{/* Search */}
+				{searchPlaceholder && (
+					<div className='flex justify-between items-center'>
+						<Input
+							placeholder={searchPlaceholder}
+							className='min-w-sm w-base max-w-base'
+							value={search}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+								setSearch(e.target.value)
+							}
+						/>
+					</div>
+				)}
+
+				{/* Dynamic Filter */}
+				{filter && filterField && (
+					<DynamicFilter<T>
+						title='Bộ lọc'
+						schema={filterField}
+						initialValues={{} as Partial<T>}
+						onApply={(filters: Partial<T>): void => {
+							const normalized: Partial<T> = { ...filters };
+
+							// Nếu object có key 'status', convert 'ALL' -> undefined
+							if ('status' in normalized) {
+								const key = 'status' as keyof T;
+								if (normalized[key] === 'ALL') {
+									delete normalized[key];
+								}
+							}
+
+							applyFilters(normalized);
+						}}
 					/>
-				</div>
-			)}
+				)}
+			</div>
 		</div>
 	);
 }

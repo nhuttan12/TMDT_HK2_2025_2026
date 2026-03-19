@@ -116,16 +116,6 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 		}
 	};
 
-	const getImageSrc = (img?: CategoryImage): string | undefined => {
-		if (!img) return undefined;
-
-		if (img.file) {
-			return URL.createObjectURL(img.file);
-		}
-
-		return img.imageUrl;
-	};
-
 	return (
 		<AdminFormWrapper
 			title="Quản lý danh mục"

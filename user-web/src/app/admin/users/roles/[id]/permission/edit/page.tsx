@@ -4,31 +4,31 @@ import { RolePermission } from '@/types/users/admin/RolePermission';
 
 const rolePermissions: RolePermission[] = [
 	{
-		permissionID: 1,
+		id: 1,
 		permission: 'Thêm sản phẩm',
 		code: 'product.add',
 		isActive: true,
 	},
 	{
-		permissionID: 2,
+		id: 2,
 		permission: 'Sửa sản phẩm',
 		code: 'product.update',
 		isActive: true,
 	},
 	{
-		permissionID: 3,
+		id: 3,
 		permission: 'Xóa sản phẩm',
 		code: 'product.remove',
 		isActive: false,
 	},
 	{
-		permissionID: 4,
+		id: 4,
 		permission: 'Xem danh sách sản phẩm',
 		code: 'product.view',
 		isActive: true,
 	},
 	{
-		permissionID: 5,
+		id: 5,
 		permission: 'Quản lý đơn hàng',
 		code: 'order.view',
 		isActive: false,

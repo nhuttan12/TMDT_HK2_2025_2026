@@ -26,12 +26,12 @@ export function ProductDetailCarousel({ products }: Props): JSX.Element {
 				{products.map(
 					(product: ProductUserCard): JSX.Element => (
 						<CarouselItem
-							key={product.productID}
+							key={product.id}
 							className='basis-1/2 lg:basis-1/3'
 						>
 							<div className='p-1'>
 								<ProductCard
-									key={product.productID}
+									key={product.id}
 									product={product}
 									elementWidth={185}
 								/>

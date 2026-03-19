@@ -10,10 +10,76 @@ import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import CategoryAdminTable from '@/app/admin/categories/_components/category-admin-table';
 import { usePagination } from '@/hooks/use-pagination';
 import Pagination from '@/components/layout/share/pagination';
+import { FilterField } from '@/types/uis/FilterField';
+import { CategoryAdminFilterValues } from '@/types/categories/admin/CategoryAdminFilterValues';
 
 interface Props {
 	categories: CategoryListItemAdmin[];
 }
+
+const categoryFilterSchema: FilterField<CategoryAdminFilterValues>[] = [
+	{
+		key: 'name',
+		label: 'Tên danh mục',
+		type: 'text',
+		gridSpan: 1,
+		placeholder: 'Tìm theo tên danh mục',
+	},
+	{
+		key: 'slug',
+		label: 'Slug',
+		type: 'text',
+		gridSpan: 2,
+		placeholder: 'Tìm theo slug',
+	},
+	{
+		key: 'productCountMin',
+		label: 'Số sản phẩm từ',
+		type: 'number',
+		gridSpan: 1,
+	},
+	{
+		key: 'productCountMax',
+		label: 'Số sản phẩm đến',
+		type: 'number',
+		gridSpan: 1,
+	},
+	{
+		key: 'status',
+		label: 'Trạng thái',
+		type: 'select',
+		gridSpan: 2,
+		options: [
+			{ label: 'Tất cả', value: 'ALL' },
+			{ label: 'Hoạt động', value: 'true' },
+			{ label: 'Không hoạt động', value: 'false' },
+		],
+	},
+	{
+		key: 'createdFrom',
+		label: 'Từ ngày tạo',
+		type: 'date',
+		gridSpan: 1,
+	},
+	{
+		key: 'createdTo',
+		label: 'Đến ngày tạo',
+		type: 'date',
+		gridSpan: 1,
+	},
+	{
+		key: 'updatedFrom',
+		label: 'Từ ngày cập nhật',
+		type: 'date',
+		gridSpan: 1,
+	},
+	{
+		key: 'updatedTo',
+		label: 'Đến ngày cập nhật',
+		type: 'date',
+		gridSpan: 1,
+	},
+];
 
 export default function CategoryAdminClient({ categories }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
@@ -36,12 +102,15 @@ export default function CategoryAdminClient({ categories }: Props): JSX.Element 
 	return (
 		<div className='space-y-4'>
 			{/* Header */}
-			<AdminTableHeader
+			<AdminTableHeader<CategoryAdminFilterValues>
 				title='Quản lý danh mục'
 				description='Quản lý toàn bộ danh mục sản phẩm trong hệ thống'
 				searchPlaceholder='Tìm danh mục...'
+				searchKey='name'
 				addLabel='+ Thêm danh mục'
 				onAdd={handleRedirectToAddNewProduct}
+				filter
+				filterField={categoryFilterSchema}
 			/>
 
 			{/* Table */}

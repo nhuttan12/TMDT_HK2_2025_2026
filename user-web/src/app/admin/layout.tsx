@@ -1,7 +1,8 @@
 import React, { JSX } from 'react';
 import AdminSidebarWrapper from '@/components/layout/admin/admin-sidebar-wrapper';
+import { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: {
 		default: 'Admin',
 		template: '%s | Admin',

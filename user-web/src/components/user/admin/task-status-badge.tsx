@@ -1,22 +1,24 @@
 import { Badge } from '@/components/ui/badge';
 import React, { JSX } from 'react';
-import { TaskStatus } from '@/types/users/admin/TaskStatus';
+import { getTaskStatusLabel, TaskStatus } from '@/types/users/admin/TaskStatus';
 
 interface Props {
 	status: TaskStatus;
 }
 
-export default function ProductStatusBadge({ status }: Props): JSX.Element {
+export default function TaskStatusBadge({ status }: Props): JSX.Element {
+	const label: string = getTaskStatusLabel(status);
+
 	if (status === 'pending') {
-		return <Badge variant='secondary'>Chưa bắt đầu</Badge>;
+		return <Badge variant='secondary'>{label}</Badge>;
 	}
 
 	if (status === 'in-progress') {
-		return <Badge>Đang làm</Badge>;
+		return <Badge>{label}</Badge>;
 	}
 
 	if (status === 'done') {
-		return <Badge className='bg-green-600'>Hoàn thành</Badge>;
+		return <Badge className='bg-green-600'>{label}</Badge>;
 	}
 
 	return <Badge>Không xác định</Badge>;

@@ -1,35 +1,36 @@
 import { JSX } from 'react';
 import RoleClient from '@/app/admin/users/roles/_components/role-client';
 import { Role } from '@/types/users/admin/Role';
+import { Metadata } from 'next';
 
 const roles: Role[] = [
 	{
-		roleID: 1,
+		id: 1,
 		name: 'Admin',
 		description: 'Quyền cao nhất hệ thống',
 		isActive: true,
 	},
 	{
-		roleID: 2,
+		id: 2,
 		name: 'Manager',
 		description: 'Quản lý sản phẩm và đơn hàng',
 		isActive: true,
 	},
 	{
-		roleID: 3,
+		id: 3,
 		name: 'Staff',
 		description: 'Nhân viên bán hàng',
 		isActive: true,
 	},
 	{
-		roleID: 4,
+		id: 4,
 		name: 'Support',
 		description: 'Hỗ trợ khách hàng',
 		isActive: false,
 	},
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Quản lý thông tin chức vụ',
 };
 

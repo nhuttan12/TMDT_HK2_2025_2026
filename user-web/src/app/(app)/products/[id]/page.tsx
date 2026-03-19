@@ -155,7 +155,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 
 	const relatedProducts: ProductUserCard[] = [
 		{
-			productID: 2,
+			id: 2,
 			name: 'Xà lách Romaine VietGAP 200G',
 			price: 25000,
 			discount: 10,
@@ -164,7 +164,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			isInWishlist: false,
 		},
 		{
-			productID: 3,
+			id: 3,
 			name: 'Cà chua bi Đà Lạt 500G',
 			price: 32000,
 			discount: 0,
@@ -173,7 +173,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			isInWishlist: false,
 		},
 		{
-			productID: 4,
+			id: 4,
 			name: 'Khoai tây Đà Lạt 1KG',
 			price: 40000,
 			discount: 5,
@@ -182,7 +182,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			isInWishlist: false,
 		},
 		{
-			productID: 5,
+			id: 5,
 			name: '[Đông lạnh] Pizza Ristorante Piccola Margherita Dr. Oetker 270G',
 			price: 169000,
 			discount: 5,
@@ -191,7 +191,7 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 			isInWishlist: false,
 		},
 		{
-			productID: 6,
+			id: 6,
 			name: 'Khô mực size S 70 - 80 Song Phương 150 g (hộp)',
 			price: 235000,
 			discount: 5,

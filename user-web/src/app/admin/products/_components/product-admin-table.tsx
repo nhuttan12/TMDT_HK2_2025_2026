@@ -86,7 +86,7 @@ export default function ProductAdminTable({
 			),
 		},
 		{
-			key: 'price',
+			key: 'salePrice',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
 					<span>Giá</span>
@@ -94,7 +94,7 @@ export default function ProductAdminTable({
 				</div>
 			),
 			onHeaderClick: (): void => handleSort('price'),
-			render: (row: ProductListInfoAdmin): string => `${row.price.toLocaleString()}₫`,
+			render: (row: ProductListInfoAdmin): string => `${row.salePrice.toLocaleString()}₫`,
 		},
 		{
 			key: 'status',

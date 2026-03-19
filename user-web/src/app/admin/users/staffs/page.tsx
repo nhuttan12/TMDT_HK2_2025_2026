@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import UserAdminClient from '@/app/admin/users/_components/user-admin-client';
 import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
+import { Metadata } from 'next';
 
 const mockStaff: UserListAdmin[] = [
 	{
@@ -35,7 +36,7 @@ const mockStaff: UserListAdmin[] = [
 	},
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Quản lý nhân viên',
 };
 
@@ -43,7 +44,7 @@ export default function Index(): JSX.Element {
 	return (
 		<UserAdminClient
 			users={mockStaff}
-			mode={'staff'}
+			mode={'staffs'}
 		/>
 	);
 }

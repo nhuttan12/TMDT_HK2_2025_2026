@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import InvoiceAdminPageClient from '@/app/admin/invoices/_components/invoice-admin-page-client';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import { Metadata } from 'next';
 
 const mockInvoices: UserInvoice[] = [
 	{
@@ -85,7 +86,7 @@ const mockInvoices: UserInvoice[] = [
 	},
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Quản lý đơn mua',
 };
 

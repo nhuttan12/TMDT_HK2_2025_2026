@@ -8,7 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import { JSX, useState } from 'react';
+import { FormEvent, JSX, useState } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
 import { Switch } from '@/components/ui/switch';
 import { RoleFormType } from '@/types/shared/admin/RoleFormType';
@@ -19,6 +19,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion';
+import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 
 interface Props {
 	permissions: RolePermission[];
@@ -31,11 +32,11 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 	const isUpdate: boolean = formType === 'update';
 	const isView: boolean = formType === 'view';
 
-	const togglePermission = (permissionID: number) => {
+	const togglePermission = (id: number) => {
 		setData((prev: RolePermission[]): RolePermission[] =>
 			prev.map(
 				(p: RolePermission): RolePermission =>
-					p.permissionID === permissionID ? { ...p, isActive: !p.isActive } : p,
+					p.id === id ? { ...p, isActive: !p.isActive } : p,
 			),
 		);
 	};
@@ -55,81 +56,73 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 
 	const firstResource: string = Object.keys(groupedPermissions)[0];
 
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		handleSave();
+	};
+
 	const handleSave = () => {
 		const activePermissions: number[] = data
 			.filter((p: RolePermission): boolean => p.isActive)
-			.map((p: RolePermission): number => p.permissionID);
+			.map((p: RolePermission): number => p.id);
 
 		console.log(activePermissions);
 	};
 
 	return (
-		<div className='space-y-6'>
-			<div>
-				<h1 className='text-2xl font-bold'>Phân quyền nhân viên</h1>
-				<p className='text-sm text-muted-foreground'>
-					Thay đổi quyền hạn của từng chức vụ, vai trò
-				</p>
-			</div>
-
+		<AdminFormWrapper
+			title='Phân quyền nhân viên'
+			description='Thay đổi quyền hạn của từng chức vụ, vai trò'
+			onSubmit={handleSubmit}
+			actions={
+				isUpdate && (
+					<Button type='submit' className='cursor-pointer'>
+						Lưu thay đổi
+					</Button>
+				)
+			}
+		>
 			<Accordion
 				type='multiple'
 				className='w-full'
 				defaultValue={[firstResource]}
 			>
 				{Object.entries(groupedPermissions).map(([resource, perms]) => (
-					<AccordionItem
-						key={resource}
-						value={resource}
-					>
-						<AccordionTrigger className='capitalize cursor-pointer '>
+					<AccordionItem key={resource} value={resource}>
+						<AccordionTrigger className='capitalize cursor-pointer'>
 							{resource}
 						</AccordionTrigger>
 
 						<AccordionContent>
 							<div className='space-y-3'>
-								{perms.map(
-									(permission: RolePermission): JSX.Element => (
-										<div
-											key={permission.permissionID}
-											className='flex items-center justify-between border rounded-md p-3'
-										>
-											<div className='space-y-1'>
-												<p className='font-medium'>
-													{permission.permission}
-												</p>
-
-												<p className='text-sm text-muted-foreground font-mono'>
-													{permission.code}
-												</p>
-											</div>
-
-											<Switch
-												checked={permission.isActive}
-												onCheckedChange={() =>
-													togglePermission(permission.permissionID)
-												}
-												disabled={isView}
-											/>
+								{perms.map((permission) => (
+									<div
+										key={permission.id}
+										className='flex items-center justify-between border rounded-md p-3'
+									>
+										<div className='space-y-1'>
+											<p className='font-medium'>
+												{permission.permission}
+											</p>
+											<p className='text-sm text-muted-foreground font-mono'>
+												{permission.code}
+											</p>
 										</div>
-									),
-								)}
+
+										<Switch
+											checked={permission.isActive}
+											onCheckedChange={() =>
+												togglePermission(permission.id)
+											}
+											disabled={isView}
+										/>
+									</div>
+								))}
 							</div>
 						</AccordionContent>
 					</AccordionItem>
 				))}
 			</Accordion>
-
-			{isUpdate && (
-				<div className='flex justify-end'>
-					<Button
-						onClick={handleSave}
-						className='cursor-pointer'
-					>
-						Lưu thay đổi
-					</Button>
-				</div>
-			)}
-		</div>
+		</AdminFormWrapper>
 	);
 }

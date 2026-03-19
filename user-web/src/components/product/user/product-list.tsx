@@ -4,7 +4,7 @@ import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 
 const list: ProductUserCard[] = [
 	{
-		productID: 1,
+		id: 1,
 		name: 'Orange',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbB_doR9LVg_xVbDXOOZc3TNbgNCEIzLLKw&s',
 		price: 5.5,
@@ -13,7 +13,7 @@ const list: ProductUserCard[] = [
 		discount: 0,
 	},
 	{
-		productID: 2,
+		id: 2,
 		name: 'Tangerine',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-fSVx2LYnvTgOi1oiw2lONk1EkZf3ZOJTGQ&s',
 		price: 3.0,
@@ -22,7 +22,7 @@ const list: ProductUserCard[] = [
 		discount: 0,
 	},
 	{
-		productID: 3,
+		id: 3,
 		name: 'Raspberry',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSk-k_lv6L0dU7km1VpLN0IQV-Nr8jVNS69vw&s',
 		price: 10.0,
@@ -31,7 +31,7 @@ const list: ProductUserCard[] = [
 		discount: 0,
 	},
 	{
-		productID: 4,
+		id: 4,
 		name: 'Lemon',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQg7t4ogMfd_ii5A99O4xakAhyFqnjYecZAw&s',
 		price: 5.3,
@@ -40,7 +40,7 @@ const list: ProductUserCard[] = [
 		discount: 0.5,
 	},
 	{
-		productID: 5,
+		id: 5,
 		name: 'Avocado',
 		image: 'https://domf5oio6qrcr.cloudfront.net/medialibrary/16762/gettyimages-961101662.jpg',
 		price: 15.7,
@@ -49,7 +49,7 @@ const list: ProductUserCard[] = [
 		discount: 0,
 	},
 	{
-		productID: 6,
+		id: 6,
 		name: 'Lemon 2',
 		image: 'https://media.istockphoto.com/id/1130558991/photo/whole-lemon-isolated-on-white-background-clipping-path-full-depth-of-field.jpg?s=612x612&w=0&k=20&c=un9FPAWPWX5VDdWrV_FIv1-M5sPD6z_isJZA6HFyy_I=',
 		price: 8.0,
@@ -58,7 +58,7 @@ const list: ProductUserCard[] = [
 		discount: 0.5,
 	},
 	{
-		productID: 7,
+		id: 7,
 		name: 'Banana',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMZw3NVvQB7ew-0I7zWlJw5b6iaU9TrcGY4Q&s',
 		price: 7.5,
@@ -67,7 +67,7 @@ const list: ProductUserCard[] = [
 		discount: 0,
 	},
 	{
-		productID: 8,
+		id: 8,
 		name: 'Watermelon',
 		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCR2eBUKsjuLAl0oqz7YvkZJFU1C3znejG4g&s',
 		price: 12.2,
@@ -86,7 +86,7 @@ export default function ProductList(): JSX.Element {
 						{list.map((item: ProductUserCard) => (
 							<ProductCart
 								product={item}
-								key={item.productID}
+								key={item.id}
 							/>
 						))}
 					</div>

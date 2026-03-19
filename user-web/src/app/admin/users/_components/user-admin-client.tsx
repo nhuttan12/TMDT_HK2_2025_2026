@@ -8,6 +8,8 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useTableSort } from '@/hooks/use-table-sort';
 import UserAdminTable from '@/app/admin/users/_components/user-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
+import Pagination from '@/components/layout/share/pagination';
+import { usePagination } from '@/hooks/use-pagination';
 
 interface Props {
 	users: UserListAdmin[];
@@ -18,6 +20,7 @@ export default function UserAdminClient({ users, mode }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<UserAdminSortField>();
+	const { currentPage, changePage } = usePagination();
 
 	const handleRedirectToStaffsInfoViewMode = (userID: number) => {
 		router.push(`/admin/users/${mode}/${userID}`);
@@ -54,6 +57,13 @@ export default function UserAdminClient({ users, mode }: Props): JSX.Element {
 					onEdit={handleRedirectToEditStaffsEditMode}
 				/>
 			</div>
+
+			{/* Pagination */}
+			<Pagination
+				currentPage={currentPage}
+				totalPages={10}
+				onPageChange={changePage}
+			/>
 		</div>
 	);
 }

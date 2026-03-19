@@ -1,11 +1,13 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import Image from 'next/image';
 
 interface ProductCardProps {
 	product: ProductUserCard;
@@ -13,7 +15,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, elementWidth }: ProductCardProps): JSX.Element {
-	const router = useRouter();
+	const router: AppRouterInstance = useRouter();
 
 	const [isWishlisted, setIsWishlisted] = useState(product.isInWishlist);
 
@@ -22,9 +24,16 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 		? product.price * (1 - product.discount / 100)
 		: product.price;
 
+	const handleRedirectToProductDetail = (): void => {
+		router.push(`/products/${product.id}`);
+	};
+
 	return (
 		<Card
-			onClick={() => router.push(`/products/${product.productID}`)}
+			onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+				e.stopPropagation();
+				handleRedirectToProductDetail();
+			}}
 			className='relative cursor-pointer hover:shadow-md transition-shadow shrink-0'
 			style={{ width: elementWidth ? `${elementWidth}px` : undefined }}
 		>
@@ -40,6 +49,7 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 					try {
 						// await toggleWishlistAPI(product.productID);
 					} catch (err) {
+						console.log(err);
 						setIsWishlisted((prev) => !prev); // rollback nếu lỗi
 					}
 				}}
@@ -56,11 +66,15 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 			</Button>
 
 			<CardContent className='p-0'>
-				<img
-					src={product.image}
-					alt={product.name}
-					className='w-full h-35 object-cover rounded-t-xl'
-				/>
+				<div className='relative w-full h-35'>
+					<Image
+						src={product.image}
+						alt={product.name}
+						fill
+						className='object-cover rounded-t-xl'
+						sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+					/>
+				</div>
 			</CardContent>
 
 			<CardFooter className='flex flex-col items-start gap-1'>

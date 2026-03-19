@@ -1,0 +1,1 @@
+export type FilterFieldType = 'text' | 'number' | 'date' | 'select';

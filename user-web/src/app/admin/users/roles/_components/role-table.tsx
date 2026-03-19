@@ -1,12 +1,4 @@
-import React, { JSX, MouseEvent } from 'react';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
+import React, { JSX } from 'react';
 import { Role } from '@/types/users/admin/Role';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -75,6 +67,7 @@ export default function RoleTable({ roles, onView, onEdit }: Props): JSX.Element
 			data={roles}
 			columns={columns}
 			onRowClick={(row: Role): void => onView(row.name)}
+			getRowKey={(row: Role): number => row.id}
 		/>
 	);
 }

@@ -1,6 +1,6 @@
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
 import React, { JSX, useState } from 'react';
-import ProductStatusBadge from '@/components/user/admin/task-status-badge';
+import TaskStatusBadge from '@/components/user/admin/task-status-badge';
 import { TaskAdminSortField } from '@/types/users/admin/TaskAdminSortField';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
@@ -80,7 +80,7 @@ export default function TaskListForStaffTable({
 			onHeaderClick: () => handleSort('status'),
 
 			render: (task: TaskAssignmentList): JSX.Element => (
-				<ProductStatusBadge status={task.status} />
+				<TaskStatusBadge status={task.status} />
 			),
 		},
 	];

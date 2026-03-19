@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
 import CategoryAdminClient from '@/app/admin/categories/_components/category-admin-client';
+import { Metadata } from 'next';
 
 const mockCategories: CategoryListItemAdmin[] = [
 	{
@@ -35,7 +36,7 @@ const mockCategories: CategoryListItemAdmin[] = [
 	},
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Quản lý danh mục',
 };
 

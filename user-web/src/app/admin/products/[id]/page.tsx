@@ -6,5 +6,5 @@ interface Props {
 }
 
 export default function Index({ params }: Props): JSX.Element {
-	return <ProductAdminForm formType={'view'} />;
+	return <ProductAdminForm key={'view'} formType={'view'} />;
 }

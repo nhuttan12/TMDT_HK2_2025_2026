@@ -1,10 +1,11 @@
 import { JSX } from 'react';
 import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
 import TaskListForStaffClient from '@/app/admin/users/tasks/_components/task-list-for-staff-client';
+import { Metadata } from 'next';
 
 const mockTasks: TaskAssignmentList[] = [
 	{
-		taskID: 1,
+		id: 1,
 		title: 'Kiểm tra tồn kho',
 		description: 'Kiểm tra số lượng giày Adidas',
 		assignee: 'Nguyễn Văn A',
@@ -12,7 +13,7 @@ const mockTasks: TaskAssignmentList[] = [
 		status: 'pending',
 	},
 	{
-		taskID: 2,
+		id: 2,
 		title: 'Xử lý đơn hàng',
 		description: 'Đóng gói đơn #1021',
 		assignee: 'Trần Văn B',
@@ -20,7 +21,7 @@ const mockTasks: TaskAssignmentList[] = [
 		status: 'in-progress',
 	},
 	{
-		taskID: 3,
+		id: 3,
 		title: 'Cập nhật sản phẩm',
 		description: 'Thêm sản phẩm Nike mới',
 		assignee: 'Lê Văn C',
@@ -29,7 +30,7 @@ const mockTasks: TaskAssignmentList[] = [
 	},
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: 'Quản lý công việc phân công',
 };
 

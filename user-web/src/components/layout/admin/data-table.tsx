@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import React, { JSX } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { toNumberID } from '@/utils/shared/mappers/toNumberID';
+import { parseToNumber } from '@/utils/shared/mappers/parseToNumber';
 
 interface DataTableProps<T> {
 	data: T[];
@@ -20,7 +20,7 @@ interface DataTableProps<T> {
 	selectable?: {
 		selected: number[];
 		onToggle: (id: number) => void;
-		onToggleAll: (ids: (number)[]) => void;
+		onToggleAll: (ids: number[]) => void;
 	};
 }
 
@@ -46,9 +46,7 @@ export function DataTable<T extends object>({
 						if (selectable.selected.length === data.length) {
 							selectable.onToggleAll([]);
 						} else {
-							selectable.onToggleAll(
-								data.map((row: T): number => getRowKey(row)),
-							);
+							selectable.onToggleAll(data.map((row: T): number => getRowKey(row)));
 						}
 					}}
 					onClick={(e: React.MouseEvent<HTMLButtonElement>): void => e.stopPropagation()}
@@ -56,7 +54,7 @@ export function DataTable<T extends object>({
 			),
 			render: (row: T): JSX.Element => {
 				const rawID: string | number = getRowKey(row);
-				const id: number = toNumberID(rawID);
+				const id: number = parseToNumber(rawID);
 
 				return (
 					<Checkbox
@@ -75,46 +73,50 @@ export function DataTable<T extends object>({
 	}
 
 	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					{finalColumns.map(
-						(col: Column<T>): JSX.Element => (
-							<TableHead
-								key={String(col.key)}
-								className={col.onHeaderClick ? 'cursor-pointer select-none' : ''}
-								onClick={col.onHeaderClick}
+		<div className='h-[500px] max-h-[500px] overflow-y-scroll shadow-lg rounded-sm'>
+			<Table>
+				<TableHeader className='sticky top-0 bg-white z-10 border-b! border-gray-400!'>
+					<TableRow>
+						{finalColumns.map(
+							(col: Column<T>): JSX.Element => (
+								<TableHead
+									key={String(col.key)}
+									className={
+										col.onHeaderClick ? 'cursor-pointer select-none' : ''
+									}
+									onClick={col.onHeaderClick}
+								>
+									<b>{col.header}</b>
+								</TableHead>
+							),
+						)}
+					</TableRow>
+				</TableHeader>
+
+				<TableBody>
+					{data.map(
+						(row: T): JSX.Element => (
+							<TableRow
+								key={getRowKey(row)}
+								onClick={(): void | undefined => onRowClick?.(row)}
+								className='cursor-pointer'
 							>
-								{col.header}
-							</TableHead>
+								{finalColumns.map(
+									(col: Column<T>): JSX.Element => (
+										<TableCell key={String(col.key)}>
+											{col.render
+												? col.render(row)
+												: col.key in row
+													? (row[col.key as keyof T] as React.ReactNode)
+													: null}
+										</TableCell>
+									),
+								)}
+							</TableRow>
 						),
 					)}
-				</TableRow>
-			</TableHeader>
-
-			<TableBody>
-				{data.map(
-					(row: T): JSX.Element => (
-						<TableRow
-							key={getRowKey(row)}
-							onClick={(): void | undefined => onRowClick?.(row)}
-							className='cursor-pointer'
-						>
-							{finalColumns.map(
-								(col: Column<T>): JSX.Element => (
-									<TableCell key={String(col.key)}>
-										{col.render
-											? col.render(row)
-											: col.key in row
-												? (row[col.key as keyof T] as React.ReactNode)
-												: null}
-									</TableCell>
-								),
-							)}
-						</TableRow>
-					),
-				)}
-			</TableBody>
-		</Table>
+				</TableBody>
+			</Table>
+		</div>
 	);
 }
