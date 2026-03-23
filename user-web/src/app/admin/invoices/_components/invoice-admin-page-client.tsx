@@ -23,17 +23,7 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-	const [search, setSearch] = useState('');
-	const [status, setStatus] = useState<InvoiceStatus | 'ALL'>('ALL');
 	const { currentPage, changePage } = usePagination();
-
-	const filtered: UserInvoice[] = invoices.filter((invoice: UserInvoice): boolean => {
-		const matchStatus: boolean = status === 'ALL' || invoice.status === status;
-
-		const matchSearch: boolean = invoice.id.toString().includes(search);
-
-		return matchStatus && matchSearch;
-	});
 
 	const currentStatus: InvoiceStatus | null = searchParams.get('status') as InvoiceStatus | null;
 
@@ -41,16 +31,6 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 		const params = new URLSearchParams(searchParams.toString());
 
 		params.set('status', status);
-
-		router.push(`/admin/invoices?${params.toString()}`);
-	}
-
-	function handleApplyFilter(filters: InvoiceAdminFilterValues) {
-		const params = new URLSearchParams(searchParams.toString());
-
-		Object.entries(filters).forEach(([key, value]) => {
-			if (value) params.set(key, String(value));
-		});
 
 		router.push(`/admin/invoices?${params.toString()}`);
 	}
@@ -66,6 +46,7 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 		'CREDIT_CARD',
 		'BANK_TRANSFER',
 	];
+
 	const schema: FilterField<InvoiceAdminFilterValues>[] = [
 		{
 			key: 'paymentMethod',
@@ -114,6 +95,7 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 
 	return (
 		<div className='space-y-6'>
+			{/* Header */}
 			<div className='flex space-x-16'>
 				<AdminTableHeader<InvoiceAdminFilterValues>
 					title='Quản lý hóa đơn'
@@ -132,7 +114,7 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 			{/* Table */}
 			<div className='rounded-xl border bg-white'>
 					<InvoiceAdminTable
-						invoices={filtered}
+						invoices={invoices}
 						onRedirectToDetail={handleRedirectToInvoiceDetailAdmin}
 					/>
 			</div>

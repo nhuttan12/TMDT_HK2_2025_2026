@@ -16,6 +16,7 @@ interface DataTableProps<T> {
 	columns: Column<T>[];
 	onRowClick?: (row: T) => void;
 	getRowKey: (row: T) => number;
+	tableHeight?: number;
 
 	selectable?: {
 		selected: number[];
@@ -30,6 +31,7 @@ export function DataTable<T extends object>({
 	onRowClick,
 	getRowKey,
 	selectable,
+	tableHeight = 500,
 }: DataTableProps<T>): JSX.Element {
 	let finalColumns: Column<T>[] = columns;
 
@@ -73,7 +75,10 @@ export function DataTable<T extends object>({
 	}
 
 	return (
-		<div className='h-[500px] max-h-[500px] overflow-y-scroll shadow-lg rounded-sm'>
+		<div
+			style={{ height: `${tableHeight}px`, maxHeight: `${tableHeight}px` }}
+			className="overflow-y-scroll shadow-lg rounded-sm"
+		>
 			<Table>
 				<TableHeader className='sticky top-0 bg-white z-10 border-b! border-gray-400!'>
 					<TableRow>
@@ -95,7 +100,7 @@ export function DataTable<T extends object>({
 
 				<TableBody>
 					{data.map(
-						(row: T): JSX.Element => (
+						(row: T, rowIndex: number): JSX.Element => (
 							<TableRow
 								key={getRowKey(row)}
 								onClick={(): void | undefined => onRowClick?.(row)}
@@ -105,7 +110,7 @@ export function DataTable<T extends object>({
 									(col: Column<T>): JSX.Element => (
 										<TableCell key={String(col.key)}>
 											{col.render
-												? col.render(row)
+												? col.render(row, rowIndex)
 												: col.key in row
 													? (row[col.key as keyof T] as React.ReactNode)
 													: null}

@@ -4,7 +4,6 @@ import React, { JSX, useState } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
 	Select,
 	SelectContent,

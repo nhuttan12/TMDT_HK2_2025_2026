@@ -89,11 +89,11 @@ export default function ProductAdminTable({
 			key: 'salePrice',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Giá</span>
-					{renderSortIcon('price')}
+					<span>Giá bán</span>
+					{renderSortIcon('salePrice')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('price'),
+			onHeaderClick: (): void => handleSort('salePrice'),
 			render: (row: ProductListInfoAdmin): string => `${row.salePrice.toLocaleString()}₫`,
 		},
 		{
@@ -101,10 +101,10 @@ export default function ProductAdminTable({
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
 					<span>Trạng thái</span>
-					{renderSortIcon('isActive')}
+					{renderSortIcon('status')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('isActive'),
+			onHeaderClick: (): void => handleSort('status'),
 			render: (row: ProductListInfoAdmin): JSX.Element => (
 				<ProductStatusBadge status={row.status} />
 			),

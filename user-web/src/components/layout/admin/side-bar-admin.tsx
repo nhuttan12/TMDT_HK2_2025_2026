@@ -66,22 +66,22 @@ const sidebarData: SidebarItemInterface[] = [
 		children: [
 			{
 				title: 'Phiếu nhập kho',
-				href: '/admin/inventory/imports',
+				href: '/admin/inventories/receipts',
 				icon: <Download size={18} />,
 			},
 			{
 				title: 'Phiếu xuất kho',
-				href: '/admin/inventory/exports',
+				href: '/admin/inventories/issues',
 				icon: <Upload size={18} />,
 			},
 			{
 				title: 'Sản phẩm tồn kho',
-				href: '/admin/inventory/stocks',
+				href: '/admin/inventories/stocks',
 				icon: <Boxes size={18} />,
 			},
 			{
 				title: 'Nhà cung cấp',
-				href: '/admin/inventory/suppliers',
+				href: '/admin/inventories/suppliers',
 				icon: <Truck size={18} />,
 			},
 			{
@@ -110,11 +110,6 @@ const sidebarData: SidebarItemInterface[] = [
 				href: '/admin/users/roles',
 				icon: <Shield size={18} />,
 			},
-			// {
-			// 	title: 'Lịch chấm công',
-			// 	href: '/admin/users/attendance',
-			// 	icon: <CalendarCheck size={18} />,
-			// },
 			{
 				title: 'Nhiệm vụ phân công',
 				href: '/admin/users/tasks',

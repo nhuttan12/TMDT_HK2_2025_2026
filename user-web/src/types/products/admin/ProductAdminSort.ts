@@ -1,9 +1,8 @@
 export type ProductAdminSortField =
 	| 'name'
-	| 'price'
+	| 'salePrice'
 	| 'stock'
-	| 'isActive'
+	| 'status'
 	| 'createdAt'
 	| 'updatedAt'
 	| 'slug';
-export type ProductAdminSortOrder = 'asc' | 'desc' | null;

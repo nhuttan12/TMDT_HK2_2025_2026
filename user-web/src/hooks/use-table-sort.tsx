@@ -5,7 +5,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { JSX } from 'react';
 
-export type SortOrder = 'asc' | 'desc';
+type SortOrder = 'asc' | 'desc';
 
 export function useTableSort<T extends string>() {
 	const router: AppRouterInstance = useRouter();

@@ -1,35 +1,11 @@
 'use client';
 
 import { JSX } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
-import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ChevronDown, ChevronUp, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { formatDate } from '@/utils/shared/date';
-import {
-	ProductAdminSortField,
-	ProductAdminSortOrder,
-} from '@/types/products/admin/ProductAdminSort';
+import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { useTableSort } from '@/hooks/use-table-sort';
-import ProductStatusBadge from '@/components/product/admin/product-status-badge';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
 import { usePagination } from '@/hooks/use-pagination';

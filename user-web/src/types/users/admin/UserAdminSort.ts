@@ -5,5 +5,3 @@ export type UserAdminSortField =
 	| 'isActive'
 	| 'createdAt'
 	| 'updatedAt';
-
-export type UserAdminSortOrder = 'asc' | 'desc' | null;

@@ -5,4 +5,3 @@ export type CategoryAdminSortField =
 	| 'status'
 	| 'createdAt'
 	| 'updatedAt';
-export type CategoryAdminSortOrder = 'asc' | 'desc' | null;
