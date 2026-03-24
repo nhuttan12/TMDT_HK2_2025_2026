@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import GoodsIssueAdminPageClient from '@/app/admin/inventories/issues/_components/goods-issue-admin-page-client';
 import { GoodsIssueList } from '@/types/inventories/issues/GoodsIssueList';
+import {Metadata} from "next";
 
 // Mock data
 const mockIssues: GoodsIssueList[] = [
@@ -38,6 +39,11 @@ const mockIssues: GoodsIssueList[] = [
 		updatedAt: '2024-03-21T09:15:00Z',
 	},
 ];
+
+export const metadata: Metadata = {
+	title: 'Quản lý hoá đơn xuất kho',
+};
+
 
 export default function Page(): JSX.Element {
 	return <GoodsIssueAdminPageClient goodsIssues={mockIssues}/>;

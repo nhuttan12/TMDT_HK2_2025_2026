@@ -1,4 +1,4 @@
-export interface UpdateGoodsReceiptItemDto {
+export interface UpdateGoodsReceiptBatchDto {
 	id: number;
 
 	productID: number;
@@ -9,6 +9,4 @@ export interface UpdateGoodsReceiptItemDto {
 	batchNumber?: string;
 	serialNumber?: string;
 	expiredAt?: string;
-
-	note?: string;
 }

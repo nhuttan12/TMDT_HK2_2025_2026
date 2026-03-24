@@ -27,9 +27,9 @@ export default function RoleClient({ roles }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const handleRedirectToRolePermissionViewMode = (
-		roleNName: string,
+		roleName: string,
 	) => {
-		router.push(`/admin/users/roles/${roleNName.toLowerCase()}/permission`);
+		router.push(`/admin/users/roles/${roleName.toLowerCase()}/permission`);
 	};
 
 	const handleRedirectToRolePermissionEditMode = (

@@ -1,4 +1,4 @@
-import { GoodsReceiptStatus } from '@/types/inventories/receipts/GoodsReceiptStatus';
+import { GoodsReceiptStatus } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
 import { Badge } from '@/components/ui/badge';
 import { JSX } from 'react';
 
@@ -8,7 +8,11 @@ const statusMap: Record<GoodsReceiptStatus, { label: string; variant: BadgeVaria
 	cancelled: { label: 'Đã huỷ', variant: 'destructive' },
 };
 
-export default function GoodsReceiptStatusBadge({ status }: { status: GoodsReceiptStatus }): JSX.Element {
+interface Props {
+	status: GoodsReceiptStatus;
+}
+
+export default function GoodsReceiptStatusBadge({ status }: Props): JSX.Element {
 	return (
 		<Badge variant={statusMap[status].variant}>
 			{statusMap[status].label}

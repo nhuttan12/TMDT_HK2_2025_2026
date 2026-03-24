@@ -11,7 +11,7 @@ import {
 	ImageIcon,
 	Images,
 	LayoutDashboard,
-	Megaphone,
+	Megaphone, MessageCircle,
 	Package,
 	Settings,
 	Shield,
@@ -84,11 +84,6 @@ const sidebarData: SidebarItemInterface[] = [
 				href: '/admin/inventories/suppliers',
 				icon: <Truck size={18} />,
 			},
-			{
-				title: 'Lịch sử xuất nhập',
-				href: '/admin/inventory/history',
-				icon: <History size={18} />,
-			},
 		],
 	},
 	{
@@ -99,6 +94,11 @@ const sidebarData: SidebarItemInterface[] = [
 				title: 'Khách hàng',
 				href: '/admin/users/customers',
 				icon: <Users size={18} />,
+			},
+			{
+				title: 'Nhắn tin với khách hàng',
+				href: '/admin/users/customers/messages',
+				icon: <MessageCircle size={18} />,
 			},
 			{
 				title: 'Nhân viên',

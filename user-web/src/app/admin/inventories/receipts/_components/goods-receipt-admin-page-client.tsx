@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 import GoodsReceiptAdminTable from '@/app/admin/inventories/receipts/_components/goods-receipt-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { FilterField } from '@/types/uis/FilterField';
-import { ReceiptAdminFilterValues } from '@/types/inventories/receipts/ReceiptAdminFilterValues';
+import { ReceiptAdminFilterValues } from '@/types/inventories/receipts/uis/ReceiptAdminFilterValues';
 import { FilterSupplier } from '@/types/inventories/suppliers/FilterSupplier';
-import { GoodsReceiptList } from '@/types/inventories/receipts/GoodsReceiptList';
+import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import Pagination from '@/components/layout/share/pagination';
 import { useTableSort } from '@/hooks/use-table-sort';
-import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
 import { usePagination } from '@/hooks/use-pagination';
+import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
 
 const suppliers: FilterSupplier[] = [
 	{ id: 1, code: 'NCC01', name: 'ABC' },
@@ -58,7 +58,7 @@ interface Props {
 export default function GoodsReceiptAdminPageClient({ receipts }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
-	const { handleSort, renderSortIcon } = useTableSort<CategoryAdminSortField>();
+	const { handleSort, renderSortIcon } = useTableSort<GoodsReceiptSortField>();
 	const { currentPage, changePage } = usePagination();
 
 	const handleRedirectToAddNewReceiptDetail = () => {

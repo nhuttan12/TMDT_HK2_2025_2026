@@ -3,7 +3,7 @@ import { getGoodsIssueStatusLabel } from '@/types/inventories/issues/GoodsIssueS
 import { Column } from '@/types/uis/Column';
 import { JSX, useState } from 'react';
 import { GoodsIssueList } from '@/types/inventories/issues/GoodsIssueList';
-import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
+import { GoodsIssueSortField } from '@/types/inventories/issues/GoodsIssueSortField';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -15,8 +15,8 @@ import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 
 interface Props {
 	issues: GoodsIssueList[];
-	handleSort: (field: CategoryAdminSortField) => void;
-	renderSortIcon: (field: CategoryAdminSortField) => JSX.Element | null;
+	handleSort: (field: GoodsIssueSortField) => void;
+	renderSortIcon: (field: GoodsIssueSortField) => JSX.Element | null;
 
 	onView: (id: number) => void;
 	onEdit: (id: number) => void;
@@ -50,30 +50,66 @@ export default function GoodsIssueAdminTable({
 	const goodsIssueColumns: Column<GoodsIssueList>[] = [
 		{
 			key: 'code',
-			header: 'Mã phiếu',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Mã phiếu</span>
+					{renderSortIcon('code')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('code'),
 		},
 		{
 			key: 'customerName',
-			header: 'Khách hàng',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Khách hàng</span>
+					{renderSortIcon('customerName')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('customerName'),
 		},
 		{
 			key: 'exportDate',
-			header: 'Ngày xuất',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Ngày xuất</span>
+					{renderSortIcon('exportDate')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('exportDate'),
 			render: (row: GoodsIssueList): string =>
 				new Date(row.exportDate).toLocaleDateString('vi-VN'),
 		},
 		{
 			key: 'totalQuantity',
-			header: 'SL',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Số lượng</span>
+					{renderSortIcon('totalQuantity')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('totalQuantity'),
 		},
 		{
 			key: 'totalAmount',
-			header: 'Tổng tiền',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Tổng tiền</span>
+					{renderSortIcon('totalAmount')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('totalAmount'),
 			render: (row: GoodsIssueList): string => row.totalAmount.toLocaleString('vi-VN') + ' ₫',
 		},
 		{
 			key: 'status',
-			header: 'Trạng thái',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Trạng thái</span>
+					{renderSortIcon('status')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('status'),
 			render: (row: GoodsIssueList): React.JSX.Element => {
 				const label: string = getGoodsIssueStatusLabel(row.status);
 

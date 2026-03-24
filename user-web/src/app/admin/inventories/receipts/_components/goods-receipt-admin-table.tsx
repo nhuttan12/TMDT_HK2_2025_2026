@@ -1,10 +1,9 @@
 import { DataTable } from '@/components/layout/admin/data-table';
-import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/GoodsReceiptStatus';
+import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
 import { Column } from '@/types/uis/Column';
 import { JSX, useState } from 'react';
-import { GoodsReceiptList } from '@/types/inventories/receipts/GoodsReceiptList';
-import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
+import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,8 +15,8 @@ import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 
 interface Props {
 	receipts: GoodsReceiptList[];
-	handleSort: (field: CategoryAdminSortField) => void;
-	renderSortIcon: (field: CategoryAdminSortField) => JSX.Element | null;
+	handleSort: (field: GoodsReceiptSortField) => void;
+	renderSortIcon: (field: GoodsReceiptSortField) => JSX.Element | null;
 
 	onView: (id: number) => void;
 	onEdit: (id: number) => void;
@@ -51,80 +50,123 @@ export default function GoodsReceiptAdminTable({
 	const goodsReceiptColumns: Column<GoodsReceiptList>[] = [
 		{
 			key: 'code',
-			header: 'Mã phiếu',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Mã phiếu</span>
+					{renderSortIcon('code')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('code'),
 		},
 		{
 			key: 'supplierName',
-			header: 'Nhà cung cấp',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Nhà cung cấp</span>
+					{renderSortIcon('supplierName')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('supplierName'),
 		},
 		{
 			key: 'importDate',
-			header: 'Ngày nhập',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Ngày nhập</span>
+					{renderSortIcon('importDate')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('importDate'),
 			render: (row: GoodsReceiptList): string =>
 				new Date(row.importDate).toLocaleDateString('vi-VN'),
 		},
 		{
+			key: 'totalBatches',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Số lô</span>
+					{renderSortIcon('totalBatches')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('totalBatches'),
+		},
+		{
 			key: 'totalQuantity',
-			header: 'SL',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Số lượng máy</span>
+					{renderSortIcon('totalQuantity')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('totalQuantity'),
 		},
 		{
 			key: 'totalAmount',
-			header: 'Tổng tiền',
-			render: (row: GoodsReceiptList): string => row.totalAmount.toLocaleString('vi-VN') + ' ₫',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Tổng tiền</span>
+					{renderSortIcon('totalAmount')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('totalAmount'),
+			render: (row: GoodsReceiptList): string =>
+				row.totalAmount.toLocaleString('vi-VN') + ' ₫',
 		},
 		{
 			key: 'status',
-			header: 'Trạng thái',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Trạng thái</span>
+					{renderSortIcon('status')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('status'),
 			render: (row: GoodsReceiptList): React.JSX.Element => {
 				const label: string = getGoodsReceiptStatusLabel(row.status);
 
 				return (
 					<span
-						className={`px-2 py-1 rounded text-sm ${
+						className={`px-2 py-1 rounded text-[12px] font-medium ${
 							row.status === 'draft'
-								? 'bg-gray-200'
+								? 'bg-amber-100 text-amber-700'
 								: row.status === 'confirmed'
-									? 'bg-green-200'
-									: 'bg-red-200'
+									? 'bg-emerald-100 text-emerald-700'
+									: 'bg-rose-100 text-rose-700'
 						}`}
 					>
-					{label}
-				</span>
+                        {label}
+                    </span>
 				);
 			},
+		},
+		{
+			key: 'createdByName',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Người tạo</span>
+					{renderSortIcon('createdByName')}
+				</div>
+			),
+			onHeaderClick: (): void => handleSort('createdByName'),
 		},
 		{
 			key: 'actions',
 			header: <span className='text-right block'>Hành động</span>,
 			render: (row: GoodsReceiptList): JSX.Element => (
-				<div
-					className='text-right'
-					onClick={(e) => e.stopPropagation()}
-				>
+				<div className='text-right' onClick={(e) => e.stopPropagation()}>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								size='icon'
-							>
+							<Button variant='ghost' size='icon'>
 								<MoreHorizontal size={16} />
 							</Button>
 						</DropdownMenuTrigger>
-
 						<DropdownMenuContent align='end'>
 							<DropdownMenuItem onClick={() => onEdit(row.id)}>
-								<Pencil
-									size={14}
-									className='mr-2'
-								/>
+								<Pencil size={14} className='mr-2' />
 								Chỉnh sửa
 							</DropdownMenuItem>
-
 							<DropdownMenuItem className='text-red-500'>
-								<Trash
-									size={14}
-									className='mr-2'
-								/>
+								<Trash size={14} className='mr-2' />
 								Xóa
 							</DropdownMenuItem>
 						</DropdownMenuContent>

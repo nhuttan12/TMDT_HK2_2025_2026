@@ -1,0 +1,116 @@
+import { JSX } from 'react';
+import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { Metadata } from 'next';
+import ProductVariantListInBatchTable from '@/app/admin/inventories/receipts/[receiptID]/batches/[batchID]/_components/product-variant-list-in-batch-table';
+
+const mockBatchItemSerials: BatchItemSerial[] = [
+	{
+		id: 1,
+		batchID: 1,
+		productVariantID: 101,
+		productVariantName: 'iPhone 15 Pro Max 256GB',
+		serialNumber: 'SN-IP15PM-0001',
+		appearanceCondition: 'Mới 100%',
+		status: 'in_stock',
+		importDate: '2026-03-01',
+		expiredAt: undefined,
+	},
+	{
+		id: 2,
+		batchID: 1,
+		productVariantID: 101,
+		productVariantName: 'iPhone 15 Pro Max 256GB',
+		serialNumber: 'SN-IP15PM-0002',
+		appearanceCondition: 'Mới 100%',
+		status: 'sold',
+		importDate: '2026-03-01',
+	},
+	{
+		id: 3,
+		batchID: 1,
+		productVariantID: 101,
+		productVariantName: 'iPhone 15 Pro Max 256GB',
+		serialNumber: 'SN-IP15PM-0003',
+		appearanceCondition: 'Trầy nhẹ',
+		status: 'defective',
+		importDate: '2026-03-01',
+	},
+	{
+		id: 4,
+		batchID: 2,
+		productVariantID: 102,
+		productVariantName: 'Samsung S24 Ultra',
+		serialNumber: 'SN-SS24U-0001',
+		appearanceCondition: 'Mới 100%',
+		status: 'in_stock',
+		importDate: '2026-03-05',
+	},
+	{
+		id: 5,
+		batchID: 2,
+		productVariantID: 102,
+		productVariantName: 'Samsung S24 Ultra',
+		serialNumber: 'SN-SS24U-0002',
+		appearanceCondition: 'Mới 100%',
+		status: 'sold',
+		importDate: '2026-03-05',
+	},
+	{
+		id: 6,
+		batchID: 3,
+		productVariantID: 103,
+		productVariantName: 'MacBook Pro M3',
+		serialNumber: 'SN-MBP-M3-0001',
+		appearanceCondition: 'Mới 100%',
+		status: 'in_stock',
+		importDate: '2026-02-20',
+	},
+	{
+		id: 7,
+		batchID: 3,
+		productVariantID: 103,
+		productVariantName: 'MacBook Pro M3',
+		serialNumber: 'SN-MBP-M3-0002',
+		appearanceCondition: 'Móp nhẹ góc',
+		status: 'defective',
+		importDate: '2026-02-20',
+	},
+	{
+		id: 8,
+		batchID: 4,
+		productVariantID: 104,
+		productVariantName: 'Sony WH-1000XM5',
+		serialNumber: 'SN-SONY-XM5-0001',
+		status: 'in_stock',
+		importDate: '2026-03-10',
+		expiredAt: '2027-03-10',
+	},
+	{
+		id: 9,
+		batchID: 4,
+		productVariantID: 104,
+		productVariantName: 'Sony WH-1000XM5',
+		serialNumber: 'SN-SONY-XM5-0002',
+		status: 'sold',
+		importDate: '2026-03-10',
+		expiredAt: '2027-03-10',
+	},
+	{
+		id: 10,
+		batchID: 5,
+		productVariantID: 105,
+		productVariantName: 'Logitech MX Master 3S',
+		serialNumber: 'SN-LOGI-MX3S-0001',
+		appearanceCondition: 'Mới 100%',
+		status: 'in_stock',
+		importDate: '2026-03-15',
+	},
+];
+
+export const metadata: Metadata = {
+	title: 'Sản phẩm trong lô hàng',
+};
+
+export default function Page(): JSX.Element {
+	return <ProductVariantListInBatchTable productVariants={mockBatchItemSerials} />;
+}

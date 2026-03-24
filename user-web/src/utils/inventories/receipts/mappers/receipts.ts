@@ -1,48 +1,57 @@
-import { CreateGoodsReceiptDto } from '@/types/inventories/receipts/CreateGoodsReceiptDto';
-import { GoodsReceipt } from '@/types/inventories/receipts/GoodsReceipt';
-import { GoodsReceiptItem } from '@/types/inventories/receipts/GoodsReceiptItem';
-import { UpdateGoodsReceiptDto } from '@/types/inventories/receipts/UpdateGoodsReceiptDto';
+import { CreateGoodsReceiptDto } from '@/types/inventories/receipts/dtos/CreateGoodsReceiptDto';
+import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
+import { UpdateGoodsReceiptDto } from '@/types/inventories/receipts/dtos/UpdateGoodsReceiptDto';
+import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
+import { CreateGoodsReceiptBatchDto } from '@/types/inventories/receipts/dtos/CreateGoodsReceiptBatchDto';
+import { UpdateGoodsReceiptBatchDto } from '@/types/inventories/receipts/dtos/UpdateGoodsReceiptBatchDto';
 
-export function mapToCreate(form: GoodsReceipt): CreateGoodsReceiptDto {
+function mapBatchToDto(batch: GoodsReceiptBatch): CreateGoodsReceiptBatchDto {
 	return {
-		supplierID: form.supplier!.id,
-		warehouseID: form.warehouseID!,
-		importDate: form.importDate,
-		note: form.note,
-		items: form.items.map((i: GoodsReceiptItem) => ({
-			productID: i.productID,
-			quantity: i.quantity,
-			unitPrice: i.unitPrice,
-			batchNumber: i.batchNumber,
-			serialNumber: i.serialNumber,
-			expiredAt: i.expiredAt,
-			note: i.note,
-		})),
+		productID: batch.productID,
+		batchNumber: batch.batchNumber,
+		quantity: batch.quantity,
+		unitPrice: batch.unitPrice,
+		manufacturedAt: batch.manufacturedAt,
+		expiredAt: batch.expiredAt,
+		serialNumbers: undefined
 	};
 }
 
-export function mapToUpdateDto(receipt: GoodsReceipt): UpdateGoodsReceiptDto {
+export function mapGoodsReceiptToCreateDto(
+	data: GoodsReceiptDetail,
+): CreateGoodsReceiptDto {
 	return {
-		id: receipt.id,
+		code: data.code || undefined,
+		supplierID: data.supplierID,
+		importDate: data.importDate,
+		note: data.note,
+		batches: data.batches.map(mapBatchToDto)
+	};
+}
 
-		// chỉ map nếu có supplier
-		supplierID: receipt.supplier?.id,
+function mapBatchToUpdateDto(
+	batch: GoodsReceiptBatch
+): UpdateGoodsReceiptBatchDto {
+	return {
+		id: batch.id,
+		productID: batch.productID,
+		quantity: batch.quantity,
+		unitPrice: batch.unitPrice,
+		batchNumber: batch.batchNumber,
+		expiredAt: batch.expiredAt,
+		serialNumber: undefined
+	};
+}
 
-		warehouseID: receipt.warehouseID,
-		importDate: receipt.importDate,
-		note: receipt.note,
-
-		items: receipt.items.map((item: GoodsReceiptItem) => ({
-			id: item.id,
-
-			productID: item.productID,
-			quantity: item.quantity,
-			unitPrice: item.unitPrice,
-
-			batchNumber: item.batchNumber,
-			serialNumber: item.serialNumber,
-			expiredAt: item.expiredAt,
-			note: item.note,
-		})),
+export function mapGoodsReceiptToUpdateDto(
+	data: GoodsReceiptDetail
+): UpdateGoodsReceiptDto {
+	return {
+		id: data.id,
+		code: data.code,
+		supplierID: data.supplierID,
+		importDate: data.importDate,
+		note: data.note,
+		batches: data.batches.map(mapBatchToUpdateDto)
 	};
 }
