@@ -14,6 +14,7 @@ import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
+import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -30,23 +31,15 @@ export default function ProductAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const allKeys: number[] = products.map((p: ProductListInfoAdmin): number => p.id);
 
-	const toggleSelect = (productID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(productID)
-				? prev.filter((x: number): boolean => x !== productID)
-				: [...prev, productID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === products.length) {
-			setSelected([]);
-		} else {
-			setSelected(products.map((i: ProductListInfoAdmin): number => i.id));
-		}
-	};
+	const {
+		selected,
+		toggle,
+		toggleAll,
+		isAllSelected,
+		isIndeterminate,
+	} = useTableSelection<number>(allKeys);
 
 	const columns: Column<ProductListInfoAdmin>[] = [
 		{
@@ -84,17 +77,6 @@ export default function ProductAdminTable({
 			render: (row: ProductListInfoAdmin): JSX.Element => (
 				<span className='text-muted-foreground'>{row.slug}</span>
 			),
-		},
-		{
-			key: 'salePrice',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Giá bán</span>
-					{renderSortIcon('salePrice')}
-				</div>
-			),
-			onHeaderClick: (): void => handleSort('salePrice'),
-			render: (row: ProductListInfoAdmin): string => `${row.salePrice.toLocaleString()}₫`,
 		},
 		{
 			key: 'status',
@@ -150,13 +132,14 @@ export default function ProductAdminTable({
 							<Button
 								variant='ghost'
 								size='icon'
+								className='cursor-pointer'
 							>
 								<MoreHorizontal size={16} />
 							</Button>
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align='end'>
-							<DropdownMenuItem onClick={() => onEdit(row.id)}>
+							<DropdownMenuItem className='cursor-pointer' onClick={() => onEdit(row.id)}>
 								<Pencil
 									size={14}
 									className='mr-2'
@@ -164,7 +147,7 @@ export default function ProductAdminTable({
 								Chỉnh sửa
 							</DropdownMenuItem>
 
-							<DropdownMenuItem className='text-red-500'>
+							<DropdownMenuItem className='text-red-500 cursor-pointer'>
 								<Trash
 									size={14}
 									className='mr-2'
@@ -186,8 +169,10 @@ export default function ProductAdminTable({
 			getRowKey={(row: ProductListInfoAdmin): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
+				onToggle: toggle,
+				onToggleAll: toggleAll,
+				isAllSelected,
+				isIndeterminate,
 			}}
 		/>
 	);

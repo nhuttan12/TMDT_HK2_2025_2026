@@ -39,7 +39,8 @@ export default function SidebarItem({ item, pathname }: ItemProps): JSX.Element 
 
 				<CollapsibleContent className='ml-6 space-y-1'>
 					{item.children.map((child: SidebarItemInterface, i: number): JSX.Element => {
-						const active: boolean = pathname === child.href;
+						const active: boolean =
+							child.href !== undefined && pathname.startsWith(child.href);
 
 						return (
 							<Link

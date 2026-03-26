@@ -1,6 +1,16 @@
 import { JSX } from 'react';
-import ProductAdminForm from '@/components/product/admin/product-admin-form';
+import ProductAdminFormClient from '@/components/product/admin/product-admin-form-client';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: 'Thêm mới thông tin sản phẩm',
+};
 
 export default function AddNewProductPage(): JSX.Element {
-	return <ProductAdminForm key={'create'} formType={'create'} />;
+	return (
+		<ProductAdminFormClient
+			key={'create'}
+			formType={'create'}
+		/>
+	);
 }

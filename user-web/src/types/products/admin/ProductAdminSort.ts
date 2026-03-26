@@ -1,6 +1,5 @@
 export type ProductAdminSortField =
 	| 'name'
-	| 'salePrice'
 	| 'stock'
 	| 'status'
 	| 'createdAt'

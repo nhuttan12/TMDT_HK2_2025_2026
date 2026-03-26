@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/table';
 import React, { JSX } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { parseToNumber } from '@/utils/shared/mappers/parseToNumber';
 
 interface DataTableProps<T> {
 	data: T[];
@@ -17,11 +16,14 @@ interface DataTableProps<T> {
 	onRowClick?: (row: T) => void;
 	getRowKey: (row: T) => number;
 	tableHeight?: number;
+	stickyHeader?: boolean;
 
 	selectable?: {
 		selected: number[];
 		onToggle: (id: number) => void;
-		onToggleAll: (ids: number[]) => void;
+		onToggleAll: () => void;
+		isAllSelected?: boolean;
+		isIndeterminate?: boolean;
 	};
 }
 
@@ -31,39 +33,50 @@ export function DataTable<T extends object>({
 	onRowClick,
 	getRowKey,
 	selectable,
+	stickyHeader = true,
 	tableHeight = 500,
 }: DataTableProps<T>): JSX.Element {
 	let finalColumns: Column<T>[] = columns;
 
 	const borderClass: string = 'border! border-gray-500!';
+	const overflowClass = stickyHeader ? 'overflow-y-scroll' : 'overflow-y-auto';
 
 	if (selectable) {
 		const selectColumn: Column<T> = {
 			key: '__select',
 			header: (
 				<Checkbox
+					data-no-row-click
 					className={borderClass}
-					checked={selectable.selected.length === data.length}
-					onCheckedChange={(): void => {
-						if (selectable.selected.length === data.length) {
-							selectable.onToggleAll([]);
-						} else {
-							selectable.onToggleAll(data.map((row: T): number => getRowKey(row)));
+					checked={selectable.isAllSelected ?? selectable.selected.length === data.length}
+					ref={(el: HTMLButtonElement): void => {
+						if (el && selectable.isIndeterminate !== undefined) {
+							(el as HTMLInputElement).indeterminate = selectable.isIndeterminate;
 						}
+					}}
+					onCheckedChange={(): void => {
+						selectable.onToggleAll();
 					}}
 					onClick={(e: React.MouseEvent<HTMLButtonElement>): void => e.stopPropagation()}
 				/>
 			),
 			render: (row: T): JSX.Element => {
-				const rawID: string | number = getRowKey(row);
-				const id: number = parseToNumber(rawID);
+				const id: number = getRowKey(row);
 
 				return (
 					<Checkbox
 						className={borderClass}
 						checked={selectable.selected.includes(id)}
-						onClick={(e) => e.stopPropagation()}
-						onCheckedChange={() => {
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void =>
+							e.stopPropagation()
+						}
+						onMouseDown={(e: React.MouseEvent<HTMLButtonElement>): void =>
+							e.stopPropagation()
+						}
+						onPointerDown={(e: React.MouseEvent<HTMLButtonElement>): void =>
+							e.stopPropagation()
+						}
+						onCheckedChange={(): void => {
 							selectable.onToggle(id);
 						}}
 					/>
@@ -77,7 +90,7 @@ export function DataTable<T extends object>({
 	return (
 		<div
 			style={{ height: `${tableHeight}px`, maxHeight: `${tableHeight}px` }}
-			className="overflow-y-scroll shadow-lg rounded-sm"
+			className={`${overflowClass} shadow-lg rounded-sm`}
 		>
 			<Table>
 				<TableHeader className='sticky top-0 bg-white z-10 border-b! border-gray-400!'>
@@ -89,7 +102,23 @@ export function DataTable<T extends object>({
 									className={
 										col.onHeaderClick ? 'cursor-pointer select-none' : ''
 									}
-									onClick={col.onHeaderClick}
+									onClick={(e: React.MouseEvent<HTMLTableCellElement>): void => {
+										const target = e.target as HTMLElement;
+
+										if (e.currentTarget !== e.target) return;
+
+										if (
+											target.closest('button') ||
+											target.closest('input') ||
+											target.closest('[role="checkbox"]') ||
+											target.closest('[data-no-row-click]')
+										) {
+											return;
+										}
+
+										col.onHeaderClick?.(e);
+									}}
+
 								>
 									<b>{col.header}</b>
 								</TableHead>
@@ -103,7 +132,21 @@ export function DataTable<T extends object>({
 						(row: T, rowIndex: number): JSX.Element => (
 							<TableRow
 								key={getRowKey(row)}
-								onClick={(): void | undefined => onRowClick?.(row)}
+								onClick={(e: React.MouseEvent<HTMLTableRowElement>): void => {
+									// Nếu click từ element có data-no-row-click → bỏ qua
+									const target = e.target as HTMLElement;
+
+									if (
+										target.closest('button') ||
+										target.closest('input') ||
+										target.closest('[role="checkbox"]') ||
+										target.closest('[data-no-row-click]')
+									) {
+										return;
+									}
+
+									onRowClick?.(row);
+								}}
 								className='cursor-pointer'
 							>
 								{finalColumns.map(

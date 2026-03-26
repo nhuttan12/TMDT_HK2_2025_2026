@@ -182,10 +182,6 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 
 	const itemColumns: Column<GoodsReceiptBatch>[] = [
 		{
-			key: 'sku',
-			header: 'SKU',
-		},
-		{
 			key: 'productName',
 			header: 'Tên sản phẩm',
 		},
@@ -370,6 +366,7 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 					)}
 				</div>
 
+                {/* Goods Receipt Batch List */}
 				<DataTable<GoodsReceiptBatch>
 					data={batches}
 					columns={itemColumns}

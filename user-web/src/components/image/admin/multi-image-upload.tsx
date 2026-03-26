@@ -1,13 +1,15 @@
+'use client'
+
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { ChangeEvent, JSX } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DraggableImage } from '@/components/image/admin/draggable-image';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { getImageSrc } from '@/utils/images/getImageSrc';
 import ImagePreview from '@/components/image/admin/image-preview';
 import { Trash } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface Props {
 	value: SortableImageForm[];
@@ -84,7 +86,7 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 					prev.map(
 						(img: SortableImageForm): SortableImageForm =>
 							img.localID === item.localID
-								? { ...img, status: 'done', imageUrl: url }
+								? { ...img, status: 'done', imageUrl: url, file: undefined }
 								: img,
 					),
 				);
@@ -101,12 +103,25 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 	return (
 		<DndProvider backend={HTML5Backend}>
 			<div className='space-y-4'>
-				<input
+				<Input
+					id={FILE_INPUT_ID}
 					type='file'
+					accept='image/*'
 					multiple
+					className='hidden'
 					onChange={handleAdd}
 					disabled={disabled}
 				/>
+
+				<Label htmlFor={!disabled ? FILE_INPUT_ID : undefined}>
+					<Button
+						type='button'
+						asChild
+						disabled={disabled}
+					>
+						<span>Chọn ảnh</span>
+					</Button>
+				</Label>
 
 				{value.map((img: SortableImageForm, index: number): JSX.Element => {
 					const content: JSX.Element = (
@@ -156,7 +171,7 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 										}}
 										disabled={disabled}
 									>
-										Delete
+										Xoá ảnh
 										<Trash />
 									</Button>
 								)}

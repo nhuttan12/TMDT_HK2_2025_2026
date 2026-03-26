@@ -5,5 +5,5 @@ export interface Column<T> {
 	header: React.ReactNode;
 	render?: (row: T, index?: number) => React.ReactNode;
 	className?: string;
-	onHeaderClick?: () => void;
+	onHeaderClick?: (e: React.MouseEvent<HTMLTableCellElement>) => void;
 }
