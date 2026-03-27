@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminClient from '@/app/admin/products/_components/product-admin-client';
+import ProductAdminContainer from '@/app/admin/products/_components/product-admin-container';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { Metadata } from 'next';
 
@@ -56,5 +56,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProductsPage(): JSX.Element {
-	return <ProductAdminClient products={mockProducts} />;
+	return <ProductAdminContainer products={mockProducts} />;
 }

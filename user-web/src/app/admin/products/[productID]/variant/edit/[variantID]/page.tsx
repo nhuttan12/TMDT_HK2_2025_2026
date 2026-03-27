@@ -73,7 +73,7 @@ export default async function Page({ params }: Props): Promise<JSX.Element> {
 	return (
 		<ProductVariantDetailContainer
 			initialData={variant}
-			mode={'view'}
+			mode={'update'}
 		/>
 	);
 }

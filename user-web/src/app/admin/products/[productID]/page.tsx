@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminFormClient from '@/components/product/admin/product-admin-form-client';
+import ProductAdminFormContainer from '@/app/admin/products/[productID]/_components/product-admin-form-container';
 import { Metadata } from 'next';
 import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
@@ -156,7 +156,7 @@ export const metadata: Metadata = {
 
 export default function Index({ params }: Props): JSX.Element {
 	return (
-		<ProductAdminFormClient
+		<ProductAdminFormContainer
 			key={'view'}
 			formType={'view'}
 			productAdmin={mockProductAdmin}

@@ -1,7 +1,7 @@
 import { JSX, useState } from 'react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import Image from 'next/image';
-import ProductStatusBadge from '@/components/product/admin/product-status-badge';
+import ProductStatusBadge from '@/app/admin/products/[productID]/_components/product-status-badge';
 import { formatDate } from '@/utils/shared/date';
 import {
 	DropdownMenu,

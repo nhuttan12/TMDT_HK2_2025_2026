@@ -6,6 +6,7 @@ import ProductVariantListInBatchTable from '@/app/admin/inventories/receipts/[re
 const mockBatchItemSerials: BatchItemSerial[] = [
 	{
 		id: 1,
+		productID: 201,
 		batchID: 1,
 		productVariantID: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
@@ -17,6 +18,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 2,
+		productID: 202,
 		batchID: 1,
 		productVariantID: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
@@ -27,6 +29,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 3,
+		productID: 203,
 		batchID: 1,
 		productVariantID: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
@@ -37,6 +40,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 4,
+		productID: 204,
 		batchID: 2,
 		productVariantID: 102,
 		productVariantName: 'Samsung S24 Ultra',
@@ -47,6 +51,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 5,
+		productID: 205,
 		batchID: 2,
 		productVariantID: 102,
 		productVariantName: 'Samsung S24 Ultra',
@@ -57,6 +62,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 6,
+		productID: 206,
 		batchID: 3,
 		productVariantID: 103,
 		productVariantName: 'MacBook Pro M3',
@@ -67,6 +73,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 7,
+		productID: 207,
 		batchID: 3,
 		productVariantID: 103,
 		productVariantName: 'MacBook Pro M3',
@@ -77,6 +84,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 8,
+		productID: 208,
 		batchID: 4,
 		productVariantID: 104,
 		productVariantName: 'Sony WH-1000XM5',
@@ -87,6 +95,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 9,
+		productID: 209,
 		batchID: 4,
 		productVariantID: 104,
 		productVariantName: 'Sony WH-1000XM5',
@@ -97,6 +106,7 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 10,
+		productID: 210,
 		batchID: 5,
 		productVariantID: 105,
 		productVariantName: 'Logitech MX Master 3S',

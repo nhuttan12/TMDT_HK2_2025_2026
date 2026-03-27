@@ -1,30 +1,41 @@
 'use client';
 
+import { ChangeEvent, FormEvent, JSX, SetStateAction } from 'react';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
+import Field from '@/components/layout/admin/field';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
 import { getProductVariantStatusLabel } from '@/types/products/admin/variant/ProductVariantStatusLabel';
-import { ChangeEvent, FormEvent, JSX, SetStateAction, useState } from 'react';
+import { Label } from '@/components/ui/label';
 import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import Field from '@/components/layout/admin/field';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface Props {
-	variant: ProductVariantDetail;
-	formType: AdminFormType;
+	form: ProductVariantDetail;
+	setForm: React.Dispatch<React.SetStateAction<ProductVariantDetail>>;
+	disabled: boolean;
+	onSubmit: (e: FormEvent) => void;
+	mode: AdminFormType;
+	loading: boolean;
 }
 
-export default function ProductVariantDetailClient({ variant, formType }: Props): JSX.Element {
-	const isView = formType === 'view';
-	const isCreate = formType === 'create';
+export default function ProductVariantDetailUI({
+	form,
+	setForm,
+	disabled,
+	onSubmit,
+	mode,
+	loading,
+}: Props): JSX.Element {
+	const discount: number = calculateDiscount(form.pricing.salePrice, form.pricing.costPrice);
 
-	const [form, setForm] = useState<ProductVariantDetail>(variant);
+	const isView: boolean = mode === 'view';
+	const isCreate: boolean = mode === 'create';
+	const isUpdate: boolean = mode === 'update';
 
-	// ===== handlers =====
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;
 
@@ -34,20 +45,17 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 		}));
 	};
 
-	const handleSubmit = (e: FormEvent): void => {
-		e.preventDefault();
-	};
-
-	const discount: number = calculateDiscount(form.pricing.salePrice, form.pricing.costPrice);
-
 	return (
 		<AdminFormWrapper
 			title='Chi tiết biến thể sản phẩm'
 			description='Quản lý thông tin biến thể'
-			onSubmit={handleSubmit}
+			onSubmit={onSubmit}
 			actions={
 				!isView && (
-					<Button type='submit'>
+					<Button
+						className='cursor-pointer'
+						type='submit'
+					>
 						{isCreate ? 'Tạo biến thể' : 'Cập nhật biến thể'}
 					</Button>
 				)
@@ -59,7 +67,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 					name='name'
 					value={form.name}
 					onChange={handleInputChange}
-					disabled={isView}
+					disabled={disabled}
 				/>
 			</Field>
 
@@ -68,12 +76,15 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 					name='sku'
 					value={form.sku}
 					onChange={handleInputChange}
-					disabled={isView}
+					disabled={disabled}
 				/>
 			</Field>
 
 			<Field label='Trạng thái'>
-				<Input value={getProductVariantStatusLabel(form.status)} disabled />
+				<Input
+					value={getProductVariantStatusLabel(form.status)}
+					disabled
+				/>
 			</Field>
 
 			{/* ===== ATTRIBUTES ===== */}
@@ -90,7 +101,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 									attributes: [{ ...prev.attributes[0], size: e.target.value }],
 								}))
 							}
-							disabled={isView}
+							disabled={disabled}
 						/>
 					</Field>
 
@@ -103,7 +114,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 									attributes: [{ ...prev.attributes[0], color: e.target.value }],
 								}))
 							}
-							disabled={isView}
+							disabled={disabled}
 						/>
 					</Field>
 				</div>
@@ -127,7 +138,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 									},
 								}))
 							}
-							disabled={isView}
+							disabled={disabled}
 						/>
 					</Field>
 
@@ -144,16 +155,19 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 									},
 								}))
 							}
-							disabled={isView}
+							disabled={disabled}
 						/>
 					</Field>
 
 					<Field label='Chiết khấu (%)'>
 						<div className='relative'>
-							<Input value={discount} disabled />
+							<Input
+								value={discount}
+								disabled
+							/>
 							<span className='absolute right-3 top-1/2 -translate-y-1/2 text-sm'>
-					%
-				</span>
+								%
+							</span>
 						</div>
 					</Field>
 				</div>
@@ -165,15 +179,24 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 
 				<div className='grid grid-cols-3 gap-4'>
 					<Field label='Có thể bán'>
-						<Input value={form.inventory.available} disabled />
+						<Input
+							value={form.inventory.available}
+							disabled
+						/>
 					</Field>
 
 					<Field label='Đang giữ'>
-						<Input value={form.inventory.reserved} disabled />
+						<Input
+							value={form.inventory.reserved}
+							disabled
+						/>
 					</Field>
 
 					<Field label='Sắp về'>
-						<Input value={form.inventory.incoming} disabled />
+						<Input
+							value={form.inventory.incoming}
+							disabled
+						/>
 					</Field>
 				</div>
 			</div>
@@ -196,7 +219,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 									},
 								}))
 							}
-							disabled={isView}
+							disabled={disabled}
 						/>
 					</Field>
 
@@ -216,7 +239,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 										},
 									}))
 								}
-								disabled={isView}
+								disabled={disabled}
 							/>
 						</Field>
 
@@ -235,7 +258,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 										},
 									}))
 								}
-								disabled={isView}
+								disabled={disabled}
 							/>
 						</Field>
 
@@ -254,7 +277,7 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 										},
 									}))
 								}
-								disabled={isView}
+								disabled={disabled}
 							/>
 						</Field>
 					</div>
@@ -271,9 +294,20 @@ export default function ProductVariantDetailClient({ variant, formType }: Props)
 							images: typeof updater === 'function' ? updater(prev.images) : updater,
 						}))
 					}
-					disabled={isView}
+					disabled={disabled}
 				/>
 			</Field>
+
+			{isView && (
+				<Button
+					variant={'default'}
+					type='submit'
+					disabled={loading}
+					className='cursor-pointer'
+				>
+					{loading ? 'Đang xử lý...' : isCreate ? 'Tạo biến thể' : 'Cập nhật'}
+				</Button>
+			)}
 		</AdminFormWrapper>
 	);
 }

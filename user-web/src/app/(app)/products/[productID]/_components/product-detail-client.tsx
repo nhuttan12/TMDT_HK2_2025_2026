@@ -3,7 +3,7 @@
 import { ProductDetailCarousel } from '@/components/product/user/product-detail-carousel';
 import CommentItem from '@/components/product/user/comment-item';
 import Rating from '@/components/product/user/rating';
-import ReadMoreHtml from '@/components/user/read-more-html';
+import ReadMoreHtml from '@/components/product/user/read-more-html';
 import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/stores/cart.store';
 import { useCheckoutStore } from '@/stores/checkout.store';

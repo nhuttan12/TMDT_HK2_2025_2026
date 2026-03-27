@@ -115,6 +115,7 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 
 				<Label htmlFor={!disabled ? FILE_INPUT_ID : undefined}>
 					<Button
+						className='cursor-pointer'
 						type='button'
 						asChild
 						disabled={disabled}

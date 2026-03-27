@@ -12,6 +12,7 @@ import { usePagination } from '@/hooks/use-pagination';
 import Pagination from '@/components/layout/share/pagination';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
+import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -44,7 +45,7 @@ const productFilterSchema: FilterField<ProductAdminFilterValues>[] = [
 	{ key: 'updatedTo', label: 'Đến ngày chỉnh sửa', type: 'date', gridSpan: 1 },
 ];
 
-export default function ProductAdminClient({ products }: Props): JSX.Element {
+export default function ProductAdminContainer({ products }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<ProductAdminSortField>();
@@ -63,35 +64,16 @@ export default function ProductAdminClient({ products }: Props): JSX.Element {
 	};
 
 	return (
-		<div className='space-y-4'>
-			{/* Header */}
-			<AdminTableHeader<ProductAdminFilterValues>
-				title='Quản lý sản phẩm'
-				description='Quản lý toàn bộ sản phẩm trong hệ thống'
-				searchPlaceholder='Tìm sản phẩm...'
-				searchKey='name'
-				addLabel='+ Thêm sản phẩm'
-				onAdd={handleRedirectToAddNewProduct}
-				filter={true}
-				filterField={productFilterSchema}
-			/>
-
-			{/* Table */}
-			<div className='rounded-xl border bg-white'>
-				<ProductAdminTable
-					products={products}
-					handleSort={handleSort}
-					renderSortIcon={renderSortIcon}
-					onView={handleRedirectToProductViewMode}
-					onEdit={handleRedirectToEditProductEditMode}
-				/>
-			</div>
-
-			<Pagination
-				currentPage={currentPage}
-				totalPages={10}
-				onPageChange={changePage}
-			/>
-		</div>
+		<ProductAdminUi
+			products={products}
+			currentPage={currentPage}
+			onPageChange={changePage}
+			onSort={handleSort}
+			renderSortIcon={renderSortIcon}
+			onCreate={handleRedirectToAddNewProduct}
+			onView={handleRedirectToProductViewMode}
+			onEdit={handleRedirectToEditProductEditMode}
+			filterSchema={productFilterSchema}
+		/>
 	);
 }

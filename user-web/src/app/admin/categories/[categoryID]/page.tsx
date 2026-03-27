@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import CategoryAdminForm from '@/components/category/admin/category-admin-form';
+import CategoryAdminForm from '@/app/admin/categories/_components/category-admin-form';
 
 interface Props {
 	params: { categoryID: string };

@@ -10,12 +10,15 @@ import Pagination from '@/components/layout/share/pagination';
 import { useTableSort } from '@/hooks/use-table-sort';
 import { usePagination } from '@/hooks/use-pagination';
 import { ProductVariantInBatchSortField } from '@/types/inventories/receipts/uis/ProductVariantInBatchSortField';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface Props {
 	productVariants: BatchItemSerial[];
 }
 
 export default function ProductVariantListInBatchTable({ productVariants }: Props): JSX.Element {
+	const router: AppRouterInstance = useRouter();
 	const { handleSort, renderSortIcon } = useTableSort<ProductVariantInBatchSortField>();
 	const { currentPage, changePage } = usePagination();
 
@@ -93,6 +96,10 @@ export default function ProductVariantListInBatchTable({ productVariants }: Prop
 		},
 	];
 
+	const handleRedirectToProductVariantDetail = (row: BatchItemSerial) => {
+		router.push(`/admin/products/${row.productID}/variant/${row.productVariantID}`);
+	};
+
 	return (
 		<div className='space-y-6'>
 			<AdminTableHeader
@@ -105,7 +112,8 @@ export default function ProductVariantListInBatchTable({ productVariants }: Prop
 			<DataTable
 				data={productVariants}
 				columns={columns}
-				getRowKey={(row: BatchItemSerial) => row.id}
+				getRowKey={(row: BatchItemSerial): number => row.id}
+				onRowClick={handleRedirectToProductVariantDetail}
 				tableHeight={400}
 			/>
 

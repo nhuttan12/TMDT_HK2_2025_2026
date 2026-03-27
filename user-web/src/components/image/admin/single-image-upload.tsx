@@ -37,6 +37,7 @@ export default function SingleImageUpload({ value, onChange, disabled }: Props):
 
 				<Label htmlFor={!disabled ? FILE_INPUT_ID : undefined}>
 					<Button
+						className='cursor-pointer'
 						type='button'
 						asChild
 						disabled={disabled}

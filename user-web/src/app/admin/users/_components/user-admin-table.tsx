@@ -1,4 +1,4 @@
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getUserRoleLabel } from '@/types/users/UserRole';
@@ -16,6 +16,7 @@ import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
+import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	users: UserListAdmin[];
@@ -33,23 +34,10 @@ export default function UserAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const allKeys: number[] = users.map((p: UserListAdmin): number => p.id);
 
-	const toggleSelect = (userID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(userID)
-				? prev.filter((x: number): boolean => x !== userID)
-				: [...prev, userID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === users.length) {
-			setSelected([]);
-		} else {
-			setSelected(users.map((i: UserListAdmin): number => i.id));
-		}
-	};
+	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+		useTableSelection<number>(allKeys);
 
 	const columns: Column<UserListAdmin>[] = [
 		{
@@ -188,8 +176,10 @@ export default function UserAdminTable({
 			getRowKey={(row: UserListAdmin): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
+				onToggle: toggle,
+				onToggleAll: toggleAll,
+				isAllSelected,
+				isIndeterminate,
 			}}
 		/>
 	);

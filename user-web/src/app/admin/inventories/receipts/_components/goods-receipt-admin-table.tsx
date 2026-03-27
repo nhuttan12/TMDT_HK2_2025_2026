@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/layout/admin/data-table';
 import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
 import { Column } from '@/types/uis/Column';
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
 import {
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	receipts: GoodsReceiptList[];
@@ -29,23 +30,10 @@ export default function GoodsReceiptAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const allKeys: number[] = receipts.map((p: GoodsReceiptList): number => p.id);
 
-	const toggleSelect = (receiptID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(receiptID)
-				? prev.filter((x: number): boolean => x !== receiptID)
-				: [...prev, receiptID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === receipts.length) {
-			setSelected([]);
-		} else {
-			setSelected(receipts.map((i: GoodsReceiptList): number => i.id));
-		}
-	};
+	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+		useTableSelection<number>(allKeys);
 
 	const goodsReceiptColumns: Column<GoodsReceiptList>[] = [
 		{
@@ -134,8 +122,8 @@ export default function GoodsReceiptAdminTable({
 									: 'bg-rose-100 text-rose-700'
 						}`}
 					>
-                        {label}
-                    </span>
+						{label}
+					</span>
 				);
 			},
 		},
@@ -153,20 +141,32 @@ export default function GoodsReceiptAdminTable({
 			key: 'actions',
 			header: <span className='text-right block'>Hành động</span>,
 			render: (row: GoodsReceiptList): JSX.Element => (
-				<div className='text-right' onClick={(e) => e.stopPropagation()}>
+				<div
+					className='text-right'
+					onClick={(e) => e.stopPropagation()}
+				>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' size='icon'>
+							<Button
+								variant='ghost'
+								size='icon'
+							>
 								<MoreHorizontal size={16} />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
 							<DropdownMenuItem onClick={() => onEdit(row.id)}>
-								<Pencil size={14} className='mr-2' />
+								<Pencil
+									size={14}
+									className='mr-2'
+								/>
 								Chỉnh sửa
 							</DropdownMenuItem>
 							<DropdownMenuItem className='text-red-500'>
-								<Trash size={14} className='mr-2' />
+								<Trash
+									size={14}
+									className='mr-2'
+								/>
 								Xóa
 							</DropdownMenuItem>
 						</DropdownMenuContent>
@@ -184,8 +184,10 @@ export default function GoodsReceiptAdminTable({
 			onRowClick={(row: GoodsReceiptList): void => onView(row.id)}
 			selectable={{
 				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
+				onToggle: toggle,
+				onToggleAll: toggleAll,
+				isAllSelected,
+				isIndeterminate,
 			}}
 		/>
 	);

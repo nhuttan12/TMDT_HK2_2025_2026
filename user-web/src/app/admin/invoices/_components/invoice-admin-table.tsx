@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX, useState } from 'react';
+import React, { JSX } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
@@ -14,6 +14,7 @@ import {
 import { getPaymentMethodLabel, PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
+import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	invoices: UserInvoice[];
@@ -21,23 +22,10 @@ interface Props {
 }
 
 export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const allKeys: number[] = invoices.map((p: UserInvoice): number => p.id);
 
-	const toggleSelect = (invoiceID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(invoiceID)
-				? prev.filter((x: number): boolean => x !== invoiceID)
-				: [...prev, invoiceID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === invoices.length) {
-			setSelected([]);
-		} else {
-			setSelected(invoices.map((i: UserInvoice): number => i.id));
-		}
-	};
+	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+		useTableSelection<number>(allKeys);
 
 	const changeStatus = (id: number, status: InvoiceStatus): void => {
 		console.log('Update status', id, status);
@@ -119,8 +107,10 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 			getRowKey={(row: UserInvoice): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
+				onToggle: toggle,
+				onToggleAll: toggleAll,
+				isAllSelected,
+				isIndeterminate,
 			}}
 		/>
 	);

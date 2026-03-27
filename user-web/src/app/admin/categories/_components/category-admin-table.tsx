@@ -1,9 +1,9 @@
-import { JSX, useState } from 'react';
+import { JSX, useMemo, useState } from 'react';
 import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
-import CategoryStatusBadge from '@/components/category/admin/category-status-badge';
+import CategoryStatusBadge from '@/app/admin/categories/_components/category-status-badge';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
+import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	categories: CategoryListItemAdmin[];
@@ -31,23 +32,15 @@ export default function CategoryAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const allKeys: number[] = categories.map((c: CategoryListItemAdmin): number => c.id);
 
-	const toggleSelect = (categoryID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(categoryID)
-				? prev.filter((x: number): boolean => x !== categoryID)
-				: [...prev, categoryID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === categories.length) {
-			setSelected([]);
-		} else {
-			setSelected(categories.map((i: CategoryListItemAdmin): number => i.id));
-		}
-	};
+	const {
+		selected,
+		toggle,
+		toggleAll,
+		isAllSelected,
+		isIndeterminate,
+	} = useTableSelection<number>(allKeys);
 
 	const columns: Column<CategoryListItemAdmin>[] = [
 		{
@@ -190,8 +183,10 @@ export default function CategoryAdminTable({
 			getRowKey={(row: CategoryListItemAdmin): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
+				onToggle: toggle,
+				onToggleAll: toggleAll,
+				isAllSelected,
+				isIndeterminate,
 			}}
 		/>
 	);
