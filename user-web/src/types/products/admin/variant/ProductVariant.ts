@@ -1,6 +1,6 @@
 export interface ProductVariant {
 	id: number;
-	productID: number;
+	productId: number;
 
 	name: string; // optional, fallback display
 	sku: string;

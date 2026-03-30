@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import ProductVariantDetailContainer from '@/app/admin/products/[productID]/variant/_components/product-variant-detail-container';
+import ProductVariantDetailContainer from '@/app/admin/products/[productId]/variant/_components/product-variant-detail-container';
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
 
 export const metadata: Metadata = {
@@ -15,9 +15,11 @@ interface Props {
 
 // giả lập fetch
 async function getVariant(id: string): Promise<ProductVariantDetail> {
+	const numberId: number = Number(id);
+
 	return {
-		id: 1,
-		productID: 101,
+		id: numberId,
+		productId: 101,
 		name: 'Áo thun đen M',
 		sku: 'TS-BLACK-M',
 		attributes: [{ size: 'M', color: 'Đen' }],

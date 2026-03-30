@@ -6,38 +6,18 @@ import ProductDetailClient from './_components/product-detail-client';
 import notFound from '@/app/not-found';
 
 interface Props {
-	params: Promise<{ id: string }>;
+	params: { id: string };
 }
 
-/**
- * SEO Metadata
- */
-// export async function generateMetadata({ params }: Props): Promise<Metadata> {
-// 	const product = await getProductById(params.id);
-
-// 	if (!product) {
-// 		return {
-// 			title: 'Sản phẩm không tồn tại',
-// 		};
-// 	}
-
-// 	return {
-// 		title: product.name,
-// 		description: product.description,
-// 		openGraph: {
-// 			title: product.name,
-// 			description: product.description,
-// 			images: [product.imageUrl],
-// 		},
-// 	};
-// }
-
 export default async function ProductListPage({ params }: Props): Promise<JSX.Element> {
-	const { id } = await params;
 
-	const numericID: number = Number(id);
+	const numericID: number = Number(params.id);
 
 	if (!Number.isFinite(numericID)) {
+		notFound();
+	}
+
+	if (!Number.isNaN(numericID)) {
 		notFound();
 	}
 

@@ -13,6 +13,16 @@ import Pagination from '@/components/layout/share/pagination';
 import { useTableSort } from '@/hooks/use-table-sort';
 import { usePagination } from '@/hooks/use-pagination';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { exportExcelFile } from '@/utils/shared/exportExcelFile';
 
 const suppliers: FilterSupplier[] = [
 	{ id: 1, code: 'NCC01', name: 'ABC' },
@@ -55,7 +65,7 @@ interface Props {
 	receipts: GoodsReceiptList[];
 }
 
-export default function GoodsReceiptAdminPageClient({ receipts }: Props): JSX.Element {
+export default function GoodsReceiptAdminContainer({ receipts }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<GoodsReceiptSortField>();
@@ -73,6 +83,10 @@ export default function GoodsReceiptAdminPageClient({ receipts }: Props): JSX.El
 		router.push(`/admin/inventories/receipts/${receiptID}`);
 	};
 
+	const handleImportExcel = async (): Promise<void> => {
+		await exportExcelFile();
+	};
+
 	return (
 		<div className='space-y-4'>
 			{/* Header */}
@@ -82,8 +96,23 @@ export default function GoodsReceiptAdminPageClient({ receipts }: Props): JSX.El
 				searchPlaceholder='Tìm theo mã phiếu'
 				filter
 				filterField={receiptFilterFields}
-				onAdd={handleRedirectToAddNewReceiptDetail}
-				addLabel='Nhập kho'
+				actions={
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button className='cursor-pointer'>Nhập kho</Button>
+						</DropdownMenuTrigger>
+
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem onClick={handleRedirectToAddNewReceiptDetail}>
+								Nhập thủ công
+							</DropdownMenuItem>
+
+							<DropdownMenuItem onClick={handleImportExcel}>
+								Nhập bằng Excel
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				}
 			/>
 
 			{/* Table */}

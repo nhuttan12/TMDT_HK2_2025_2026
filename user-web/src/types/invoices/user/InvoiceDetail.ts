@@ -4,7 +4,7 @@ import { PaymentMethod } from './PaymentMethod';
 import { ShippingStatus } from './ShippingStatus';
 
 export interface InvoiceDetail {
-	invoiceID: number;
+	invoiceId: number;
 	createdAt: string;
 	paidAt?: string;
 	cancelledAt?: string;

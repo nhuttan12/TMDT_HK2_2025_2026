@@ -24,7 +24,7 @@ export default function InvoiceDetailAdmin({ invoice }: Props): JSX.Element {
 			{/* HEADER */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Hóa đơn #{invoice.invoiceID}</CardTitle>
+					<CardTitle>Hóa đơn #{invoice.invoiceId}</CardTitle>
 				</CardHeader>
 
 				<CardContent className='grid grid-cols-2 gap-6'>
@@ -125,7 +125,7 @@ export default function InvoiceDetailAdmin({ invoice }: Props): JSX.Element {
 
 						<TableBody>
 							{invoice.items.map((item) => (
-								<TableRow key={item.productID}>
+								<TableRow key={item.productId}>
 									<TableCell className='flex items-center gap-3'>
 										<Image
 											src={item.imageUrl}

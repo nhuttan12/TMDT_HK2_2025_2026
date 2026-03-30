@@ -1,19 +1,9 @@
 'use client';
 
-import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
-import { getProductVariantStatusLabel } from '@/types/products/admin/variant/ProductVariantStatusLabel';
-import { ChangeEvent, FormEvent, JSX, SetStateAction, useEffect, useState } from 'react';
-import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
-import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
+import { FormEvent, JSX, useEffect, useState } from 'react';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import Field from '@/components/layout/admin/field';
-import ProductVariantDetailUI
-	from '@/app/admin/products/[productID]/variant/_components/product-variant-detail-ui';
+import ProductVariantDetailUI from '@/app/admin/products/[productId]/variant/_components/product-variant-detail-ui';
 
 interface Props {
 	initialData: ProductVariantDetail;

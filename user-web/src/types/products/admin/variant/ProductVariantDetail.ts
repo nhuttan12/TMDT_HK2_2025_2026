@@ -7,7 +7,7 @@ import { ProductVariantShipping } from '@/types/products/admin/variant/ProductVa
 
 export interface ProductVariantDetail {
 	id: number;
-	productID: number;
+	productId: number;
 
 	name: string;
 	sku: string;

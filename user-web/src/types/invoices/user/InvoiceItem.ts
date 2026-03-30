@@ -1,5 +1,5 @@
 export interface InvoiceItem {
-	productID: number;
+	productId: number;
 	productName: string;
 	imageUrl: string;
 	price: number;

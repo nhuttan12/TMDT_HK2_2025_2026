@@ -36,8 +36,8 @@ export default function UserInvoicesClient({ invoices }: Props): JSX.Element {
 		}
 	};
 
-	const handleRedirectInvoiceDetail = (invoiceID: number) => {
-		router.push(`invoices/${invoiceID}`);
+	const handleRedirectInvoiceDetail = (invoiceId: number) => {
+		router.push(`invoices/${invoiceId}`);
 	};
 
 	const pageSize = 10;

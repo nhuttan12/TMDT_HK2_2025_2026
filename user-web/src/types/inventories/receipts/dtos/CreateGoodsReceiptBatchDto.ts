@@ -1,5 +1,5 @@
 export interface CreateGoodsReceiptBatchDto {
-	productID: number;
+	productId: number;
 
 	batchNumber: string;
 	quantity: number;

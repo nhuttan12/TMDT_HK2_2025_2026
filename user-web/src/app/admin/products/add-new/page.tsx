@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminFormContainer from '@/app/admin/products/[productID]/_components/product-admin-form-container';
+import ProductAdminFormContainer from '@/app/admin/products/[productId]/_components/product-admin-form-container';
 import { Metadata } from 'next';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 
@@ -18,7 +18,7 @@ const emptyProduct: ProductDetailInfoAdmin = {
 	discount: 0,
 
 	status: true,
-	categoryID: 0,
+	categoryId: 0,
 	images: [],
 
 	createdAt: '',

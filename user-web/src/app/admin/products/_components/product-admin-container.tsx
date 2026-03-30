@@ -6,10 +6,7 @@ import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { useTableSort } from '@/hooks/use-table-sort';
-import AdminTableHeader from '@/components/layout/admin/admin-table-header';
-import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
 import { usePagination } from '@/hooks/use-pagination';
-import Pagination from '@/components/layout/share/pagination';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
 import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
@@ -55,12 +52,12 @@ export default function ProductAdminContainer({ products }: Props): JSX.Element 
 		router.push('/admin/products/add-new');
 	};
 
-	const handleRedirectToProductViewMode = (productID: number) => {
-		router.push(`/admin/products/${productID}`);
+	const handleRedirectToProductViewMode = (productId: number) => {
+		router.push(`/admin/products/${productId}`);
 	};
 
-	const handleRedirectToEditProductEditMode = (userID: number) => {
-		router.push(`/admin/products/update/${userID}`);
+	const handleRedirectToEditProductEditMode = (userId: number) => {
+		router.push(`/admin/products/update/${userId}`);
 	};
 
 	return (

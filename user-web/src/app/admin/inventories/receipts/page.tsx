@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import GoodsReceiptAdminPageClient from '@/app/admin/inventories/receipts/_components/goods-receipt-admin-page-client';
+import GoodsReceiptAdminContainer from '@/app/admin/inventories/receipts/_components/goods-receipt-admin-container';
 import { Metadata } from 'next';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 
@@ -44,5 +44,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page(): JSX.Element {
-	return <GoodsReceiptAdminPageClient receipts={mockGoodsReceipts} />;
+	return <GoodsReceiptAdminContainer receipts={mockGoodsReceipts} />;
 }

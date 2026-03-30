@@ -1,13 +1,5 @@
 'use client';
 
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
 import { FormEvent, JSX, useState } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
 import { Switch } from '@/components/ui/switch';
@@ -76,7 +68,10 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 			onSubmit={handleSubmit}
 			actions={
 				isUpdate && (
-					<Button type='submit' className='cursor-pointer'>
+					<Button
+						type='submit'
+						className='cursor-pointer'
+					>
 						Lưu thay đổi
 					</Button>
 				)
@@ -88,7 +83,10 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 				defaultValue={[firstResource]}
 			>
 				{Object.entries(groupedPermissions).map(([resource, perms]) => (
-					<AccordionItem key={resource} value={resource}>
+					<AccordionItem
+						key={resource}
+						value={resource}
+					>
 						<AccordionTrigger className='capitalize cursor-pointer'>
 							{resource}
 						</AccordionTrigger>
@@ -101,9 +99,7 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 										className='flex items-center justify-between border rounded-md p-3'
 									>
 										<div className='space-y-1'>
-											<p className='font-medium'>
-												{permission.permission}
-											</p>
+											<p className='font-medium'>{permission.permission}</p>
 											<p className='text-sm text-muted-foreground font-mono'>
 												{permission.code}
 											</p>
@@ -111,9 +107,7 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 
 										<Switch
 											checked={permission.isActive}
-											onCheckedChange={() =>
-												togglePermission(permission.id)
-											}
+											onCheckedChange={() => togglePermission(permission.id)}
 											disabled={isView}
 										/>
 									</div>

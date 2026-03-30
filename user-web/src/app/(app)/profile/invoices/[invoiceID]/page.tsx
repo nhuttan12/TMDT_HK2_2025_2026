@@ -2,11 +2,11 @@ import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import InvoiceDetailClient from './_components/invoices-detail-client';
 
 interface Props {
-	params: { invoiceID: string };
+	params: { invoiceId: string };
 }
 
 const mockInvoiceDetail: InvoiceDetail = {
-	invoiceID: 1024,
+	invoiceId: 1024,
 	createdAt: '2026-02-20T10:15:00Z',
 	paidAt: '2026-02-20T10:17:32Z',
 	completedAt: '2026-02-23T15:45:00Z',
@@ -22,7 +22,7 @@ const mockInvoiceDetail: InvoiceDetail = {
 
 	items: [
 		{
-			productID: 11,
+			productId: 11,
 			productName: 'Tai nghe Bluetooth Sony WH-1000XM5',
 			imageUrl: '/images/products/sony-wh1000xm5.jpg',
 			price: 7500000,
@@ -32,7 +32,7 @@ const mockInvoiceDetail: InvoiceDetail = {
 			totalPrice: 7000000,
 		},
 		{
-			productID: 25,
+			productId: 25,
 			productName: 'Chuột Logitech MX Master 3S',
 			imageUrl: '/images/products/logitech-mx-master-3s.jpg',
 			price: 2900000,

@@ -22,12 +22,12 @@ export default function UserAdminClient({ users, mode }: Props): JSX.Element {
 	const { handleSort, renderSortIcon } = useTableSort<UserAdminSortField>();
 	const { currentPage, changePage } = usePagination();
 
-	const handleRedirectToStaffsInfoViewMode = (userID: number) => {
-		router.push(`/admin/users/${mode}/${userID}`);
+	const handleRedirectToStaffsInfoViewMode = (userId: number) => {
+		router.push(`/admin/users/${mode}/${userId}`);
 	};
 
-	const handleRedirectToEditStaffsEditMode = (userID: number) => {
-		router.push(`/admin/users/${mode}/update/${userID}`);
+	const handleRedirectToEditStaffsEditMode = (userId: number) => {
+		router.push(`/admin/users/${mode}/update/${userId}`);
 	};
 
 	const title = mode === 'customers' ? 'Quản lý khách hàng' : 'Quản lý nhân viên';

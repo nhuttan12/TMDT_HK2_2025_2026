@@ -1,8 +1,7 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
-import { Input } from '@/components/ui/input';
 import InvoiceAdminTable from '@/app/admin/invoices/_components/invoice-admin-table';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import InvoiceStatusButtonFilter from '@/app/admin/invoices/_components/invoice-status-button-filter';
@@ -35,8 +34,8 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 		router.push(`/admin/invoices?${params.toString()}`);
 	}
 
-	const handleRedirectToInvoiceDetailAdmin = (invoiceID: number): void => {
-		router.push(`/admin/invoices/${invoiceID}`);
+	const handleRedirectToInvoiceDetailAdmin = (invoiceId: number): void => {
+		router.push(`/admin/invoices/${invoiceId}`);
 	};
 
 	const paymentMethods: PaymentMethod[] = [
@@ -113,10 +112,10 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 
 			{/* Table */}
 			<div className='rounded-xl border bg-white'>
-					<InvoiceAdminTable
-						invoices={invoices}
-						onRedirectToDetail={handleRedirectToInvoiceDetailAdmin}
-					/>
+				<InvoiceAdminTable
+					invoices={invoices}
+					onRedirectToDetail={handleRedirectToInvoiceDetailAdmin}
+				/>
 			</div>
 
 			{/* Pagination */}

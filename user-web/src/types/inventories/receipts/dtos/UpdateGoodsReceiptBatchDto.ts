@@ -1,7 +1,7 @@
 export interface UpdateGoodsReceiptBatchDto {
 	id: number;
 
-	productID: number;
+	productId: number;
 
 	quantity: number;
 	unitPrice: number;

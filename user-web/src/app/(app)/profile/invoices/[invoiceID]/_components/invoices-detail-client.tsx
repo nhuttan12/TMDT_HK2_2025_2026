@@ -20,7 +20,7 @@ export default function InvoiceDetailClient({ invoice }: Props) {
 			<div className='bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex justify-between items-center'>
 				<div>
 					<h1 className='text-2xl font-bold text-slate-800'>
-						Hóa đơn #{invoice.invoiceID}
+						Hóa đơn #{invoice.invoiceId}
 					</h1>
 					<p className='text-slate-500 mt-1'>Ngày tạo: {formatDate(invoice.createdAt)}</p>
 				</div>
@@ -75,7 +75,7 @@ export default function InvoiceDetailClient({ invoice }: Props) {
 				<div className='divide-y divide-slate-200'>
 					{invoice.items.map((item) => (
 						<div
-							key={item.productID}
+							key={item.productId}
 							className='flex justify-between py-4'
 						>
 							<div>

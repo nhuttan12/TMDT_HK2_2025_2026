@@ -45,7 +45,7 @@ export default function ProductDetailClient({
 
 	const handleAddToCart = () => {
 		addItem({
-			productID: product.id,
+			productId: product.id,
 			name: product.name,
 			price: product.price,
 			imageUrl: product.image,
@@ -55,7 +55,7 @@ export default function ProductDetailClient({
 
 	const handleBuyNow = () => {
 		const item: CartItem = {
-			productID: product.id,
+			productId: product.id,
 			name: product.name,
 			price: product.price,
 			imageUrl: product.image,

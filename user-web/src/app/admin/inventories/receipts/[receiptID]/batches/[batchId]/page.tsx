@@ -1,14 +1,19 @@
 import { JSX } from 'react';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { Metadata } from 'next';
-import ProductVariantListInBatchTable from '@/app/admin/inventories/receipts/[receiptID]/batches/[batchID]/_components/product-variant-list-in-batch-table';
+import ProductVariantListInBatchTable from '@/app/admin/inventories/receipts/[receiptId]/batches/[batchId]/_components/product-variant-list-in-batch-table';
+import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = {
+	title: 'Sản phẩm trong lô hàng',
+};
 
 const mockBatchItemSerials: BatchItemSerial[] = [
 	{
 		id: 1,
-		productID: 201,
-		batchID: 1,
-		productVariantID: 101,
+		productId: 201,
+		batchId: 1,
+		productVariantId: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
 		serialNumber: 'SN-IP15PM-0001',
 		appearanceCondition: 'Mới 100%',
@@ -18,9 +23,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 2,
-		productID: 202,
-		batchID: 1,
-		productVariantID: 101,
+		productId: 202,
+		batchId: 1,
+		productVariantId: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
 		serialNumber: 'SN-IP15PM-0002',
 		appearanceCondition: 'Mới 100%',
@@ -29,9 +34,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 3,
-		productID: 203,
-		batchID: 1,
-		productVariantID: 101,
+		productId: 203,
+		batchId: 1,
+		productVariantId: 101,
 		productVariantName: 'iPhone 15 Pro Max 256GB',
 		serialNumber: 'SN-IP15PM-0003',
 		appearanceCondition: 'Trầy nhẹ',
@@ -40,9 +45,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 4,
-		productID: 204,
-		batchID: 2,
-		productVariantID: 102,
+		productId: 204,
+		batchId: 2,
+		productVariantId: 102,
 		productVariantName: 'Samsung S24 Ultra',
 		serialNumber: 'SN-SS24U-0001',
 		appearanceCondition: 'Mới 100%',
@@ -51,9 +56,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 5,
-		productID: 205,
-		batchID: 2,
-		productVariantID: 102,
+		productId: 205,
+		batchId: 2,
+		productVariantId: 102,
 		productVariantName: 'Samsung S24 Ultra',
 		serialNumber: 'SN-SS24U-0002',
 		appearanceCondition: 'Mới 100%',
@@ -62,9 +67,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 6,
-		productID: 206,
-		batchID: 3,
-		productVariantID: 103,
+		productId: 206,
+		batchId: 3,
+		productVariantId: 103,
 		productVariantName: 'MacBook Pro M3',
 		serialNumber: 'SN-MBP-M3-0001',
 		appearanceCondition: 'Mới 100%',
@@ -73,9 +78,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 7,
-		productID: 207,
-		batchID: 3,
-		productVariantID: 103,
+		productId: 207,
+		batchId: 3,
+		productVariantId: 103,
 		productVariantName: 'MacBook Pro M3',
 		serialNumber: 'SN-MBP-M3-0002',
 		appearanceCondition: 'Móp nhẹ góc',
@@ -84,9 +89,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 8,
-		productID: 208,
-		batchID: 4,
-		productVariantID: 104,
+		productId: 208,
+		batchId: 4,
+		productVariantId: 104,
 		productVariantName: 'Sony WH-1000XM5',
 		serialNumber: 'SN-SONY-XM5-0001',
 		status: 'in_stock',
@@ -95,9 +100,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 9,
-		productID: 209,
-		batchID: 4,
-		productVariantID: 104,
+		productId: 209,
+		batchId: 4,
+		productVariantId: 104,
 		productVariantName: 'Sony WH-1000XM5',
 		serialNumber: 'SN-SONY-XM5-0002',
 		status: 'sold',
@@ -106,9 +111,9 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 	{
 		id: 10,
-		productID: 210,
-		batchID: 5,
-		productVariantID: 105,
+		productId: 210,
+		batchId: 5,
+		productVariantId: 105,
 		productVariantName: 'Logitech MX Master 3S',
 		serialNumber: 'SN-LOGI-MX3S-0001',
 		appearanceCondition: 'Mới 100%',
@@ -117,10 +122,28 @@ const mockBatchItemSerials: BatchItemSerial[] = [
 	},
 ];
 
-export const metadata: Metadata = {
-	title: 'Sản phẩm trong lô hàng',
-};
+interface Props {
+	params: {
+		batchId: string;
+	};
+}
 
-export default function Page(): JSX.Element {
-	return <ProductVariantListInBatchTable productVariants={mockBatchItemSerials} />;
+export default async function Page({ params }: Props): Promise<JSX.Element> {
+	const { batchId } = await params;
+
+	const id: number = Number(batchId);
+
+	if (!id || Number.isNaN(id)) {
+		console.error('Invalid batch ID', id);
+
+		notFound();
+	}
+
+	return (
+		<ProductVariantListInBatchTable
+			batchId={id}
+			productVariants={mockBatchItemSerials}
+			mode={'view'}
+		/>
+	);
 }

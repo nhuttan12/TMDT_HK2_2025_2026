@@ -7,5 +7,5 @@ export type ProductUpdateDTO = Partial<BaseProduct> & {
 	brand: string;
 	description: string;
 	discount?: number;
-	categoryID: number;
+	categoryId: number;
 };

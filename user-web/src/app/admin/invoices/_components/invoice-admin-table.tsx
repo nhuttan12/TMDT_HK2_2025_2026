@@ -18,7 +18,7 @@ import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	invoices: UserInvoice[];
-	onRedirectToDetail: (invoiceID: number) => void;
+	onRedirectToDetail: (invoiceId: number) => void;
 }
 
 export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Props): JSX.Element {

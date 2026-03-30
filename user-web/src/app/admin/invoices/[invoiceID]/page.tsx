@@ -1,9 +1,9 @@
 import { JSX } from 'react';
-import InvoiceDetailAdmin from '@/app/admin/invoices/[invoiceID]/_components/invoice-detail-admin';
+import InvoiceDetailAdmin from '@/app/admin/invoices/[invoiceId]/_components/invoice-detail-admin';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 
 const mockInvoice: InvoiceDetail = {
-	invoiceID: 1024,
+	invoiceId: 1024,
 	createdAt: '2026-03-12T10:20:00',
 	paidAt: '2026-03-12T10:22:00',
 	completedAt: undefined,
@@ -23,7 +23,7 @@ const mockInvoice: InvoiceDetail = {
 
 	items: [
 		{
-			productID: 1,
+			productId: 1,
 			productName: 'Mechanical Keyboard RK84',
 			imageUrl:
 				'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJY_rdiAA2nRvjtwKfi_mz4VB9_GlS7wGVcg&s',
@@ -34,7 +34,7 @@ const mockInvoice: InvoiceDetail = {
 			totalPrice: 1100000,
 		},
 		{
-			productID: 2,
+			productId: 2,
 			productName: 'Logitech G Pro X Superlight',
 			imageUrl:
 				'https://product.hstatic.net/200000722513/product/3_7c1bf2ff4e504450a42de78e6cc48087.jpg',
@@ -45,7 +45,7 @@ const mockInvoice: InvoiceDetail = {
 			totalPrice: 1300000,
 		},
 		{
-			productID: 3,
+			productId: 3,
 			productName: 'Artisan Mousepad',
 			imageUrl:
 				'https://cdn.hstatic.net/products/200000637319/image_-_2025-08-05t092620.319_e4af81103b9d42d8a44230ec64a29ea8_master.png',

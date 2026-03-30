@@ -10,12 +10,11 @@ import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/GoodsIss
 import { GoodsIssueList } from '@/types/inventories/issues/GoodsIssueList';
 import Pagination from '@/components/layout/share/pagination';
 import { useTableSort } from '@/hooks/use-table-sort';
-import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
 import { usePagination } from '@/hooks/use-pagination';
 import { GoodsIssueSortField } from '@/types/inventories/issues/GoodsIssueSortField';
 
 interface Props {
-	goodsIssues: GoodsIssueList[]
+	goodsIssues: GoodsIssueList[];
 }
 
 const issueFilterFields: FilterField<GoodsIssueAdminFilterValues>[] = [
@@ -61,7 +60,7 @@ const issueFilterFields: FilterField<GoodsIssueAdminFilterValues>[] = [
 	},
 ];
 
-export default function GoodsIssueAdminPageClient({goodsIssues}: Props): JSX.Element {
+export default function GoodsIssueAdminPageClient({ goodsIssues }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<GoodsIssueSortField>();

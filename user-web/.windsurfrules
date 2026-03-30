@@ -1,0 +1,37 @@
+# Windsurf Rules for User Web E-commerce Platform
+
+## 🛠 Tech Stack & Environment
+- **Core:** Next.js 16 (App Router), React 19, TypeScript.
+- **Runtime/Package Manager:** Luôn sử dụng `bun`. Ưu tiên `bun add`, `bun dev`.
+- **Styling:** Tailwind CSS 4 (Sử dụng các tính năng mới nhất của v4).
+- **State Management:** Zustand (Lưu trữ trong `src/stores/`).
+- **UI Components:** Radix UI primitives, Lucide React icons, Framer Motion.
+- **Rich Text:** TipTap (Dành cho mô tả sản phẩm/blog).
+
+## 🏗 Project Architecture
+- **Routing:** - `src/app/(app)/`: Routes dành cho khách hàng (Carts, Checkout, Products, Profile).
+  - `src/app/admin/`: Routes dành cho quản trị viên (Categories, Inventories, Products, Invoices).
+  - `src/app/auth/`: Các luồng đăng nhập/đăng ký.
+- **Component Pattern:**
+  - `src/components/ui/`: Các UI components dùng chung (Button, Input, Modal từ Radix).
+  - `src/components/product/`, `src/components/layout/`, `src/components/user/`: Components theo domain.
+- **Data Flow:** Ưu tiên Server Components. Chỉ dùng `'use client'` cho các component cần tương tác (Form, Modal, Framer Motion).
+
+## 📜 Coding Standards
+- **Naming Convention:** - Biến, hàm, file: Tiếng Anh (camelCase).
+  - UI Labels, Messages: Tiếng Việt (Ví dụ: "Thêm vào giỏ hàng", "Quản lý kho").
+- **Types:** Không dùng `any`. Mọi data model phải định nghĩa trong `src/types/`.
+- **Clean Code:** Tuân thủ SOLID, DRY. Ưu tiên Functional Components và Arrow Functions.
+
+## 📦 Business Logic Specifics (Critical)
+- **Product & Inventory:**
+  - Hỗ trợ biến thể sản phẩm (Variants: Size, Color).
+  - Quản lý kho theo Lô hàng (Batch) và Số Serial.
+  - Form nhập kho (`GoodsReceiptBatch`) cần xử lý chính xác dữ liệu từ `inventories`.
+- **Invoices:** Hệ thống hóa đơn cần bộ lọc (`InvoiceFilter`) linh hoạt cho Admin.
+
+## 🤖 Interaction with Cascade (Windsurf)
+1. **Context Awareness:** Trước khi tạo feature mới, hãy đọc file `src/types/` tương ứng để hiểu cấu trúc dữ liệu.
+2. **File Creation:** Khi tạo page mới trong `admin`, hãy đảm bảo nó tuân thủ layout chung của Dashboard.
+3. **Library Usage:** Nếu cần kéo thả, dùng `React DnD`. Nếu cần hiệu ứng, dùng `Framer Motion`.
+4. **Self-Correction:** Nếu code chạy lỗi, hãy kiểm tra `bun.lockb` và đảm bảo các peer dependencies của React 19 được thỏa mãn.

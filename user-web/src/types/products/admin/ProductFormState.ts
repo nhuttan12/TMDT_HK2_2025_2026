@@ -8,7 +8,7 @@ export interface ProductFormState extends BaseProduct {
 	description: string;
 	importPrice: number;
 	discount?: number;
-	categoryID: number;
+	categoryId: number;
 	createdAt: string;
 	updatedAt: string;
 }

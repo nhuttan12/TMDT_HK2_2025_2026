@@ -24,6 +24,9 @@ export function useTableSort<T extends string>() {
 			newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
 		}
 
+		// guard
+		if (currentSort === field && currentOrder === newOrder) return;
+
 		const params = new URLSearchParams(searchParams.toString());
 
 		params.set('sort', field);

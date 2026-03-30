@@ -1,8 +1,11 @@
 export interface GoodsReceiptBatch {
 	id: number; // Batch ID
 
+	// Use for front end for distinguishing between new and existing batches
+	isNew?: boolean;
+
 	// Product info
-	productID: number;
+	productId: number;
 	productName: string;
 
 	batchNumber: string;

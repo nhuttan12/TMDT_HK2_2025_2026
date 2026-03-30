@@ -47,7 +47,7 @@ export default function ProductCard({ product, elementWidth }: ProductCardProps)
 					setIsWishlisted((prev) => !prev);
 
 					try {
-						// await toggleWishlistAPI(product.productID);
+						// await toggleWishlistAPI(product.productId);
 					} catch (err) {
 						console.log(err);
 						setIsWishlisted((prev) => !prev); // rollback nếu lỗi

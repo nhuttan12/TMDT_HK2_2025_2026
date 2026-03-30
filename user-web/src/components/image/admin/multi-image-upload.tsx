@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { ChangeEvent, JSX } from 'react';
@@ -96,9 +96,9 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 		e.target.value = '';
 	};
 
-	const update = (updater: (imgs: SortableImageForm[]) => SortableImageForm[]) => {
-		onChange(updater(value));
-	};
+	// const update = (updater: (imgs: SortableImageForm[]) => SortableImageForm[]) => {
+	// 	onChange(updater(value));
+	// };
 
 	return (
 		<DndProvider backend={HTML5Backend}>

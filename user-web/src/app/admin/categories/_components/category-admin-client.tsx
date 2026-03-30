@@ -91,12 +91,12 @@ export default function CategoryAdminClient({ categories }: Props): JSX.Element 
 		router.push('/admin/categories/add-new');
 	};
 
-	const handleRedirectToCategoryViewMode = (categoryID: number) => {
-		router.push(`/admin/categories/${categoryID}`);
+	const handleRedirectToCategoryViewMode = (categoryId: number) => {
+		router.push(`/admin/categories/${categoryId}`);
 	};
 
-	const handleRedirectToEditCategoryEditMode = (categoryID: number) => {
-		router.push(`/admin/categories/update/${categoryID}`);
+	const handleRedirectToEditCategoryEditMode = (categoryId: number) => {
+		router.push(`/admin/categories/update/${categoryId}`);
 	};
 
 	return (

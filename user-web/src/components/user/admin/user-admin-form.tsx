@@ -69,12 +69,12 @@ export default function UserAdminForm({ formType }: Props): JSX.Element {
 	};
 
 	// ===== ROLE CHANGE =====
-	const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setForm((prev) => ({
-			...prev,
-			role: e.target.value as UserRole,
-		}));
-	};
+	// const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+	// 	setForm((prev) => ({
+	// 		...prev,
+	// 		role: e.target.value as UserRole,
+	// 	}));
+	// };
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();

@@ -17,14 +17,14 @@ export const useCartStore = create<CartStore>()(
 			addToCart: (item: CartItem) => {
 				set((state: CartStore) => {
 					const existing: CartItem | undefined = state.items.find(
-						(i: CartItem): boolean => i.productID === item.productID,
+						(i: CartItem): boolean => i.productId === item.productId,
 					);
 
 					if (existing) {
 						return {
 							items: state.items.map(
 								(i: CartItem): CartItem =>
-									i.productID === item.productID
+									i.productId === item.productId
 										? { ...i, quantity: i.quantity + item.quantity }
 										: i,
 							),
@@ -36,18 +36,18 @@ export const useCartStore = create<CartStore>()(
 					};
 				});
 			},
-			removeItem: (productID: number): void => {
+			removeItem: (productId: number): void => {
 				set((state: CartStore) => ({
-					items: state.items.filter((i: CartItem): boolean => i.productID !== productID),
+					items: state.items.filter((i: CartItem): boolean => i.productId !== productId),
 				}));
 			},
 			clearItems: (): void => set({ items: [] }),
-			updateQuantity: (productID: number, quantity: number): void =>
+			updateQuantity: (productId: number, quantity: number): void =>
 				set((state: CartStore) => {
 					if (quantity < 1) {
 						return {
 							items: state.items.filter(
-								(i: CartItem): boolean => i.productID !== productID,
+								(i: CartItem): boolean => i.productId !== productId,
 							),
 						};
 					}
@@ -55,7 +55,7 @@ export const useCartStore = create<CartStore>()(
 					return {
 						items: state.items.map(
 							(i: CartItem): CartItem =>
-								i.productID === productID ? { ...i, quantity } : i,
+								i.productId === productId ? { ...i, quantity } : i,
 						),
 					};
 				}),

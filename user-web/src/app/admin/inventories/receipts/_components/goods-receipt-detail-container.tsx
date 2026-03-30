@@ -5,7 +5,7 @@ import Field from '@/components/layout/admin/field';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { ChangeEvent, FormEvent, JSX, useState } from 'react';
+import { ChangeEvent, FormEvent, JSX, useEffect, useState } from 'react';
 import GoodsReceiptStatusBadge from './goods-receipt-status-badge';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { Column } from '@/types/uis/Column';
@@ -15,132 +15,41 @@ import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceip
 import { formatDateForInpu } from '@/utils/shared/date';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-
-export const emptyGoodsReceiptDetail: GoodsReceiptDetail = {
-	id: 0,
-	code: '',
-	supplierID: 0,
-	supplierName: '',
-	importDate: '',
-	importStatus: 'draft',
-	batches: [],
-};
-
-export const mockGoodsReceiptDetails: GoodsReceiptDetail[] = [
-	{
-		id: 1,
-		code: 'PNK-001',
-		supplierID: 1,
-		supplierName: 'Công ty ABC',
-		importDate: new Date().toISOString(),
-		importStatus: 'draft',
-		note: 'Hàng test',
-		batches: [
-			{
-				id: 1,
-				productID: 101,
-				productName: 'iPhone 15 Pro Max',
-				batchNumber: 'BATCH-001',
-				quantity: 10,
-				unitPrice: 30000000,
-				totalPrice: 300000000,
-				manufacturedAt: '2025-01-01',
-				expiredAt: undefined,
-				isSerialInputted: true,
-			},
-			{
-				id: 2,
-				productID: 102,
-				productName: 'Samsung S24 Ultra',
-				batchNumber: 'BATCH-002',
-				quantity: 5,
-				unitPrice: 25000000,
-				totalPrice: 125000000,
-				isSerialInputted: false,
-			},
-		],
-	},
-	{
-		id: 2,
-		code: 'PNK-002',
-		supplierID: 2,
-		supplierName: 'Công ty XYZ',
-		importDate: new Date().toISOString(),
-		importStatus: 'confirmed',
-		batches: [
-			{
-				id: 3,
-				productID: 103,
-				productName: 'MacBook Pro M3',
-				batchNumber: 'BATCH-003',
-				quantity: 3,
-				unitPrice: 50000000,
-				totalPrice: 150000000,
-				manufacturedAt: '2024-12-01',
-				isSerialInputted: true,
-			},
-		],
-	},
-	{
-		id: 3,
-		code: 'PNK-003',
-		supplierID: 3,
-		supplierName: 'Nhà cung cấp DEF',
-		importDate: new Date().toISOString(),
-		importStatus: 'cancelled',
-		batches: [],
-	},
-	{
-		id: 4,
-		code: 'PNK-004',
-		supplierID: 4,
-		supplierName: 'Công ty GHI',
-		importDate: new Date().toISOString(),
-		importStatus: 'confirmed',
-		note: 'Hàng nhập số lượng lớn',
-		batches: [
-			{
-				id: 4,
-				productID: 104,
-				productName: 'Tai nghe Sony WH-1000XM5',
-				batchNumber: 'BATCH-004',
-				quantity: 20,
-				unitPrice: 8000000,
-				totalPrice: 160000000,
-				expiredAt: undefined,
-				isSerialInputted: false,
-			},
-			{
-				id: 5,
-				productID: 105,
-				productName: 'Chuột Logitech MX Master 3S',
-				batchNumber: 'BATCH-005',
-				quantity: 15,
-				unitPrice: 2500000,
-				totalPrice: 37500000,
-				isSerialInputted: false,
-			},
-		],
-	},
-];
+import { ProductSelectionGoodsReceiptModal } from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
+import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
+import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
 
 interface Props {
 	formType: AdminFormType;
+	goodsReceipt: GoodsReceiptDetail;
 }
 
-export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Element {
+export default function GoodsReceiptDetailContainer({
+	formType,
+	goodsReceipt,
+}: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
 	const isView: boolean = formType === 'view';
 	const isCreate: boolean = formType === 'create';
 
-	const receipt: GoodsReceiptDetail = isCreate
-		? emptyGoodsReceiptDetail
-		: mockGoodsReceiptDetails[0];
+	const [form, setForm] = useState<GoodsReceiptDetail>(goodsReceipt);
 
-	const [form, setForm] = useState<GoodsReceiptDetail>(receipt);
-	const [batches, setBatches] = useState<GoodsReceiptBatch[]>(receipt.batches);
+	const batches = useBatchReceiptStore((s: BatchReceiptStore) => s.batches);
+	const addBatch = useBatchReceiptStore((s: BatchReceiptStore) => s.addBatch);
+	const updateBatch = useBatchReceiptStore((s: BatchReceiptStore) => s.updateBatch);
+	const generateId = useBatchReceiptStore((s: BatchReceiptStore) => s.generateId);
+	const batchItemsByBatchId = useBatchReceiptStore(
+		(s: BatchReceiptStore) => s.batchItemsByBatchId,
+	);
+
+	useEffect((): void => {
+		if (goodsReceipt.batches?.length) {
+			useBatchReceiptStore.setState({
+				batches: goodsReceipt.batches,
+			});
+		}
+	}, [goodsReceipt.batches]);
 
 	const updateReceiptField = <K extends keyof GoodsReceiptDetail>(
 		key: K,
@@ -154,7 +63,10 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 
 		const payload: GoodsReceiptDetail = {
 			...form,
-			batches,
+			batches: batches.map((batch: GoodsReceiptBatch) => ({
+				...batch,
+				items: batchItemsByBatchId[batch.id] || [],
+			})),
 		};
 
 		console.log('Submit:', payload);
@@ -164,20 +76,42 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 		key: K,
 		value: GoodsReceiptDetail[K],
 	) => {
-		setForm((prev) => ({ ...prev, [key]: value }));
+		setForm((prev: GoodsReceiptDetail) => ({ ...prev, [key]: value }));
 	};
 
 	const totalQuantity: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch) => sum + i.quantity,
+		(sum: number, i: GoodsReceiptBatch): number => sum + i.quantity,
 		0,
 	);
 	const totalAmount: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch) => sum + i.totalPrice,
+		(sum: number, i: GoodsReceiptBatch): number => sum + i.totalPrice,
 		0,
 	);
 
-	const handleRedirectToBatchDetail = (batchID: number): void => {
+	const handleRedirectToBatchDetailViewMode = (batchID: number): void => {
 		router.push(`/admin/inventories/receipts/${form.id}/batches/${batchID}`);
+	};
+
+	const handleRedirectToBatchDetailCreateMode = (batchID: number): void => {
+		router.push(`/admin/inventories/receipts/${form.id}/batches/${batchID}/add-new`);
+	};
+
+	const handleProductSelection = (product: ProductForGoodsReceipt): void => {
+		const id: number = generateId();
+
+		const newBatch: GoodsReceiptBatch = {
+			id: id,
+			isNew: true,
+			productId: product.id,
+			productName: product.name,
+			batchNumber: '',
+			quantity: 1,
+			unitPrice: 0,
+			totalPrice: 0,
+			isSerialInputted: false,
+		};
+
+		addBatch(newBatch);
 	};
 
 	const itemColumns: Column<GoodsReceiptBatch>[] = [
@@ -188,14 +122,14 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 		{
 			key: 'batchNumber',
 			header: 'Mã lô',
-			render: (item: GoodsReceiptBatch, rowIndex: number | undefined): JSX.Element => (
+			render: (item: GoodsReceiptBatch): JSX.Element => (
 				<Input
 					value={item.batchNumber}
 					disabled={isView}
 					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						const newItems: GoodsReceiptBatch[] = [...batches];
-						newItems[rowIndex!].batchNumber = e.target.value;
-						setBatches(newItems);
+						updateBatch(item.id, {
+							batchNumber: e.target.value,
+						});
 					}}
 				/>
 			),
@@ -203,10 +137,7 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 		{
 			key: 'quantity',
 			header: 'Số lượng',
-			render: (
-				item: GoodsReceiptBatch,
-				rowIndex: number | undefined,
-			): number | JSX.Element =>
+			render: (item: GoodsReceiptBatch): number | JSX.Element =>
 				isView ? (
 					item.quantity
 				) : (
@@ -215,10 +146,11 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 						value={item.quantity}
 						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
 							const qty: number = Number(e.target.value);
-							const newItems: GoodsReceiptBatch[] = [...batches];
-							newItems[rowIndex!].quantity = qty;
-							newItems[rowIndex!].totalPrice = qty * newItems[rowIndex!].unitPrice;
-							setBatches(newItems);
+
+							updateBatch(item.id, {
+								quantity: qty,
+								totalPrice: qty * item.unitPrice,
+							});
 						}}
 					/>
 				),
@@ -226,10 +158,7 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 		{
 			key: 'unitPrice',
 			header: 'Đơn giá',
-			render: (
-				item: GoodsReceiptBatch,
-				rowIndex: number | undefined,
-			): string | JSX.Element =>
+			render: (item: GoodsReceiptBatch): string | JSX.Element =>
 				isView ? (
 					item.unitPrice.toLocaleString() + ' ₫'
 				) : (
@@ -238,10 +167,11 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 						value={item.unitPrice}
 						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
 							const price: number = Number(e.target.value);
-							const newItems: GoodsReceiptBatch[] = [...batches];
-							newItems[rowIndex!].unitPrice = price;
-							newItems[rowIndex!].totalPrice = price * newItems[rowIndex!].quantity;
-							setBatches(newItems);
+
+							updateBatch(item.id, {
+								unitPrice: price,
+								totalPrice: price * item.quantity,
+							});
 						}}
 					/>
 				),
@@ -255,15 +185,15 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 		{
 			key: 'expiredAt',
 			header: 'Ngày hết hạn',
-			render: (item: GoodsReceiptBatch, rowIndex: number | undefined): JSX.Element => (
+			render: (item: GoodsReceiptBatch): JSX.Element => (
 				<Input
 					type='date'
 					value={item.expiredAt || ''}
 					disabled={isView}
 					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						const newItems: GoodsReceiptBatch[] = [...batches];
-						newItems[rowIndex!].expiredAt = e.target.value;
-						setBatches(newItems);
+						updateBatch(item.id, {
+							expiredAt: e.target.value,
+						});
 					}}
 				/>
 			),
@@ -345,33 +275,25 @@ export default function GoodsReceiptDetailClient({ formType }: Props): JSX.Eleme
 				<div className='flex justify-between items-center mb-4'>
 					<h2 className='font-bold text-lg'>Danh sách lô hàng chi tiết</h2>
 					{isCreate && (
-						<Button
-							onClick={(): void => {
-								const newBatch: GoodsReceiptBatch = {
-									id: Date.now(),
-									productID: 0,
-									productName: '',
-									batchNumber: '',
-									quantity: 1,
-									unitPrice: 0,
-									totalPrice: 0,
-									isSerialInputted: false,
-								};
-
-								setBatches([...batches, newBatch]);
-							}}
-						>
-							Thêm dòng hàng
-						</Button>
+						<ProductSelectionGoodsReceiptModal
+							onSelectProduct={handleProductSelection}
+							trigger={<Button className='cursor-pointer'>Thêm dòng hàng</Button>}
+						/>
 					)}
 				</div>
 
-                {/* Goods Receipt Batch List */}
+				{/* Goods Receipt Batch List */}
 				<DataTable<GoodsReceiptBatch>
 					data={batches}
 					columns={itemColumns}
 					getRowKey={(item: GoodsReceiptBatch): number => item.id}
-					onRowClick={(row: GoodsReceiptBatch): void => handleRedirectToBatchDetail(row.id)}
+					onRowClick={(row: GoodsReceiptBatch): void => {
+						if (row.isNew) {
+							handleRedirectToBatchDetailCreateMode(row.id);
+						} else {
+							handleRedirectToBatchDetailViewMode(row.id);
+						}
+					}}
 				/>
 			</div>
 

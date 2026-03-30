@@ -34,7 +34,7 @@ export default function ProductVariantDetailUI({
 
 	const isView: boolean = mode === 'view';
 	const isCreate: boolean = mode === 'create';
-	const isUpdate: boolean = mode === 'update';
+	// const isUpdate: boolean = mode === 'update';
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;

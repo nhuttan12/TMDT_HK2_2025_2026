@@ -196,8 +196,8 @@ export default function ProductAdminFormUI({
 				<Label>Danh mục</Label>
 				<Input
 					type='number'
-					name='categoryID'
-					value={form.categoryID}
+					name='categoryId'
+					value={form.categoryId}
 					onChange={onInputChange}
 					disabled={disabled}
 				/>

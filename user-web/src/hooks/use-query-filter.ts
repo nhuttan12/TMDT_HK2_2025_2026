@@ -5,10 +5,11 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 export function useQueryFilter<T extends object>() {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
+	const search: string = searchParams.toString();
 
 	const applyFilters = useCallback(
 		(filters: Partial<T>) => {
-			const params = new URLSearchParams(searchParams.toString());
+			const params = new URLSearchParams(search);
 
 			Object.entries(filters).forEach(([key, value]) => {
 				if (typeof value === 'boolean') {
@@ -24,7 +25,7 @@ export function useQueryFilter<T extends object>() {
 
 			router.push(`?${params.toString()}`);
 		},
-		[router, searchParams],
+		[router, search],
 	);
 
 	return { applyFilters };

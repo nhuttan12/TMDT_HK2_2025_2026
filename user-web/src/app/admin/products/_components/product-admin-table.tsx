@@ -1,7 +1,7 @@
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import Image from 'next/image';
-import ProductStatusBadge from '@/app/admin/products/[productID]/_components/product-status-badge';
+import ProductStatusBadge from '@/app/admin/products/[productId]/_components/product-status-badge';
 import { formatDate } from '@/utils/shared/date';
 import {
 	DropdownMenu,
@@ -33,13 +33,8 @@ export default function ProductAdminTable({
 }: Props): JSX.Element {
 	const allKeys: number[] = products.map((p: ProductListInfoAdmin): number => p.id);
 
-	const {
-		selected,
-		toggle,
-		toggleAll,
-		isAllSelected,
-		isIndeterminate,
-	} = useTableSelection<number>(allKeys);
+	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+		useTableSelection<number>(allKeys);
 
 	const columns: Column<ProductListInfoAdmin>[] = [
 		{
@@ -139,7 +134,10 @@ export default function ProductAdminTable({
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align='end'>
-							<DropdownMenuItem className='cursor-pointer' onClick={() => onEdit(row.id)}>
+							<DropdownMenuItem
+								className='cursor-pointer'
+								onClick={() => onEdit(row.id)}
+							>
 								<Pencil
 									size={14}
 									className='mr-2'

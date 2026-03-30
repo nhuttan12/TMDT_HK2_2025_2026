@@ -1,21 +1,9 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
-import { Pencil } from 'lucide-react';
 import { Role } from '@/types/users/admin/Role';
-import { JSX, MouseEvent } from 'react';
+import { JSX } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Input } from '@/components/ui/input';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import RoleTable from '@/app/admin/users/roles/_components/role-table';
 
@@ -26,15 +14,11 @@ interface Props {
 export default function RoleClient({ roles }: Props): JSX.Element {
 	const router: AppRouterInstance = useRouter();
 
-	const handleRedirectToRolePermissionViewMode = (
-		roleName: string,
-	) => {
+	const handleRedirectToRolePermissionViewMode = (roleName: string) => {
 		router.push(`/admin/users/roles/${roleName.toLowerCase()}/permission`);
 	};
 
-	const handleRedirectToRolePermissionEditMode = (
-		roleNName: string,
-	) => {
+	const handleRedirectToRolePermissionEditMode = (roleNName: string) => {
 		router.push(`/admin/users/roles/${roleNName.toLowerCase()}/permission/edit`);
 	};
 

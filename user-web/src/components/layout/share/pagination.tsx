@@ -3,8 +3,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { JSX } from 'react';
 import { Button } from '@/components/ui/button';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface PaginationProps {
 	currentPage: number;

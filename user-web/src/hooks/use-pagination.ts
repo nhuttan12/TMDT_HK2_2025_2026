@@ -11,8 +11,12 @@ export function usePagination() {
 	const currentPage: number = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
 	const changePage = (page: number) => {
-		const params = new URLSearchParams(searchParams.toString());
+		//guard
+		const current: string | null = searchParams.get('page');
 
+		if (current === String(page)) return;
+
+		const params = new URLSearchParams(searchParams.toString());
 		params.set('page', String(page));
 
 		router.push(`?${params.toString()}`, { scroll: false });

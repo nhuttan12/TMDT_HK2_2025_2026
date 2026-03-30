@@ -1,4 +1,4 @@
-import { JSX, useMemo, useState } from 'react';
+import { JSX } from 'react';
 import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItemAdmin';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
@@ -34,13 +34,8 @@ export default function CategoryAdminTable({
 }: Props): JSX.Element {
 	const allKeys: number[] = categories.map((c: CategoryListItemAdmin): number => c.id);
 
-	const {
-		selected,
-		toggle,
-		toggleAll,
-		isAllSelected,
-		isIndeterminate,
-	} = useTableSelection<number>(allKeys);
+	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+		useTableSelection<number>(allKeys);
 
 	const columns: Column<CategoryListItemAdmin>[] = [
 		{

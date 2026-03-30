@@ -7,7 +7,7 @@ import { UpdateGoodsReceiptBatchDto } from '@/types/inventories/receipts/dtos/Up
 
 function mapBatchToDto(batch: GoodsReceiptBatch): CreateGoodsReceiptBatchDto {
 	return {
-		productID: batch.productID,
+		productId: batch.productId,
 		batchNumber: batch.batchNumber,
 		quantity: batch.quantity,
 		unitPrice: batch.unitPrice,
@@ -34,7 +34,7 @@ function mapBatchToUpdateDto(
 ): UpdateGoodsReceiptBatchDto {
 	return {
 		id: batch.id,
-		productID: batch.productID,
+		productId: batch.productId,
 		quantity: batch.quantity,
 		unitPrice: batch.unitPrice,
 		batchNumber: batch.batchNumber,

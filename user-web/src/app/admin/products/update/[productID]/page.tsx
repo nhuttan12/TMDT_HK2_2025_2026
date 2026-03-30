@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import ProductAdminFormContainer from '@/app/admin/products/[productID]/_components/product-admin-form-container';
+import ProductAdminFormContainer from '@/app/admin/products/[productId]/_components/product-admin-form-container';
 import { Metadata } from 'next';
 import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const mockProductVariant: ProductVariant[] = [
 	{
 		id: 1,
-		productID: 201,
+		productId: 201,
 		name: 'iPhone 15 - 128GB - Black',
 		sku: 'IP15-128-BLK',
 		quantity: 12,
@@ -22,7 +22,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 2,
-		productID: 201,
+		productId: 201,
 		name: 'iPhone 15 - 256GB - Black',
 		sku: 'IP15-256-BLK',
 		quantity: 8,
@@ -32,7 +32,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 3,
-		productID: 201,
+		productId: 201,
 		name: 'iPhone 15 - 128GB - Pink',
 		sku: 'IP15-128-PNK',
 		quantity: 10,
@@ -42,7 +42,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 4,
-		productID: 202,
+		productId: 202,
 		name: 'Samsung Galaxy S24 - 256GB - Black',
 		sku: 'S24-256-BLK',
 		quantity: 15,
@@ -52,7 +52,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 5,
-		productID: 202,
+		productId: 202,
 		name: 'Samsung Galaxy S24 - 512GB - Black',
 		sku: 'S24-512-BLK',
 		quantity: 6,
@@ -62,7 +62,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 6,
-		productID: 202,
+		productId: 202,
 		name: 'Samsung Galaxy S24 - 256GB - Purple',
 		sku: 'S24-256-PRP',
 		quantity: 9,
@@ -72,7 +72,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 7,
-		productID: 203,
+		productId: 203,
 		name: 'Xiaomi 14 - 256GB - White',
 		sku: 'XM14-256-WHT',
 		quantity: 20,
@@ -82,7 +82,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 8,
-		productID: 203,
+		productId: 203,
 		name: 'Xiaomi 14 - 512GB - Black',
 		sku: 'XM14-512-BLK',
 		quantity: 14,
@@ -92,7 +92,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 9,
-		productID: 204,
+		productId: 204,
 		name: 'OPPO Find X7 - 256GB - Blue',
 		sku: 'OPX7-256-BLU',
 		quantity: 11,
@@ -102,7 +102,7 @@ const mockProductVariant: ProductVariant[] = [
 	},
 	{
 		id: 10,
-		productID: 204,
+		productId: 204,
 		name: 'OPPO Find X7 - 512GB - Black',
 		sku: 'OPX7-512-BLK',
 		quantity: 7,
@@ -123,7 +123,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 	discount: calculateDiscount(34990000, 30000000),
 
 	status: true,
-	categoryID: 1,
+	categoryId: 1,
 
 	images: [
 		{

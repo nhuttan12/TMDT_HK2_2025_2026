@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import ProductVariantDetailContainer from '@/app/admin/products/[productID]/variant/_components/product-variant-detail-container';
+import ProductVariantDetailContainer from '@/app/admin/products/[productId]/variant/_components/product-variant-detail-container';
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
 
 export const metadata: Metadata = {
@@ -9,19 +9,16 @@ export const metadata: Metadata = {
 
 interface Props {
 	params: {
-		productID: string;
+		productId: string;
 	};
 }
 
-export default async function Page({ params }: Props): Promise<JSX.Element> {
-	const resolvedParams = await params;
-
-	// 2. Ép kiểu string sang number
-	const productID: number = Number(resolvedParams.productID);
+export default function Page({ params }: Props): JSX.Element {
+	const productId: number = Number(params.productId);
 
 	const emptyProductVariant: ProductVariantDetail = {
 		id: 0,
-		productID: productID,
+		productId: productId,
 		name: '',
 		sku: '',
 		attributes: [{ size: '', color: '' }],

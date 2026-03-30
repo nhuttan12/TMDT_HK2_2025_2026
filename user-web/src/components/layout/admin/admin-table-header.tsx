@@ -4,7 +4,6 @@ import React, { JSX, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
-import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
 import { useQueryFilter } from '@/hooks/use-query-filter';
 import { Timeout } from '@radix-ui/primitive';
@@ -16,6 +15,9 @@ interface Props<T> {
 	searchKey?: keyof T;
 	onAdd?: () => void;
 	addLabel?: string;
+
+	actions?: React.ReactNode;
+
 	filter?: boolean;
 	filterField?: FilterField<T>[];
 }
@@ -27,6 +29,7 @@ export default function AdminTableHeader<T extends object>({
 	searchKey,
 	onAdd,
 	addLabel,
+	actions,
 	filter = false,
 	filterField,
 }: Props<T>): JSX.Element {
@@ -56,14 +59,16 @@ export default function AdminTableHeader<T extends object>({
 					<p className='text-sm text-muted-foreground'>{description}</p>
 				</div>
 
-				{onAdd && addLabel && (
+				{actions ? (
+					actions
+				) : onAdd && addLabel ? (
 					<Button
 						className='cursor-pointer'
 						onClick={onAdd}
 					>
 						{addLabel}
 					</Button>
-				)}
+				) : null}
 			</div>
 
 			<div className='flex gap-4'>
@@ -90,7 +95,6 @@ export default function AdminTableHeader<T extends object>({
 						onApply={(filters: Partial<T>): void => {
 							const normalized: Partial<T> = { ...filters };
 
-							// Nếu object có key 'status', convert 'ALL' -> undefined
 							if ('status' in normalized) {
 								const key = 'status' as keyof T;
 								if (normalized[key] === 'ALL') {

@@ -2,10 +2,10 @@ import { BatchItemStatus } from '@/types/inventories/receipts/uis/BatchItemStatu
 
 export interface BatchItemSerial {
 	id: number;
-	productID: number;
+	productId: number;
 
-	batchID: number;
-	productVariantID: number;
+	batchId: number;
+	productVariantId: number;
 	productVariantName: string;
 
 	serialNumber: string;

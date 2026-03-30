@@ -48,7 +48,7 @@ export default function CheckoutPreview() {
 
 				<TableBody>
 					{items.map((item) => (
-						<TableRow key={item.productID}>
+						<TableRow key={item.productId}>
 							<TableCell className='flex items-center gap-3'>
 								<Image
 									src={item.imageUrl}

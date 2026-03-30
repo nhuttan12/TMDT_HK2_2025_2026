@@ -1,7 +1,7 @@
 'use client';
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { JSX, useEffect, useMemo, useRef, useState } from 'react';
+import { JSX, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 
 interface Props {

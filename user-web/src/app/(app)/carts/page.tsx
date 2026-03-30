@@ -20,7 +20,7 @@ import { useCartStore } from '@/stores/cart.store';
 
 const mockCart: CartItem[] = [
 	{
-		productID: 1,
+		productId: 1,
 		name: 'Tai nghe Sony WH-1000XM5',
 		imageUrl:
 			'https://bizweb.dktcdn.net/thumb/1024x1024/100/340/129/products/wh-1000xm5-sonycuongphan-1-1-silver.jpg?v=1714306049613',
@@ -28,7 +28,7 @@ const mockCart: CartItem[] = [
 		quantity: 1,
 	},
 	{
-		productID: 2,
+		productId: 2,
 		name: 'Chuột Logitech MX Master 3',
 		imageUrl:
 			'https://product.hstatic.net/200000722513/product/mx-master-3s-mouse-top-view-graphite_880f7c80882541c2b4e349b7ed0fa439_de0fb8d222ec49bfb11d909a1f116f7e.png',
@@ -42,13 +42,13 @@ interface Props {
 }
 
 export default function Cart({ params }: Props): JSX.Element {
-	const [cartItems, setCartItems] = useState<CartItem[]>(mockCart);
+	const [cartItems] = useState<CartItem[]>(mockCart);
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems);
 	const router = useRouter();
 
 	const updateQuantity = useCartStore((s) => s.updateQuantity);
-	const items: CartItem[] = useCartStore((s): CartItem[] => s.items);
+	// const items: CartItem[] = useCartStore((s): CartItem[] => s.items);
 	const removeItem = useCartStore((s) => s.removeItem);
 
 	const toggleSelect = useCallback((id: number) => {
@@ -61,12 +61,12 @@ export default function Cart({ params }: Props): JSX.Element {
 		if (selectedIds.length === cartItems.length) {
 			setSelectedIds([]);
 		} else {
-			setSelectedIds(cartItems.map((i) => i.productID));
+			setSelectedIds(cartItems.map((i) => i.productId));
 		}
 	}, [selectedIds, cartItems]);
 
 	const selectedItems = useMemo(() => {
-		return cartItems.filter((item) => selectedIds.includes(item.productID));
+		return cartItems.filter((item) => selectedIds.includes(item.productId));
 	}, [cartItems, selectedIds]);
 
 	const total = useMemo(() => {
@@ -75,7 +75,7 @@ export default function Cart({ params }: Props): JSX.Element {
 
 	const handleCheckout = () => {
 		const selectedItems: CartItem[] = cartItems.filter((item: CartItem) => {
-			return selectedIds.includes(item.productID);
+			return selectedIds.includes(item.productId);
 		});
 
 		setCheckoutItems(selectedItems);
@@ -84,8 +84,8 @@ export default function Cart({ params }: Props): JSX.Element {
 		router.push('/checkout');
 	};
 
-	const handleRedirectProductDetail = (productID: number): void => {
-		router.push(`/products/${productID}`);
+	const handleRedirectProductDetail = (productId: number): void => {
+		router.push(`/products/${productId}`);
 	};
 
 	if (!cartItems.length) {
@@ -119,15 +119,15 @@ export default function Cart({ params }: Props): JSX.Element {
 				<TableBody>
 					{cartItems.map((item: CartItem) => (
 						<TableRow
-							key={item.productID}
+							key={item.productId}
 							className='cursor-pointer'
-							onClick={() => handleRedirectProductDetail(item.productID)}
+							onClick={() => handleRedirectProductDetail(item.productId)}
 						>
 							<TableCell onClick={(e) => e.stopPropagation()}>
 								<input
 									type='checkbox'
-									checked={selectedIds.includes(item.productID)}
-									onChange={() => toggleSelect(item.productID)}
+									checked={selectedIds.includes(item.productId)}
+									onChange={() => toggleSelect(item.productId)}
 								/>
 							</TableCell>
 
@@ -151,7 +151,7 @@ export default function Cart({ params }: Props): JSX.Element {
 										size='icon'
 										onClick={(e) => {
 											e.stopPropagation();
-											updateQuantity(item.productID, item.quantity - 1);
+											updateQuantity(item.productId, item.quantity - 1);
 										}}
 									>
 										<Minus className='h-4 w-4' />
@@ -166,7 +166,7 @@ export default function Cart({ params }: Props): JSX.Element {
 										size='icon'
 										onClick={(e) => {
 											e.stopPropagation();
-											updateQuantity(item.productID, item.quantity + 1);
+											updateQuantity(item.productId, item.quantity + 1);
 										}}
 									>
 										<Plus className='h-4 w-4' />
@@ -184,7 +184,7 @@ export default function Cart({ params }: Props): JSX.Element {
 									size='icon'
 									onClick={(e) => {
 										e.stopPropagation();
-										removeItem(item.productID);
+										removeItem(item.productId);
 									}}
 								>
 									<Trash2 className='h-4 w-4' />
