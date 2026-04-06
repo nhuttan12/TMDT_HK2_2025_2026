@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { useTableSelection } from '@/hooks/use-table-selection';
+import { useTableSelection } from '@/hooks/share/use-table-selection';
 
 interface Props {
 	categories: CategoryListItemAdmin[];

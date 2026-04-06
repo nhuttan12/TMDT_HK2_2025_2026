@@ -14,7 +14,7 @@ import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { useTableSelection } from '@/hooks/use-table-selection';
+import { useTableSelection } from '@/hooks/share/use-table-selection';
 
 interface Props {
 	products: ProductListInfoAdmin[];

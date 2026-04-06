@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import ProductList from '@/components/product/user/product-list';
 import Pagination from '@/components/layout/share/pagination';
 import ProductFilter from '@/components/product/user/product-filter';
-import { usePagination } from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/share/use-pagination';
 
 export default function ProductsPageClient(): JSX.Element {
 	const { currentPage, changePage } = usePagination();

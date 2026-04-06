@@ -10,7 +10,7 @@ export interface BatchItemSerial {
 
 	serialNumber: string;
 
-	appearanceCondition?: string;
+	appearanceCondition: string;
 
 	status: BatchItemStatus;
 	importDate: string;

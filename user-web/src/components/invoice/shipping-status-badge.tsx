@@ -3,8 +3,9 @@ import { JSX } from 'react';
 
 import {
 	ShippingStatus,
-	getShippingStatusLabel,
+
 } from '@/types/invoices/user/ShippingStatus';
+import {getShippingStatusLabel} from "@/types/invoices/user/ShippingStatusLabel";
 
 interface Props {
 	status: ShippingStatus;

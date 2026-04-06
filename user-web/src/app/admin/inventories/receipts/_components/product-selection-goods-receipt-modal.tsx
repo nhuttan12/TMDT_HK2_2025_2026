@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useMemo, useState } from 'react';
+import React, { JSX, useMemo, useState } from 'react';
 import {
 	Dialog,
 	DialogContent,
@@ -15,61 +15,26 @@ import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/Product
 import { Package, Search } from 'lucide-react';
 
 interface ProductSelectionGoodsReceiptModalProps {
+	products: ProductForGoodsReceipt[];
 	onSelectProduct: (product: ProductForGoodsReceipt) => void;
 	trigger?: React.ReactNode;
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
 }
 
-// Mock data for products - replace with actual API call
-const mockProducts: ProductForGoodsReceipt[] = [
-	{
-		id: 1,
-		name: 'iPhone 15 Pro Max',
-		status: true,
-	},
-	{
-		id: 2,
-		name: 'Samsung Galaxy S24 Ultra',
-		status: true,
-	},
-	{
-		id: 3,
-		name: 'MacBook Pro 16"',
-		status: true,
-	},
-	{
-		id: 4,
-		name: 'iPad Air',
-		status: false,
-	},
-	{
-		id: 5,
-		name: 'AirPods Pro',
-		status: true,
-	},
-	{
-		id: 6,
-		name: 'Sony WH-1000XM5',
-		status: true,
-	},
-	{
-		id: 7,
-		name: 'Apple Watch Series 9',
-		status: false,
-	},
-	{
-		id: 8,
-		name: 'Dell XPS 15',
-		status: true,
-	},
-];
-
 export function ProductSelectionGoodsReceiptModal({
+	products,
 	onSelectProduct,
 	trigger,
+	open: controlledOpen,
+	onOpenChange: setControlledOpen,
 }: ProductSelectionGoodsReceiptModalProps): JSX.Element {
-	const [isOpen, setIsOpen] = useState(false);
+	const [internalOpen, setInternalOpen] = useState(false);
+
+	const isOpen: boolean = controlledOpen !== undefined ? controlledOpen : internalOpen;
+	const setIsOpen = setControlledOpen !== undefined ? setControlledOpen : setInternalOpen;
+
 	const [searchTerm, setSearchTerm] = useState('');
-	const [products] = useState<ProductForGoodsReceipt[]>(mockProducts);
 
 	const filteredProducts: ProductForGoodsReceipt[] = useMemo((): ProductForGoodsReceipt[] => {
 		return products.filter((product: ProductForGoodsReceipt): boolean =>
@@ -88,14 +53,7 @@ export function ProductSelectionGoodsReceiptModal({
 			open={isOpen}
 			onOpenChange={setIsOpen}
 		>
-			<DialogTrigger asChild>
-				{trigger || (
-					<Button className='cursor-pointer'>
-						<Package className='w-4 h-4 mr-2' />
-						Chọn sản phẩm
-					</Button>
-				)}
-			</DialogTrigger>
+			{trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 			<DialogContent className='max-w-2xl max-h-[80vh] overflow-hidden flex flex-col'>
 				<DialogHeader>
 					<DialogTitle className='flex items-center gap-2'>
@@ -169,7 +127,7 @@ export function ProductSelectionGoodsReceiptModal({
 					</span>
 					<Button
 						variant='outline'
-						onClick={() => setIsOpen(false)}
+						onClick={() => setIsOpen}
 					>
 						Đóng
 					</Button>

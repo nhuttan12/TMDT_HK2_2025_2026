@@ -16,7 +16,7 @@ import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { useTableSelection } from '@/hooks/use-table-selection';
+import { useTableSelection } from '@/hooks/share/use-table-selection';
 
 interface Props {
 	users: UserListAdmin[];

@@ -1,8 +1,6 @@
 'use client';
 
 import { JSX } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
 import GoodsReceiptAdminTable from '@/app/admin/inventories/receipts/_components/goods-receipt-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { FilterField } from '@/types/uis/FilterField';
@@ -10,8 +8,8 @@ import { ReceiptAdminFilterValues } from '@/types/inventories/receipts/uis/Recei
 import { FilterSupplier } from '@/types/inventories/suppliers/FilterSupplier';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import Pagination from '@/components/layout/share/pagination';
-import { useTableSort } from '@/hooks/use-table-sort';
-import { usePagination } from '@/hooks/use-pagination';
+import { useTableSort } from '@/hooks/share/use-table-sort';
+import { usePagination } from '@/hooks/share/use-pagination';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
 import {
 	DropdownMenu,
@@ -20,9 +18,12 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { exportExcelFile } from '@/utils/shared/exportExcelFile';
+import { ProductSelectionGoodsReceiptModal } from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
+import { ProductBatchItemModal } from '@/app/admin/inventories/receipts/[receiptId]/batches/[batchId]/_components/product-batch-item-modal';
+import { useGoodsReceiptData } from '@/hooks/inventories/receipts/use-goods-receipt-data';
+import { useProductVariantListData } from '@/hooks/inventories/receipts/use-product-variant-list-data';
+import { useGoodsReceiptExcel } from '@/hooks/inventories/receipts/use-goods-receipt-excel';
+import { useGoodsReceiptNavigation } from '@/hooks/inventories/receipts/use-goods-receipt-navigation';
 
 const suppliers: FilterSupplier[] = [
 	{ id: 1, code: 'NCC01', name: 'ABC' },
@@ -66,26 +67,29 @@ interface Props {
 }
 
 export default function GoodsReceiptAdminContainer({ receipts }: Props): JSX.Element {
-	const router: AppRouterInstance = useRouter();
+	const { mockProducts } = useGoodsReceiptData();
+	const { availableVariants } = useProductVariantListData();
+
+	// Chỉ lấy Logic Excel (Bỏ qua hoàn toàn Logic Form)
+	const {
+		isProductModalOpen,
+		setIsProductModalOpen,
+		isVariantModalOpen,
+		setIsVariantModalOpen,
+		handleStartExcelFlow,
+		handleProductSelected,
+		handleVariantsSelected,
+	} = useGoodsReceiptExcel();
+
+	// Chỉ lấy Logic Navigation
+	const {
+		handleRedirectToAddNewReceiptDetail,
+		handleRedirectToEditReceiptDetail,
+		handleRedirectToReceiptDetail,
+	} = useGoodsReceiptNavigation();
 
 	const { handleSort, renderSortIcon } = useTableSort<GoodsReceiptSortField>();
 	const { currentPage, changePage } = usePagination();
-
-	const handleRedirectToAddNewReceiptDetail = () => {
-		router.push(`/admin/inventories/receipts/add-new`);
-	};
-
-	const handleRedirectToEditReceiptDetail = (receiptID: number) => {
-		router.push(`/admin/inventories/receipts/${receiptID}/edit`);
-	};
-
-	const handleRedirectToReceiptDetail = (receiptID: number): void => {
-		router.push(`/admin/inventories/receipts/${receiptID}`);
-	};
-
-	const handleImportExcel = async (): Promise<void> => {
-		await exportExcelFile();
-	};
 
 	return (
 		<div className='space-y-4'>
@@ -107,12 +111,28 @@ export default function GoodsReceiptAdminContainer({ receipts }: Props): JSX.Ele
 								Nhập thủ công
 							</DropdownMenuItem>
 
-							<DropdownMenuItem onClick={handleImportExcel}>
+							<DropdownMenuItem onClick={handleStartExcelFlow}>
 								Nhập bằng Excel
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				}
+			/>
+
+			{/* Modal 1: Choosing product modal */}
+			<ProductSelectionGoodsReceiptModal
+				products={mockProducts}
+				open={isProductModalOpen}
+				onOpenChange={setIsProductModalOpen}
+				onSelectProduct={handleProductSelected}
+			/>
+
+			{/* Modal 2: Choosing variants modal */}
+			<ProductBatchItemModal
+				variants={availableVariants}
+				open={isVariantModalOpen}
+				onOpenChange={setIsVariantModalOpen}
+				onSelect={handleVariantsSelected}
 			/>
 
 			{/* Table */}

@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { useTableSelection } from '@/hooks/use-table-selection';
 
 interface Props {
 	receipts: GoodsReceiptList[];
@@ -30,11 +29,6 @@ export default function GoodsReceiptAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const allKeys: number[] = receipts.map((p: GoodsReceiptList): number => p.id);
-
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
-		useTableSelection<number>(allKeys);
-
 	const goodsReceiptColumns: Column<GoodsReceiptList>[] = [
 		{
 			key: 'code',
@@ -182,13 +176,6 @@ export default function GoodsReceiptAdminTable({
 			columns={goodsReceiptColumns}
 			getRowKey={(row: GoodsReceiptList): number => row.id}
 			onRowClick={(row: GoodsReceiptList): void => onView(row.id)}
-			selectable={{
-				selected: selected,
-				onToggle: toggle,
-				onToggleAll: toggleAll,
-				isAllSelected,
-				isIndeterminate,
-			}}
 		/>
 	);
 }

@@ -1,49 +1,80 @@
-import ExcelJS from 'exceljs';
+import ExcelJS, { Workbook, Worksheet } from 'exceljs';
 import { saveAs } from 'file-saver';
+import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
+import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
 
-export const exportExcelFile = async (): Promise<void> => {
-	const workbook = new ExcelJS.Workbook();
+export const exportExcelFile = async (
+	product: ProductForGoodsReceipt,
+	variants: ProductVariantRow[],
+): Promise<void> => {
+	const workbook: Workbook = new ExcelJS.Workbook();
 
-	const sheet = workbook.addWorksheet('Import');
-
-	sheet.columns = [
-		{ header: 'Batch Code', key: 'batchCode', width: 20 },
-		{ header: 'Product Code', key: 'productCode', width: 20 },
-		{ header: 'Variant', key: 'variant', width: 20 },
-		{ header: 'Quantity', key: 'quantity', width: 15 },
-		{ header: 'Price', key: 'price', width: 15 },
+	// Sheet 1: Thông tin phiếu nhập (Template trống)
+	const receiptSheet: Worksheet = workbook.addWorksheet('1. Thông tin phiếu nhập');
+	receiptSheet.columns = [
+		{ header: 'Mã phiếu (Tự chọn)', key: 'code', width: 20 },
+		{ header: 'ID Nhà cung cấp', key: 'supplierID', width: 15 },
+		{ header: 'Ngày nhập (YYYY-MM-DD)', key: 'importDate', width: 20 },
+		{ header: 'Ghi chú', key: 'note', width: 30 },
 	];
-
-	// header style
-	const headerRow = sheet.getRow(1);
-	headerRow.font = { bold: true };
-
-	// example
-	sheet.addRow({
-		batchCode: 'BATCH001',
-		productCode: 'SP001',
-		variant: 'Red-L',
-		quantity: 10,
-		price: 20000,
+	receiptSheet.getRow(1).font = { bold: true };
+	receiptSheet.addRow({
+		code: 'GR-TEMP',
+		supplierID: '',
+		importDate: new Date().toISOString().split('T'),
+		note: '',
 	});
 
-	// dropdown
-	const variants = ['Red-L', 'Blue-M'];
+	// Sheet 2: Danh sách lô (Điền sẵn tên SP đã chọn)
+	const batchSheet: Worksheet = workbook.addWorksheet('2. Danh sách lô hàng');
+	batchSheet.columns = [
+		{ header: 'Mã lô *', key: 'batchNumber', width: 20 },
+		{ header: 'ID Sản phẩm', key: 'productId', width: 15 },
+		{ header: 'Tên sản phẩm', key: 'productName', width: 30 },
+		{ header: 'Số lượng', key: 'quantity', width: 15 },
+		{ header: 'Đơn giá nhập', key: 'unitPrice', width: 15 },
+		{ header: 'Ngày hết hạn', key: 'expiredAt', width: 20 },
+	];
+	batchSheet.getRow(1).font = { bold: true };
+	batchSheet.addRow({
+		batchNumber: 'LO-001',
+		productId: product.id,
+		productName: product.name,
+		quantity: variants.length,
+		unitPrice: 0,
+		expiredAt: '',
+	});
 
-	for (let i = 2; i <= 50; i++) {
-		sheet.getCell(`C${i}`).dataValidation = {
-			type: 'list',
-			allowBlank: false,
-			formulae: [`"${variants.join(',')}"`],
-		};
-	}
+	// Sheet 3: Danh sách Serial (Điền sẵn các biến thể đã chọn)
+	const serialSheet: Worksheet = workbook.addWorksheet('3. Danh sách Serial chi tiết');
+	serialSheet.columns = [
+		{ header: 'Mã lô (Khớp với Sheet 2)', key: 'batchNumber', width: 25 },
+		{ header: 'Tên biến thể', key: 'productVariantName', width: 35 },
+		{ header: 'Số Serial/IMEI *', key: 'serialNumber', width: 25 },
+		{ header: 'Tình trạng ngoại quan', key: 'appearanceCondition', width: 25 },
+		{ header: 'Trạng thái (in_stock/defective)', key: 'status', width: 20 },
+		{ header: 'Ngày nhập', key: 'importDate', width: 20 },
+		{ header: 'Ngày hết hạn', key: 'expiredAt', width: 20 },
+	];
+	serialSheet.getRow(1).font = { bold: true };
 
-	// 👉 export file
+	// Map các biến thể đã chọn vào hàng
+	variants.forEach((v: ProductVariantRow): void => {
+		serialSheet.addRow({
+			batchNumber: 'LO-001',
+			productVariantName: v.name,
+			serialNumber: '',
+			// Mặc định
+			status: 'in_stock',
+			importDate: new Date().toISOString().split('T'),
+			expiredAt: '',
+		});
+	});
+
 	const buffer = await workbook.xlsx.writeBuffer();
-
 	const blob = new Blob([buffer], {
 		type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 	});
 
-	saveAs(blob, 'import-template.xlsx');
+	saveAs(blob, 'mau-don-nhap-kho.xlsx');
 };

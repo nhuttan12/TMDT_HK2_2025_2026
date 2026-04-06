@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 import GoodsIssueAdminTable from '@/app/admin/inventories/issues/_components/goods-issue-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { FilterField } from '@/types/uis/FilterField';
-import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/GoodsIssueAdminFilterValues';
-import { GoodsIssueList } from '@/types/inventories/issues/GoodsIssueList';
+import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/GoodsIssueAdminFilterValues';
+import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
 import Pagination from '@/components/layout/share/pagination';
-import { useTableSort } from '@/hooks/use-table-sort';
-import { usePagination } from '@/hooks/use-pagination';
-import { GoodsIssueSortField } from '@/types/inventories/issues/GoodsIssueSortField';
+import { useTableSort } from '@/hooks/share/use-table-sort';
+import { usePagination } from '@/hooks/share/use-pagination';
+import { GoodsIssueSortField } from '@/types/inventories/issues/uis/GoodsIssueSortField';
 
 interface Props {
 	goodsIssues: GoodsIssueList[];
@@ -22,6 +22,16 @@ const issueFilterFields: FilterField<GoodsIssueAdminFilterValues>[] = [
 		key: 'code',
 		label: 'Mã phiếu',
 		type: 'text',
+	},
+	{
+		key: 'type',
+		label: 'Loại xuất kho',
+		type: 'select',
+		options: [
+			{ label: 'Bán lẻ', value: 'RETAIL' },
+			{ label: 'Bán sỉ', value: 'WHOLESALE' },
+			{ label: 'Trả hàng hỏng', value: 'RETURN_DEFECTIVE' },
+		],
 	},
 	{
 		key: 'status',

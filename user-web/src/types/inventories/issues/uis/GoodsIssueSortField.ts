@@ -1,9 +1,9 @@
 export type GoodsIssueSortField =
 	| 'code'
-	| 'customerName'
 	| 'exportDate'
 	| 'totalQuantity'
 	| 'totalAmount'
 	| 'status'
+	| 'type'
 	| 'createdAt'
 	| 'updatedAt';

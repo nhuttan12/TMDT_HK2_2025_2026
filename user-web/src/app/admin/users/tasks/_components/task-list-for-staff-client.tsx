@@ -5,11 +5,11 @@ import { TaskAssignmentList } from '@/types/users/admin/TaskAssignmentList';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { TaskAdminSortField } from '@/types/users/admin/TaskAdminSortField';
-import { useTableSort } from '@/hooks/use-table-sort';
+import { useTableSort } from '@/hooks/share/use-table-sort';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import TaskListForStaffTable from '@/app/admin/users/tasks/_components/task-list-for-staff-table';
 import Pagination from '@/components/layout/share/pagination';
-import { usePagination } from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/share/use-pagination';
 import { FilterField } from '@/types/uis/FilterField';
 import { TaskAssignmentFilterValues } from '@/types/users/admin/TaskAssignmentFilterValues';
 

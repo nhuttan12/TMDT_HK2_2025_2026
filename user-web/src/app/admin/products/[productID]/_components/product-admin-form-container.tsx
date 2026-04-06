@@ -14,7 +14,7 @@ import { ProductUpdateDTO } from '@/types/products/admin/ProductUpdateDTO';
 import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useTableSelection } from '@/hooks/use-table-selection';
+import { useTableSelection } from '@/hooks/share/use-table-selection';
 import ProductAdminFormUI from '@/app/admin/products/[productId]/_components/product-admin-form-ui';
 
 interface Props {

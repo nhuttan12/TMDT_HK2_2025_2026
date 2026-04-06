@@ -1,124 +1,46 @@
-'use client';
-
-import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
-import Field from '@/components/layout/admin/field';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useGoodsReceiptData } from '@/hooks/inventories/receipts/use-goods-receipt-data';
+import { ChangeEvent, JSX } from 'react';
+import { ProductSelectionGoodsReceiptModal } from './product-selection-goods-receipt-modal';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { ChangeEvent, FormEvent, JSX, useEffect, useState } from 'react';
-import GoodsReceiptStatusBadge from './goods-receipt-status-badge';
-import RichTextEditor from '@/components/layout/admin/rich-text-editor';
+import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { Column } from '@/types/uis/Column';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
+import { Input } from '@/components/ui/input';
+import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
+import Field from '@/components/layout/admin/field';
+import GoodsReceiptStatusBadge from './goods-receipt-status-badge';
+import { formatDateForInput } from '@/utils/shared/date';
+import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
-import { formatDateForInpu } from '@/utils/shared/date';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ProductSelectionGoodsReceiptModal } from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
-import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
-import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
+import { useGoodsReceiptAdminLogic } from '@/hooks/inventories/receipts/use-goods-receipt-logic';
 
-interface Props {
+interface GoodsReceiptDetailViewProps {
 	formType: AdminFormType;
 	goodsReceipt: GoodsReceiptDetail;
 }
 
-export default function GoodsReceiptDetailContainer({
+export function GoodsReceiptDetailContainer({
 	formType,
 	goodsReceipt,
-}: Props): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-
-	const isView: boolean = formType === 'view';
-	const isCreate: boolean = formType === 'create';
-
-	const [form, setForm] = useState<GoodsReceiptDetail>(goodsReceipt);
-
-	const batches = useBatchReceiptStore((s: BatchReceiptStore) => s.batches);
-	const addBatch = useBatchReceiptStore((s: BatchReceiptStore) => s.addBatch);
-	const updateBatch = useBatchReceiptStore((s: BatchReceiptStore) => s.updateBatch);
-	const generateId = useBatchReceiptStore((s: BatchReceiptStore) => s.generateId);
-	const batchItemsByBatchId = useBatchReceiptStore(
-		(s: BatchReceiptStore) => s.batchItemsByBatchId,
-	);
-
-	useEffect((): void => {
-		if (goodsReceipt.batches?.length) {
-			useBatchReceiptStore.setState({
-				batches: goodsReceipt.batches,
-			});
-		}
-	}, [goodsReceipt.batches]);
-
-	const updateReceiptField = <K extends keyof GoodsReceiptDetail>(
-		key: K,
-		value: GoodsReceiptDetail[K],
-	): void => {
-		setForm((prev: GoodsReceiptDetail) => ({ ...prev, [key]: value }));
-	};
-
-	const handleSubmit = (e: FormEvent): void => {
-		e.preventDefault();
-
-		const payload: GoodsReceiptDetail = {
-			...form,
-			batches: batches.map((batch: GoodsReceiptBatch) => ({
-				...batch,
-				items: batchItemsByBatchId[batch.id] || [],
-			})),
-		};
-
-		console.log('Submit:', payload);
-	};
-
-	const handleChange = <K extends keyof GoodsReceiptDetail>(
-		key: K,
-		value: GoodsReceiptDetail[K],
-	) => {
-		setForm((prev: GoodsReceiptDetail) => ({ ...prev, [key]: value }));
-	};
-
-	const totalQuantity: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch): number => sum + i.quantity,
-		0,
-	);
-	const totalAmount: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch): number => sum + i.totalPrice,
-		0,
-	);
-
-	const handleRedirectToBatchDetailViewMode = (batchID: number): void => {
-		router.push(`/admin/inventories/receipts/${form.id}/batches/${batchID}`);
-	};
-
-	const handleRedirectToBatchDetailCreateMode = (batchID: number): void => {
-		router.push(`/admin/inventories/receipts/${form.id}/batches/${batchID}/add-new`);
-	};
-
-	const handleProductSelection = (product: ProductForGoodsReceipt): void => {
-		const id: number = generateId();
-
-		const newBatch: GoodsReceiptBatch = {
-			id: id,
-			isNew: true,
-			productId: product.id,
-			productName: product.name,
-			batchNumber: '',
-			quantity: 1,
-			unitPrice: 0,
-			totalPrice: 0,
-			isSerialInputted: false,
-		};
-
-		addBatch(newBatch);
-	};
+}: GoodsReceiptDetailViewProps): JSX.Element {
+	const { mockProducts } = useGoodsReceiptData();
+	const {
+		form,
+		batches,
+		isView,
+		isCreate,
+		totalQuantity,
+		totalAmount,
+		updateReceiptField,
+		handleSubmit,
+		handleProductSelection,
+		handleRedirectToBatchDetail,
+		updateBatch,
+	} = useGoodsReceiptAdminLogic({ formType, goodsReceipt });
 
 	const itemColumns: Column<GoodsReceiptBatch>[] = [
-		{
-			key: 'productName',
-			header: 'Tên sản phẩm',
-		},
+		{ key: 'productName', header: 'Tên sản phẩm' },
 		{
 			key: 'batchNumber',
 			header: 'Mã lô',
@@ -127,9 +49,7 @@ export default function GoodsReceiptDetailContainer({
 					value={item.batchNumber}
 					disabled={isView}
 					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						updateBatch(item.id, {
-							batchNumber: e.target.value,
-						});
+						updateBatch(item.id, { batchNumber: e.target.value });
 					}}
 				/>
 			),
@@ -137,44 +57,16 @@ export default function GoodsReceiptDetailContainer({
 		{
 			key: 'quantity',
 			header: 'Số lượng',
-			render: (item: GoodsReceiptBatch): number | JSX.Element =>
-				isView ? (
-					item.quantity
-				) : (
-					<Input
-						type='number'
-						value={item.quantity}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-							const qty: number = Number(e.target.value);
-
-							updateBatch(item.id, {
-								quantity: qty,
-								totalPrice: qty * item.unitPrice,
-							});
-						}}
-					/>
-				),
+			render: (item: GoodsReceiptBatch): JSX.Element => (
+				<span className='text-slate-700 font-medium'>{item.quantity}</span>
+			),
 		},
 		{
 			key: 'unitPrice',
 			header: 'Đơn giá',
-			render: (item: GoodsReceiptBatch): string | JSX.Element =>
-				isView ? (
-					item.unitPrice.toLocaleString() + ' ₫'
-				) : (
-					<Input
-						type='number'
-						value={item.unitPrice}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-							const price: number = Number(e.target.value);
-
-							updateBatch(item.id, {
-								unitPrice: price,
-								totalPrice: price * item.quantity,
-							});
-						}}
-					/>
-				),
+			render: (item: GoodsReceiptBatch): JSX.Element => (
+				<span className='text-slate-700 font-medium'>{item.unitPrice}</span>
+			),
 		},
 		{
 			key: 'totalPrice',
@@ -191,9 +83,7 @@ export default function GoodsReceiptDetailContainer({
 					value={item.expiredAt || ''}
 					disabled={isView}
 					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						updateBatch(item.id, {
-							expiredAt: e.target.value,
-						});
+						updateBatch(item.id, { expiredAt: e.target.value });
 					}}
 				/>
 			),
@@ -218,7 +108,6 @@ export default function GoodsReceiptDetailContainer({
 				!isView && <Button type='submit'>{isCreate ? 'Tạo phiếu' : 'Cập nhật'}</Button>
 			}
 		>
-			{/* Info */}
 			<div className='grid grid-cols-2 gap-4 p-4 rounded-lg border shadow-sm'>
 				<Field label='Mã phiếu'>
 					<Input
@@ -238,7 +127,6 @@ export default function GoodsReceiptDetailContainer({
 
 				<Field label='Nhà cung cấp'>
 					<Input
-						key={form.supplierID}
 						value={form.supplierName}
 						disabled={isView}
 						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
@@ -250,7 +138,7 @@ export default function GoodsReceiptDetailContainer({
 				<Field label='Ngày nhập'>
 					<Input
 						type='date'
-						value={formatDateForInpu(form.importDate)}
+						value={formatDateForInput(form.importDate)}
 						disabled={isView}
 						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
 							updateReceiptField('importDate', e.target.value)
@@ -259,45 +147,38 @@ export default function GoodsReceiptDetailContainer({
 				</Field>
 			</div>
 
-			{/* ===== Note ===== */}
 			<div className='mt-4'>
 				<Field label='Ghi chú đợt nhập'>
 					<RichTextEditor
 						value={form?.note || ''}
 						disabled={isView}
-						onChange={(val: string): void => handleChange('note', val)}
+						onChange={(val: string): void => updateReceiptField('note', val)}
 					/>
 				</Field>
 			</div>
 
-			{/* ===== Items Table ===== */}
 			<div className='mt-8'>
 				<div className='flex justify-between items-center mb-4'>
 					<h2 className='font-bold text-lg'>Danh sách lô hàng chi tiết</h2>
 					{isCreate && (
 						<ProductSelectionGoodsReceiptModal
+							products={mockProducts}
 							onSelectProduct={handleProductSelection}
-							trigger={<Button className='cursor-pointer'>Thêm dòng hàng</Button>}
+							trigger={<Button className='cursor-pointer'>Thêm lô hàng mới</Button>}
 						/>
 					)}
 				</div>
 
-				{/* Goods Receipt Batch List */}
 				<DataTable<GoodsReceiptBatch>
 					data={batches}
 					columns={itemColumns}
 					getRowKey={(item: GoodsReceiptBatch): number => item.id}
 					onRowClick={(row: GoodsReceiptBatch): void => {
-						if (row.isNew) {
-							handleRedirectToBatchDetailCreateMode(row.id);
-						} else {
-							handleRedirectToBatchDetailViewMode(row.id);
-						}
+						handleRedirectToBatchDetail(row.id, row.isNew ? 'create' : 'view');
 					}}
 				/>
 			</div>
 
-			{/* ===== Summary ===== */}
 			<div className='flex justify-end gap-12 mt-8 pt-4 border-t'>
 				<div className='text-right'>
 					<p className='text-sm text-muted-foreground'>Tổng số lượng</p>

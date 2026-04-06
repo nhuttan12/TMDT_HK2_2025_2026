@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
 import { FilterField } from '@/types/uis/FilterField';
-import { useQueryFilter } from '@/hooks/use-query-filter';
+import { useQueryFilter } from '@/hooks/share/use-query-filter';
 import { Timeout } from '@radix-ui/primitive';
 
 interface Props<T> {

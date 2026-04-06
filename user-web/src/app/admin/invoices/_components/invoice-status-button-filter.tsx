@@ -1,6 +1,7 @@
 import { JSX } from 'react';
-import { getInvoiceStatusLabel, InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
+import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 import { Button } from '@/components/ui/button';
+import {getInvoiceStatusLabel} from "@/types/invoices/user/InvoiceStatusLabel";
 
 interface Props {
 	currentStatus?: InvoiceStatus | null;

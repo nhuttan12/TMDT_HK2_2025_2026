@@ -1,0 +1,1 @@
+export type PartnerType = 'customer' | 'supplier' | 'internal';

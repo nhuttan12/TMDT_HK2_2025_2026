@@ -50,7 +50,7 @@ const emptyCategory: CategoryDetailInfoAdmin = {
 };
 
 export default function CategoryAdminForm({ formType }: Props): JSX.Element {
-	const FILE_INPUT_ID = 'category-image';
+	// const FILE_INPUT_ID = 'category-image';
 	const isCreate: boolean = formType === 'create';
 	// const isUpdate: boolean = formType === 'update';
 	const isView: boolean = formType === 'view';
@@ -74,22 +74,22 @@ export default function CategoryAdminForm({ formType }: Props): JSX.Element {
 	};
 
 	// ===== IMAGE =====
-	const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (!file) return;
-
-		const image = {
-			file,
-			url: undefined,
-		};
-
-		setForm((prev) => ({
-			...prev,
-			image,
-		}));
-
-		e.target.value = '';
-	};
+	// const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
+	// 	const file = e.target.files?.[0];
+	// 	if (!file) return;
+	//
+	// 	const image = {
+	// 		file,
+	// 		url: undefined,
+	// 	};
+	//
+	// 	setForm((prev) => ({
+	// 		...prev,
+	// 		image,
+	// 	}));
+	//
+	// 	e.target.value = '';
+	// };
 
 	// const handleRemoveImage = () => {
 	// 	setForm((prev) => ({

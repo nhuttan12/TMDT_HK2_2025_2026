@@ -8,11 +8,12 @@ import InvoiceStatusButtonFilter from '@/app/admin/invoices/_components/invoice-
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { InvoiceAdminFilterValues } from '@/types/invoices/admin/InvoiceAdminFilterValues';
-import { usePagination } from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/share/use-pagination';
 import Pagination from '@/components/layout/share/pagination';
-import { getPaymentMethodLabel, PaymentMethod } from '@/types/invoices/user/PaymentMethod';
+import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { FilterField } from '@/types/uis/FilterField';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
+import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
 
 interface Props {
 	invoices: UserInvoice[];

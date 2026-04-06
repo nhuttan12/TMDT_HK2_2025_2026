@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
-import { getInvoiceStatusLabel, InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
+import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 import { JSX } from 'react';
+import {getInvoiceStatusLabel} from "@/types/invoices/user/InvoiceStatusLabel";
 
 interface Props {
 	status: InvoiceStatus;

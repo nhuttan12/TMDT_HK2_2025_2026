@@ -8,6 +8,6 @@ export function formatDate(dateString: string): string {
 	return date.toLocaleDateString('vi-VN');
 }
 
-export function formatDateForInpu(date: string): string {
+export function formatDateForInput(date: string): string {
 	return date ? date.split('T')[0] : '';
 }

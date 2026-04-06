@@ -5,8 +5,8 @@ import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmi
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
-import { useTableSort } from '@/hooks/use-table-sort';
-import { usePagination } from '@/hooks/use-pagination';
+import { useTableSort } from '@/hooks/share/use-table-sort';
+import { usePagination } from '@/hooks/share/use-pagination';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
 import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';

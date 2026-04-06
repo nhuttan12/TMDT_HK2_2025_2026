@@ -9,10 +9,10 @@ import {
 } from '@/components/ui/table';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import { JSX } from 'react';
-import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethod';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import Image from 'next/image';
 import { ShippingStatusBadge } from '@/components/invoice/shipping-status-badge';
+import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
 
 interface Props {
 	invoice: InvoiceDetail;

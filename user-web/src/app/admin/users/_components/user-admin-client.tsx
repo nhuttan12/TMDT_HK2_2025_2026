@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useTableSort } from '@/hooks/use-table-sort';
+import { useTableSort } from '@/hooks/share/use-table-sort';
 import UserAdminTable from '@/app/admin/users/_components/user-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import Pagination from '@/components/layout/share/pagination';
-import { usePagination } from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/share/use-pagination';
 
 interface Props {
 	users: UserListAdmin[];

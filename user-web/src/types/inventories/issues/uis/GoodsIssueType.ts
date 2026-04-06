@@ -1,0 +1,1 @@
+export type GoodsIssueType = 'retail' | 'wholesale' | 'return_defective';

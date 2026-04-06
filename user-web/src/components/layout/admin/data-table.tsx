@@ -90,7 +90,7 @@ export function DataTable<T extends object>({
 	return (
 		<div
 			style={{ height: `${tableHeight}px`, maxHeight: `${tableHeight}px` }}
-			className={`${overflowClass} shadow-lg rounded-sm`}
+			className={`${overflowClass} shadow-lg rounded-sm overflow-x-auto`}
 		>
 			<Table>
 				<TableHeader className='sticky top-0 bg-white z-10 border-b! border-gray-400!'>
@@ -118,7 +118,6 @@ export function DataTable<T extends object>({
 
 										col.onHeaderClick?.(e);
 									}}
-
 								>
 									<b>{col.header}</b>
 								</TableHead>

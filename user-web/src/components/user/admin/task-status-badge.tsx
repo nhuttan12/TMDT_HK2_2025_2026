@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import React, { JSX } from 'react';
-import { getTaskStatusLabel, TaskStatus } from '@/types/users/admin/TaskStatus';
+import { TaskStatus } from '@/types/users/admin/TaskStatus';
+import { getTaskStatusLabel } from '@/types/users/admin/TaskStatusLabel';
 
 interface Props {
 	status: TaskStatus;

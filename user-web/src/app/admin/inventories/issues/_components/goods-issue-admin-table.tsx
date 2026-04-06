@@ -1,17 +1,13 @@
 import { DataTable } from '@/components/layout/admin/data-table';
-import { getGoodsIssueStatusLabel } from '@/types/inventories/issues/GoodsIssueStatus';
 import { Column } from '@/types/uis/Column';
-import { JSX, useState } from 'react';
-import { GoodsIssueList } from '@/types/inventories/issues/GoodsIssueList';
-import { GoodsIssueSortField } from '@/types/inventories/issues/GoodsIssueSortField';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { JSX } from 'react';
+import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
+import { GoodsIssueSortField } from '@/types/inventories/issues/uis/GoodsIssueSortField';
+import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssueTypeLabel';
+import GoodsIssueStatusBadge from '@/app/admin/inventories/issues/_components/goods-issue-status-badge';
+import GoodsIssueActions from './goods-issue-actions';
+import useConfirmDelete from '@/hooks/share/admin/use-confirm-delete';
+import DeleteConfirmModal from '@/components/layout/admin/delete-confirm-modal';
 
 interface Props {
 	issues: GoodsIssueList[];
@@ -29,23 +25,15 @@ export default function GoodsIssueAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const [selected, setSelected] = useState<number[]>([]);
+	const { selectedItem, isOpen, openConfirm, closeConfirm } = useConfirmDelete<GoodsIssueList>();
 
-	const toggleSelect = (issueID: number): void => {
-		setSelected((prev: number[]): number[] =>
-			prev.includes(issueID)
-				? prev.filter((x: number): boolean => x !== issueID)
-				: [...prev, issueID],
-		);
-	};
-
-	const toggleSelectAll = (): void => {
-		if (selected.length === issues.length) {
-			setSelected([]);
-		} else {
-			setSelected(issues.map((i: GoodsIssueList): number => i.id));
+	function handleExecuteDelete(): void {
+		if (selectedItem) {
+			console.log('Thực hiện gọi API xóa ID:', selectedItem.id);
+			// Logic gọi API...
+			closeConfirm();
 		}
-	};
+	}
 
 	const goodsIssueColumns: Column<GoodsIssueList>[] = [
 		{
@@ -56,17 +44,24 @@ export default function GoodsIssueAdminTable({
 					{renderSortIcon('code')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('code'),
+			onHeaderClick: function (): void {
+				handleSort('code');
+			},
 		},
 		{
-			key: 'customerName',
+			key: 'type',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Khách hàng</span>
-					{renderSortIcon('customerName')}
+					<span>Loại xuất</span>
+					{renderSortIcon('type')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('customerName'),
+			onHeaderClick: function (): void {
+				handleSort('type');
+			},
+			render: function (row: GoodsIssueList): string {
+				return getGoodsIssueTypeLabel(row.type);
+			},
 		},
 		{
 			key: 'exportDate',
@@ -76,9 +71,12 @@ export default function GoodsIssueAdminTable({
 					{renderSortIcon('exportDate')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('exportDate'),
-			render: (row: GoodsIssueList): string =>
-				new Date(row.exportDate).toLocaleDateString('vi-VN'),
+			onHeaderClick: function (): void {
+				handleSort('exportDate');
+			},
+			render: function (row: GoodsIssueList): string {
+				return new Date(row.exportDate).toLocaleDateString('vi-VN');
+			},
 		},
 		{
 			key: 'totalQuantity',
@@ -88,7 +86,12 @@ export default function GoodsIssueAdminTable({
 					{renderSortIcon('totalQuantity')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('totalQuantity'),
+			onHeaderClick: function (): void {
+				handleSort('totalQuantity');
+			},
+			render: function (row: GoodsIssueList): string {
+				return row.totalQuantity.toLocaleString('vi-VN');
+			},
 		},
 		{
 			key: 'totalAmount',
@@ -98,8 +101,12 @@ export default function GoodsIssueAdminTable({
 					{renderSortIcon('totalAmount')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('totalAmount'),
-			render: (row: GoodsIssueList): string => row.totalAmount.toLocaleString('vi-VN') + ' ₫',
+			onHeaderClick: function (): void {
+				handleSort('totalAmount');
+			},
+			render: function (row: GoodsIssueList): string {
+				return row.totalAmount.toLocaleString('vi-VN') + ' ₫';
+			},
 		},
 		{
 			key: 'status',
@@ -109,77 +116,46 @@ export default function GoodsIssueAdminTable({
 					{renderSortIcon('status')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('status'),
+			onHeaderClick: (): void => {
+				handleSort('status');
+			},
 			render: (row: GoodsIssueList): React.JSX.Element => {
-				const label: string = getGoodsIssueStatusLabel(row.status);
-
-				return (
-					<span
-						className={`px-2 py-1 rounded text-sm ${
-							row.status === 'draft'
-								? 'bg-gray-200'
-								: row.status === 'confirmed'
-									? 'bg-green-200'
-									: 'bg-red-200'
-						}`}
-					>
-					{label}
-				</span>
-				);
+				return <GoodsIssueStatusBadge status={row.status} />;
 			},
 		},
 		{
 			key: 'actions',
-			header: <span className='text-right block'>Hành động</span>,
-			render: (row: GoodsIssueList): JSX.Element => (
-				<div
-					className='text-right'
-					onClick={(e) => e.stopPropagation()}
-				>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								size='icon'
-							>
-								<MoreHorizontal size={16} />
-							</Button>
-						</DropdownMenuTrigger>
-
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem onClick={() => onEdit(row.id)}>
-								<Pencil
-									size={14}
-									className='mr-2'
-								/>
-								Chỉnh sửa
-							</DropdownMenuItem>
-
-							<DropdownMenuItem className='text-red-500'>
-								<Trash
-									size={14}
-									className='mr-2'
-								/>
-								Xóa
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			),
+			header: <span className='text-right block px-4'>Hành động</span>,
+			render: (row: GoodsIssueList): JSX.Element => {
+				return (
+					<GoodsIssueActions
+						id={row.id}
+						onEdit={onEdit}
+						onDelete={(): void => {
+							openConfirm(row);
+						}}
+					/>
+				);
+			},
 		},
 	];
 
 	return (
-		<DataTable<GoodsIssueList>
-			data={issues}
-			columns={goodsIssueColumns}
-			getRowKey={(row: GoodsIssueList): number => row.id}
-			onRowClick={(row: GoodsIssueList): void => onView(row.id)}
-			selectable={{
-				selected: selected,
-				onToggle: toggleSelect,
-				onToggleAll: toggleSelectAll,
-			}}
-		/>
+		<>
+			<DataTable<GoodsIssueList>
+				data={issues}
+				columns={goodsIssueColumns}
+				getRowKey={(row: GoodsIssueList): number => row.id}
+				onRowClick={(row: GoodsIssueList): void => onView(row.id)}
+			/>
+
+			<DeleteConfirmModal
+				isOpen={isOpen}
+				title='Xác nhận xóa phiếu xuất?'
+				description={`Bạn có chắc chắn muốn xóa phiếu ${selectedItem?.code}? Hành động này không thể hoàn tác.`}
+				onClose={closeConfirm}
+				onConfirm={handleExecuteDelete}
+			/>
+		</>
 	);
 }

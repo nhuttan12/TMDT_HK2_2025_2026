@@ -44,6 +44,7 @@ const mockGoodsReceiptDetails: GoodsReceiptDetail = {
 export default function Page(): JSX.Element {
 	return (
 		<GoodsReceiptDetailContainer
+			key={'update'}
 			formType={'update'}
 			goodsReceipt={mockGoodsReceiptDetails}
 		/>

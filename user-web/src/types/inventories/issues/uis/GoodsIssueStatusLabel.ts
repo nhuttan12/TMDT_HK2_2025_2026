@@ -1,4 +1,4 @@
-export type GoodsIssueStatus = 'draft' | 'confirmed' | 'cancelled';
+import { GoodsIssueStatus } from '@/types/inventories/issues/uis/GoodsIssueStatus';
 
 const goodsIssueStatusLabel: Record<GoodsIssueStatus, string> = {
 	draft: 'Bản nháp',

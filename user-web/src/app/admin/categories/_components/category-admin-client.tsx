@@ -5,10 +5,10 @@ import { CategoryListItemAdmin } from '@/types/categories/admin/CategoryListItem
 import { useRouter } from 'next/navigation';
 import { CategoryAdminSortField } from '@/types/categories/admin/CategoryAdminSort';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useTableSort } from '@/hooks/use-table-sort';
+import { useTableSort } from '@/hooks/share/use-table-sort';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import CategoryAdminTable from '@/app/admin/categories/_components/category-admin-table';
-import { usePagination } from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/share/use-pagination';
 import Pagination from '@/components/layout/share/pagination';
 import { FilterField } from '@/types/uis/FilterField';
 import { CategoryAdminFilterValues } from '@/types/categories/admin/CategoryAdminFilterValues';
