@@ -1,0 +1,28 @@
+﻿using demo1.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace demo1.Data.Configurations
+{
+    public class UserConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<User> builder)
+        {
+            // Map to explicit table name using lower case to align with
+            // typical Postgres naming conventions.
+            builder.ToTable("users");
+
+            // Primary key configuration. UseIdentityByDefaultColumn maps
+            // to Postgres identity/serial semantics for auto-incrementing ids.
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).UseIdentityByDefaultColumn(); // Sử dụng Identity cho khóa chính
+
+            // Email is essential for user accounts; enforce required and a
+            // sensible maximum length to avoid overly large values.
+            builder.Property(e => e.Email).IsRequired().HasMaxLength(150);
+
+            // Relationship: a User belongs to a Role. Restrict deletion of
+            // a Role when users reference it to prevent accidental data loss.
+            builder.HasOne(u => u.Role).WithMany(r => r.Users).HasForeignKey(u => u.RoleId).OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+}
