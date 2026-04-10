@@ -23,7 +23,7 @@ namespace demo1.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Admin")] // Chỉ cho phép người dùng có vai trò "Admin" truy cập endpoint này
-        public async Task<ActionResult<Pagination<UserInfoDTO>>> GetAll(UserParameters query)
+        public async Task<ActionResult<Pagination<UserInfoDTO>>> GetAll([FromQuery] UserParameters query)
         {
             var users = await UserService.GetAllAsync(query);
             return Ok(users);

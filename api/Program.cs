@@ -21,6 +21,24 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
+        // Thêm định nghĩa Security cho JWT
+        var requirements = new Dictionary<string, OpenApiSecurityScheme>
+        {
+            ["Bearer"] = new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "Nhập JWT Token của bạn tại đây"
+            }
+        };
+        document.Components = new OpenApiComponents { SecuritySchemes = requirements };
+
+        // Áp dụng Security cho tất cả Endpoint
+        document.SecurityRequirements.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "Bearer", Type = ReferenceType.SecurityScheme } }] = Array.Empty<string>()
+        });
         document.Info.Title = "E-Commerce API System";
         document.Info.Version = "v1";
         document.Info.Description = "Hệ thống API quản lý cửa hàng trực tuyến";
@@ -82,11 +100,12 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(Program).Assembly);
 });
 // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API)
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
          builder => builder
-             .WithOrigins("http://localhost:3000") //TODO: Thay đổi thành URL frontend của bạn
+             .WithOrigins(allowedOrigins ?? ["http://localhost:3000"]) //TODO: Thay đổi thành URL frontend của bạn
              .AllowAnyMethod()
              .AllowAnyHeader()
              .AllowCredentials()); // BẮT BUỘC: Cho phép nhận Cookie/Credentials
@@ -123,14 +142,14 @@ if (app.Environment.IsDevelopment())
 }
 // Chuyển hướng HTTP sang HTTPS
 app.UseHttpsRedirection();
+// CORS middleware
+app.UseCors("AllowSpecificOrigin");
 // Authentication & Authorization middleware 
 // tự động kiểm tra token trong header của các request đến và xác thực người dùng dựa trên token đó
 app.UseAuthentication();
 app.UseAuthorization();
 // Global exception handling middleware
 app.UseExceptionHandler();
-// CORS middleware
-app.UseCors("AllowSpecificOrigin");
 // Map controller routes
 app.MapControllers();
 app.Run();

@@ -27,13 +27,13 @@ namespace demo1.Services.Auths
                 throw new DirectoryNotFoundException("User not found");
             if (!verifyPassword(user, password, user.PasswordHash))
                 throw new UnauthorizedAccessException("Invalid password");
-            var retk = _tokenService.GenerateToken(user, true);
+            var retk = _tokenService.GenerateToken(user, false);
             // TODO: Save the refresh token to the database
             //_context.RefreshTokens.Add(new RefreshToken { token = retk });
             //await _context.SaveChangesAsync();
             var res = new TokenResponse
             {
-                AccessToken = _tokenService.GenerateToken(user, false),
+                AccessToken = _tokenService.GenerateToken(user, true),
                 RefreshToken = retk
             };
 
