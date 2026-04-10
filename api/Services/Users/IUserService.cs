@@ -1,4 +1,6 @@
-﻿using demo1.Dtos.Users.Requests;
+﻿using api.Models.Utilities;
+using demo1.Controllers;
+using demo1.Dtos.Users.Requests;
 using demo1.Dtos.Users.Responses;
 
 namespace demo1.Services.Users
@@ -9,7 +11,7 @@ namespace demo1.Services.Users
         public Task<UserInfoDTO> UpdateAsync(int id, UserUpdateDto userUpdateDto);
         public Task<UserInfoDTO?> GetByIdAsync(int id);
         public ValueTask<bool> IsExistByUserNameAsync(string username);
-        public Task<List<UserInfoDTO>> GetAllAsync();
+        public Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query);
         public Task GetUserByRefreshTokenAsync(string refreshToken);
     }
 }

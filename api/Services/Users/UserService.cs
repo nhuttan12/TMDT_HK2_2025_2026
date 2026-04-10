@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using api.Models.Utilities;
+using AutoMapper;
+using demo1.Controllers;
 using demo1.Data;
 using demo1.Dtos.Users.Requests;
 using demo1.Dtos.Users.Responses;
@@ -40,9 +42,36 @@ namespace demo1.Services.Users
             return _mapper.Map<UserInfoDTO>(user);
         }
 
-        public Task<List<UserInfoDTO>> GetAllAsync()
+        public async Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query)
         {
-            throw new NotImplementedException();
+            if (query.PageNumber <= 0 || query.PageSize <= 0)
+            {
+                throw new BadRequestException("PageNumber and PageSize must be greater than 0.");
+            }
+            // trả về 1 truy vấn trì hoãn để có thể áp dụng các câu lệnh query khác như skip và take.
+            // trước khi thực hiện truy vấn cơ sở dữ liệu bằng câu lệnh TolistAsync(),...
+            var usersQuery = _context.Users.AsNoTracking().AsQueryable();
+            var totalUsers = await _context.Users.CountAsync();
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+
+            if (skip > 0)
+            {
+                usersQuery = usersQuery.Skip(skip);
+            }
+            var users = await usersQuery.Take(query.PageSize).ToListAsync();
+            if (users == null || users.Count == 0)
+            {
+                throw new NotFoundException("No users found.");
+            }
+            Pagination<UserInfoDTO> res = new(_mapper.Map<IEnumerable<UserInfoDTO>>(users), users.Count, query.PageNumber, query.PageSize)
+            {
+                Items = _mapper.Map<IEnumerable<UserInfoDTO>>(users),
+                TotalItems = totalUsers,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+            };
+            return res;
         }
 
         public async Task<UserInfoDTO?> GetByIdAsync(int id)
@@ -66,4 +95,5 @@ namespace demo1.Services.Users
             throw new NotImplementedException();
         }
     }
+
 }

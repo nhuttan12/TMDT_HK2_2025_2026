@@ -14,7 +14,6 @@ namespace demo1.Controllers
             SetRefreshTokenCookie(token.RefreshToken);
             return Ok(token.AccessToken);
         }
-
         [HttpDelete("logout")]
         public IActionResult Logout()
         {
