@@ -15,19 +15,13 @@ namespace demo1.Controllers
             return Ok(token.AccessToken);
         }
 
-        private void SetRefreshTokenCookie(string refreshToken)
+        [HttpDelete("logout")]
+        public IActionResult Logout()
         {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,        // Quan trọng: JavaScript không thể truy cập
-                Secure = true,          // Chỉ gửi qua HTTPS
-                SameSite = SameSiteMode.Strict, // Chống tấn công CSRF
-                Expires = DateTime.UtcNow.AddDays(_config.GetValue<int>("RefreshTokenExpirationDays"))
-            };
-
-            // "refreshToken" là tên của Cookie
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            Response.Cookies.Delete("refreshToken");
+            return NoContent();
         }
+
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
@@ -44,6 +38,20 @@ namespace demo1.Controllers
             return Ok(newAccessToken.AccessToken);
 
         }
+        private void SetRefreshTokenCookie(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,        // Quan trọng: JavaScript không thể truy cập
+                Secure = true,          // Chỉ gửi qua HTTPS
+                SameSite = SameSiteMode.Strict, // Chống tấn công CSRF
+                Expires = DateTime.UtcNow.AddDays(_config.GetValue<int>("RefreshTokenExpirationDays"))
+            };
+
+            // "refreshToken" là tên của Cookie
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        }
+
     }
 
     public record LoginRequest(string Username, string Password);
