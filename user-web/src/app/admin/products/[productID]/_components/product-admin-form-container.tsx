@@ -88,12 +88,18 @@ export default function ProductAdminFormContainer({
 		setForm((prev: ProductDetailInfoAdmin) => ({ ...prev, description: val }));
 	};
 
-	const handleRedirectToProductVariantDetail = (variantID: number) => {
-		router.push(`/admin/products/${form.id}/variant/${variantID}`);
+	const handleRedirectToProductVariantDetail = (variantId: number) => {
+		router.push(`/admin/products/${form.id}/variant/${variantId}`);
 	};
 
 	const handleAddNewVariant = () => {
 		router.push(`/admin/products/${form.id}/variant/add-new`);
+	};
+
+	const handleDeleteVariant = (variantId: number): void => {};
+
+	const handleEditVariant = (variantId: number): void => {
+		router.push(`/admin/products/${form.id}/variant/edit/${variantId}`);
 	};
 
 	return (
@@ -114,6 +120,8 @@ export default function ProductAdminFormContainer({
 			onSubmit={handleSubmit}
 			onVariantClick={handleRedirectToProductVariantDetail}
 			onAddVariant={handleAddNewVariant}
+			onDeleteVariant={handleDeleteVariant}
+			onEditVariant={handleEditVariant}
 		/>
 	);
 }

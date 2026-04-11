@@ -28,6 +28,7 @@ async function getVariant(id: string): Promise<ProductVariantDetail> {
 			salePrice: 100000,
 			costPrice: 70000,
 		},
+		supplierName: 'Công ty ABC',
 		inventory: {
 			available: 50,
 			reserved: 5,

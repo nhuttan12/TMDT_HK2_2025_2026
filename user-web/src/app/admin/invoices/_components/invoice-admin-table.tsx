@@ -15,7 +15,7 @@ import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
-import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
+import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethodLabel';
 
 interface Props {
 	invoices: UserInvoice[];
@@ -39,22 +39,22 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 		{
 			key: 'id',
 			header: 'ID',
-			render: (row) => `#${row.id}`,
+			render: (row: UserInvoice): string => `#${row.id}`,
 		},
 		{
 			key: 'createdAt',
 			header: 'Ngày tạo',
-			render: (row) => new Date(row.createdAt).toLocaleDateString(),
+			render: (row: UserInvoice): string => new Date(row.createdAt).toLocaleDateString(),
 		},
 		{
 			key: 'status',
 			header: 'Trạng thái',
-			render: (row) => <InvoiceStatusBadge status={row.status} />,
+			render: (row: UserInvoice): JSX.Element => <InvoiceStatusBadge status={row.status} />,
 		},
 		{
 			key: 'paymentMethod',
 			header: 'Thanh toán',
-			render: (row) => getPaymentMethodLabel(row.paymentMethod as PaymentMethod),
+			render: (row: UserInvoice): string => getPaymentMethodLabel(row.paymentMethod as PaymentMethod),
 		},
 		{
 			key: 'totalItems',
@@ -63,25 +63,27 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 		{
 			key: 'totalAmount',
 			header: 'Tổng tiền',
-			render: (row) => `${row.totalAmount.toLocaleString()} đ`,
+			render: (row: UserInvoice): string => `${row.totalAmount.toLocaleString()} đ`,
 		},
 		{
 			key: 'actions',
 			header: 'Hành động',
-			render: (row) => (
+			render: (row: UserInvoice): JSX.Element => (
 				<Select
 					defaultValue={row.status}
-					onValueChange={(value) => changeStatus(row.id, value as InvoiceStatus)}
+					onValueChange={(value: string): void =>
+						changeStatus(row.id, value as InvoiceStatus)
+					}
 				>
 					<SelectTrigger
-						className='w-[160px]'
-						onClick={(e) => e.stopPropagation()}
+						className='w-40'
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => e.stopPropagation()}
 					>
 						<SelectValue />
 					</SelectTrigger>
 
 					<SelectContent>
-						{row.status === 'PENDING_APPROVAL' ? (
+						{row.status === 'pending_approval' ? (
 							<>
 								<SelectItem value='APPROVE'>Duyệt đơn</SelectItem>
 								<SelectItem value='CANCEL'>Huỷ đơn</SelectItem>

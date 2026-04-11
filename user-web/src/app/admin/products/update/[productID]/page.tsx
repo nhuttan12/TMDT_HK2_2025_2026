@@ -119,6 +119,8 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 	brand: 'Apple',
 	description: 'Phiên bản cao cấp nhất của iPhone 15 series.',
 
+	supplierName: 'Apple',
+
 	importPrice: 30000000,
 	discount: calculateDiscount(34990000, 30000000),
 

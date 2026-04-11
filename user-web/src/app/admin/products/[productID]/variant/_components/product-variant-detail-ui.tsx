@@ -39,7 +39,7 @@ export default function ProductVariantDetailUI({
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;
 
-		setForm((prev) => ({
+		setForm((prev: ProductVariantDetail) => ({
 			...prev,
 			[name]: value,
 		}));
@@ -75,6 +75,15 @@ export default function ProductVariantDetailUI({
 				<Input
 					name='sku'
 					value={form.sku}
+					onChange={handleInputChange}
+					disabled={disabled}
+				/>
+			</Field>
+
+			<Field label='Nhà cung cấp'>
+				<Input
+					name='supplier'
+					value={form.supplierName}
 					onChange={handleInputChange}
 					disabled={disabled}
 				/>

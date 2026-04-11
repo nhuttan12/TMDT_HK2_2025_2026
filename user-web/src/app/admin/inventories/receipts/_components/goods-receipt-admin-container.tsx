@@ -26,8 +26,8 @@ import { useGoodsReceiptExcel } from '@/hooks/inventories/receipts/use-goods-rec
 import { useGoodsReceiptNavigation } from '@/hooks/inventories/receipts/use-goods-receipt-navigation';
 
 const suppliers: FilterSupplier[] = [
-	{ id: 1, code: 'NCC01', name: 'ABC' },
-	{ id: 2, code: 'NCC02', name: 'XYZ' },
+	{ id: 1, name: 'ABC' },
+	{ id: 2, name: 'XYZ' },
 ];
 
 const receiptFilterFields: FilterField<ReceiptAdminFilterValues>[] = [

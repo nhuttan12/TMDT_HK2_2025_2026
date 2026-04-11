@@ -117,6 +117,9 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 	name: 'iPhone 15 Pro Max 256GB',
 	slug: 'iphone-15-pro-max-256gb',
 	brand: 'Apple',
+
+	supplierName: 'Apple',
+
 	description: 'Phiên bản cao cấp nhất của iPhone 15 series.',
 
 	importPrice: 30000000,

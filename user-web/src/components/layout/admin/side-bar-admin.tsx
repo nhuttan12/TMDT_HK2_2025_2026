@@ -157,20 +157,9 @@ const sidebarData: SidebarItemInterface[] = [
 		],
 	},
 	{
-		title: 'Cá nhân',
+		title: 'Thông tin cá nhân',
+		href: '/admin/me/profile',
 		icon: <User size={18} />,
-		children: [
-			{
-				title: 'Thông tin cá nhân',
-				href: '/admin/me/profile',
-				icon: <IdCard size={18} />,
-			},
-			{
-				title: 'Nhiệm vụ trong ngày',
-				href: '/admin/me/today-tasks',
-				icon: <CheckCircle2 size={18} />,
-			},
-		],
 	},
 	{
 		title: 'Cài đặt',

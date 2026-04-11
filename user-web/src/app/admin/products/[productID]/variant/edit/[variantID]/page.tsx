@@ -33,6 +33,7 @@ async function getVariant(id: string): Promise<ProductVariantDetail> {
 			reserved: 5,
 			incoming: 10,
 		},
+		supplierName: 'Công ty ABC',
 		shipping: {
 			weightInGram: 200,
 			dimensionsInCm: {

@@ -1,9 +1,12 @@
-'use client'
+'use client';
 
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
 import { JSX } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { HelpCircle } from 'lucide-react';
+import AdminTableHeader from '@/components/layout/admin/admin-table-header';
+import { ProductInStockFilterValues } from '@/types/inventories/stocks/ProductInStockFilterValues';
+import { FilterField } from '@/types/uis/FilterField';
 
 interface GoodsStockOverviewProps {
 	goodsStockSummary: GoodsStockSummaryItem[];
@@ -12,11 +15,75 @@ interface GoodsStockOverviewProps {
 export default function GoodsStockOverview({
 	goodsStockSummary,
 }: GoodsStockOverviewProps): JSX.Element {
+	const productInStockFilterFields: FilterField<ProductInStockFilterValues>[] = [
+		{
+			key: 'name',
+			label: 'Tên sản phẩm',
+			type: 'text',
+		},
+		{
+			key: 'variantSku',
+			label: 'Mã SKU',
+			type: 'text',
+		},
+		{
+			key: 'supplierName',
+			label: 'Nhà cung cấp',
+			type: 'text',
+		},
+		{
+			key: 'replenishment',
+			label: 'Mức độ bổ sung hàng',
+			type: 'select',
+			options: [
+				{ label: 'Bổ sung ngay (Hết hàng)', value: 'immediate' },
+				{ label: 'Sắp hết hàng', value: 'early' },
+				{ label: 'Bình thường', value: 'normal' },
+			],
+		},
+		{
+			key: 'minStock',
+			label: 'Tồn kho tối thiểu',
+			type: 'number',
+		},
+		{
+			key: 'maxStock',
+			label: 'Tồn kho tối đa',
+			type: 'number',
+		},
+		{
+			key: 'minSales7d',
+			label: 'Đã bán 7 ngày (tối thiểu)',
+			type: 'number',
+		},
+		{
+			key: 'maxSales7d',
+			label: 'Đã bán 7 ngày (tối đa)',
+			type: 'number',
+		},
+		{
+			key: 'minSales30d',
+			label: 'Đã bán 30 ngày (tối thiểu)',
+			type: 'number',
+		},
+		{
+			key: 'maxSales30d',
+			label: 'Đã bán 30 ngày (tối đa)',
+			type: 'number',
+		},
+	];
+
 	return (
-		<div className='w-full rounded-lg border bg-white shadow-sm overflow-hidden'>
+		<div className='space-y-4'>
 			{/* Phần Header */}
 			<div className='flex items-baseline gap-2 px-6 py-4 border-b bg-white'>
-				<h2 className='text-lg font-semibold text-slate-900'>Tổng quan tồn kho</h2>
+				<AdminTableHeader<ProductInStockFilterValues>
+					title='Tổng quan tồn kho'
+					description='Quản lý thông tin số lượng tồn kho của từng sản phẩm biến thể'
+					searchPlaceholder='Tìm theo tên biến thể'
+					filter
+					filterField={productInStockFilterFields}
+				/>
 			</div>
 
 			{/* Phần Nội dung: Dùng grid chia 5 cột và divide-x để tạo đường kẻ dọc */}

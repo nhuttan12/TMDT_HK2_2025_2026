@@ -10,9 +10,11 @@ import { usePagination } from '@/hooks/share/use-pagination';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
 import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
+import { useProductInStockData } from '@/hooks/inventories/stocks/use-product-in-stock-data';
+import { useProductListInfoAdmin } from '@/hooks/products/admin/use-product-list-info-admin';
 
 interface Props {
-	products: ProductListInfoAdmin[];
+	initialProducts: ProductListInfoAdmin[];
 }
 
 const productFilterSchema: FilterField<ProductAdminFilterValues>[] = [
@@ -42,11 +44,20 @@ const productFilterSchema: FilterField<ProductAdminFilterValues>[] = [
 	{ key: 'updatedTo', label: 'Đến ngày chỉnh sửa', type: 'date', gridSpan: 1 },
 ];
 
-export default function ProductAdminContainer({ products }: Props): JSX.Element {
+export default function ProductAdminContainer({ initialProducts }: Props): JSX.Element {
+	const { data: products, isLoading: isProductsLoading } =
+		useProductListInfoAdmin(initialProducts);
+
 	const router: AppRouterInstance = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<ProductAdminSortField>();
 	const { currentPage, changePage } = usePagination();
+
+	const isPageLoading: boolean = isProductsLoading;
+
+	if (isPageLoading && !products) {
+		return <div className='p-4 text-gray-500'>Đang tải dữ liệu...</div>;
+	}
 
 	const handleRedirectToAddNewProduct = () => {
 		router.push('/admin/products/add-new');
@@ -56,13 +67,13 @@ export default function ProductAdminContainer({ products }: Props): JSX.Element 
 		router.push(`/admin/products/${productId}`);
 	};
 
-	const handleRedirectToEditProductEditMode = (userId: number) => {
-		router.push(`/admin/products/update/${userId}`);
+	const handleRedirectToEditProductEditMode = (productId: number) => {
+		router.push(`/admin/products/update/${productId}`);
 	};
 
 	return (
 		<ProductAdminUi
-			products={products}
+			products={initialProducts}
 			currentPage={currentPage}
 			onPageChange={changePage}
 			onSort={handleSort}

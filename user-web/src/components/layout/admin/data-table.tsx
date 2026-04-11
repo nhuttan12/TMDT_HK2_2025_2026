@@ -105,8 +105,6 @@ export function DataTable<T extends object>({
 									onClick={(e: React.MouseEvent<HTMLTableCellElement>): void => {
 										const target = e.target as HTMLElement;
 
-										if (e.currentTarget !== e.target) return;
-
 										if (
 											target.closest('button') ||
 											target.closest('input') ||

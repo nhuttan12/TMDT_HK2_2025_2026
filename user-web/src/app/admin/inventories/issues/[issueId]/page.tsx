@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 const mockGoodsIssueItems: GoodsIssueDetail = {
 	id: 1,
 	code: 'PXK-20260403-001',
-	type: 'WHOLESALE', // Loại bán sỉ
+	type: 'wholesale', // Loại bán sỉ
 	partner: {
 		id: 50,
 		name: 'Công ty Công nghệ số ABC',
-		type: 'CUSTOMER',
+		type: 'customer',
 		phoneNumber: '02838445566',
 		address: '123 Đường số 7, Phường Linh Trung, Thủ Đức, TP.HCM',
 	},

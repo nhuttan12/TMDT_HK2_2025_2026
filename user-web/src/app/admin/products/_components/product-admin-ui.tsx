@@ -23,6 +23,9 @@ interface Props {
 	onEdit: (id: number) => void;
 
 	filterSchema: FilterField<ProductAdminFilterValues>[];
+
+	customTitle?: string;
+	customDescription?: string;
 }
 
 export default function ProductAdminUi({
@@ -35,13 +38,15 @@ export default function ProductAdminUi({
 	onView,
 	onEdit,
 	filterSchema,
+	customTitle,
+	customDescription,
 }: Props): JSX.Element {
 	return (
 		<div className='space-y-4'>
 			{/* Header */}
 			<AdminTableHeader<ProductAdminFilterValues>
-				title='Quản lý sản phẩm'
-				description='Quản lý toàn bộ sản phẩm trong hệ thống'
+				title={customTitle || 'Quản lý sản phẩm'}
+				description={customDescription || 'Quản lý toàn bộ sản phẩm trong hệ thống'}
 				searchPlaceholder='Tìm sản phẩm...'
 				searchKey='name'
 				addLabel='+ Thêm sản phẩm'

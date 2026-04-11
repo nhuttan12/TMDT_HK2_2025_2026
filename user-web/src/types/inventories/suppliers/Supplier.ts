@@ -5,12 +5,7 @@ export interface Supplier extends BaseSupplier {
 	phone?: string;
 	email?: string;
 
-	address?: string;
+	address: string;
 
-	taxCode?: string; // mã số thuế
-
-	isActive: boolean;
-
-	createdAt: string;
-	updatedAt: string;
+	taxCode: string;
 }
