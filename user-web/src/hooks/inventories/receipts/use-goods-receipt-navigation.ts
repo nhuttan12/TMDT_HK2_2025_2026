@@ -1,3 +1,5 @@
+'use client';
+
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';

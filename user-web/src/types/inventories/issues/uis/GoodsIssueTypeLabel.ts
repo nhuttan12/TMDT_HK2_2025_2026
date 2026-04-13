@@ -1,9 +1,9 @@
 import { GoodsIssueType } from './GoodsIssueType';
 
 const GOODS_ISSUE_TYPE_LABEL: Record<GoodsIssueType, string> = {
-	RETAIL: 'Bán lẻ',
-	WHOLESALE: 'Bán sỉ',
-	RETURN_DEFECTIVE: 'Trả hàng hỏng',
+	retail: 'Bán lẻ',
+	wholesale: 'Bán sỉ',
+	return_defective: 'Trả hàng hỏng',
 };
 
 export function getGoodsIssueTypeLabel(type: GoodsIssueType): string {

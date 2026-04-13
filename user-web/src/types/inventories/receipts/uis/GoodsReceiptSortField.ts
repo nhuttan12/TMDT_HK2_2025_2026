@@ -6,4 +6,4 @@ export type GoodsReceiptSortField =
 	| 'totalQuantity'
 	| 'totalAmount'
 	| 'status'
-	| 'createdByName';
+	| 'createdAt';

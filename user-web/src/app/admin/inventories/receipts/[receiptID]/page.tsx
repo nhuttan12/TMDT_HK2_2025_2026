@@ -1,7 +1,9 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import GoodsReceiptDetailContainer from '@/app/admin/inventories/receipts/_components/goods-receipt-detail-container';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
+import {
+	GoodsReceiptDetailContainer
+} from '@/app/admin/inventories/receipts/_components/goods-receipt-detail-container';
 
 export const metadata: Metadata = {
 	title: 'Thông tin chi tiết đơn nhập kho',

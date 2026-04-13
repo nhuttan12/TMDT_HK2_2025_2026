@@ -16,6 +16,8 @@ import Image from 'next/image';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import Field from '@/components/layout/admin/field';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Props {
 	form: ProductDetailInfoAdmin;
@@ -173,49 +175,46 @@ export default function ProductAdminFormUI({
 				}
 			>
 				{/* Name */}
-				<div className='space-y-2'>
-					<Label>Tên sản phẩm</Label>
+				<Field label='Tên sản phẩm'>
 					<Input
 						name='name'
 						value={form.name}
 						onChange={onInputChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
-				{/* Brand */}
-				<div className='space-y-2'>
-					<Label>Thương hiệu</Label>
+				{/* Category */}
+				<Field label='Danh mục'>
 					<Input
-						name='brand'
-						value={form.brand}
+						type='number'
+						name='categoryId'
+						value={form.categoryId}
 						onChange={onInputChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
-				{/* Brand */}
-				<div className='space-y-2'>
-					<Label>Nhà cung cấp</Label>
+				{/* Supplier */}
+				<Field label='Nhà cung cấp'>
 					<Input
 						name='supplier'
 						value={form.supplierName}
 						onChange={onInputChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
 				{/* Description */}
-				<div className='space-y-2'>
-					<Label>Mô tả</Label>
+				<Field label='Mô tả'>
 					<RichTextEditor
 						value={form.description}
 						onChange={onDescriptionChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
-				{/* Status */}
+				{/* Status - Giữ nguyên layout ngang */}
 				{isUpdate && (
 					<div className='flex items-center gap-3'>
 						<Switch
@@ -227,19 +226,17 @@ export default function ProductAdminFormUI({
 				)}
 
 				{/* Sale price */}
-				<div className='space-y-2'>
-					<Label>Giá bán</Label>
+				<Field label='Giá bán'>
 					<Input
 						type='number'
 						name='salePrice'
 						onChange={onInputChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
 				{/* Import price */}
-				<div className='space-y-2'>
-					<Label>Giá nhập</Label>
+				<Field label='Giá nhập'>
 					<Input
 						type='number'
 						name='importPrice'
@@ -247,11 +244,10 @@ export default function ProductAdminFormUI({
 						onChange={onInputChange}
 						disabled={disabled}
 					/>
-				</div>
+				</Field>
 
 				{/* Discount */}
-				<div className='space-y-2'>
-					<Label>Giảm giá</Label>
+				<Field label='Giảm giá'>
 					<Input
 						type='number'
 						name='discount'
@@ -259,62 +255,48 @@ export default function ProductAdminFormUI({
 						onChange={onInputChange}
 						disabled
 					/>
-				</div>
-
-				{/* Category */}
-				<div className='space-y-2'>
-					<Label>Danh mục</Label>
-					<Input
-						type='number'
-						name='categoryId'
-						value={form.categoryId}
-						onChange={onInputChange}
-						disabled={disabled}
-					/>
-				</div>
+				</Field>
 
 				{/* Images */}
-				<div className='space-y-4'>
-					<Label>Hình ảnh</Label>
+				<Field label='Hình ảnh'>
 					<MultiImageUpload
 						value={form.images}
 						onChange={onImagesChange}
 						disabled={disabled}
 					/>
-				</div>
-				<div className='mt-8'>
-					<div className='flex justify-between items-center mb-4'>
-						<h2 className='font-bold text-lg'>Danh sách biến thể sản phẩm</h2>
+				</Field>
 
-						<Button
-							onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
-								e.preventDefault();
-								onAddVariant();
-							}}
-							className='cursor-pointer'
-						>
-							Thêm biến thể
-						</Button>
-					</div>
+				<div className='flex justify-between items-center mb-4'>
+					<h2 className='font-bold text-lg'>Danh sách biến thể sản phẩm</h2>
 
-					{/* Product Variant List */}
-					{!isCreate && productVariants && (
-						<DataTable
-							data={productVariants}
-							columns={productVariantColumns}
-							stickyHeader={false}
-							getRowKey={(row: ProductVariant): number => row.id}
-							onRowClick={(row: ProductVariant): void => onVariantClick(row.id)}
-							selectable={{
-								selected,
-								onToggle,
-								onToggleAll,
-								isAllSelected,
-								isIndeterminate,
-							}}
-						/>
-					)}
+					<Button
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+							e.preventDefault();
+							onAddVariant();
+						}}
+						className='cursor-pointer'
+					>
+						Thêm biến thể
+					</Button>
 				</div>
+
+				{/* Product Variant List */}
+				{!isCreate && productVariants && (
+					<DataTable
+						data={productVariants}
+						columns={productVariantColumns}
+						stickyHeader={false}
+						getRowKey={(row: ProductVariant): number => row.id}
+						onRowClick={(row: ProductVariant): void => onVariantClick(row.id)}
+						selectable={{
+							selected,
+							onToggle,
+							onToggleAll,
+							isAllSelected,
+							isIndeterminate,
+						}}
+					/>
+				)}
 			</AdminFormWrapper>
 
 			{/* Modal Xác Nhận */}

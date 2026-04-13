@@ -15,7 +15,7 @@ import {
 	Package,
 	Settings,
 	Shield,
-	ShoppingCart,
+	ShoppingCart, Store,
 	Tag,
 	TicketPercent,
 	Truck,
@@ -96,25 +96,30 @@ const sidebarData: SidebarItemInterface[] = [
 				icon: <Users size={18} />,
 			},
 			{
+				title: 'Cửa hàng',
+				href: '/admin/users/shops',
+				icon: <Store size={18} />,
+			},
+			{
 				title: 'Nhắn tin với khách hàng',
 				href: '/admin/users/customers/messages',
 				icon: <MessageCircle size={18} />,
 			},
-			{
-				title: 'Nhân viên',
-				href: '/admin/users/staffs',
-				icon: <UserCog size={18} />,
-			},
-			{
-				title: 'Phân quyền nhân viên',
-				href: '/admin/users/roles',
-				icon: <Shield size={18} />,
-			},
-			{
-				title: 'Nhiệm vụ phân công',
-				href: '/admin/users/tasks',
-				icon: <ClipboardList size={18} />,
-			},
+			// {
+			// 	title: 'Nhân viên',
+			// 	href: '/admin/users/staffs',
+			// 	icon: <UserCog size={18} />,
+			// },
+			// {
+			// 	title: 'Phân quyền nhân viên',
+			// 	href: '/admin/users/roles',
+			// 	icon: <Shield size={18} />,
+			// },
+			// {
+			// 	title: 'Nhiệm vụ phân công',
+			// 	href: '/admin/users/tasks',
+			// 	icon: <ClipboardList size={18} />,
+			// },
 		],
 	},
 	{
@@ -156,10 +161,15 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 		],
 	},
+	// {
+	// 	title: 'Thông tin cá nhân',
+	// 	href: '/admin/me/profile',
+	// 	icon: <User size={18} />,
+	// },
 	{
-		title: 'Thông tin cá nhân',
-		href: '/admin/me/profile',
-		icon: <User size={18} />,
+		title: 'Thông tin cửa hàng',
+		href: '/admin/store-info',
+		icon: <Store size={18} />,
 	},
 	{
 		title: 'Cài đặt',

@@ -1,3 +1,5 @@
+'use client';
+
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { useGoodsReceiptForm } from './use-goods-receipt-form';

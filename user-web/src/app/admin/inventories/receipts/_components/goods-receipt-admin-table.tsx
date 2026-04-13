@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 
 interface Props {
 	receipts: GoodsReceiptList[];
@@ -59,8 +60,7 @@ export default function GoodsReceiptAdminTable({
 				</div>
 			),
 			onHeaderClick: (): void => handleSort('importDate'),
-			render: (row: GoodsReceiptList): string =>
-				new Date(row.importDate).toLocaleDateString('vi-VN'),
+			render: (row: GoodsReceiptList): string => formatDateTimeWithBrackets(row.importDate),
 		},
 		{
 			key: 'totalBatches',
@@ -122,14 +122,15 @@ export default function GoodsReceiptAdminTable({
 			},
 		},
 		{
-			key: 'createdByName',
+			key: 'createdAt',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Người tạo</span>
-					{renderSortIcon('createdByName')}
+					<span>Ngày tạo</span>
+					{renderSortIcon('createdAt')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('createdByName'),
+			onHeaderClick: (): void => handleSort('createdAt'),
+			render: (row: GoodsReceiptList): string => formatDateTimeWithBrackets(row.createdAt),
 		},
 		{
 			key: 'actions',

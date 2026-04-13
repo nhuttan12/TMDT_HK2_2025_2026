@@ -1,3 +1,5 @@
+'use client'
+
 import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';

@@ -4,7 +4,6 @@ import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 export interface ProductFormState extends BaseProduct {
 	id: number;
 	images: SortableImageForm[];
-	brand: string;
 	description: string;
 	importPrice: number;
 	discount?: number;

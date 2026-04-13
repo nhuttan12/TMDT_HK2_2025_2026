@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { useGoodsReceiptData } from '@/hooks/inventories/receipts/use-goods-receipt-data';
 import { ChangeEvent, JSX } from 'react';

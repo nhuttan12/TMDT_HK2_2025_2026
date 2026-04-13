@@ -116,7 +116,6 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 	id: 1,
 	name: 'iPhone 15 Pro Max 256GB',
 	slug: 'iphone-15-pro-max-256gb',
-	brand: 'Apple',
 
 	supplierName: 'Apple',
 

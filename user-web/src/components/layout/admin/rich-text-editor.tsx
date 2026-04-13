@@ -17,6 +17,8 @@ export default function RichTextEditor({
 	onChange,
 	disabled = false,
 }: Props): JSX.Element | null {
+	const editorHeightClass = disabled ? 'min-h-0' : 'min-h-[300px]';
+
 	const editor: Editor | null = useEditor({
 		extensions: [StarterKit, Underline],
 		content: value,
@@ -26,7 +28,7 @@ export default function RichTextEditor({
 		},
 		editorProps: {
 			attributes: {
-				class: 'prose max-w-none focus:outline-none min-h-[300px]',
+				class: `prose max-w-none focus:outline-none ${editorHeightClass}`,
 			},
 		},
 	});

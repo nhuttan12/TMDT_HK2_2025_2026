@@ -8,6 +8,7 @@ import GoodsIssueStatusBadge from '@/app/admin/inventories/issues/_components/go
 import GoodsIssueActions from './goods-issue-actions';
 import useConfirmDelete from '@/hooks/share/admin/use-confirm-delete';
 import DeleteConfirmModal from '@/components/layout/admin/delete-confirm-modal';
+import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 
 interface Props {
 	issues: GoodsIssueList[];
@@ -74,9 +75,7 @@ export default function GoodsIssueAdminTable({
 			onHeaderClick: function (): void {
 				handleSort('exportDate');
 			},
-			render: function (row: GoodsIssueList): string {
-				return new Date(row.exportDate).toLocaleDateString('vi-VN');
-			},
+			render: (row: GoodsIssueList): string => formatDateTimeWithBrackets(row.exportDate),
 		},
 		{
 			key: 'totalQuantity',
@@ -107,6 +106,19 @@ export default function GoodsIssueAdminTable({
 			render: function (row: GoodsIssueList): string {
 				return row.totalAmount.toLocaleString('vi-VN') + ' ₫';
 			},
+		},
+		{
+			key: 'createdAt',
+			header: (
+				<div className='flex items-center gap-1 cursor-pointer select-none'>
+					<span>Ngày tạo</span>
+					{renderSortIcon('createdAt')}
+				</div>
+			),
+			onHeaderClick: function (): void {
+				handleSort('createdAt');
+			},
+			render: (row: GoodsIssueList): string => formatDateTimeWithBrackets(row.createdAt),
 		},
 		{
 			key: 'status',

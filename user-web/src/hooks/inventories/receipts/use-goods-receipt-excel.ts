@@ -1,3 +1,5 @@
+'use client'
+
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { useState } from 'react';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
