@@ -2,7 +2,7 @@ import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSumm
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { fetchGoodsStockSummary } from '@/services/inventories/stocks/goods-stock-service';
 
-export function useGoodsStockSummaryData(
+export function useGoodsStockSummaryQuery(
 	initialData?: GoodsStockSummaryItem[],
 ): UseQueryResult<GoodsStockSummaryItem[], Error> {
 	return useQuery({

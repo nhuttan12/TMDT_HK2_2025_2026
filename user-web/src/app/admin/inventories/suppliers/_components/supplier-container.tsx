@@ -8,7 +8,7 @@ import Pagination from '@/components/layout/share/pagination';
 import { usePagination } from '@/hooks/share/use-pagination';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useGoodsSupplierData } from '@/hooks/inventories/suppliers/use-goods-supplier-data';
+import { useGoodsSupplierQuery } from '@/queries/suppliers/use-goods-supplier-query';
 
 interface SuppliersContainerProps {
 	initialSuppliers: Supplier[];
@@ -17,7 +17,7 @@ interface SuppliersContainerProps {
 export default function SuppliersContainer({
 	initialSuppliers,
 }: SuppliersContainerProps): JSX.Element {
-	const { data: goods, isLoading: isProductsLoading } = useGoodsSupplierData(initialSuppliers);
+	const { data: goods, isLoading: isProductsLoading } = useGoodsSupplierQuery(initialSuppliers);
 
 	const router: AppRouterInstance = useRouter();
 	const { currentPage, changePage } = usePagination();

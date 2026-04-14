@@ -10,7 +10,7 @@ import { usePagination } from '@/hooks/share/use-pagination';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
 import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
-import { useProductInStockData } from '@/hooks/inventories/stocks/use-product-in-stock-data';
+import { useProductInStockQuery } from '@/queries/stocks/use-product-in-stock-query';
 import { useProductListInfoAdmin } from '@/hooks/products/admin/use-product-list-info-admin';
 
 interface Props {

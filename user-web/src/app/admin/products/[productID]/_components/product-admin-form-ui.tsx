@@ -6,7 +6,6 @@ import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { Column } from '@/types/uis/Column';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { Switch } from '@/components/ui/switch';
@@ -17,7 +16,6 @@ import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-m
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
 import Field from '@/components/layout/admin/field';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Props {
 	form: ProductDetailInfoAdmin;

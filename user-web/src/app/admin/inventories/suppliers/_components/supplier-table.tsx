@@ -3,7 +3,7 @@
 import { DataTable } from '@/components/layout/admin/data-table';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { Column } from '@/types/uis/Column';
-import React, { JSX, useMemo, useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SupplierSortField } from '@/types/inventories/suppliers/SupplierSortField';
 import { useTableSort } from '@/hooks/share/use-table-sort';

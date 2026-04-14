@@ -2,10 +2,10 @@
 
 import { JSX } from 'react';
 import GoodsStockOverview from '@/app/admin/inventories/stocks/_components/goods-stock-overview';
-import { useGoodsStockSummaryData } from '@/hooks/inventories/stocks/use-goods-stock-summary-data';
+import { useGoodsStockSummaryQuery } from '@/queries/stocks/use-goods-stock-summary-query';
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
 import GoodsStockTable from '@/app/admin/inventories/stocks/_components/goods-stock-table';
-import { useProductInStockData } from '@/hooks/inventories/stocks/use-product-in-stock-data';
+import { useProductInStockQuery } from '@/queries/stocks/use-product-in-stock-query';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -20,9 +20,9 @@ export default function GoodsStockContainer({
 	initialProducts,
 }: GoodsStockContainerProps): JSX.Element {
 	const router: AppRouterInstance = useRouter();
-	const { data: summary, isLoading: isSummaryLoading } = useGoodsStockSummaryData(initialSummary);
+	const { data: summary, isLoading: isSummaryLoading } = useGoodsStockSummaryQuery(initialSummary);
 
-	const { data: products, isLoading: isProductsLoading } = useProductInStockData(initialProducts);
+	const { data: products, isLoading: isProductsLoading } = useProductInStockQuery(initialProducts);
 
 	const isPageLoading: boolean = isSummaryLoading || isProductsLoading;
 

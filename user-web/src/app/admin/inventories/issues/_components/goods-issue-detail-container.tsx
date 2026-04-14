@@ -45,7 +45,6 @@ export default function GoodsIssueDetailContainer({
 		handleUpdateItem,
 		handleSubmit,
 		handleAddProductToForm,
-		handleRemoveItem,
 		handleBack,
 	} = useGoodsIssueLogic({
 		goodsIssue,

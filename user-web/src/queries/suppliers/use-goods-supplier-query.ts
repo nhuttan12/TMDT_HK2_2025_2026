@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { fetchGoodsSupplier } from '@/services/inventories/suppliers/goods-supplier-service';
 
-export function useGoodsSupplierData(initialData?: Supplier[]): UseQueryResult<Supplier[], Error> {
+export function useGoodsSupplierQuery(initialData?: Supplier[]): UseQueryResult<Supplier[], Error> {
 	return useQuery({
 		queryKey: ['goods-supplier'],
 		queryFn: fetchGoodsSupplier,

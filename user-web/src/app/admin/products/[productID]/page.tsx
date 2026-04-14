@@ -129,7 +129,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 
 	images: [
 		{
-			localID: crypto.randomUUID(),
+			localId: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-1.jpg',
 			order: 0,
@@ -138,7 +138,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 			progress: 100,
 		},
 		{
-			localID: crypto.randomUUID(),
+			localId: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-2.jpg',
 			order: 1,

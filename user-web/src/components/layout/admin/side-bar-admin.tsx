@@ -3,25 +3,19 @@
 import { usePathname, useRouter } from 'next/navigation';
 import {
 	Boxes,
-	CheckCircle2,
-	ClipboardList,
 	Download,
-	IdCard,
 	ImageIcon,
 	Images,
 	LayoutDashboard,
 	Megaphone,
 	MessageCircle,
 	Package,
-	Settings,
-	Shield,
-	ShoppingCart, Store,
+	ShoppingCart,
+	Store,
 	Tag,
 	TicketPercent,
 	Truck,
 	Upload,
-	User,
-	UserCog,
 	Users,
 	Warehouse,
 	Zap,
@@ -128,17 +122,17 @@ const sidebarData: SidebarItemInterface[] = [
 		children: [
 			// ----- CONTENT -----
 			{
-				title: 'Banner trang chủ',
+				title: 'Ảnh bìa',
 				href: '/admin/content/banners',
 				icon: <ImageIcon size={18} />,
 			},
 			{
-				title: 'Slider / Carousel',
+				title: 'Ảnh quảng cáo',
 				href: '/admin/content/sliders',
 				icon: <Images size={18} />,
 			},
 			{
-				title: 'Popup khuyến mãi',
+				title: 'Hình ảnh khuyến mãi',
 				href: '/admin/content/popups',
 				icon: <Megaphone size={18} />,
 			},
@@ -168,14 +162,14 @@ const sidebarData: SidebarItemInterface[] = [
 	// },
 	{
 		title: 'Thông tin cửa hàng',
-		href: '/admin/store-info',
+		href: '/admin/shop-info',
 		icon: <Store size={18} />,
 	},
-	{
-		title: 'Cài đặt',
-		href: '/admin/settings',
-		icon: <Settings size={18} />,
-	},
+	// {
+	// 	title: 'Cài đặt',
+	// 	href: '/admin/settings',
+	// 	icon: <Settings size={18} />,
+	// },
 ];
 
 export default function AdminSidebar(): JSX.Element {

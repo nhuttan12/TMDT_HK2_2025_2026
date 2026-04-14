@@ -11,10 +11,10 @@ const mockInvoiceDetail: InvoiceDetail = {
 	paidAt: '2026-02-20T10:17:32Z',
 	completedAt: '2026-02-23T15:45:00Z',
 
-	status: 'COMPLETED',
-	shippingStatus: 'DELIVERED',
+	status: 'completed',
+	shippingStatus: 'delivered',
 
-	paymentMethod: 'BANK_TRANSFER',
+	paymentMethod: 'bank_transfer',
 
 	recipientName: 'Nguyễn Nhựt Tân',
 	recipientPhone: '0901234567',
