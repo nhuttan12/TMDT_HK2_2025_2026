@@ -2,6 +2,7 @@
 using demo1.Controllers;
 using demo1.Dtos.Users.Requests;
 using demo1.Dtos.Users.Responses;
+using demo1.Models;
 
 namespace demo1.Services.Users
 {
@@ -13,5 +14,7 @@ namespace demo1.Services.Users
         public ValueTask<bool> IsExistByUserNameAsync(string username);
         public Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query);
         public Task GetUserByRefreshTokenAsync(string refreshToken);
+        Task<User> GetByEmailAsync(string? email);
+        Task<User?> CreateFromGoogleAsync(string? email, string? name);
     }
 }

@@ -42,6 +42,11 @@ namespace demo1.Services.Users
             return _mapper.Map<UserInfoDTO>(user);
         }
 
+        public Task<User?> CreateFromGoogleAsync(string? email, string? name)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query)
         {
             if (query.PageNumber <= 0 || query.PageSize <= 0)
@@ -74,6 +79,12 @@ namespace demo1.Services.Users
             return res;
         }
 
+        public Task<User> GetByEmailAsync(string? email)
+        {
+            // TODO: Implement logic to retrieve user by email from the database
+            throw new NotImplementedException();
+        }
+
         public async Task<UserInfoDTO?> GetByIdAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -82,6 +93,7 @@ namespace demo1.Services.Users
 
         public async Task GetUserByRefreshTokenAsync(string refreshToken)
         {
+            // TODO: Implement logic to retrieve user by refresh token from the database
             throw new NotImplementedException();
         }
 
@@ -92,6 +104,7 @@ namespace demo1.Services.Users
 
         public async Task<UserInfoDTO> UpdateAsync(int id, UserUpdateDto userUpdateDto)
         {
+            // TODO: Implement logic to update user information in the database
             throw new NotImplementedException();
         }
     }

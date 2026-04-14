@@ -12,8 +12,8 @@ using demo1.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260409102046_init")]
-    partial class init
+    [Migration("20260413083921_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,100 @@ namespace api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("api.Models.Users.Address", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("address_url")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("address_url");
+
+                    b.Property<DateTime>("create_at")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_at");
+
+                    b.Property<bool>("is_used")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_used");
+
+                    b.Property<string>("user_id")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("id")
+                        .HasName("pk_addresses");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_addresses_user_id");
+
+                    b.ToTable("addresses", null, t =>
+                        {
+                            t.Property("user_id")
+                                .HasColumnName("user_id1");
+                        });
+                });
+
+            modelBuilder.Entity("api.Models.Users.UserDetail", b =>
+                {
+                    b.Property<int>("user_id")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("address_id")
+                        .HasColumnType("text")
+                        .HasColumnName("address_id");
+
+                    b.Property<string>("avatar_url")
+                        .HasColumnType("text")
+                        .HasColumnName("avatar_url");
+
+                    b.Property<DateTime>("lock_time_end")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lock_time_end");
+
+                    b.Property<DateTime>("lock_time_start")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lock_time_start");
+
+                    b.HasKey("user_id")
+                        .HasName("pk_user_details");
+
+                    b.ToTable("user_details", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
+                {
+                    b.Property<int>("user_Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("provider")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider");
+
+                    b.Property<string>("provider_key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider_key");
+
+                    b.HasKey("user_Id")
+                        .HasName("pk_user_external_logins");
+
+                    b.ToTable("user_external_logins", (string)null);
+                });
 
             modelBuilder.Entity("demo1.Models.Products.Product", b =>
                 {
@@ -137,6 +231,38 @@ namespace api.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Users.Address", b =>
+                {
+                    b.HasOne("demo1.Models.User", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_addresses_users_user_id");
+                });
+
+            modelBuilder.Entity("api.Models.Users.UserDetail", b =>
+                {
+                    b.HasOne("demo1.Models.User", "User")
+                        .WithOne("UserDetail")
+                        .HasForeignKey("api.Models.Users.UserDetail", "user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_details_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
+                {
+                    b.HasOne("demo1.Models.User", "User")
+                        .WithOne("UserExternalLogin")
+                        .HasForeignKey("api.Models.Users.UserExternalLogin", "user_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_external_logins_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("demo1.Models.User", b =>
                 {
                     b.HasOne("demo1.Models.Roles.Role", "Role")
@@ -152,6 +278,15 @@ namespace api.Migrations
             modelBuilder.Entity("demo1.Models.Roles.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("demo1.Models.User", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("UserDetail");
+
+                    b.Navigation("UserExternalLogin");
                 });
 #pragma warning restore 612, 618
         }

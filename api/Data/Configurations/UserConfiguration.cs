@@ -1,4 +1,5 @@
-﻿using demo1.Models;
+﻿using api.Models.Users;
+using demo1.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace demo1.Data.Configurations
@@ -23,6 +24,18 @@ namespace demo1.Data.Configurations
             // Relationship: a User belongs to a Role. Restrict deletion of
             // a Role when users reference it to prevent accidental data loss.
             builder.HasOne(u => u.Role).WithMany(r => r.Users).HasForeignKey(u => u.RoleId).OnDelete(DeleteBehavior.Restrict);
+            // Quan hệ với UserExternalLogin
+            builder.HasOne(u => u.UserExternalLogin)
+                   .WithOne(uel => uel.User) // Cung cấp thuộc tính điều hướng ngược lại
+                   .HasForeignKey<UserExternalLogin>(uel => uel.user_Id)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            // Quan hệ với UserDetail
+            builder.HasOne(u => u.UserDetail)
+                   .WithOne(ud => ud.User) // Cung cấp thuộc tính điều hướng ngược lại
+                   .HasForeignKey<UserDetail>(ud => ud.user_id)
+                   .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

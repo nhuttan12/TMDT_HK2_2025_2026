@@ -5,6 +5,7 @@ using demo1.Models.Jwts;
 using demo1.Services.Auths;
 using demo1.Services.Users;
 using demo1.Utilities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,17 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(ket),
         ClockSkew = TimeSpan.Zero
     };
+}).AddCookie()
+.AddGoogle(options =>
+{
+    // Đọc thông tin từ cấu hình (appsettings.json hoặc User Secrets)
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]
+                       ?? throw new InvalidOperationException("Google ClientId is missing.");
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
+                          ?? throw new InvalidOperationException("Google ClientSecret is missing.");
+    // (Tùy chọn) Lưu các claim bổ sung từ Google
+    options.SignInScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
+    options.ClaimActions.MapJsonKey("picture", "picture");
 });
 // Cấu hình Authorization
 builder.Services.AddAuthorization();
@@ -105,7 +117,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
          builder => builder
-             .WithOrigins(allowedOrigins ?? ["http://localhost:3000"]) //TODO: Thay đổi thành URL frontend của bạn
+             .WithOrigins(allowedOrigins ?? ["http://localhost:3000", "https://localhost:3000", "http://127.0.0.1:3000"]) //TODO: Thay đổi thành URL frontend của bạn
              .AllowAnyMethod()
              .AllowAnyHeader()
              .AllowCredentials()); // BẮT BUỘC: Cho phép nhận Cookie/Credentials

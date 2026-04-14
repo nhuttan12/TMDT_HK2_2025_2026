@@ -1,4 +1,5 @@
-﻿using demo1.Dtos.Users.Responses;
+﻿using demo1.Controllers;
+using demo1.Dtos.Users.Responses;
 using demo1.Models;
 
 namespace demo1.Services.Auths
@@ -10,5 +11,6 @@ namespace demo1.Services.Auths
         public Task<TokenResponse> loginAsync(string username, string password);
 
         public Task<User> RefreshTokenAsync(string refreshToken);
+        Task<TokenResponse> HandleGoogleLogin(googleInfoResponse googleInfo);
     }
 }

@@ -1,4 +1,5 @@
-﻿using demo1.Models.Roles;
+﻿using api.Models.Users;
+using demo1.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 
 namespace demo1.Models
@@ -10,8 +11,7 @@ namespace demo1.Models
         [Required]
         [MaxLength(50)]
         public required string Username { get; set; } = string.Empty;
-        [Required]
-        public required string PasswordHash { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         [Required]
         public required string Email { get; set; }
@@ -28,6 +28,9 @@ namespace demo1.Models
 
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
+        public virtual UserDetail? UserDetail { get; set; }
+        public virtual UserExternalLogin? UserExternalLogin { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
     }
 }
