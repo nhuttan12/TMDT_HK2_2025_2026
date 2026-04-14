@@ -10,7 +10,7 @@ namespace demo1.Services.Auths
         public bool verifyPassword(User user, string password, string passwordHash);
         public Task<TokenResponse> loginAsync(string username, string password);
 
-        public Task<User> RefreshTokenAsync(string refreshToken);
+        public Task<TokenResponse> RefreshTokenAsync(string refreshToken);
         Task<TokenResponse> HandleGoogleLogin(googleInfoResponse googleInfo);
     }
 }

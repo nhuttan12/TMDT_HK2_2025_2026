@@ -1,4 +1,5 @@
-﻿using demo1.Services.Auths;
+﻿using demo1.Dtos.Users.Responses;
+using demo1.Services.Auths;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,8 @@ namespace demo1.Controllers
             {
                 return Unauthorized("Invalid username or password");
             }
-            SetRefreshTokenCookie(token.RefreshToken);
-            return Ok(token.AccessToken);
+            SetTokenCookie(token);
+            return Ok();
         }
         [HttpDelete("logout")]
         public IActionResult Logout()
@@ -32,32 +33,39 @@ namespace demo1.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+            var refreshToken = Request.Cookies["X-Access-Token"];
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest("No refresh token provided");
-            var user = await _authService.RefreshTokenAsync(refreshToken);
-            if (user == null)
-                return BadRequest("Invalid refresh token");
 
-            var newAccessToken = await _authService.loginAsync(user.Username, user.PasswordHash);
-            if (newAccessToken == null || string.IsNullOrEmpty(newAccessToken.AccessToken) || string.IsNullOrEmpty(newAccessToken.RefreshToken))
-                return BadRequest("Failed to generate new access token");
-            SetRefreshTokenCookie(newAccessToken.RefreshToken);
-            return Ok(newAccessToken.AccessToken);
+            var token = await _authService.RefreshTokenAsync(refreshToken);
+            if (token == null)
+                return BadRequest("Invalid refresh token");
+            SetTokenCookie(token);
+            return Ok();
 
         }
-        private void SetRefreshTokenCookie(string refreshToken)
+        private void SetTokenCookie(TokenResponse token)
         {
-            var cookieOptions = new CookieOptions
+            if (token == null || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.AccessToken))
+                throw new ArgumentException("TokenResponse must contain both AccessToken and RefreshToken");
+            Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions
             {
-                HttpOnly = true,        // Quan trọng: JavaScript không thể truy cập
-                Secure = true,          // Chỉ gửi qua HTTPS
-                SameSite = SameSiteMode.Strict, // Chống tấn công CSRF
-                Expires = DateTime.UtcNow.AddDays(_config.GetValue<int>("RefreshTokenExpirationDays"))
-            };
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Path = "/", //Mặc định gửi cho tất cả request
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
 
-            // "refreshToken" là tên của Cookie
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            // 2. Thiết lập Cookie cho Refresh Token (Chỉ gửi đến endpoint refresh)
+            Response.Cookies.Append("X-Refresh-Token", token.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict, // Thắt chặt hơn để chống CSRF
+                Path = "/api/auth/refresh-token", // CHỈ gửi khi gọi URL này
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
         }
 
         [HttpGet("Login-google")]
@@ -85,7 +93,7 @@ namespace demo1.Controllers
             var token = await _authService.HandleGoogleLogin(googleInfo);
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
                 return BadRequest("Failed to generate tokens from Google info");
-            SetRefreshTokenCookie(token.RefreshToken);
+            SetTokenCookie(token);
 
             // Xóa Cookie ngay lập tức để duy trì tính Stateless cho API
             await HttpContext.SignOutAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
@@ -93,7 +101,7 @@ namespace demo1.Controllers
             // Redirect về Frontend kèm Token
             // TODO: cần thay đổi cách redirect
             var frontendUrl = _config["AllowedOrigins:0"] ?? "http://localhost:3000";
-            return Redirect($"{frontendUrl}/login-success?token={token.AccessToken}");
+            return Redirect($"{frontendUrl}/login-success");
         }
     }
 

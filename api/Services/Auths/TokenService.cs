@@ -51,7 +51,7 @@ namespace demo1.Services.Auths
                 var refreshToken = new RefreshToken
                 (
                      user.Id.ToString(),
-                   DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpirationDays)
+                     DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpirationDays)
                 );
                 expires = refreshToken.ExpirationTime;
                 claims.Add(new Claim(JwtRegisteredClaimNames.Jti, refreshToken.TokenId));

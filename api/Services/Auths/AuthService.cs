@@ -6,6 +6,7 @@ using demo1.Exceptions;
 using demo1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace demo1.Services.Auths
 {
@@ -72,16 +73,20 @@ namespace demo1.Services.Auths
             return res;
         }
 
-        public async Task<User> RefreshTokenAsync(string refreshToken)
+        public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
         {
             var principal = _tokenService.ValidateToken(refreshToken);
-            if (principal == null)
-                throw new BadRequestException("Invalid refresh token");
-            var userName = principal?.Identity?.Name;
+
+            var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? throw new BadRequestException("Invalid refresh token");
+
             var user = await _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync(Users => Users.Username == userName) ?? throw new NotFoundException("user not found");
-            return user;
+                .FirstOrDefaultAsync(Users => Users.Id == int.Parse(sub)) ?? throw new NotFoundException("user not found");
+
+            if (user == null)
+                throw new DirectoryNotFoundException("User not found");
+            return GetTokenResponse(user);
         }
 
 
