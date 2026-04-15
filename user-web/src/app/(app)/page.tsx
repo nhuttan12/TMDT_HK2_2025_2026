@@ -3,6 +3,7 @@ import { JSX } from 'react';
 import HomeBannerCarousel from '@/app/(app)/_components/home-banner-carousel';
 import { HomeBanner } from '@/types/uis/HomeBanner';
 import Link from 'next/link';
+import { useAuthStore } from '@/stores/auth.store';
 
 const homeBanners: HomeBanner[] = [
 	{
@@ -35,7 +36,9 @@ const homeBanners: HomeBanner[] = [
 	},
 ];
 
+
 export default function Index(): JSX.Element {
+	
 	return (
 		<>
 			{/* HERO BANNER */}

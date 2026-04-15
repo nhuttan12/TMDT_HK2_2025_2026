@@ -28,8 +28,12 @@ namespace demo1.Controllers
             Response.Cookies.Delete("refreshToken");
             return NoContent();
         }
-
-
+        /// <summary>
+        /// thực hiện refresh token bằng cách lấy refresh token từ cookie, 
+        /// nếu hợp lệ sẽ trả về access token mới và refresh token mới, 
+        /// đồng thời cập nhật cookie
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
@@ -74,6 +78,10 @@ namespace demo1.Controllers
             var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
+        /// <summary>
+        /// google sẽ redirect về endpoint này sau khi người dùng hoàn tất xác thực trên Google,  
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("google-response")]
         public async Task<IActionResult> GoogleResponse()
         {
@@ -101,7 +109,7 @@ namespace demo1.Controllers
             // Redirect về Frontend kèm Token
             // TODO: cần thay đổi cách redirect
             var frontendUrl = _config["AllowedOrigins:0"] ?? "http://localhost:3000";
-            return Redirect($"{frontendUrl}/login-success");
+            return Redirect($"{frontendUrl}/login_success");
         }
     }
 
