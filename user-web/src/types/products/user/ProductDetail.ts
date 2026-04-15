@@ -1,3 +1,5 @@
+import { Review } from '@/types/products/user/Review';
+
 export interface ProductDetail {
 	id: number;
 	name: string;
@@ -7,4 +9,6 @@ export interface ProductDetail {
 	discount: number;
 	rating: number;
 	description: string;
+
+	reviews: Review[];
 }

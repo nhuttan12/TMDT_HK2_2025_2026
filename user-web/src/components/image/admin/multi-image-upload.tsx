@@ -1,7 +1,7 @@
 'use client';
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import React, { ChangeEvent, JSX } from 'react';
+import React, { ChangeEvent, JSX, useId } from 'react';
 import { SortableImageItem } from '@/components/image/admin/sortable-image-item';
 import { Button } from '@/components/ui/button';
 import ImagePreview from '@/components/image/admin/image-preview';
@@ -49,6 +49,8 @@ function fakeUpload(file: File, onProgress: (p: number) => void): Promise<string
 
 export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Element {
 	const FILE_INPUT_ID = 'multi-image-upload';
+
+	const dndId: string = useId();
 
 	// 1. Cấu hình Cảm biến (Sensors)
 	const sensors = useSensors(
@@ -163,6 +165,7 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 
 			{/* 4. Khởi tạo Context cho DND Kit */}
 			<DndContext
+				id={dndId}
 				sensors={sensors}
 				collisionDetection={closestCenter}
 				onDragEnd={handleDragEnd}

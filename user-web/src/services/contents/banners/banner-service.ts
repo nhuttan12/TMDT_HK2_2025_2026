@@ -1,14 +1,7 @@
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { ShopBanner } from '@/types/shops/ShopBanner';
 import { mapRawBannerToSortableForm } from '@/utils/content/banners/mappers/admin-banner';
-
-export interface UpdateBannerPayload {
-	id?: string;
-	imageUrl?: string;
-	order: number;
-	isPrimary: boolean;
-}
-
+import { UpdateBannerPayload } from '@/types/shops/UpdateBannerPayload';
 
 export async function fetchShopBanners(): Promise<SortableImageForm[]> {
 	await new Promise((resolve) => setTimeout(resolve, 800)); // Fake delay

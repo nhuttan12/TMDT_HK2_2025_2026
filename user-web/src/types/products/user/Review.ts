@@ -1,6 +1,6 @@
 import { ShopReply } from '@/types/products/user/ShopReply';
 
-export interface CommentModel {
+export interface Review {
 	id: string;
 	userName: string;
 	createdAt: string;

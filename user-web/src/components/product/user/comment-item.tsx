@@ -1,9 +1,9 @@
 import { JSX } from 'react';
 import Rating from './rating';
-import { CommentModel } from '@/types/products/user/CommentModel';
+import { Review } from '@/types/products/user/Review';
 
 interface Props {
-	comment: CommentModel;
+	comment: Review;
 }
 
 export default function CommentItem({ comment }: Props): JSX.Element {

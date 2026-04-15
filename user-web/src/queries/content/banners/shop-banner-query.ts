@@ -2,9 +2,9 @@ import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
 	fetchShopBanners,
-	UpdateBannerPayload,
 	updateShopBanners,
 } from '@/services/contents/banners/banner-service';
+import { UpdateBannerPayload } from '@/types/shops/UpdateBannerPayload';
 
 export function useShopBannersQuery(
 	initialData: SortableImageForm[],

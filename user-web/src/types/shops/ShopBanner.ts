@@ -1,6 +1,3 @@
-export interface ShopBanner {
-	id: number;
-	url: string;
-	order: number;
-	isPrimary: boolean;
-}
+import { BaseSortableImage } from '@/types/shared/admin/BaseSortableImage';
+
+export type ShopBanner = BaseSortableImage;

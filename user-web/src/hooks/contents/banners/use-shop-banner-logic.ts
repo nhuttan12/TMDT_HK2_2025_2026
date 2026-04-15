@@ -2,7 +2,8 @@
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { useEffect, useState } from 'react';
-import { UpdateBannerPayload } from '@/services/contents/banners/banner-service';
+
+import { UpdateBannerPayload } from '@/types/shops/UpdateBannerPayload';
 
 interface UseShopBannerLogicReturn {
 	banners: SortableImageForm[];
@@ -36,11 +37,11 @@ export function useShopBannerLogic(serverBanners: SortableImageForm[]): UseShopB
 	};
 
 	return {
-		banners,
-		setBanners,
-		isUploading,
-		hasPrimary,
-		isValidToSave,
-		preparePayload,
+		banners: banners,
+		setBanners: setBanners,
+		isUploading: isUploading,
+		hasPrimary: hasPrimary,
+		isValidToSave: isValidToSave,
+		preparePayload: preparePayload,
 	};
 }

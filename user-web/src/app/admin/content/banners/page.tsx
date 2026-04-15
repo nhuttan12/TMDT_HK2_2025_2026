@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { fetchShopBanners } from '@/services/contents/banners/banner-service';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { ShopBannerContainer } from '@/app/admin/content/banners/_components/shop-banner-container';
+import { ShopBannersContainer } from '@/app/admin/content/banners/_components/shop-banners-container';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default async function ShopDecorationPage(): Promise<JSX.Element> {
 	return (
 		<main className='min-h-screen p-4 md:p-8'>
 			<div className='max-w-6xl mx-auto'>
-				<ShopBannerContainer initialBanners={initialBanners} />
+				<ShopBannersContainer initialBanners={initialBanners} />
 			</div>
 		</main>
 	);

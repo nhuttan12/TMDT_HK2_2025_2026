@@ -1,18 +1,35 @@
-'use client';
-
+import { JSX } from 'react';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
-import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
+import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethodLabel';
 import { getInvoiceStatusLabel } from '@/types/invoices/user/InvoiceStatusLabel';
 import { getShippingStatusLabel } from '@/types/invoices/user/ShippingStatusLabel';
+import { formatMoney } from '@/utils/shared/money';
+import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 
-interface Props {
-	invoice: InvoiceDetail;
+interface InvoicesDetailUiProps {
+	invoice?: InvoiceDetail;
+	isLoading: boolean;
 }
 
-export default function InvoiceDetailClient({ invoice }: Props) {
-	const formatDate = (date?: string) => (date ? new Date(date).toLocaleString('vi-VN') : '-');
+export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
+	const { invoice, isLoading } = props;
 
-	const formatMoney = (amount: number) => amount.toLocaleString('vi-VN') + ' ₫';
+	if (isLoading) {
+		return (
+			<div className='w-full mx-auto p-6 flex justify-center items-center min-h-screen bg-slate-50'>
+				<p className='text-slate-500'>Đang tải chi tiết hóa đơn...</p>
+			</div>
+		);
+	}
+
+	// Nếu fetch xong mà không có dữ liệu
+	if (!invoice) {
+		return (
+			<div className='w-full mx-auto p-6 flex justify-center items-center min-h-screen bg-slate-50'>
+				<p className='text-red-500'>Không tìm thấy hóa đơn.</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className='w-full mx-auto p-6 space-y-8 bg-slate-50 min-h-screen'>
@@ -22,7 +39,7 @@ export default function InvoiceDetailClient({ invoice }: Props) {
 					<h1 className='text-2xl font-bold text-slate-800'>
 						Hóa đơn #{invoice.invoiceId}
 					</h1>
-					<p className='text-slate-500 mt-1'>Ngày tạo: {formatDate(invoice.createdAt)}</p>
+					<p className='text-slate-500 mt-1'>Ngày tạo: {formatDateTimeWithBrackets(invoice.createdAt)}</p>
 				</div>
 
 				<span className='px-4 py-2 rounded-lg bg-slate-100 text-slate-700 font-medium'>
@@ -136,7 +153,7 @@ export default function InvoiceDetailClient({ invoice }: Props) {
 					<p className='text-slate-600 mt-2'>
 						Dự kiến giao:{' '}
 						<span className='font-medium text-slate-800'>
-							{formatDate(invoice.estimatedDelivery)}
+							{formatDateTimeWithBrackets(invoice.estimatedDelivery)}
 						</span>
 					</p>
 				</div>
