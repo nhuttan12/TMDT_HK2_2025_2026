@@ -11,7 +11,6 @@ namespace demo1.Utilities
         {
             //  Đảm bảo Database đã được tạo
             await myAppDBContext.Database.MigrateAsync();
-            string nameAccount = config[key: "InitialSetup:Name"] ?? "Null";
             string emailAccount = config[key: "InitialSetup:Email"] ?? "Null";
             string passwordAccount = config[key: "InitialSetup:Password"] ?? "Null";
             List<string> roles = config.GetSection("InitialSetup:RoleList")
@@ -21,7 +20,7 @@ namespace demo1.Utilities
                 .Select(v => v!)
                 .ToList();
 
-            if (nameAccount == "Null" || emailAccount == "Null" || passwordAccount == "Null" || roles.Count == 0)
+            if (emailAccount == "Null" || passwordAccount == "Null" || roles.Count == 0)
             {
                 throw new Exception("Initial setup configuration is missing or invalid.");
             }
@@ -42,12 +41,11 @@ namespace demo1.Utilities
             await myAppDBContext.SaveChangesAsync();
 
             var Account = await myAppDBContext.Set<User>()
-                .FirstOrDefaultAsync(a => a.Username == nameAccount);
+                .FirstOrDefaultAsync(a => a.Email == emailAccount);
             if (Account == null)
             {
                 var newUser = new User
                 {
-                    Username = nameAccount,
                     Email = emailAccount,
                     PasswordHash = "",
                     CreateAt = DateTime.UtcNow,

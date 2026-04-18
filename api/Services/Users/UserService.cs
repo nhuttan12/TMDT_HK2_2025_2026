@@ -55,7 +55,7 @@ namespace demo1.Services.Users
             }
             // trả về 1 truy vấn trì hoãn để có thể áp dụng các câu lệnh query khác như skip và take.
             // trước khi thực hiện truy vấn cơ sở dữ liệu bằng câu lệnh TolistAsync(),...
-            var usersQuery = _context.Users.AsNoTracking().AsQueryable();
+            var usersQuery = _context.Users.Include(u => u.Role).AsNoTracking().AsQueryable();
             var totalUsers = await _context.Users.CountAsync();
 
             var skip = (query.PageNumber - 1) * query.PageSize;
@@ -97,9 +97,9 @@ namespace demo1.Services.Users
             throw new NotImplementedException();
         }
 
-        public async ValueTask<bool> IsExistByUserNameAsync(string username)
+        public async ValueTask<bool> IsExistByEmailAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username); ;
+            return await _context.Users.AnyAsync(u => u.Email == email); ;
         }
 
         public async Task<UserInfoDTO> UpdateAsync(int id, UserUpdateDto userUpdateDto)
@@ -107,6 +107,7 @@ namespace demo1.Services.Users
             // TODO: Implement logic to update user information in the database
             throw new NotImplementedException();
         }
+
     }
 
 }

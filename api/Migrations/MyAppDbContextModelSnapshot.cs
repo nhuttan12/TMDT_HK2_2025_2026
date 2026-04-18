@@ -213,12 +213,6 @@ namespace api.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_at");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
-
                     b.HasKey("Id")
                         .HasName("pk_users");
 

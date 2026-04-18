@@ -8,9 +8,10 @@ namespace demo1.Services.Auths
     {
         public string hashPassword(User user, string password);
         public bool verifyPassword(User user, string password, string passwordHash);
-        public Task<TokenResponse> loginAsync(string username, string password);
+        public Task<TokenResponse> loginAsync(LoginRequest req);
 
         public Task<TokenResponse> RefreshTokenAsync(string refreshToken);
-        Task<TokenResponse> HandleGoogleLogin(googleInfoResponse googleInfo);
+        Task<TokenResponse> HandleGoogleLogin(GoogleInfoResponse googleInfo);
+        public Task<UserInfoDTO> Register(RegisterRequest registerRequest);
     }
 }

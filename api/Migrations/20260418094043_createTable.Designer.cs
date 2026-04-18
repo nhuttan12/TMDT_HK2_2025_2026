@@ -12,8 +12,8 @@ using demo1.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260413083921_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260418094043_createTable")]
+    partial class createTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -215,12 +215,6 @@ namespace api.Migrations
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_at");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
 
                     b.HasKey("Id")
                         .HasName("pk_users");

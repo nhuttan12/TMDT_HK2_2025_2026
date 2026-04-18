@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class createTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,9 +46,8 @@ namespace api.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    password_hash = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false),
                     phone = table.Column<string>(type: "text", nullable: true),
                     full_name = table.Column<string>(type: "text", nullable: false),
                     create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

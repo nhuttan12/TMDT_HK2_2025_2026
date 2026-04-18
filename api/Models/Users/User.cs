@@ -9,12 +9,8 @@ namespace demo1.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
-        public required string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-
-        [Required]
         public required string Email { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
 
         public string? Phone { get; set; }
 

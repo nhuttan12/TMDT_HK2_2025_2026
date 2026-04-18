@@ -3,29 +3,45 @@ using demo1.Services.Auths;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace demo1.Controllers
 {
+
+    /// <summary>
+    ///AuthController thực hiện nhiệm vụ bảo mật
+    ///api list:
+    ///+ login(username,password) 
+    ///+ LoginGoogle()
+    ///+ googleResponse() 
+    ///+ logout() 
+    ///+ refreshTocken() 
+    ///+ LoginFaceBook()
+    /// </summary>
+    /// <param name="_config"></param>
+    /// <param name="_authService"></param>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController(IConfiguration _config, IAuthService _authService) : ControllerBase
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _authService.loginAsync(request.Username, request.Password);
+            var token = await _authService.loginAsync(request);
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
             {
                 return Unauthorized("Invalid username or password");
             }
             SetTokenCookie(token);
-            return Ok();
+            return Ok("success");
         }
         [HttpDelete("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Delete("refresh-token");
+            Response.Cookies.Delete("X-Access-Token");
             return NoContent();
         }
         /// <summary>
@@ -48,31 +64,8 @@ namespace demo1.Controllers
             return Ok();
 
         }
-        private void SetTokenCookie(TokenResponse token)
-        {
-            if (token == null || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.AccessToken))
-                throw new ArgumentException("TokenResponse must contain both AccessToken and RefreshToken");
-            Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Lax,
-                Path = "/", //Mặc định gửi cho tất cả request
-                Expires = DateTime.UtcNow.AddHours(1)
-            });
 
-            // 2. Thiết lập Cookie cho Refresh Token (Chỉ gửi đến endpoint refresh)
-            Response.Cookies.Append("X-Refresh-Token", token.RefreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict, // Thắt chặt hơn để chống CSRF
-                Path = "/api/auth/refresh-token", // CHỈ gửi khi gọi URL này
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
-        }
-
-        [HttpGet("Login-google")]
+        [HttpGet("login-google")]
         public IActionResult LoginGoogle()
         {
             var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
@@ -97,7 +90,7 @@ namespace demo1.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sub) || string.IsNullOrEmpty(avatarUrl))
                 return BadRequest("Thông tin Google không đầy đủ");
 
-            var googleInfo = new googleInfoResponse(name, email, sub, avatarUrl);
+            var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl);
             var token = await _authService.HandleGoogleLogin(googleInfo);
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
                 return BadRequest("Failed to generate tokens from Google info");
@@ -111,8 +104,58 @@ namespace demo1.Controllers
             var frontendUrl = _config["AllowedOrigins:0"] ?? "http://localhost:3000";
             return Redirect($"{frontendUrl}/login_success");
         }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest req)
+        {
+            // TODO: implement register logic
+            await _authService.Register(req);
+            return Ok("success");
+        }
+        // TODO: forgot-password
+
+        // TODO: change-password
+
+
+
+        private void SetTokenCookie(TokenResponse token)
+        {
+            if (token == null || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.AccessToken))
+                throw new ArgumentException("TokenResponse must contain both AccessToken and RefreshToken");
+            Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Path = "/", //Mặc định gửi cho tất cả request
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
+            // 2. Thiết lập Cookie cho Refresh Token (Chỉ gửi đến endpoint refresh)
+            Response.Cookies.Append("X-Refresh-Token", token.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict, // Thắt chặt hơn để chống CSRF
+                Path = "/api/auth/refresh-token", // CHỈ gửi khi gọi URL này
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
+        }
+
     }
 
-    public record LoginRequest(string Username, string Password);
-    public record googleInfoResponse(string name, string email, string sub, string avatar_url);
+    public record LoginRequest(
+        [Required]
+        [EmailAddress]
+        string Email,
+        [Required]
+        [PasswordPropertyText]
+        string Password);
+    public record RegisterRequest(
+        [EmailAddress]
+        string Email,
+        [PasswordPropertyText]
+        string Password
+        );
+    public record GoogleInfoResponse(string Name, string Email, string Sub, string Avatar_url);
 }

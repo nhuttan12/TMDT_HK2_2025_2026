@@ -21,34 +21,38 @@ namespace demo1.Services.Auths
             var res = _passwordHasher.VerifyHashedPassword(user, passwordHash, password);
             return res == PasswordVerificationResult.Success;
         }
-        public async Task<TokenResponse> loginAsync(string username, string password)
+        public async Task<TokenResponse> loginAsync(LoginRequest req)
         {
+            // kiểm tra đầu vào 
+            if (req.Email == null || req.Password == null)
+            {
+                throw new BadRequestException("Email và password không phù hợp");
+            }
+            // lấy user 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Username == username);
-            if (user == null)
-                throw new DirectoryNotFoundException("User not found");
-            if (!verifyPassword(user, password, user.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid password");
+                .SingleOrDefaultAsync(u => u.Email == req.Email);
+            // kiểm tra user có tồn tại và có đúng mật khẩu hay ko 
+            if (user == null || !verifyPassword(user, req.Password, user.PasswordHash))
+                throw new UnauthorizedException("Email và password không chính xác");
             return GetTokenResponse(user);
         }
-        public async Task<TokenResponse> HandleGoogleLogin(googleInfoResponse googleInfo)
+        public async Task<TokenResponse> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
             // Logic của bạn: Tìm user trong DB hoặc tạo mới
             var user = await _context.Users.Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Email == googleInfo.email);
+                .FirstOrDefaultAsync(u => u.Email == googleInfo.Email);
 
             if (user == null)
             {
                 user = new User
                 {
-                    Username = googleInfo.email,
-                    Email = googleInfo.email,
+                    Email = googleInfo.Email,
                     PasswordHash = "",
                     RoleId = 2,
                     UserDetail = new UserDetail
                     {
-                        avatar_url = googleInfo.avatar_url
+                        avatar_url = googleInfo.Avatar_url
                     }
                 };
                 _context.Users.Add(user);
@@ -89,6 +93,10 @@ namespace demo1.Services.Auths
             return GetTokenResponse(user);
         }
 
-
+        public Task<UserInfoDTO> Register(RegisterRequest registerRequest)
+        {
+            //TODO: implemet method
+            throw new NotImplementedException();
+        }
     }
 }

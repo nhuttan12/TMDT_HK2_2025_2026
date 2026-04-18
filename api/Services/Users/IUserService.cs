@@ -11,7 +11,7 @@ namespace demo1.Services.Users
         public Task<UserInfoDTO> CreateAsync(UserCreateDto userCreateDto);
         public Task<UserInfoDTO> UpdateAsync(int id, UserUpdateDto userUpdateDto);
         public Task<UserInfoDTO?> GetByIdAsync(int id);
-        public ValueTask<bool> IsExistByUserNameAsync(string username);
+        public ValueTask<bool> IsExistByEmailAsync(string email);
         public Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query);
         public Task GetUserByRefreshTokenAsync(string refreshToken);
         Task<User> GetByEmailAsync(string? email);
