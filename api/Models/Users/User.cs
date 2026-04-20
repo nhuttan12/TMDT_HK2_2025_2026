@@ -1,4 +1,5 @@
 ﻿using api.Models.Users;
+using demo1.Exceptions;
 using demo1.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +7,14 @@ namespace demo1.Models
 {
     public class User
     {
+       public static User Create(string email, Role role)
+        {
+            return new User
+            {
+                Email = email.ToLower().Trim(),
+                Role = role
+            };
+        }
         public int Id { get; set; }
 
         [Required]
@@ -27,6 +36,12 @@ namespace demo1.Models
         public virtual UserDetail? UserDetail { get; set; }
         public virtual UserExternalLogin? UserExternalLogin { get; set; }
         public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+
+        public void SetPassword(string hash)
+        {
+            if (string.IsNullOrEmpty(hash)) throw new InternalServerErrorException("user: mật khẩu bị null");
+            this.PasswordHash = hash;
+        }
 
     }
 }

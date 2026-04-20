@@ -1,16 +1,18 @@
 ﻿using api.Models.Users;
+using AutoMapper;
 using demo1.Controllers;
 using demo1.Data;
 using demo1.Dtos.Users.Responses;
 using demo1.Exceptions;
 using demo1.Models;
+using demo1.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace demo1.Services.Auths
 {
-    public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService) : IAuthService
+    public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService,IUserService _userService, IMapper _mapper) : IAuthService
     {
         public string hashPassword(User user, string password)
         {
@@ -93,10 +95,20 @@ namespace demo1.Services.Auths
             return GetTokenResponse(user);
         }
 
-        public Task<UserInfoDTO> Register(RegisterRequest registerRequest)
+        public async Task<UserInfoDTO> Register(RegisterRequest registerRequest)
         {
-            //TODO: implemet method
-            throw new NotImplementedException();
+            if( await _context.Users.AnyAsync(u => u.Email == registerRequest.Email))
+            { 
+                throw new BadRequestException("tài khoản đã tồn tại");
+            }
+            var r = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
+                ?? throw new InternalServerErrorException("Không tìm thấy role");
+            User newUser = User.Create(registerRequest.Email,r);
+            string passwordhash = hashPassword(newUser,registerRequest.Password);
+            newUser.SetPassword(passwordhash);
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserInfoDTO>(newUser);
         }
     }
 }

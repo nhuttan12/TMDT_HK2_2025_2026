@@ -65,9 +65,9 @@ namespace demo1.Services.Auths
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = expires,
-                SigningCredentials = creds,
                 Issuer = _jwtSettings.Issuer,
                 Audience = _jwtSettings.Audience,
+                SigningCredentials = creds,
             };
             var tokenHandler = new JwtSecurityTokenHandler();
 
