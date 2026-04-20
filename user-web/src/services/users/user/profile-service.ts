@@ -1,0 +1,21 @@
+import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
+
+/**
+ * Lấy thông tin hồ sơ người dùng dựa trên ID
+ */
+export async function getUserProfile(userId: number): Promise<UserProfileInfo> {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve({
+				id: userId,
+				fullName: 'Nguyễn Văn A',
+				email: 'nguyenvana@example.com',
+				phone: '0901234567',
+				address1: '123 Đường Số 1, Quận 1, TP.HCM',
+				address2: 'Tòa nhà Landmark 81, Bình Thạnh',
+				address3: '',
+				avatarUrl: '',
+			});
+		}, 500);
+	});
+}

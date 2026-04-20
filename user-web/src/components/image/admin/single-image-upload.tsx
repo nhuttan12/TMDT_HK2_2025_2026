@@ -5,8 +5,6 @@ import { BaseImage } from '@/types/images/admin/BaseImage';
 import { ChangeEvent, JSX, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { getImageSrc } from '@/utils/images/getImageSrc';
-import Image from 'next/image';
 import { ImagePlus, Trash2 } from 'lucide-react';
 
 interface Props {

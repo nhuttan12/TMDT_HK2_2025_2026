@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Package, Search } from 'lucide-react';
 import { ProductForGoodsIssue } from '@/types/inventories/issues/uis/ProductForGoodsIssue';
-import { useProductSelectionGoodsIssueLogic } from '@/hooks/inventories/issues/use-product-selection-goods-issue-logic';
+import { useProductSelectionGoodsIssueLogic } from '@/hooks/inventories/goods-issues/use-product-selection-goods-issue-logic';
 
 interface ProductSelectionGoodsIssueModalProps {
 	products: ProductForGoodsIssue[];

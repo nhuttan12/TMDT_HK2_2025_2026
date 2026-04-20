@@ -1,6 +1,11 @@
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { JSX } from 'react';
 import { useUserInvoicesQuery } from '@/queries/invoices/user/use-invoice-detail-query';
+import { UserInvoicesUi } from '@/app/(app)/profile/invoices/_components/user-invoices-ui';
+import {
+	UserInvoicesLogicReturn,
+	useUserInvoicesLogic,
+} from '@/hooks/invoices/user/use-user-invoices-logic';
 
 interface UserInvoicesContainerProps {
 	userId: number;

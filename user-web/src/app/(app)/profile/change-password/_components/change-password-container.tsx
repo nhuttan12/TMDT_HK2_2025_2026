@@ -5,7 +5,7 @@ import { ChangePasswordUi } from './change-password-ui';
 import {
 	ChangePasswordLogicReturn,
 	useChangePasswordLogic,
-} from '@/hooks/user/profile/use-change-password-logic';
+} from '@/hooks/users/profile/use-change-password-logic';
 
 export default function ChangePasswordContainer(): JSX.Element {
 	const logic: ChangePasswordLogicReturn = useChangePasswordLogic();

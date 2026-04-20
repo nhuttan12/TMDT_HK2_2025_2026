@@ -13,7 +13,7 @@ import Pagination from '@/components/layout/share/pagination';
 import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { FilterField } from '@/types/uis/FilterField';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
-import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
+import {getPaymentMethodLabel} from "@/utils/invoices/payment-method-label";
 
 interface Props {
 	invoices: UserInvoice[];
@@ -43,8 +43,8 @@ export default function InvoiceAdminPageClient({ invoices }: Props): JSX.Element
 		'COD',
 		'VNPAY',
 		'MoMo',
-		'CREDIT_CARD',
-		'BANK_TRANSFER',
+		'credit_card',
+		'bank_transfer',
 	];
 
 	const schema: FilterField<InvoiceAdminFilterValues>[] = [

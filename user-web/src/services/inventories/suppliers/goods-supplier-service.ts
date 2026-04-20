@@ -1,7 +1,7 @@
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 
-export const fetchGoodsSupplier = async (): Promise<Supplier[]> => {
+export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 	const mockSuppliers: Supplier[] = [
 		{
 			id: 1,
@@ -53,7 +53,7 @@ export const fetchGoodsSupplier = async (): Promise<Supplier[]> => {
 	return mockSuppliers;
 };
 
-export const fetchProductBySupplierId = async (
+export const getProductBySupplierId = async (
 	supplierId: number,
 ): Promise<ProductListInfoAdmin[]> => {
 	const mockProducts: ProductListInfoAdmin[] = [

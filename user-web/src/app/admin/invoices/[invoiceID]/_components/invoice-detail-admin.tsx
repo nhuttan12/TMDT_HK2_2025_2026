@@ -12,7 +12,7 @@ import { JSX } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import Image from 'next/image';
 import { ShippingStatusBadge } from '@/components/invoice/shipping-status-badge';
-import {getPaymentMethodLabel} from "@/types/invoices/user/PaymentMethodLabel";
+import {getPaymentMethodLabel} from "@/utils/invoices/payment-method-label";
 
 interface Props {
 	invoice: InvoiceDetail;

@@ -3,7 +3,6 @@ import React, { JSX } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 import { getReplenishmentLabel } from '@/types/inventories/stocks/ReplenishmentLevelLabel';
 import { Column } from '@/types/uis/Column';

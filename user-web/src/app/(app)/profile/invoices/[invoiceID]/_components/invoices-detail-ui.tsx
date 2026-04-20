@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
-import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethodLabel';
-import { getInvoiceStatusLabel } from '@/types/invoices/user/InvoiceStatusLabel';
-import { getShippingStatusLabel } from '@/types/invoices/user/ShippingStatusLabel';
+import { getPaymentMethodLabel } from '@/utils/invoices/payment-method-label';
+import { getInvoiceStatusLabel } from '@/utils/invoices/invoice-status-label';
+import { getShippingStatusLabel } from '@/utils/invoices/shipping-status-label';
 import { formatMoney } from '@/utils/shared/money';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 

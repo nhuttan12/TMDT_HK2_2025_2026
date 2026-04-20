@@ -1,0 +1,21 @@
+import { JSX } from 'react';
+import { getHomeBannersAdmin } from '@/services/contents/home-banners/admin/home-banner-service-admin';
+import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
+import { Metadata } from 'next';
+import { ShopBannersContainer } from '@/app/admin/content/home-banners/_components/shop-banners-container';
+
+export const metadata: Metadata = {
+	title: 'Quản lý ảnh bìa',
+};
+
+export default async function ShopDecorationPage(): Promise<JSX.Element> {
+	const initialBanners: SortableImageForm[] = await getHomeBannersAdmin();
+
+	return (
+		<main className='min-h-screen p-4 md:p-8'>
+			<div className='max-w-6xl mx-auto'>
+				<ShopBannersContainer initialBanners={initialBanners} />
+			</div>
+		</main>
+	);
+}

@@ -1,12 +1,6 @@
-import { JSX } from 'react';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import React, { JSX } from 'react';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { Pencil, Trash } from 'lucide-react';
 
 interface Props {
 	id: number;
@@ -15,50 +9,42 @@ interface Props {
 }
 
 export default function GoodsIssueActions({ id, onEdit, onDelete }: Props): JSX.Element {
-	function handleEdit(e: React.MouseEvent<HTMLDivElement>): void {
+	// Ngăn chặn sự kiện click lan truyền lên Row của Table
+	function handleEdit(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.stopPropagation();
 		onEdit(id);
 	}
 
-	function handleDelete(e: React.MouseEvent<HTMLDivElement>): void {
+	function handleDelete(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.stopPropagation();
 		onDelete(id);
 	}
 
 	return (
-		<div className='text-right'>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button
-						variant='ghost'
-						size='icon'
-						className='h-8 w-8'
-					>
-						<MoreHorizontal size={16} />
-					</Button>
-				</DropdownMenuTrigger>
+		<div className='flex items-center justify-end gap-2'>
+			<Button
+				variant='link'
+				className='px-2 text-blue-600 hover:text-blue-700 font-medium'
+				onClick={handleEdit}
+			>
+				<Pencil
+					size={14}
+					className='mr-1.5'
+				/>
+				Sửa
+			</Button>
 
-				<DropdownMenuContent align='end'>
-					<DropdownMenuItem onClick={handleEdit}>
-						<Pencil
-							size={14}
-							className='mr-2'
-						/>
-						Chỉnh sửa
-					</DropdownMenuItem>
-
-					<DropdownMenuItem
-						className='text-red-500 focus:text-red-500'
-						onClick={handleDelete}
-					>
-						<Trash
-							size={14}
-							className='mr-2'
-						/>
-						Xóa
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			<Button
+				variant='link'
+				className='px-2 text-red-500 hover:text-red-600 font-medium'
+				onClick={handleDelete}
+			>
+				<Trash
+					size={14}
+					className='mr-1.5'
+				/>
+				Xóa
+			</Button>
 		</div>
 	);
 }

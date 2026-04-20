@@ -6,7 +6,15 @@ interface ProductListProps {
 	products: ProductUserCard[];
 }
 
-export default function ProductList({ products }: ProductListProps): JSX.Element {
+export default function ProductList({ products = [] }: ProductListProps): JSX.Element {
+	if (products.length === 0) {
+		return (
+			<div className='text-center py-10 text-muted-foreground bg-white rounded-2xl border border-gray-100 shadow-sm mt-3'>
+				Không tìm thấy sản phẩm nào.
+			</div>
+		);
+	}
+
 	return (
 		<section className='mt-3'>
 			<div className='max-w-7xl mx-auto px-4'>

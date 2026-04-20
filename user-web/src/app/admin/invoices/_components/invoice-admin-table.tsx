@@ -15,7 +15,7 @@ import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
-import { getPaymentMethodLabel } from '@/types/invoices/user/PaymentMethodLabel';
+import { getPaymentMethodLabel } from '@/utils/invoices/payment-method-label';
 
 interface Props {
 	invoices: UserInvoice[];

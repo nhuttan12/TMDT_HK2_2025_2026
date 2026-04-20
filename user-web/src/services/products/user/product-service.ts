@@ -341,3 +341,4 @@ export const getProductsHome = async (): Promise<ProductUserCard[]> => {
 
 	return products;
 };
+

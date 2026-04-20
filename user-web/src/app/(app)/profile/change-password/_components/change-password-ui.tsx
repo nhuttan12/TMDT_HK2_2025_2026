@@ -13,7 +13,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-import { ChangePasswordLogicReturn } from '@/hooks/user/profile/use-change-password-logic';
+import { ChangePasswordLogicReturn } from '@/hooks/users/profile/use-change-password-logic';
 
 type ChangePasswordUiProps = ChangePasswordLogicReturn;
 

@@ -2,10 +2,10 @@
 
 import { JSX } from 'react';
 import GoodsStockOverview from '@/app/admin/inventories/stocks/_components/goods-stock-overview';
-import { useGoodsStockSummaryQuery } from '@/queries/stocks/use-goods-stock-summary-query';
+import { useGoodsStockSummaryQuery } from '@/queries/inventories/stocks/use-goods-stock-summary-query';
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
 import GoodsStockTable from '@/app/admin/inventories/stocks/_components/goods-stock-table';
-import { useProductInStockQuery } from '@/queries/stocks/use-product-in-stock-query';
+import { useProductInStockQuery } from '@/queries/inventories/stocks/use-product-in-stock-query';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';

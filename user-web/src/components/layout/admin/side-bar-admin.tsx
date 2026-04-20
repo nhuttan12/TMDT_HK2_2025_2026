@@ -123,12 +123,12 @@ const sidebarData: SidebarItemInterface[] = [
 			// ----- CONTENT -----
 			{
 				title: 'Ảnh bìa',
-				href: '/admin/content/banners',
+				href: '/admin/content/home-banners',
 				icon: <ImageIcon size={18} />,
 			},
 			{
 				title: 'Ảnh quảng cáo',
-				href: '/admin/content/sliders',
+				href: '/admin/content/shop-banners',
 				icon: <Images size={18} />,
 			},
 			{

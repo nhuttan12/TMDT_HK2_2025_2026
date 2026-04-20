@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/table';
 import Image from 'next/image';
 import { JSX } from 'react';
-import { CartItem } from '@/types/carts/CartItem';
 import { CheckoutLogicReturn } from '@/hooks/carts/use-checkout-preview-logic';
 
 type CheckoutPreviewUIProps = CheckoutLogicReturn;
