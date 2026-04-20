@@ -90,7 +90,7 @@ namespace demo1.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sub) || string.IsNullOrEmpty(avatarUrl))
                 return BadRequest("Thông tin Google không đầy đủ");
 
-            var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl);
+            var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl );
             var token = await _authService.HandleGoogleLogin(googleInfo);
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
                 return BadRequest("Failed to generate tokens from Google info");

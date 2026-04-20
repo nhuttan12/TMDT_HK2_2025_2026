@@ -10,10 +10,10 @@ namespace api.Data.Configurations
         public void Configure(EntityTypeBuilder<UserExternalLogin> builder)
         {
             builder.ToTable("user_external_logins");
-            builder.HasKey(uel => uel.user_Id);
+            builder.HasKey(uel => uel.Id);
             builder.HasOne<User>()
                 .WithOne()
-                .HasForeignKey<UserExternalLogin>(uel => uel.user_Id)
+                .HasForeignKey<UserExternalLogin>(uel => uel.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

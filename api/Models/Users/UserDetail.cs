@@ -5,16 +5,22 @@ namespace api.Models.Users
     public class UserDetail
     {
         public UserDetail() { }
+
         public UserDetail(string? avatarUrl)
         {
-            this.avatar_url = avatarUrl;
+            this.AvatarUrl = avatarUrl;
         }
-        public int user_id { get; set; }
-        public DateTime lock_time_start { get; set; }
-        public DateTime lock_time_end { get; set; }
-        public string? avatar_url { get; set; }
-        public string? address_id { get; set; }
+        public int UserId { get; set; }
+        public DateTime LockTimeStart { get; set; }
+        public DateTime LockTimeEnd { get; set; }
+        public string? AvatarUrl { get; set; }
+        public string? AddressId { get; set; }
 
         public virtual User User { get; set; } = null!;
+
+        public static UserDetail Create()
+        {
+            return new UserDetail { };
+        }
     }
 }

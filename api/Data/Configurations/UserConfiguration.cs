@@ -27,14 +27,20 @@ namespace demo1.Data.Configurations
             // Quan hệ với UserExternalLogin
             builder.HasOne(u => u.UserExternalLogin)
                    .WithOne(uel => uel.User) // Cung cấp thuộc tính điều hướng ngược lại
-                   .HasForeignKey<UserExternalLogin>(uel => uel.user_Id)
+                   .HasForeignKey<UserExternalLogin>(uel => uel.Id)
                    .OnDelete(DeleteBehavior.Cascade);
 
             // Quan hệ với UserDetail
             builder.HasOne(u => u.UserDetail)
                    .WithOne(ud => ud.User) // Cung cấp thuộc tính điều hướng ngược lại
-                   .HasForeignKey<UserDetail>(ud => ud.user_id)
+                   .HasForeignKey<UserDetail>(ud => ud.UserId)
                    .OnDelete(DeleteBehavior.Cascade);
+            // quan hệ với Address
+            builder.HasMany(u => u.Addresses)
+                .WithOne(ad => ad.User)
+                .HasForeignKey(ad => ad.User_id)
+                .OnDelete(DeleteBehavior.Cascade);// Xóa User thì xóa luôn Address
+
 
         }
     }

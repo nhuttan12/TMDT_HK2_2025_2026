@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using demo1.Data;
@@ -11,9 +12,11 @@ using demo1.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420070613_AddAddressToUser")]
+    partial class AddAddressToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,27 +62,27 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("user_id")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
 
-                    b.Property<string>("AddressId")
+                    b.Property<string>("address_id")
                         .HasColumnType("text")
                         .HasColumnName("address_id");
 
-                    b.Property<string>("AvatarUrl")
+                    b.Property<string>("avatar_url")
                         .HasColumnType("text")
                         .HasColumnName("avatar_url");
 
-                    b.Property<DateTime>("LockTimeEnd")
+                    b.Property<DateTime>("lock_time_end")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("lock_time_end");
 
-                    b.Property<DateTime>("LockTimeStart")
+                    b.Property<DateTime>("lock_time_start")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("lock_time_start");
 
-                    b.HasKey("UserId")
+                    b.HasKey("user_id")
                         .HasName("pk_user_details");
 
                     b.ToTable("user_details", (string)null);
@@ -87,21 +90,21 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("user_Id")
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("user_id");
 
-                    b.Property<string>("Provider")
+                    b.Property<string>("provider")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("provider");
 
-                    b.Property<string>("ProviderKey")
+                    b.Property<string>("provider_key")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("provider_key");
 
-                    b.HasKey("Id")
+                    b.HasKey("user_Id")
                         .HasName("pk_user_external_logins");
 
                     b.ToTable("user_external_logins", (string)null);
@@ -229,7 +232,7 @@ namespace api.Migrations
                 {
                     b.HasOne("demo1.Models.User", "User")
                         .WithOne("UserDetail")
-                        .HasForeignKey("api.Models.Users.UserDetail", "UserId")
+                        .HasForeignKey("api.Models.Users.UserDetail", "user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_user_details_users_user_id");
@@ -241,10 +244,10 @@ namespace api.Migrations
                 {
                     b.HasOne("demo1.Models.User", "User")
                         .WithOne("UserExternalLogin")
-                        .HasForeignKey("api.Models.Users.UserExternalLogin", "Id")
+                        .HasForeignKey("api.Models.Users.UserExternalLogin", "user_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_external_logins_users_id");
+                        .HasConstraintName("fk_user_external_logins_users_user_id");
 
                     b.Navigation("User");
                 });

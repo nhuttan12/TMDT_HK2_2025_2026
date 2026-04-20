@@ -9,10 +9,10 @@ namespace api.Data.Configurations
         public void Configure(EntityTypeBuilder<UserDetail> builder)
         {
             builder.ToTable("user_details");
-            builder.HasKey(ud => ud.user_id);
+            builder.HasKey(ud => ud.UserId);
             builder.HasOne(ud => ud.User)
                .WithOne(u => u.UserDetail)
-               .HasForeignKey<UserDetail>(ud => ud.user_id)
+               .HasForeignKey<UserDetail>(ud => ud.UserId)
                .OnDelete(DeleteBehavior.Cascade);
         }
     }

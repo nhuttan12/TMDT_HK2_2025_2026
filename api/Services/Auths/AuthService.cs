@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace demo1.Services.Auths
 {
-    public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService,IUserService _userService, IMapper _mapper) : IAuthService
+    public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService, IMapper _mapper) : IAuthService
     {
         public string hashPassword(User user, string password)
         {
@@ -39,6 +39,23 @@ namespace demo1.Services.Auths
                 throw new UnauthorizedException("Email và password không chính xác");
             return GetTokenResponse(user);
         }
+        public async Task<UserInfoDTO> Register(RegisterRequest registerRequest)
+        {
+            if (await _context.Users.AnyAsync(u => u.Email == registerRequest.Email))
+            {
+                throw new BadRequestException("tài khoản đã tồn tại");
+            }
+            var r = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
+                ?? throw new InternalServerErrorException("Không tìm thấy role");
+
+            User newUser = User.Create(registerRequest.Email, r, "Local",string.Empty);
+
+            string passwordhash = hashPassword(newUser, registerRequest.Password);
+            newUser.SetPassword(passwordhash);
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserInfoDTO>(newUser);
+        }
         public async Task<TokenResponse> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
             // Logic của bạn: Tìm user trong DB hoặc tạo mới
@@ -52,10 +69,11 @@ namespace demo1.Services.Auths
                     Email = googleInfo.Email,
                     PasswordHash = "",
                     RoleId = 2,
+                    UserExternalLogin = UserExternalLogin.Create("Google",googleInfo.Sub),
                     UserDetail = new UserDetail
                     {
-                        avatar_url = googleInfo.Avatar_url
-                    }
+                        AvatarUrl = googleInfo.Avatar_url
+                    },
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
@@ -78,7 +96,6 @@ namespace demo1.Services.Auths
             };
             return res;
         }
-
         public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
         {
             var principal = _tokenService.ValidateToken(refreshToken);
@@ -95,20 +112,7 @@ namespace demo1.Services.Auths
             return GetTokenResponse(user);
         }
 
-        public async Task<UserInfoDTO> Register(RegisterRequest registerRequest)
-        {
-            if( await _context.Users.AnyAsync(u => u.Email == registerRequest.Email))
-            { 
-                throw new BadRequestException("tài khoản đã tồn tại");
-            }
-            var r = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
-                ?? throw new InternalServerErrorException("Không tìm thấy role");
-            User newUser = User.Create(registerRequest.Email,r);
-            string passwordhash = hashPassword(newUser,registerRequest.Password);
-            newUser.SetPassword(passwordhash);
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<UserInfoDTO>(newUser);
-        }
+
+       
     }
 }

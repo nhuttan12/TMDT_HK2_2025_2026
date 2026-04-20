@@ -9,12 +9,8 @@ namespace api.Data.Configurations
         public void Configure(EntityTypeBuilder<Address> builder)
         {
             builder.ToTable("addresses");
-            builder.HasKey(a => a.id);
-            builder.Property(a => a.id).UseIdentityByDefaultColumn();
-            builder.Property(a => a.user_id).IsRequired();
-            builder.Property(a => a.address_url).IsRequired();
-            builder.Property(a => a.create_at).IsRequired();
-            builder.Property(a => a.is_used).IsRequired();
+            builder.HasKey(a => a.Id);
+            builder.Property(a => a.Id).UseIdentityByDefaultColumn();
         }
     }
 }

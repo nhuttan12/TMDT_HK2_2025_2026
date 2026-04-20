@@ -63,7 +63,7 @@ namespace demo1.Controllers
             var user = await UserService.GetByIdAsync(int.Parse(userId));
             return Ok(user);
         }
-
+        // *********************************************************************
         [HttpPost("shop")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserInfoDTO>> CreateShop([FromBody] UserCreateShopDto userCreateDto)
@@ -79,6 +79,7 @@ namespace demo1.Controllers
             //TODO: implement method lock user
             return Ok();
         }
+
         [HttpPost("me")]
         [Authorize(Roles = "User, Admin, Shop")]
         public async Task<ActionResult<UserInfoDTO>> ChangeInfo([FromBody] UserUpdateInfo req)
@@ -92,6 +93,7 @@ namespace demo1.Controllers
             //TODO: implement method changeInfo 
             return Ok(user);
         }
+
         [Authorize(Roles = "User")]
         [HttpPost("me/change-password")]
         public async Task<IActionResult> ChangeMypassword([FromBody] ChangePasswordDto req)

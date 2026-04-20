@@ -18,7 +18,8 @@ namespace demo1.Data
         //public DbSet<Permission> Permissions { get; set; }
         //public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
-        public DbSet<Address> Address { get; set; }
+        public DbSet<Address> Address { get; set; } 
+        public DbSet<UserExternalLogin> UserExternalLogins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

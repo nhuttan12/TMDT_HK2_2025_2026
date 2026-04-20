@@ -1,4 +1,6 @@
-﻿namespace demo1.Dtos.Users.Responses
+﻿using api.Models.Users;
+
+namespace demo1.Dtos.Users.Responses
 {
     public class UserInfoDTO
     {
@@ -8,6 +10,9 @@
         public DateOnly? DateOfBirth { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+
+        public UserDetail? userDetail { get; set; }
+        public UserExternalLogin? externalLogin { get; set; }
 
     }
 }

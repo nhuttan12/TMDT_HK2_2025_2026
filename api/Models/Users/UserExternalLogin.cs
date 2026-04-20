@@ -5,10 +5,14 @@ namespace api.Models.Users
 {
     public class UserExternalLogin
     {
-        public int user_Id { get; set; }
+        public static UserExternalLogin Create(string Provider, string ProviderKey)
+        {
+            return new UserExternalLogin { Provider = Provider, ProviderKey = ProviderKey };
+        }
+        public int Id { get; set; }
         [Required]
-        public required string provider { get; set; } = string.Empty;
-        public string provider_key { get; set; } = string.Empty;
+        public required string Provider { get; set; } = string.Empty;
+        public string ProviderKey { get; set; } = string.Empty;
 
         public virtual User User { get; set; } = null!;
 

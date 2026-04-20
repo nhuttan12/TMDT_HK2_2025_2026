@@ -7,12 +7,15 @@ namespace demo1.Models
 {
     public class User
     {
-       public static User Create(string email, Role role)
+       public static User Create(string email, Role role,string provider,String providerKey)
         {
+            UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
+            UserDetail ud = UserDetail.Create();
             return new User
             {
                 Email = email.ToLower().Trim(),
-                Role = role
+                Role = role,
+                UserExternalLogin = ux,
             };
         }
         public int Id { get; set; }
@@ -25,6 +28,9 @@ namespace demo1.Models
 
         public string FullName { get; set; } = string.Empty;
 
+        //public bool isShop { get; set; }
+        //public bool isActive { get; set; }
+
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdateAt { get; set; }
@@ -34,14 +40,13 @@ namespace demo1.Models
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
         public virtual UserDetail? UserDetail { get; set; }
-        public virtual UserExternalLogin? UserExternalLogin { get; set; }
-        public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+        public virtual UserExternalLogin? UserExternalLogin { get;  set; }
+        public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
 
         public void SetPassword(string hash)
         {
             if (string.IsNullOrEmpty(hash)) throw new InternalServerErrorException("user: mật khẩu bị null");
             this.PasswordHash = hash;
         }
-
     }
 }

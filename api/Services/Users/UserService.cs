@@ -29,7 +29,7 @@ namespace demo1.Services.Users
         {
             var user = _mapper.Map<User>(userCreateDto);
             //  hash password
-            user.PasswordHash = _authService.hashPassword(user, userCreateDto.Password);
+            user.SetPassword(_authService.hashPassword(user, userCreateDto.Password));
             // add role
             Role? role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
             if (role == null)
@@ -37,6 +37,7 @@ namespace demo1.Services.Users
                 throw new Exception("User role not found.");
             }
             user.Role = role;
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserInfoDTO>(user);
@@ -55,7 +56,11 @@ namespace demo1.Services.Users
             }
             // trả về 1 truy vấn trì hoãn để có thể áp dụng các câu lệnh query khác như skip và take.
             // trước khi thực hiện truy vấn cơ sở dữ liệu bằng câu lệnh TolistAsync(),...
-            var usersQuery = _context.Users.Include(u => u.Role).AsNoTracking().AsQueryable();
+            var usersQuery = _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.UserDetail)
+                .Include(u => u.UserExternalLogin)
+                .AsNoTracking().AsQueryable();
             var totalUsers = await _context.Users.CountAsync();
 
             var skip = (query.PageNumber - 1) * query.PageSize;
@@ -79,18 +84,21 @@ namespace demo1.Services.Users
             return res;
         }
 
+
+        public async Task<UserInfoDTO?> GetByIdAsync(int id)
+        {
+            var user = await _context.Users
+                .Include(u => u.UserDetail)
+                .Include(u => u.UserExternalLogin)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            return user == null ? throw new NotFoundException("No User witth id: " + id) : _mapper.Map<UserInfoDTO>(user);
+        }
+        //**********************************************************************************
         public Task<User> GetByEmailAsync(string? email)
         {
             // TODO: Implement logic to retrieve user by email from the database
             throw new NotImplementedException();
         }
-
-        public async Task<UserInfoDTO?> GetByIdAsync(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            return user == null ? throw new NotFoundException("No User witth id: " + id) : _mapper.Map<UserInfoDTO>(user);
-        }
-
         public async Task GetUserByRefreshTokenAsync(string refreshToken)
         {
             // TODO: Implement logic to retrieve user by refresh token from the database
