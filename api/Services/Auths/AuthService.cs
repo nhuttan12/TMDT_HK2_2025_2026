@@ -1,16 +1,16 @@
 ﻿using api.Models.Users;
+using api.Repository;
 using AutoMapper;
-using demo1.Controllers;
-using demo1.Data;
-using demo1.Dtos.Users.Responses;
-using demo1.Exceptions;
-using demo1.Models;
-using demo1.Services.Users;
+using api.Controllers;
+using api.Dtos.Users.Responses;
+using api.Exceptions;
+using api.Models;
+using api.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace demo1.Services.Auths
+namespace api.Services.Auths
 {
     public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService, IMapper _mapper) : IAuthService
     {

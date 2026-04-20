@@ -1,4 +1,4 @@
-﻿using demo1.Models;
+﻿using api.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.Users

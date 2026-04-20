@@ -1,14 +1,14 @@
-﻿using api.Models.Utilities;
-using demo1.Dtos.Users.Requests;
-using demo1.Dtos.Users.Responses;
-using demo1.Exceptions;
-using demo1.Services.Users;
+﻿using api.Dtos.Users.Requests;
+using api.Dtos.Users.Responses;
+using api.Exceptions;
+using api.Models.Utilities;
+using api.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
-namespace demo1.Controllers
+namespace api.Controllers
 {
     /// <summary>
     /// UserController: nhận nhiệm vụ xử lý có thông tin của user 

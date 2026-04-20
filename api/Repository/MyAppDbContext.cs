@@ -1,9 +1,9 @@
 ﻿using api.Models.Users;
-using demo1.Models;
-using demo1.Models.Products;
-using demo1.Models.Roles;
+using api.Models;
+using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
-namespace demo1.Data
+using api.Models.Roles;
+namespace api.Repository
 {
     public class MyAppDbContext : DbContext
     {
@@ -12,7 +12,8 @@ namespace demo1.Data
         {
         }
         // Treat these as the entry points for LINQ queries against the DB.
-        public DbSet<User> Users { get; set; }
+        
+        public DbSet<api.Models.User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
         //public DbSet<Permission> Permissions { get; set; }

@@ -1,9 +1,9 @@
-﻿using demo1.Models;
-using demo1.Models.Roles;
-using demo1.Services.Auths;
+﻿using api.Models;
+using api.Models.Roles;
+using api.Services.Auths;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo1.Utilities
+namespace api.Utilities
 {
     public class DbInitializer
     {

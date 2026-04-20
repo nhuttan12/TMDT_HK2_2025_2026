@@ -1,4 +1,4 @@
-﻿using demo1.Models;
+﻿using api.Models;
 
 namespace api.Models.Users
 {

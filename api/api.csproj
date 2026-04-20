@@ -28,7 +28,6 @@
     <Folder Include="Dtos\" />
     <Folder Include="Excepptions\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Repository\" />
     <Folder Include="Utilities\" />
     <Folder Include="Services\" />
   </ItemGroup>

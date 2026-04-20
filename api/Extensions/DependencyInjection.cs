@@ -1,8 +1,9 @@
-﻿using demo1.Exceptions;
-using demo1.Models;
-using demo1.Models.Jwts;
-using demo1.Services.Auths;
-using demo1.Services.Users;
+﻿using api.Repository;
+using api.Exceptions;
+using api.Models;
+using api.Models.Jwts;
+using api.Services.Auths;
+using api.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace api.Extensions
         {
             // Đăng ký các dịch vụ bảo mật tại đây
             // Đăng ký DbContext với PostgreSQL
-            services.AddDbContext<demo1.Data.MyAppDbContext>(options =>
+            services.AddDbContext<MyAppDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 .UseSnakeCaseNamingConvention());
 

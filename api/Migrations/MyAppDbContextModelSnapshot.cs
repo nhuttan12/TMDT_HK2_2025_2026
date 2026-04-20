@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using demo1.Data;
+using api.Repository;
 
 #nullable disable
 
@@ -107,7 +107,7 @@ namespace api.Migrations
                     b.ToTable("user_external_logins", (string)null);
                 });
 
-            modelBuilder.Entity("demo1.Models.Products.Product", b =>
+            modelBuilder.Entity("api.Models.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -133,7 +133,7 @@ namespace api.Migrations
                     b.ToTable("products", (string)null);
                 });
 
-            modelBuilder.Entity("demo1.Models.Roles.Role", b =>
+            modelBuilder.Entity("api.Models.Roles.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -159,7 +159,7 @@ namespace api.Migrations
                     b.ToTable("roles", (string)null);
                 });
 
-            modelBuilder.Entity("demo1.Models.User", b =>
+            modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -215,7 +215,7 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Users.Address", b =>
                 {
-                    b.HasOne("demo1.Models.User", "User")
+                    b.HasOne("api.Models.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("User_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -227,7 +227,7 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
                 {
-                    b.HasOne("demo1.Models.User", "User")
+                    b.HasOne("api.Models.User", "User")
                         .WithOne("UserDetail")
                         .HasForeignKey("api.Models.Users.UserDetail", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -239,7 +239,7 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
                 {
-                    b.HasOne("demo1.Models.User", "User")
+                    b.HasOne("api.Models.User", "User")
                         .WithOne("UserExternalLogin")
                         .HasForeignKey("api.Models.Users.UserExternalLogin", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -249,9 +249,9 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("demo1.Models.User", b =>
+            modelBuilder.Entity("api.Models.User", b =>
                 {
-                    b.HasOne("demo1.Models.Roles.Role", "Role")
+                    b.HasOne("api.Models.Roles.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -261,12 +261,12 @@ namespace api.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("demo1.Models.Roles.Role", b =>
+            modelBuilder.Entity("api.Models.Roles.Role", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("demo1.Models.User", b =>
+            modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.Navigation("Addresses");
 

@@ -1,4 +1,4 @@
-﻿namespace demo1.Models.Jwts
+﻿namespace api.Models.Jwts
 {
     public class JwtSettings
     {

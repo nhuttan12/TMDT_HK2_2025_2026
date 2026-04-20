@@ -1,16 +1,16 @@
 ﻿using api.Models.Utilities;
+using api.Repository;
 using AutoMapper;
-using demo1.Controllers;
-using demo1.Data;
-using demo1.Dtos.Users.Requests;
-using demo1.Dtos.Users.Responses;
-using demo1.Exceptions;
-using demo1.Models;
-using demo1.Models.Roles;
-using demo1.Services.Auths;
+using api.Controllers;
+using api.Dtos.Users.Requests;
+using api.Dtos.Users.Responses;
+using api.Exceptions;
+using api.Models;
+using api.Models.Roles;
+using api.Services.Auths;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo1.Services.Users
+namespace api.Services.Users
 {
     public class UserService : IUserService
     {

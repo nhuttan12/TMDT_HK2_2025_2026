@@ -1,7 +1,7 @@
 using api.Extensions;
-using demo1.Data;
-using demo1.Services.Auths;
-using demo1.Utilities;
+using api.Repository;
+using api.Services.Auths;
+using api.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +26,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<MyAppDbContext>();
     var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
     // Truyền trực tiếp context vào để xử lý
+
     await DbInitializer.SeedEverything(context, config, authService);
 }
 

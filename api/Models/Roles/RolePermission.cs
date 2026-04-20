@@ -1,4 +1,4 @@
-﻿namespace demo1.Models.Roles
+﻿namespace api.Models.Roles
 {
     public class RolePermission
     {

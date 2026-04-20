@@ -1,5 +1,5 @@
-﻿using demo1.Dtos.Users.Responses;
-using demo1.Services.Auths;
+﻿using api.Dtos.Users.Responses;
+using api.Services.Auths;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
-namespace demo1.Controllers
+namespace api.Controllers
 {
 
     /// <summary>

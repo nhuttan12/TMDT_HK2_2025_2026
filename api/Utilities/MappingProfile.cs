@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using demo1.Dtos.Users.Requests;
-using demo1.Dtos.Users.Responses;
-using demo1.Models;
+using api.Dtos.Users.Requests;
+using api.Dtos.Users.Responses;
+using api.Models;
 
-namespace demo1.Utilities
+namespace api.Utilities
 {
 
     public class MappingProfile : Profile

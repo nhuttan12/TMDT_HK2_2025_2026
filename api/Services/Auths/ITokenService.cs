@@ -1,7 +1,7 @@
-﻿using demo1.Models;
+﻿using api.Models;
 using System.Security.Claims;
 
-namespace demo1.Services.Auths
+namespace api.Services.Auths
 {
     public interface ITokenService
     {

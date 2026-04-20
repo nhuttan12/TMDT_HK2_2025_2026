@@ -1,8 +1,8 @@
-﻿using api.Models.Users;
-using demo1.Models;
+﻿using api.Models;
+using api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace demo1.Data.Configurations
+namespace api.Repository.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

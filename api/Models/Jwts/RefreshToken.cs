@@ -1,4 +1,6 @@
-﻿namespace demo1.Models.Jwts
+﻿using api.Models.Jwts;
+
+namespace api.Models.Jwts
 {
     public class RefreshToken(string userId, DateTime expirationTime) : JwtToken( userId,  expirationTime)
     {

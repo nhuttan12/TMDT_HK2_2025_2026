@@ -3,9 +3,9 @@ using demo1.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace api.Data.Configurations
+namespace api.Repository.Configurations
 {
-    public class UserExternalLoginConfiguration : IEntityTypeConfiguration<api.Models.Users.UserExternalLogin>
+    public class UserExternalLoginConfiguration : IEntityTypeConfiguration<UserExternalLogin>
     {
         public void Configure(EntityTypeBuilder<UserExternalLogin> builder)
         {

@@ -1,7 +1,7 @@
-﻿using demo1.Models.Roles;
+﻿using api.Models.Roles;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace demo1.Data.Configurations
+namespace api.Repository.Configurations
 {
     public class RolePermissionConfiguration
     //: IEntityTypeConfiguration<RolePermission>

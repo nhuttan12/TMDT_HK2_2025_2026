@@ -1,10 +1,10 @@
 ﻿using api.Models.Utilities;
-using demo1.Controllers;
-using demo1.Dtos.Users.Requests;
-using demo1.Dtos.Users.Responses;
-using demo1.Models;
+using api.Controllers;
+using api.Dtos.Users.Requests;
+using api.Dtos.Users.Responses;
+using api.Models;
 
-namespace demo1.Services.Users
+namespace api.Services.Users
 {
     public interface IUserService
     {

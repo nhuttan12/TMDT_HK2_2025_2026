@@ -1,6 +1,6 @@
 ﻿using api.Models.Users;
 
-namespace demo1.Dtos.Users.Responses
+namespace api.Dtos.Users.Responses
 {
     public class UserInfoDTO
     {

@@ -1,9 +1,9 @@
-﻿using demo1.Models;
-using demo1.Models.Products;
+﻿using api.Models.Products;
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace demo1.Data.Configurations
+namespace api.Repository.Configurations
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

@@ -1,8 +1,8 @@
-﻿using demo1.Controllers;
-using demo1.Dtos.Users.Responses;
-using demo1.Models;
+﻿using api.Controllers;
+using api.Dtos.Users.Responses;
+using api.Models;
 
-namespace demo1.Services.Auths
+namespace api.Services.Auths
 {
     public interface IAuthService
     {

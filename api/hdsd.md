@@ -101,6 +101,6 @@ restart: unless-stopped
 
 
 "JwtSettings": {
-"Issuer": "https:/demo1/auth", // Định danh của Server tạo ra Token, Khi nhận Token, Server kiểm tra trường iss bên trong. Nếu nó không khớp với giá trị này, Server sẽ từ chối vì Token có thể đến từ một hệ thống lạ.
+"Issuer": "https:/api/auth", // Định danh của Server tạo ra Token, Khi nhận Token, Server kiểm tra trường iss bên trong. Nếu nó không khớp với giá trị này, Server sẽ từ chối vì Token có thể đến từ một hệ thống lạ.
 "Audience": "yourappusers", // Định danh của nơi mà Token này được phép sử dụng, Đảm bảo Token được cấp cho "App A" thì không thể dùng để đăng nhập vào "App B" dù cả hai dùng chung một Secret Key.
  }

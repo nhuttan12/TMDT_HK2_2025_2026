@@ -1,5 +1,5 @@
 ﻿//  Custom exceptions for better error handling
-namespace demo1.Exceptions
+namespace api.Exceptions
 {
     // 404 Not Found: The requested resource was not found.`    
     public class NotFoundException(string message) : Exception(message);

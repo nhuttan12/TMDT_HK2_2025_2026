@@ -1,12 +1,12 @@
-﻿using demo1.Models;
-using demo1.Models.Jwts;
+﻿using api.Models;
+using api.Models.Jwts;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace demo1.Services.Auths
+namespace api.Services.Auths
 {
     public class TokenService : ITokenService
     {

@@ -1,9 +1,9 @@
 ﻿using api.Models.Users;
-using demo1.Exceptions;
-using demo1.Models.Roles;
+using api.Exceptions;
+using api.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 
-namespace demo1.Models
+namespace api.Models
 {
     public class User
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace api.Data.Configurations
+namespace api.Repository.Configurations
 {
     public class UserDetailConfiguration : IEntityTypeConfiguration<UserDetail>
     {
