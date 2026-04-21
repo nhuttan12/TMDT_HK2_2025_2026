@@ -1,0 +1,52 @@
+﻿using api.Models.Users;
+using api.Exceptions;
+using api.Models.Roles;
+using System.ComponentModel.DataAnnotations;
+
+namespace api.Models
+{
+    public class User
+    {
+       public static User Create(string email, Role role,string provider,String providerKey)
+        {
+            UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
+            UserDetail ud = UserDetail.Create();
+            return new User
+            {
+                Email = email.ToLower().Trim(),
+                Role = role,
+                UserExternalLogin = ux,
+            };
+        }
+        public int Id { get; set; }
+
+        [Required]
+        public required string Email { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
+
+        public string? Phone { get; set; }
+
+        public string FullName { get; set; } = string.Empty;
+
+        //public bool isShop { get; set; }
+        //public bool isActive { get; set; }
+
+        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdateAt { get; set; }
+
+        public DateTime? DeleteAt { get; set; }
+
+        public int RoleId { get; set; }
+        public virtual Role Role { get; set; } = default!;
+        public virtual UserDetail? UserDetail { get; set; }
+        public virtual UserExternalLogin? UserExternalLogin { get;  set; }
+        public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+
+        public void SetPassword(string hash)
+        {
+            if (string.IsNullOrEmpty(hash)) throw new InternalServerErrorException("user: mật khẩu bị null");
+            this.PasswordHash = hash;
+        }
+    }
+}

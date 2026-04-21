@@ -9,19 +9,17 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 
 import { BaseInputField } from '@/types/uis/BaseInputField';
+import SocialLoginButtons from '@/components/auth/social-login-buttons';
+
+import { useAuth } from '@/hooks/auth/login/useAuth';
+import { useAuthStore } from '@/stores/auth.store';
 
 const fields: BaseInputField[] = [
 	{
 		name: 'username',
-		label: 'Tài khoản',
+		label: 'Tên người dùng',
 		type: 'text',
-		errorMessage: 'Tài khoản không được để trống',
-	},
-	{
-		name: 'email',
-		label: 'Email',
-		type: 'email',
-		errorMessage: 'Địa chỉ Email không được để trống',
+		errorMessage: 'Tên người dùng không được để trống',
 	},
 	{
 		name: 'password',
@@ -31,8 +29,9 @@ const fields: BaseInputField[] = [
 	},
 ];
 
-export default function Login(): JSX.Element {
+export default function LoginPage(): JSX.Element {
 	const [isVisible, setIsVisible] = useState(false);
+	const { isLoading, setIsLoading, loginWithGoogle, login, formdata, setFormData, handleSubmit } = useAuth();
 
 	return (
 		<div className='min-h-screen flex items-center justify-center bg-slate-100'>
@@ -47,7 +46,9 @@ export default function Login(): JSX.Element {
 					Đăng nhập
 				</h1>
 
-				<form className='flex flex-col space-y-4'>
+				<form className='flex flex-col space-y-4'
+					onSubmit={handleSubmit}
+				>
 					{fields.map((field) => {
 						const isPassword = field.type === 'password';
 
@@ -73,6 +74,14 @@ export default function Login(): JSX.Element {
 													? 'text'
 													: 'password'
 												: field.type
+										}
+										required
+										value={formdata[field.name as keyof typeof formdata]}
+										onChange={(e) =>
+											setFormData({
+												...formdata,
+												[field.name]: e.target.value,
+											})
 										}
 										className={`
                                             pr-10
@@ -112,9 +121,15 @@ export default function Login(): JSX.Element {
                             active:scale-[0.98]
                             focus-visible:ring-2 focus-visible:ring-black/40
                         '
+						disabled={isLoading}
 					>
 						Đăng nhập
 					</Button>
+					<SocialLoginButtons onLoginClick={(provider) => {
+						if (provider === 'google') {
+							loginWithGoogle();
+						}
+					}} />
 
 					<div className='pt-3 text-sm text-slate-600 text-center'>
 						Bạn chưa có tài khoản?{' '}

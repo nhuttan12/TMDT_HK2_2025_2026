@@ -37,7 +37,7 @@ const fields: BaseInputField[] = [
 	},
 ];
 
-export default function Register(): JSX.Element {
+export default function RegisterPage(): JSX.Element {
 	const [isVisible, setIsVisible] = useState(false);
 
 	return (
