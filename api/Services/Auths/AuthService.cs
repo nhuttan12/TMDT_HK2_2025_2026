@@ -9,10 +9,18 @@ using api.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using api.Repository.UserRepo;
+using api.Repository.RoleRepo;
 
 namespace api.Services.Auths
 {
-    public class AuthService(IPasswordHasher<User> _passwordHasher, MyAppDbContext _context, ITokenService _tokenService, IMapper _mapper) : IAuthService
+    public class AuthService(
+        IPasswordHasher<User> _passwordHasher, 
+        IAuthRepo _authRepo, 
+        ITokenService _tokenService, 
+        IMapper _mapper,
+        IRoleRepo _roleRepository,
+        IUnitOfWork _unitOfWork) : IAuthService
     {
         public string hashPassword(User user, string password)
         {
@@ -31,56 +39,72 @@ namespace api.Services.Auths
                 throw new BadRequestException("Email và password không phù hợp");
             }
             // lấy user 
-            var user = await _context.Users
-                .Include(u => u.Role)
-                .SingleOrDefaultAsync(u => u.Email == req.Email);
+            var user = await _authRepo.GetUserByEmailAsync(req.Email);
             // kiểm tra user có tồn tại và có đúng mật khẩu hay ko 
             if (user == null || !verifyPassword(user, req.Password, user.PasswordHash))
                 throw new UnauthorizedException("Email và password không chính xác");
-            return GetTokenResponse(user);
+            return GenerateTokenResponse(user);
         }
-        public async Task<UserInfoDTO> Register(RegisterRequest registerRequest)
+        public async Task<UserInfoDTO> Register(RegisterRequest request)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == registerRequest.Email))
+            // 1. Validation Logic
+            if (await _authRepo.ExistsByEmailAsync(request.Email))
             {
-                throw new BadRequestException("tài khoản đã tồn tại");
+                throw new BadRequestException("Tài khoản đã tồn tại");
             }
-            var r = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
-                ?? throw new InternalServerErrorException("Không tìm thấy role");
 
-            User newUser = User.Create(registerRequest.Email, r, "Local",string.Empty);
+            // 2. Business Rule: Mỗi User mới phải có Role mặc định
+            var role = await _roleRepository.GetByNameAsync("User")
+                ?? throw new InternalServerErrorException("Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'");
 
-            string passwordhash = hashPassword(newUser, registerRequest.Password);
-            newUser.SetPassword(passwordhash);
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+            // 3. Domain Logic: Khởi tạo Entity thông qua Factory Method (Rich Domain Model)
+            var newUser = User.Create(request.Email, role, "Local", string.Empty);
+
+            // 4. Security: Hashing (Sử dụng thư viện chuẩn thay vì hàm tự viết không rõ nguồn gốc)
+            var passwordHash = _passwordHasher.HashPassword(newUser, request.Password);
+            newUser.SetPassword(passwordHash);
+
+            // 5. Persistence
+            await _authRepo.AddAsync(newUser);
+            await _unitOfWork.CommitAsync(); 
+
             return _mapper.Map<UserInfoDTO>(newUser);
         }
+     
         public async Task<TokenResponse> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
-            // Logic của bạn: Tìm user trong DB hoặc tạo mới
-            var user = await _context.Users.Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Email == googleInfo.Email);
+            // 1. Tìm user hiện có
+            var user = await _authRepo.GetUserByEmailAsync(googleInfo.Email);
 
             if (user == null)
             {
+                // 2. Lấy role mặc định (Tránh hard-code ID = 2)
+                var defaultRole = await _roleRepository.GetByNameAsync("User")
+                    ?? throw new InternalServerErrorException("Default role not found");
+
+                // 3. Sử dụng Factory Method để tạo User object hoàn chỉnh
+                // Việc khởi tạo UserDetail và ExternalLogin nên nằm trong logic của Entity User
                 user = new User
                 {
                     Email = googleInfo.Email,
                     PasswordHash = "",
                     RoleId = 2,
-                    UserExternalLogin = UserExternalLogin.Create("Google",googleInfo.Sub),
+                    UserExternalLogin = UserExternalLogin.Create("Google", googleInfo.Sub),
                     UserDetail = new UserDetail
                     {
                         AvatarUrl = googleInfo.Avatar_url
                     },
                 };
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+
+                await _authRepo.AddAsync(user);
+                await _unitOfWork.CommitAsync();
             }
-            return GetTokenResponse(user);
+
+            // 4. Tạo JWT Token (Tách logic sinh token ra service riêng)
+            return GenerateTokenResponse(user);
         }
-        public TokenResponse GetTokenResponse(User user)
+
+        public TokenResponse GenerateTokenResponse(User user)
         {
             var retk = _tokenService.GenerateToken(user, false);
             var actk = _tokenService.GenerateToken(user, true);
@@ -96,6 +120,8 @@ namespace api.Services.Auths
             };
             return res;
         }
+       
+
         public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
         {
             var principal = _tokenService.ValidateToken(refreshToken);
@@ -103,16 +129,22 @@ namespace api.Services.Auths
             var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new BadRequestException("Invalid refresh token");
 
-            var user = await _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(Users => Users.Id == int.Parse(sub)) ?? throw new NotFoundException("user not found");
+            var user = await _authRepo.GetByIdWithRoleAsync(int.Parse(sub));
 
             if (user == null)
-                throw new DirectoryNotFoundException("User not found");
-            return GetTokenResponse(user);
+            {
+                throw new NotFoundException($"Không tìm thấy người dùng với ID: {sub}");
+            }
+
+            // TODO: 3. Kiểm tra các logic bổ sung (Ví dụ: User có bị khóa không?)
+            //if (user.IsLocked)
+            //{
+            //    throw new ForbiddenException("Tài khoản đã bị khóa.");
+            //}
+
+            // 4. Sinh bộ Token mới (Access Token & Refresh Token mới)
+            return GenerateTokenResponse(user);
         }
 
-
-       
     }
 }

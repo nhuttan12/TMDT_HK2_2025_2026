@@ -1,19 +1,26 @@
 ﻿namespace api.Models.Utilities
 {
-    public class Pagination<T>(IEnumerable<T> items, int totalItems, int pageNumber, int pageSize)
+    /// <summary>
+    /// Lớp bọc kết quả phân trang chuẩn hóa
+    /// </summary>
+    public class Pagination<T>
     {
-        public IEnumerable<T> Items { get; set; } = items;
-        // tổng số phần tử trong toàn bộ tập dữ liệu (không phải chỉ trên trang hiện tại)
-        public required int TotalItems { get; set; } = totalItems;
-        // vị trí trang hiện tại, bắt đầu từ 1
-        public required int PageNumber { get; set; } = pageNumber;
-        // số lượng phần tử trên mỗi trang
-        public required int PageSize { get; set; } = pageSize;
-        // tổng số trang, được tính dựa trên TotalItems và PageSize
+        public IReadOnlyList<T> Items { get; init; }
+        public int TotalItems { get; init; }
+        public int PageNumber { get; init; }
+        public int PageSize { get; init; }
         public int TotalPages => (int)Math.Ceiling((double)TotalItems / PageSize);
 
-        //public bool hasNext => PageNumber < TotalPages;
-        //public bool hasPrevious => PageNumber > 1;
+        public bool HasNext => PageNumber < TotalPages;
+        public bool HasPrevious => PageNumber > 1;
 
+        public Pagination(IEnumerable<T> items, int totalItems, int pageNumber, int pageSize)
+        {
+            // Chuyển sang List để tránh lazy evaluation (tránh duyệt lại nhiều lần)
+            Items = items.ToList().AsReadOnly();
+            TotalItems = totalItems;
+            PageNumber = pageNumber;
+            PageSize = pageSize;
+        }
     }
 }

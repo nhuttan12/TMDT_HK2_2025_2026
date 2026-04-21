@@ -9,6 +9,7 @@ using api.Models;
 using api.Models.Roles;
 using api.Services.Auths;
 using Microsoft.EntityFrameworkCore;
+using api.Repository.UserRepo;
 
 namespace api.Services.Users
 {
@@ -17,12 +18,14 @@ namespace api.Services.Users
         private readonly MyAppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
+        private readonly IUserRepository _userRepo;
 
-        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService)
+        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository)
         {
             _context = context;
             _mapper = Mapper;
             _authService = authService;
+            _userRepo = userRepository;
         }
 
         public async Task<UserInfoDTO> CreateAsync(UserCreateDto userCreateDto)
@@ -38,8 +41,7 @@ namespace api.Services.Users
             }
             user.Role = role;
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _userRepo.AddNewRepository(user);   
             return _mapper.Map<UserInfoDTO>(user);
         }
 
@@ -50,47 +52,27 @@ namespace api.Services.Users
 
         public async Task<Pagination<UserInfoDTO>> GetAllAsync(UserParameters query)
         {
+            // 1. Validation (Có thể đưa vào FluentValidation)
             if (query.PageNumber <= 0 || query.PageSize <= 0)
-            {
-                throw new BadRequestException("PageNumber and PageSize must be greater than 0.");
-            }
-            // trả về 1 truy vấn trì hoãn để có thể áp dụng các câu lệnh query khác như skip và take.
-            // trước khi thực hiện truy vấn cơ sở dữ liệu bằng câu lệnh TolistAsync(),...
-            var usersQuery = _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.UserDetail)
-                .Include(u => u.UserExternalLogin)
-                .AsNoTracking().AsQueryable();
-            var totalUsers = await _context.Users.CountAsync();
+                throw new BadRequestException("PageNumber and PageSize must be > 0.");
 
-            var skip = (query.PageNumber - 1) * query.PageSize;
+            // 2. Gọi Repo lấy dữ liệu thô (Domain Entities)
+            var (users, totalCount) = await _userRepo.GetAllPagedAsync(query.PageNumber, query.PageSize);
 
-            if (skip > 0)
-            {
-                usersQuery = usersQuery.Skip(skip);
-            }
-            var users = await usersQuery.Take(query.PageSize).ToListAsync();
-            if (users == null || users.Count == 0)
-            {
-                throw new NotFoundException("No users found.");
-            }
-            Pagination<UserInfoDTO> res = new(_mapper.Map<IEnumerable<UserInfoDTO>>(users), users.Count, query.PageNumber, query.PageSize)
-            {
-                Items = _mapper.Map<IEnumerable<UserInfoDTO>>(users),
-                TotalItems = totalUsers,
-                PageNumber = query.PageNumber,
-                PageSize = query.PageSize,
-            };
-            return res;
+            if (!users.Any()) throw new NotFoundException("No users found.");
+
+            // 3. Mapping sang DTOs
+            var userDtos = _mapper.Map<IEnumerable<UserInfoDTO>>(users);
+
+            // 4. Trả về kết quả phân trang
+            return new Pagination<UserInfoDTO>(userDtos, totalCount, query.PageNumber, query.PageSize);
+          
         }
 
 
         public async Task<UserInfoDTO?> GetByIdAsync(int id)
         {
-            var user = await _context.Users
-                .Include(u => u.UserDetail)
-                .Include(u => u.UserExternalLogin)
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userRepo.GetUserByIdAsync(id);
             return user == null ? throw new NotFoundException("No User witth id: " + id) : _mapper.Map<UserInfoDTO>(user);
         }
         //**********************************************************************************
