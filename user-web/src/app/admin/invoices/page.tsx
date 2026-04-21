@@ -7,7 +7,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1001,
 		createdAt: '2026-03-10T10:12:00',
-		status: 'PENDING_APPROVAL',
+		status: 'pending_approval',
 		paymentMethod: 'COD',
 		totalAmount: 750000,
 		totalItems: 2,
@@ -15,7 +15,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1002,
 		createdAt: '2026-03-10T12:40:00',
-		status: 'PAID',
+		status: 'paid',
 		paymentMethod: 'VNPAY',
 		totalAmount: 1200000,
 		totalItems: 3,
@@ -23,7 +23,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1003,
 		createdAt: '2026-03-11T09:20:00',
-		status: 'COMPLETED',
+		status: 'completed',
 		paymentMethod: 'MoMo',
 		totalAmount: 2100000,
 		totalItems: 5,
@@ -31,7 +31,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1004,
 		createdAt: '2026-03-11T13:15:00',
-		status: 'PAID',
+		status: 'paid',
 		paymentMethod: 'CREDIT_CARD',
 		totalAmount: 980000,
 		totalItems: 2,
@@ -39,7 +39,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1005,
 		createdAt: '2026-03-12T08:00:00',
-		status: 'CANCELLED',
+		status: 'cancelled',
 		paymentMethod: 'COD',
 		totalAmount: 450000,
 		totalItems: 1,
@@ -47,7 +47,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1006,
 		createdAt: '2026-03-12T10:30:00',
-		status: 'PENDING',
+		status: 'pending',
 		paymentMethod: 'BANK_TRANSFER',
 		totalAmount: 1800000,
 		totalItems: 4,
@@ -55,7 +55,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1007,
 		createdAt: '2026-03-12T16:45:00',
-		status: 'COMPLETED',
+		status: 'completed',
 		paymentMethod: 'MoMo',
 		totalAmount: 3200000,
 		totalItems: 6,
@@ -63,7 +63,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1008,
 		createdAt: '2026-03-13T09:10:00',
-		status: 'PAID',
+		status: 'paid',
 		paymentMethod: 'VNPAY',
 		totalAmount: 670000,
 		totalItems: 2,
@@ -71,7 +71,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1009,
 		createdAt: '2026-03-13T14:22:00',
-		status: 'PENDING',
+		status: 'pending',
 		paymentMethod: 'COD',
 		totalAmount: 530000,
 		totalItems: 1,
@@ -79,7 +79,7 @@ const mockInvoices: UserInvoice[] = [
 	{
 		id: 1010,
 		createdAt: '2026-03-14T11:05:00',
-		status: 'COMPLETED',
+		status: 'completed',
 		paymentMethod: 'CREDIT_CARD',
 		totalAmount: 2500000,
 		totalItems: 4,

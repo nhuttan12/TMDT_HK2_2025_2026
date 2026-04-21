@@ -7,7 +7,6 @@ export const mapProductAdminToFormState = (product: ProductDetailInfoAdmin): Pro
 	id: product.id,
 	name: product.name,
 	slug: product.slug,
-	brand: product.brand,
 	description: product.description,
 	importPrice: product.importPrice,
 	discount: product.discount,
@@ -21,7 +20,6 @@ export const mapProductAdminToFormState = (product: ProductDetailInfoAdmin): Pro
 export const mapFormToCreateDTO = (form: ProductFormState): ProductCreateDTO => ({
 	name: form.name,
 	slug: form.slug,
-	brand: form.brand,
 	description: form.description,
 	discount: form.discount,
 	status: form.status,
@@ -33,7 +31,6 @@ export const mapFormToUpdateDTO = (form: ProductFormState): ProductUpdateDTO => 
 	id: form.id,
 	name: form.name,
 	slug: form.slug,
-	brand: form.brand,
 	description: form.description,
 	discount: form.discount,
 	status: form.status,

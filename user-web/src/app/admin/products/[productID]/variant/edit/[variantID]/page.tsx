@@ -33,6 +33,7 @@ async function getVariant(id: string): Promise<ProductVariantDetail> {
 			reserved: 5,
 			incoming: 10,
 		},
+		supplierName: 'Công ty ABC',
 		shipping: {
 			weightInGram: 200,
 			dimensionsInCm: {
@@ -43,21 +44,21 @@ async function getVariant(id: string): Promise<ProductVariantDetail> {
 		},
 		images: [
 			{
-				localID: 'img-1',
+				localId: 'img-1',
 				imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
 				isPrimary: true,
 				order: 0,
 				status: 'done',
 			},
 			{
-				localID: 'img-2',
+				localId: 'img-2',
 				imageUrl: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c',
 				isPrimary: false,
 				order: 1,
 				status: 'done',
 			},
 			{
-				localID: 'img-3',
+				localId: 'img-3',
 				imageUrl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f',
 				isPrimary: false,
 				order: 2,

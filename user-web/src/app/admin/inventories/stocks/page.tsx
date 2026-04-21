@@ -1,7 +1,9 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import { fetchGoodsStockData } from '@/services/inventories/goods-stock-service';
-import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
+import {
+	fetchGoodsStockSummary,
+	fetchProductInStock,
+} from '@/services/inventories/stocks/goods-stock-service';
 import GoodsStockContainer from '@/app/admin/inventories/stocks/_components/goods-stock-container';
 
 export const metadata: Metadata = {
@@ -9,7 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function InventoriesPage(): Promise<JSX.Element> {
-	const serverStockData: GoodsStockSummaryItem[] = await fetchGoodsStockData();
-
-	return <GoodsStockContainer />;
+	const [summaryData, productData] = await Promise.all([
+		fetchGoodsStockSummary(),
+		fetchProductInStock(),
+	]);
+	return (
+		<GoodsStockContainer
+			initialSummary={summaryData}
+			initialProducts={productData}
+		/>
+	);
 }

@@ -9,5 +9,5 @@ export interface GoodsReceiptList {
 	totalQuantity: number;
 	totalAmount: number;
 	status: GoodsReceiptStatus;
-	createdByName: string;
+	createdAt: string;
 }

@@ -3,25 +3,19 @@
 import { usePathname, useRouter } from 'next/navigation';
 import {
 	Boxes,
-	CheckCircle2,
-	ClipboardList,
 	Download,
-	IdCard,
 	ImageIcon,
 	Images,
 	LayoutDashboard,
 	Megaphone,
 	MessageCircle,
 	Package,
-	Settings,
-	Shield,
 	ShoppingCart,
+	Store,
 	Tag,
 	TicketPercent,
 	Truck,
 	Upload,
-	User,
-	UserCog,
 	Users,
 	Warehouse,
 	Zap,
@@ -96,25 +90,30 @@ const sidebarData: SidebarItemInterface[] = [
 				icon: <Users size={18} />,
 			},
 			{
+				title: 'Cửa hàng',
+				href: '/admin/users/shops',
+				icon: <Store size={18} />,
+			},
+			{
 				title: 'Nhắn tin với khách hàng',
 				href: '/admin/users/customers/messages',
 				icon: <MessageCircle size={18} />,
 			},
-			{
-				title: 'Nhân viên',
-				href: '/admin/users/staffs',
-				icon: <UserCog size={18} />,
-			},
-			{
-				title: 'Phân quyền nhân viên',
-				href: '/admin/users/roles',
-				icon: <Shield size={18} />,
-			},
-			{
-				title: 'Nhiệm vụ phân công',
-				href: '/admin/users/tasks',
-				icon: <ClipboardList size={18} />,
-			},
+			// {
+			// 	title: 'Nhân viên',
+			// 	href: '/admin/users/staffs',
+			// 	icon: <UserCog size={18} />,
+			// },
+			// {
+			// 	title: 'Phân quyền nhân viên',
+			// 	href: '/admin/users/roles',
+			// 	icon: <Shield size={18} />,
+			// },
+			// {
+			// 	title: 'Nhiệm vụ phân công',
+			// 	href: '/admin/users/tasks',
+			// 	icon: <ClipboardList size={18} />,
+			// },
 		],
 	},
 	{
@@ -123,17 +122,17 @@ const sidebarData: SidebarItemInterface[] = [
 		children: [
 			// ----- CONTENT -----
 			{
-				title: 'Banner trang chủ',
-				href: '/admin/content/banners',
+				title: 'Ảnh bìa',
+				href: '/admin/content/home-banners',
 				icon: <ImageIcon size={18} />,
 			},
 			{
-				title: 'Slider / Carousel',
-				href: '/admin/content/sliders',
+				title: 'Ảnh quảng cáo',
+				href: '/admin/content/shop-banners',
 				icon: <Images size={18} />,
 			},
 			{
-				title: 'Popup khuyến mãi',
+				title: 'Hình ảnh khuyến mãi',
 				href: '/admin/content/popups',
 				icon: <Megaphone size={18} />,
 			},
@@ -156,27 +155,21 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 		],
 	},
+	// {
+	// 	title: 'Thông tin cá nhân',
+	// 	href: '/admin/me/profile',
+	// 	icon: <User size={18} />,
+	// },
 	{
-		title: 'Cá nhân',
-		icon: <User size={18} />,
-		children: [
-			{
-				title: 'Thông tin cá nhân',
-				href: '/admin/me/profile',
-				icon: <IdCard size={18} />,
-			},
-			{
-				title: 'Nhiệm vụ trong ngày',
-				href: '/admin/me/today-tasks',
-				icon: <CheckCircle2 size={18} />,
-			},
-		],
+		title: 'Thông tin cửa hàng',
+		href: '/admin/shop-info',
+		icon: <Store size={18} />,
 	},
-	{
-		title: 'Cài đặt',
-		href: '/admin/settings',
-		icon: <Settings size={18} />,
-	},
+	// {
+	// 	title: 'Cài đặt',
+	// 	href: '/admin/settings',
+	// 	icon: <Settings size={18} />,
+	// },
 ];
 
 export default function AdminSidebar(): JSX.Element {

@@ -4,7 +4,7 @@ import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 export interface ProductDetailInfoAdmin extends BaseProduct {
 	id: number;
 	images: SortableImageForm[];
-	brand: string;
+	supplierName: string;
 	description: string;
 	importPrice: number;
 	discount?: number;

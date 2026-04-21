@@ -11,8 +11,8 @@ const emptyProduct: ProductDetailInfoAdmin = {
 	id: 0,
 	name: '',
 	slug: '',
-	brand: '',
 	description: '',
+	supplierName: '',
 
 	importPrice: 0,
 	discount: 0,

@@ -1,18 +1,21 @@
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
-import React, { ChangeEvent, FormEvent, JSX, SetStateAction } from 'react';
+import React, { ChangeEvent, FormEvent, JSX, SetStateAction, useState } from 'react';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { Column } from '@/types/uis/Column';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { Switch } from '@/components/ui/switch';
 import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Image from 'next/image';
+import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { StatusModal } from '@/components/layout/share/status-modal';
+import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import Field from '@/components/layout/admin/field';
 
 interface Props {
 	form: ProductDetailInfoAdmin;
@@ -35,6 +38,8 @@ interface Props {
 
 	onVariantClick: (id: number) => void;
 	onAddVariant: () => void;
+	onDeleteVariant: (id: number) => void;
+	onEditVariant: (id: number) => void;
 }
 
 export default function ProductAdminFormUI({
@@ -54,10 +59,28 @@ export default function ProductAdminFormUI({
 	onSubmit,
 	onVariantClick,
 	onAddVariant,
+	onDeleteVariant,
+	onEditVariant,
 }: Props): JSX.Element {
 	const isCreate: boolean = mode === 'create';
 	const isView: boolean = mode === 'view';
 	const isUpdate: boolean = mode === 'update';
+
+	const modal: UseStatusModalReturn = useStatusModal();
+	const [deletingId, setDeletingId] = useState<number | null>(null);
+
+	const handleConfirmDelete = (): void => {
+		if (deletingId !== null) {
+			onDeleteVariant(deletingId);
+			setDeletingId(null);
+			modal.closeModal();
+		}
+	};
+
+	const handleCancelDelete = (): void => {
+		setDeletingId(null);
+		modal.closeModal();
+	};
 
 	const productVariantColumns: Column<ProductVariant>[] = [
 		{
@@ -98,121 +121,149 @@ export default function ProductAdminFormUI({
 					<span>—</span>
 				),
 		},
+		{
+			key: 'action',
+			header: <span className='block px-4'>Thao tác</span>,
+			render: (row: ProductVariant): JSX.Element => (
+				<div className='flex justify-center items-center w-full gap-4'>
+					<Button
+						variant='link'
+						size='lg'
+						className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+							e.stopPropagation();
+							onEditVariant(row.id);
+						}}
+					>
+						Sửa
+					</Button>
+
+					<Button
+						variant='link'
+						size='lg'
+						className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
+						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+							e.stopPropagation();
+							e.preventDefault();
+							setDeletingId(row.id);
+							modal.showWarning(
+								`Bạn có chắc chắn muốn xoá biến thể "${row.name}" không?`,
+							);
+						}}
+					>
+						Xoá
+					</Button>
+				</div>
+			),
+		},
 	];
 
 	return (
-		<AdminFormWrapper
-			title='Quản lý sản phẩm'
-			description='Quản lý thông tin chi tiết của sản phẩm'
-			onSubmit={onSubmit}
-			actions={
-				!isView && (
-					<Button type='submit'>
-						{isCreate ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}
-					</Button>
-				)
-			}
-		>
-			{/* Name */}
-			<div className='space-y-2'>
-				<Label>Tên sản phẩm</Label>
-				<Input
-					name='name'
-					value={form.name}
-					onChange={onInputChange}
-					disabled={disabled}
-				/>
-			</div>
-
-			{/* Brand */}
-			<div className='space-y-2'>
-				<Label>Thương hiệu</Label>
-				<Input
-					name='brand'
-					value={form.brand}
-					onChange={onInputChange}
-					disabled={disabled}
-				/>
-			</div>
-
-			{/* Description */}
-			<div className='space-y-2'>
-				<Label>Mô tả</Label>
-				<RichTextEditor
-					value={form.description}
-					onChange={onDescriptionChange}
-					disabled={disabled}
-				/>
-			</div>
-
-			{/* Status */}
-			{isUpdate && (
-				<div className='flex items-center gap-3'>
-					<Switch
-						checked={form.status}
-						onCheckedChange={onStatusChange}
+		<>
+			<AdminFormWrapper
+				title='Quản lý sản phẩm'
+				description='Quản lý thông tin chi tiết của sản phẩm'
+				onSubmit={onSubmit}
+				actions={
+					!isView && (
+						<Button type='submit'>
+							{isCreate ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}
+						</Button>
+					)
+				}
+			>
+				{/* Name */}
+				<Field label='Tên sản phẩm'>
+					<Input
+						name='name'
+						value={form.name}
+						onChange={onInputChange}
+						disabled={disabled}
 					/>
-					<span>Hoạt động</span>
-				</div>
-			)}
+				</Field>
 
-			{/* Sale price */}
-			<div className='space-y-2'>
-				<Label>Giá bán</Label>
-				<Input
-					type='number'
-					name='salePrice'
-					onChange={onInputChange}
-					disabled={disabled}
-				/>
-			</div>
+				{/* Category */}
+				<Field label='Danh mục'>
+					<Input
+						type='number'
+						name='categoryId'
+						value={form.categoryId}
+						onChange={onInputChange}
+						disabled={disabled}
+					/>
+				</Field>
 
-			{/* Import price */}
-			<div className='space-y-2'>
-				<Label>Giá nhập</Label>
-				<Input
-					type='number'
-					name='importPrice'
-					value={form.importPrice}
-					onChange={onInputChange}
-					disabled={disabled}
-				/>
-			</div>
+				{/* Supplier */}
+				<Field label='Nhà cung cấp'>
+					<Input
+						name='supplier'
+						value={form.supplierName}
+						onChange={onInputChange}
+						disabled={disabled}
+					/>
+				</Field>
 
-			{/* Discount */}
-			<div className='space-y-2'>
-				<Label>Giảm giá</Label>
-				<Input
-					type='number'
-					name='discount'
-					value={form.discount}
-					onChange={onInputChange}
-					disabled
-				/>
-			</div>
+				{/* Description */}
+				<Field label='Mô tả'>
+					<RichTextEditor
+						value={form.description}
+						onChange={onDescriptionChange}
+						disabled={disabled}
+					/>
+				</Field>
 
-			{/* Category */}
-			<div className='space-y-2'>
-				<Label>Danh mục</Label>
-				<Input
-					type='number'
-					name='categoryId'
-					value={form.categoryId}
-					onChange={onInputChange}
-					disabled={disabled}
-				/>
-			</div>
+				{/* Status - Giữ nguyên layout ngang */}
+				{isUpdate && (
+					<div className='flex items-center gap-3'>
+						<Switch
+							checked={form.status}
+							onCheckedChange={onStatusChange}
+						/>
+						<span>Hoạt động</span>
+					</div>
+				)}
 
-			{/* Images */}
-			<div className='space-y-4'>
-				<Label>Hình ảnh</Label>
-				<MultiImageUpload
-					value={form.images}
-					onChange={onImagesChange}
-					disabled={disabled}
-				/>
-			</div>
-			<div className='mt-8'>
+				{/* Sale price */}
+				<Field label='Giá bán'>
+					<Input
+						type='number'
+						name='salePrice'
+						onChange={onInputChange}
+						disabled={disabled}
+					/>
+				</Field>
+
+				{/* Import price */}
+				<Field label='Giá nhập'>
+					<Input
+						type='number'
+						name='importPrice'
+						value={form.importPrice}
+						onChange={onInputChange}
+						disabled={disabled}
+					/>
+				</Field>
+
+				{/* Discount */}
+				<Field label='Giảm giá'>
+					<Input
+						type='number'
+						name='discount'
+						value={form.discount}
+						onChange={onInputChange}
+						disabled
+					/>
+				</Field>
+
+				{/* Images */}
+				<Field label='Hình ảnh'>
+					<MultiImageUpload
+						value={form.images}
+						onChange={onImagesChange}
+						disabled={disabled}
+					/>
+				</Field>
+
 				<div className='flex justify-between items-center mb-4'>
 					<h2 className='font-bold text-lg'>Danh sách biến thể sản phẩm</h2>
 
@@ -244,7 +295,29 @@ export default function ProductAdminFormUI({
 						}}
 					/>
 				)}
-			</div>
-		</AdminFormWrapper>
+			</AdminFormWrapper>
+
+			{/* Modal Xác Nhận */}
+			<StatusModal
+				isOpen={modal.isOpen}
+				onClose={handleCancelDelete}
+				status={modal.status}
+				title={MODAL_TITLE_MAP[modal.status] || 'Thông báo'}
+				description={modal.message}
+				confirmText={modal.status === 'warning' ? 'Hủy' : 'Đóng'}
+			>
+				{/* Khi trạng thái là warning (chuẩn bị xoá), ta tiêm thêm nút Xác Nhận màu đỏ vào Custom Content */}
+				{modal.status === 'warning' && (
+					<div className='flex w-full justify-center mt-4'>
+						<Button
+							onClick={handleConfirmDelete}
+							className='bg-red-600 hover:bg-red-700 text-white min-w-[120px] cursor-pointer'
+						>
+							Xác nhận xoá
+						</Button>
+					</div>
+				)}
+			</StatusModal>
+		</>
 	);
 }

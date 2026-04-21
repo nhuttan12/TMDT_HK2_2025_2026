@@ -5,7 +5,7 @@ import {
 	ShippingStatus,
 
 } from '@/types/invoices/user/ShippingStatus';
-import {getShippingStatusLabel} from "@/types/invoices/user/ShippingStatusLabel";
+import {getShippingStatusLabel} from "@/utils/invoices/shipping-status-label";
 
 interface Props {
 	status: ShippingStatus;

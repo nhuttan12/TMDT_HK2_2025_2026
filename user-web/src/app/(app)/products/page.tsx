@@ -1,6 +1,10 @@
 import { JSX } from 'react';
-import ProductsPageClient from '@/app/(app)/products/_components/products-page-client';
+import ProductsContainer from '@/app/(app)/products/_components/products-container';
+import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import { getProductsHome } from '@/services/products/user/product-service';
 
-export default function ProductsPage(): JSX.Element {
-	return <ProductsPageClient />;
+export default async function ProductsPage(): Promise<JSX.Element> {
+	const products: ProductUserCard[] = await getProductsHome();
+
+	return <ProductsContainer initialProducts={products} />;
 }

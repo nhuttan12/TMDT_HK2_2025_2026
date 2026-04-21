@@ -116,7 +116,9 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 	id: 1,
 	name: 'iPhone 15 Pro Max 256GB',
 	slug: 'iphone-15-pro-max-256gb',
-	brand: 'Apple',
+
+	supplierName: 'Apple',
+
 	description: 'Phiên bản cao cấp nhất của iPhone 15 series.',
 
 	importPrice: 30000000,
@@ -127,7 +129,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 
 	images: [
 		{
-			localID: crypto.randomUUID(),
+			localId: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-1.jpg',
 			order: 0,
@@ -136,7 +138,7 @@ const mockProductAdmin: ProductDetailInfoAdmin = {
 			progress: 100,
 		},
 		{
-			localID: crypto.randomUUID(),
+			localId: crypto.randomUUID(),
 			imageUrl:
 				'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Phone/Apple/iphone_15/dien-thoai-iphone-15-pro-max-2.jpg',
 			order: 1,

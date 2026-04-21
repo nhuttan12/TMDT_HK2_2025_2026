@@ -19,6 +19,9 @@ export interface ProductVariantDetail {
 	// pricing
 	pricing: ProductVariantPricing;
 
+	// supplier
+	supplierName: string;
+
 	// inventory
 	inventory: ProductVariantInventory;
 

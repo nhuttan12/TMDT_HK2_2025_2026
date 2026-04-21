@@ -2,59 +2,16 @@ import { JSX } from 'react';
 import ProductAdminContainer from '@/app/admin/products/_components/product-admin-container';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { Metadata } from 'next';
+import { fetchProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
 
-const mockProducts: ProductListInfoAdmin[] = [
-	{
-		id: 1,
-		name: 'iPhone 15 Pro Max 256GB',
-		slug: 'iphone-15-pro-max-256gb',
-		image: 'https://picsum.photos/seed/iphone15/400/400',
-		status: true,
-		createdAt: '2024-01-10T10:00:00Z',
-		updatedAt: '2024-02-01T15:30:00Z',
-	},
-	{
-		id: 2,
-		name: 'MacBook Air M3 13-inch',
-		slug: 'macbook-air-m3-13-inch',
-		image: 'https://picsum.photos/seed/macbookm3/400/400',
-		status: true,
-		createdAt: '2024-01-10T10:00:00Z',
-		updatedAt: '2024-02-01T15:30:00Z',
-	},
-	{
-		id: 3,
-		name: 'AirPods Pro 2',
-		slug: 'airpods-pro-2',
-		image: 'https://picsum.photos/seed/airpodspro2/400/400',
-		status: false,
-		createdAt: '2024-01-10T10:00:00Z',
-		updatedAt: '2024-02-01T15:30:00Z',
-	},
-	{
-		id: 4,
-		name: 'iPad Pro 11-inch M2',
-		slug: 'ipad-pro-11-inch-m2',
-		image: 'https://picsum.photos/seed/ipadpro/400/400',
-		status: true,
-		createdAt: '2024-01-10T10:00:00Z',
-		updatedAt: '2024-02-01T15:30:00Z',
-	},
-	{
-		id: 5,
-		name: 'Apple Watch Series 9',
-		slug: 'apple-watch-series-9',
-		image: 'https://picsum.photos/seed/applewatch9/400/400',
-		status: false,
-		createdAt: '2024-01-10T10:00:00Z',
-		updatedAt: '2024-02-01T15:30:00Z',
-	},
-];
+
 
 export const metadata: Metadata = {
-	title: 'Quản lý danh sách sản phẩm',
+	title: 'Quản lý sản phẩm của cửa hàng',
 };
 
-export default function ProductsPage(): JSX.Element {
-	return <ProductAdminContainer products={mockProducts} />;
+export default async function ProductsPage(): Promise<JSX.Element> {
+	const products: ProductListInfoAdmin[] = await fetchProductListInfoAdmin();
+
+	return <ProductAdminContainer initialProducts={products} />;
 }

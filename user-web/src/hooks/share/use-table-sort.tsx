@@ -3,13 +3,20 @@
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { JSX } from 'react';
+import { JSX, useTransition } from 'react';
 
 type SortOrder = 'asc' | 'desc';
 
-export function useTableSort<T extends string>() {
+export interface UseTableSortReturn<T extends string> {
+	handleSort: (field: T) => void;
+	renderSortIcon: (field: T) => JSX.Element | null;
+	isPending: boolean;
+}
+
+export function useTableSort<T extends string>(): UseTableSortReturn<T> {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
+	const [isPending, startTransition] = useTransition();
 
 	const sortField = searchParams.get('sort') as T | null;
 	const sortOrder = (searchParams.get('order') as SortOrder) ?? 'asc';
@@ -32,21 +39,34 @@ export function useTableSort<T extends string>() {
 		params.set('sort', field);
 		params.set('order', newOrder);
 
-		router.push(`?${params.toString()}`);
+		startTransition((): void => {
+			router.push(`?${params.toString()}`, { scroll: false });
+		});
 	};
 
 	const renderSortIcon = (field: T): JSX.Element | null => {
 		if (sortField !== field) return null;
 
 		if (sortOrder === 'asc') {
-			return <ChevronUp size={14} className="inline ml-1" />;
+			return (
+				<ChevronUp
+					size={14}
+					className='inline ml-1'
+				/>
+			);
 		}
 
-		return <ChevronDown size={14} className="inline ml-1" />;
+		return (
+			<ChevronDown
+				size={14}
+				className='inline ml-1'
+			/>
+		);
 	};
 
 	return {
 		handleSort,
 		renderSortIcon,
+		isPending,
 	};
 }
