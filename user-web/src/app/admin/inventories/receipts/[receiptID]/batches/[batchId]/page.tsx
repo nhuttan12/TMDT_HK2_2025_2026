@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { Metadata } from 'next';
-import ProductVariantListInBatchTable from '@/app/admin/inventories/receipts/[receiptId]/batches/[batchId]/_components/product-variant-list-in-batch-table';
+import ProductVariantListInBatchContainer from '@/app/admin/inventories/receipts/[receiptId]/batches/[batchId]/_components/product-variant-list-in-batch-container';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
@@ -142,7 +142,7 @@ export default async function Page({ params }: Props): Promise<JSX.Element> {
 	}
 
 	return (
-		<ProductVariantListInBatchTable
+		<ProductVariantListInBatchContainer
 			batchId={id}
 			productVariants={mockBatchItemSerials}
 			mode={'view'}

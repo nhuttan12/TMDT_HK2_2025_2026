@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import GoodsIssueDetailContainer from '@/app/admin/inventories/issues/_components/goods-issue-detail-container';
+import GoodsIssueDetailContainer from '@/app/admin/inventories/issues/_components/goods-issue-detail/goods-issue-detail-container';
 import { GoodsIssueDetail } from '@/types/inventories/issues/uis/GoodsIssueDetail';
 import { getGoodsIssueById } from '@/services/inventories/goods-issues/goods-issue-detail-service';
 

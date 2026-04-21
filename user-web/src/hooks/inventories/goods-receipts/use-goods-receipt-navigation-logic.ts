@@ -4,7 +4,14 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useRouter } from 'next/navigation';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
-export function useGoodsReceiptNavigation() {
+export interface UseGoodsReceiptNavigationLogicReturn {
+	handleRedirectToBatchDetail: (receiptID: number, batchID: number, mode: AdminFormType) => void;
+	handleRedirectToAddNewReceiptDetail: () => void;
+	handleRedirectToEditReceiptDetail: (receiptID: number) => void;
+	handleRedirectToReceiptDetail: (receiptID: number) => void;
+}
+
+export const useGoodsReceiptNavigationLogic = (): UseGoodsReceiptNavigationLogicReturn => {
 	const router: AppRouterInstance = useRouter();
 
 	const handleRedirectToBatchDetail = (
@@ -37,4 +44,4 @@ export function useGoodsReceiptNavigation() {
 		handleRedirectToEditReceiptDetail,
 		handleRedirectToReceiptDetail,
 	};
-}
+};

@@ -4,7 +4,6 @@ import { DataTable } from '@/components/layout/admin/data-table';
 import Pagination from '@/components/layout/share/pagination';
 import DeleteConfirmModal from '@/components/layout/admin/delete-confirm-modal';
 import GoodsIssueStatusBadge from '@/app/admin/inventories/issues/_components/goods-issue-status-badge';
-import GoodsIssueActions from './goods-issue-actions';
 
 import { Column } from '@/types/uis/Column';
 import { FilterField } from '@/types/uis/FilterField';
@@ -13,6 +12,7 @@ import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/Good
 import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssueTypeLabel';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import { GoodsIssueAdminLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
+import GoodsIssueActions from "@/app/admin/inventories/issues/_components/goods-issue-list/goods-issue-actions";
 
 interface GoodsIssueAdminUiProps extends GoodsIssueAdminLogicReturn {
 	issues: GoodsIssueList[];

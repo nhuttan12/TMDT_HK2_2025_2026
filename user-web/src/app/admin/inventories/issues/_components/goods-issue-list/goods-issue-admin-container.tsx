@@ -2,12 +2,12 @@
 
 import { JSX } from 'react';
 import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
-import { GoodsIssueAdminUi } from './goods-issue-admin-ui';
 import { useGoodsIssueAdminQuery } from '@/queries/inventories/goods-issues/use-goods-issue-admin-query';
 import {
 	GoodsIssueAdminLogicReturn,
 	useGoodsIssueAdminLogic,
 } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
+import {GoodsIssueAdminUi} from "@/app/admin/inventories/issues/_components/goods-issue-list/goods-issue-admin-ui";
 
 interface GoodsIssueAdminContainerProps {
 	initialIssues: GoodsIssueList[];

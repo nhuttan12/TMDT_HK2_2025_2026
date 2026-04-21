@@ -27,7 +27,16 @@ const eslintConfig = defineConfig([
 					alwaysTryTypes: true,
 					project: './tsconfig.json',
 				},
+				// Thêm dòng này để giải mã chính xác các package trong node_modules
+				node: true,
 			},
+			// Thêm dòng này: Đưa các thư viện gây nhiễu vào danh sách miễn trừ
+			'import/core-modules': [
+				'@radix-ui/primitive',
+				'@radix-ui/react-slot',
+				'@dnd-kit/core',
+				'lucide-react',
+			],
 		},
 		rules: {
 			// Quy tắc then chốt: Báo lỗi đỏ nếu không tìm thấy file import

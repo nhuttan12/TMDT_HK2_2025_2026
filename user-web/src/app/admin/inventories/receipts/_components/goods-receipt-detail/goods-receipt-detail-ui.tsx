@@ -1,32 +1,27 @@
-'use client';
-
-import { Button } from '@/components/ui/button';
-import { useGoodsReceiptData } from '@/hooks/inventories/receipts/use-goods-receipt-data';
 import { ChangeEvent, JSX } from 'react';
-import { ProductSelectionGoodsReceiptModal } from './product-selection-goods-receipt-modal';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
-import { Column } from '@/types/uis/Column';
-import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import Field from '@/components/layout/admin/field';
-import GoodsReceiptStatusBadge from './goods-receipt-status-badge';
-import { formatDateForInput } from '@/utils/shared/date';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { useGoodsReceiptAdminLogic } from '@/hooks/inventories/receipts/use-goods-receipt-logic';
+import { formatDateForInput } from '@/utils/shared/date';
+import { Column } from '@/types/uis/Column';
+import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
+import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
+import { UseGoodsReceiptDetailLogicReturn } from '@/hooks/inventories/goods-receipts/use-goods-receipt-logic';
+import GoodsReceiptStatusBadge from '@/app/admin/inventories/receipts/_components/goods-receipt-detail/goods-receipt-status-badge';
+import {
+	ProductSelectionGoodsReceiptModal
+} from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
 
-interface GoodsReceiptDetailViewProps {
-	formType: AdminFormType;
-	goodsReceipt: GoodsReceiptDetail;
+
+// Extends trực tiếp Interface, chỉ khai báo thêm data tĩnh
+interface GoodsReceiptDetailUiProps extends UseGoodsReceiptDetailLogicReturn {
+	products: ProductForGoodsReceipt[];
 }
 
-export function GoodsReceiptDetailContainer({
-	formType,
-	goodsReceipt,
-}: GoodsReceiptDetailViewProps): JSX.Element {
-	const { mockProducts } = useGoodsReceiptData();
+export function GoodsReceiptDetailUi(props: GoodsReceiptDetailUiProps): JSX.Element {
 	const {
 		form,
 		batches,
@@ -34,12 +29,13 @@ export function GoodsReceiptDetailContainer({
 		isCreate,
 		totalQuantity,
 		totalAmount,
+		products,
 		updateReceiptField,
 		handleSubmit,
 		handleProductSelection,
 		handleRedirectToBatchDetail,
 		updateBatch,
-	} = useGoodsReceiptAdminLogic({ formType, goodsReceipt });
+	} = props;
 
 	const itemColumns: Column<GoodsReceiptBatch>[] = [
 		{ key: 'productName', header: 'Tên sản phẩm' },
@@ -164,7 +160,7 @@ export function GoodsReceiptDetailContainer({
 					<h2 className='font-bold text-lg'>Danh sách lô hàng chi tiết</h2>
 					{isCreate && (
 						<ProductSelectionGoodsReceiptModal
-							products={mockProducts}
+							products={products}
 							onSelectProduct={handleProductSelection}
 							trigger={<Button className='cursor-pointer'>Thêm lô hàng mới</Button>}
 						/>

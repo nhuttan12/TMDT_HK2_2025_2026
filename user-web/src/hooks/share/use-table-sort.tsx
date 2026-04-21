@@ -7,7 +7,13 @@ import { JSX, useTransition } from 'react';
 
 type SortOrder = 'asc' | 'desc';
 
-export function useTableSort<T extends string>() {
+export interface UseTableSortReturn<T extends string> {
+	handleSort: (field: T) => void;
+	renderSortIcon: (field: T) => JSX.Element | null;
+	isPending: boolean;
+}
+
+export function useTableSort<T extends string>(): UseTableSortReturn<T> {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 	const [isPending, startTransition] = useTransition();
@@ -61,6 +67,6 @@ export function useTableSort<T extends string>() {
 	return {
 		handleSort,
 		renderSortIcon,
-		isPending
+		isPending,
 	};
 }

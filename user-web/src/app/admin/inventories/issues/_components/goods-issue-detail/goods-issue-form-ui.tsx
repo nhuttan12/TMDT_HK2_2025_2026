@@ -11,7 +11,7 @@ import { DataTable } from '@/components/layout/admin/data-table';
 import { getPartnerTypeLabel } from '@/types/inventories/issues/uis/PartnerTypeLabel';
 import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssueTypeLabel';
 import { formatDateForInput } from '@/utils/shared/date';
-import { ProductSelectionGoodsIssueModal } from '@/app/admin/inventories/issues/_components/product-selection-goods-issue-modal';
+import { ProductSelectionGoodsIssueModal } from '@/app/admin/inventories/issues/_components/goods-issue-detail/product-selection-goods-issue-modal';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
 import { Trash } from 'lucide-react';

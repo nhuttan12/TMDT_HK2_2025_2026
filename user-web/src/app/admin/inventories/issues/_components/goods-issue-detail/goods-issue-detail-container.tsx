@@ -7,7 +7,7 @@ import {
 	useGoodsIssueFormLogic,
 	GoodsIssueLogicReturn,
 } from '@/hooks/inventories/goods-issues/use-goods-issue-form-logic';
-import { GoodsIssueFormUi } from './goods-issue-form-ui';
+import { GoodsIssueFormUi } from '@/app/admin/inventories/issues/_components/goods-issue-detail/goods-issue-form-ui';
 
 interface GoodsIssueDetailContainerProps {
 	formType: AdminFormType;

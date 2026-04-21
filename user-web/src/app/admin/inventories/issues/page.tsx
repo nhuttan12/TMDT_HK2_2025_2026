@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
 import { Metadata } from 'next';
 import { getGoodsIssuesAdmin } from '@/services/inventories/goods-issues/goods-issue-admin-service';
-import GoodsIssueAdminContainer from '@/app/admin/inventories/issues/_components/goods-issue-admin-container';
+import GoodsIssueAdminContainer from '@/app/admin/inventories/issues/_components/goods-issue-list/goods-issue-admin-container';
 
 export const metadata: Metadata = {
 	title: 'Quản lý hoá đơn xuất kho',
