@@ -10,7 +10,7 @@ namespace api.Repository.UserRepo
         public Task<(IEnumerable<User> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize);
 
     }
-    public class UserRopository(MyAppDbContext _context) : IUserRepository
+    public class UserRepository(MyAppDbContext _context) : IUserRepository
     {
         public async void AddNewRepository(User user)
         {

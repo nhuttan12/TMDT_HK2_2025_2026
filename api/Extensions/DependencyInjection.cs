@@ -6,6 +6,8 @@ using api.Services.Auths;
 using api.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using api.Repository.UserRepo;
+using api.Repository.RoleRepo;
 
 namespace api.Extensions
 {
@@ -22,8 +24,15 @@ namespace api.Extensions
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 .UseSnakeCaseNamingConvention());
 
-            // Đăng ký các service
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            // dang ky ropository
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRoleRepo, RoleRepo>();
+            services.AddScoped<IAuthRepo, AuthRepo>();
+
+
+            // Đăng ký các service
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
