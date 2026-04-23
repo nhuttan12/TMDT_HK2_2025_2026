@@ -10,7 +10,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { JSX, useState } from 'react';
+import { JSX, SyntheticEvent, useState } from 'react';
 import { TaskCreating } from '@/types/users/admin/TaskCreating';
 import { TaskStatus } from '@/types/users/admin/TaskStatus';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ export default function TaskAssignmentForm({ employees }: Props): JSX.Element {
 		status: 'pending',
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = (e: SyntheticEvent) => {
 		e.preventDefault();
 
 		console.log('Task assignment:', form);

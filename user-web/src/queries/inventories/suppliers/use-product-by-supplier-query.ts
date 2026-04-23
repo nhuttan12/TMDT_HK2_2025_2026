@@ -1,13 +1,14 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { getProductBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { fetchProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
 
-export function useProductListInfoAdmin(
+export function useProductBySupplierQuery(
+	supplierId: number,
 	initialData?: ProductListInfoAdmin[],
 ): UseQueryResult<ProductListInfoAdmin[], Error> {
 	return useQuery({
-		queryKey: ['product-list-info-admin'],
-		queryFn: fetchProductListInfoAdmin,
+		queryKey: ['supplier-products', supplierId],
+		queryFn: (): Promise<ProductListInfoAdmin[]> => getProductBySupplierId(supplierId),
 		// Lấy data từ Server làm vốn ban đầu
 		initialData: initialData,
 		// Sau đó nó sẽ tự động chạy ngầm để lấy data mới nhất (nếu cần)

@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, JSX, useState } from 'react';
+import { FormEvent, JSX, SyntheticEvent, useState } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
 import { Switch } from '@/components/ui/switch';
 import { RoleFormType } from '@/types/shared/admin/RoleFormType';
@@ -48,7 +48,7 @@ export default function RolePermissionForm({ permissions, formType }: Props): JS
 
 	const firstResource: string = Object.keys(groupedPermissions)[0];
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = (e: SyntheticEvent) => {
 		e.preventDefault();
 		handleSave();
 	};

@@ -1,15 +1,15 @@
 'use client';
 
 import { JSX } from 'react';
-import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { Button } from '@/components/ui/button';
-import Field from '@/components/layout/admin/field';
-import { Input } from '@/components/ui/input';
-import { useSupplierLogic } from '@/hooks/inventories/suppliers/use-supplier-logic';
+import {
+	useSupplierFormLogic,
+	UseSupplierFormLogicReturn,
+} from '@/hooks/inventories/suppliers/use-supplier-form-logic';
+import SupplierFormUi from '@/app/admin/inventories/suppliers/[supplierId]/edit/_components/supplier-form-ui';
 
-export interface SupplierFormContainerProps {
+interface SupplierFormContainerProps {
 	supplier: Supplier;
 	mode: AdminFormType;
 }
@@ -18,121 +18,10 @@ export default function SupplierFormContainer({
 	supplier,
 	mode,
 }: SupplierFormContainerProps): JSX.Element {
-	const {
-		form,
-		isView,
-		isCreate,
-		handleNameChange,
-		handleTaxCodeChange,
-		handleContactNameChange,
-		handlePhoneChange,
-		handleEmailChange,
-		handleAddressChange,
-		onFormSubmit,
-		handleBack,
-	} = useSupplierLogic({
+	const supplierFormLogic: UseSupplierFormLogicReturn = useSupplierFormLogic({
 		formType: mode,
 		supplier: supplier,
 	});
 
-	return (
-		<AdminFormWrapper
-			title={
-				isCreate
-					? 'Thêm mới nhà cung cấp'
-					: isView
-						? 'Chi tiết nhà cung cấp'
-						: 'Cập nhật nhà cung cấp'
-			}
-			description='Quản lý thông tin đối tác cung cấp hàng hóa và dịch vụ'
-			onSubmit={onFormSubmit}
-			actions={
-				<div className='flex gap-3'>
-					<Button
-						type='button'
-						variant='outline'
-						onClick={(): void => handleBack()}
-						className='cursor-pointer'
-					>
-						{isView ? 'Quay lại' : 'Hủy bỏ'}
-					</Button>
-					{!isView && (
-						<Button
-							type='submit'
-							className='cursor-pointer'
-						>
-							{isCreate ? 'Thêm mới' : 'Cập nhật'}
-						</Button>
-					)}
-				</div>
-			}
-		>
-			<div className='grid grid-cols-2 gap-6 p-6 rounded-xl border bg-card shadow-sm'>
-				{/* Tên nhà cung cấp */}
-				<Field label='Tên nhà cung cấp *'>
-					<Input
-						value={form.name}
-						disabled={isView}
-						onChange={handleNameChange}
-						placeholder='Nhập tên công ty/nhà cung cấp...'
-					/>
-				</Field>
-
-				{/* Mã số thuế */}
-				<Field label='Mã số thuế *'>
-					<Input
-						value={form.taxCode}
-						disabled={isView}
-						className='font-mono'
-						onChange={handleTaxCodeChange}
-						placeholder='Ví dụ: 0101234567'
-					/>
-				</Field>
-
-				{/* Người liên hệ */}
-				<Field label='Người liên hệ'>
-					<Input
-						value={form.contactName || ''}
-						disabled={isView}
-						onChange={handleContactNameChange}
-						placeholder='Nhập tên người đại diện...'
-					/>
-				</Field>
-
-				{/* Số điện thoại */}
-				<Field label='Số điện thoại'>
-					<Input
-						value={form.phone || ''}
-						disabled={isView}
-						onChange={handlePhoneChange}
-						placeholder='Nhập số điện thoại liên hệ...'
-					/>
-				</Field>
-
-				{/* Email */}
-				<Field label='Email liên hệ'>
-					<Input
-						type='email'
-						value={form.email || ''}
-						disabled={isView}
-						onChange={handleEmailChange}
-						placeholder='Ví dụ: contact@supplier.com'
-					/>
-				</Field>
-
-				{/* Địa chỉ (Chiếm 2 cột vì thường rất dài) */}
-				<Field
-					label='Địa chỉ chi tiết *'
-					className='col-span-2'
-				>
-					<Input
-						value={form.address}
-						disabled={isView}
-						onChange={handleAddressChange}
-						placeholder='Nhập số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố...'
-					/>
-				</Field>
-			</div>
-		</AdminFormWrapper>
-	);
+	return <SupplierFormUi {...supplierFormLogic} />;
 }

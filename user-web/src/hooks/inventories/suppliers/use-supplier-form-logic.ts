@@ -4,12 +4,26 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export interface UseSupplierLogicProps {
+interface UseSupplierLogicProps {
 	formType: AdminFormType;
 	supplier: Supplier;
 }
 
-export function useSupplierLogic(props: UseSupplierLogicProps) {
+export interface UseSupplierFormLogicReturn {
+	form: Supplier;
+	isView: boolean;
+	isCreate: boolean;
+	handleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleTaxCodeChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleContactNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handlePhoneChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleAddressChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	onFormSubmit: (e: FormEvent) => Promise<void>;
+	handleBack: () => void;
+}
+
+export function useSupplierFormLogic(props: UseSupplierLogicProps): UseSupplierFormLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
 	const isView: boolean = props.formType === 'view';

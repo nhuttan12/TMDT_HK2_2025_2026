@@ -14,7 +14,12 @@ import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { useTableSelection } from '@/hooks/share/use-table-selection';
+import {
+	useProductAdminTableLogic,
+	UseProductAdminTableLogicReturn,
+} from '@/hooks/products/admin/use-product-admin-table-logic';
+import { StatusModal } from '@/components/layout/share/status-modal';
+import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -31,10 +36,9 @@ export default function ProductAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const allKeys: number[] = products.map((p: ProductListInfoAdmin): number => p.id);
-
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
-		useTableSelection<number>(allKeys);
+	const logic: UseProductAdminTableLogicReturn = useProductAdminTableLogic({
+		products: products,
+	});
 
 	const columns: Column<ProductListInfoAdmin>[] = [
 		{
@@ -160,18 +164,40 @@ export default function ProductAdminTable({
 	];
 
 	return (
-		<DataTable
-			data={products}
-			columns={columns}
-			onRowClick={(row: ProductListInfoAdmin): void => onView(row.id)}
-			getRowKey={(row: ProductListInfoAdmin): number => row.id}
-			selectable={{
-				selected: selected,
-				onToggle: toggle,
-				onToggleAll: toggleAll,
-				isAllSelected,
-				isIndeterminate,
-			}}
-		/>
+		<>
+			<DataTable
+				data={products}
+				columns={columns}
+				onRowClick={(row: ProductListInfoAdmin): void => onView(row.id)}
+				getRowKey={(row: ProductListInfoAdmin): number => row.id}
+				selectable={{
+					selected: logic.selected,
+					onToggle: logic.toggle,
+					onToggleAll: logic.toggleAll,
+					isAllSelected: logic.isAllSelected,
+					isIndeterminate: logic.isIndeterminate,
+				}}
+			/>
+
+			<StatusModal
+				isOpen={logic.modal.isOpen}
+				onClose={logic.handleCancelDelete}
+				status={logic.modal.status}
+				title={MODAL_TITLE_MAP[logic.modal.status] || 'Thông báo'}
+				description={logic.modal.message}
+				confirmText={logic.modal.status === 'warning' ? 'Hủy' : 'Đóng'}
+			>
+				{logic.modal.status === 'warning' && (
+					<div className='flex w-full justify-center mt-4'>
+						<Button
+							onClick={logic.handleConfirmDelete}
+							className='bg-red-600 hover:bg-red-700 text-white min-w-[120px] cursor-pointer'
+						>
+							Xác nhận xoá
+						</Button>
+					</div>
+				)}
+			</StatusModal>
+		</>
 	);
 }

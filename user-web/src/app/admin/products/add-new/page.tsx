@@ -23,12 +23,14 @@ const emptyProduct: ProductDetailInfoAdmin = {
 
 	createdAt: '',
 	updatedAt: '',
+
+	productVariants: []
 };
 
 export default function AddNewProductPage(): JSX.Element {
 	return (
 		<ProductAdminFormContainer
-			productAdmin={emptyProduct}
+			initialProductAdmin={emptyProduct}
 			key={'create'}
 			formType={'create'}
 		/>

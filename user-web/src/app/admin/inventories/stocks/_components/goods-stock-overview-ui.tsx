@@ -12,7 +12,7 @@ interface GoodsStockOverviewProps {
 	goodsStockSummary: GoodsStockSummaryItem[];
 }
 
-export default function GoodsStockOverview({
+export default function GoodsStockOverviewUi({
 	goodsStockSummary,
 }: GoodsStockOverviewProps): JSX.Element {
 	const productInStockFilterFields: FilterField<ProductInStockFilterValues>[] = [

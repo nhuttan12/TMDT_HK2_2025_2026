@@ -18,7 +18,7 @@ interface Props {
 	invoice: InvoiceDetail;
 }
 
-export default function InvoiceDetailAdmin({ invoice }: Props): JSX.Element {
+export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 	return (
 		<div className='space-y-6'>
 			{/* HEADER */}

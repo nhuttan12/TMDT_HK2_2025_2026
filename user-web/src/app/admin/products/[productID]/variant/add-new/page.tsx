@@ -43,6 +43,8 @@ export default function Page({ params }: Props): JSX.Element {
 		images: [],
 		createdAt: '',
 		updatedAt: '',
+
+		supplierName: '',
 	};
 
 	return (

@@ -1,14 +1,16 @@
 'use client';
 
 import { JSX } from 'react';
-import GoodsStockOverview from '@/app/admin/inventories/stocks/_components/goods-stock-overview';
+import GoodsStockOverviewUi from '@/app/admin/inventories/stocks/_components/goods-stock-overview-ui';
 import { useGoodsStockSummaryQuery } from '@/queries/inventories/stocks/use-goods-stock-summary-query';
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
-import GoodsStockTable from '@/app/admin/inventories/stocks/_components/goods-stock-table';
+import GoodsStockTableUi from '@/app/admin/inventories/stocks/_components/goods-stock-table-ui';
 import { useProductInStockQuery } from '@/queries/inventories/stocks/use-product-in-stock-query';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {
+	useGoodsStockLogic,
+	UseGoodsStockLogicReturn,
+} from '@/hooks/inventories/stocks/use-goods-stock-logic';
 
 interface GoodsStockContainerProps {
 	initialSummary: GoodsStockSummaryItem[];
@@ -19,10 +21,14 @@ export default function GoodsStockContainer({
 	initialSummary,
 	initialProducts,
 }: GoodsStockContainerProps): JSX.Element {
-	const router: AppRouterInstance = useRouter();
-	const { data: summary, isLoading: isSummaryLoading } = useGoodsStockSummaryQuery(initialSummary);
+	// 1. Fetching Data
+	const { data: summary, isLoading: isSummaryLoading } =
+		useGoodsStockSummaryQuery(initialSummary);
+	const { data: products, isLoading: isProductsLoading } =
+		useProductInStockQuery(initialProducts);
 
-	const { data: products, isLoading: isProductsLoading } = useProductInStockQuery(initialProducts);
+	// 2. Gọi Logic Hook
+	const stockLogic: UseGoodsStockLogicReturn = useGoodsStockLogic();
 
 	const isPageLoading: boolean = isSummaryLoading || isProductsLoading;
 
@@ -30,21 +36,12 @@ export default function GoodsStockContainer({
 		return <div className='p-4 text-gray-500'>Đang tải dữ liệu...</div>;
 	}
 
-	const handleEditVariant = (row: ProductInStock): void => {
-		router.push(`/admin/products/${row.productId}/variant/edit/${row.productVariantId}`);
-	};
-
-	const handleViewVariant = (row: ProductInStock): void => {
-		router.push(`/admin/products/${row.productId}/variant/${row.productVariantId}`);
-	};
-
 	return (
 		<>
-			<GoodsStockOverview goodsStockSummary={summary ?? []} />
-			<GoodsStockTable
+			<GoodsStockOverviewUi goodsStockSummary={summary ?? []} />
+			<GoodsStockTableUi
 				products={products ?? []}
-				onEditVariant={handleEditVariant}
-				onViewVariant={handleViewVariant}
+				{...stockLogic}
 			/>
 		</>
 	);

@@ -3,45 +3,30 @@
 import { DataTable } from '@/components/layout/admin/data-table';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { Column } from '@/types/uis/Column';
-import React, { JSX, useState } from 'react';
+import React, { JSX } from 'react';
 import { Button } from '@/components/ui/button';
-import { SupplierSortField } from '@/types/inventories/suppliers/SupplierSortField';
-import { useTableSort } from '@/hooks/share/use-table-sort';
-import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import { UseSupplierListLogicReturn } from '@/hooks/inventories/suppliers/use-supplier-list-logic';
 
-interface SupplierTableProps {
+// Kế thừa toàn bộ logic từ Hook, ngoại trừ các biến của Pagination do Container đã xài
+interface SupplierTableProps extends Omit<
+	UseSupplierListLogicReturn,
+	'currentPage' | 'changePage'
+> {
 	suppliers: Supplier[];
-
-	onViewSupplier: (id: number) => void;
-	onEditSupplier: (id: number) => void;
-	onDeleteSupplier: (id: number) => void;
 }
-
 export default function SupplierTable({
 	suppliers,
-	onViewSupplier,
-	onEditSupplier,
-	onDeleteSupplier,
+	handleSort,
+	renderSortIcon,
+	handleViewSupplier,
+	handleEditSupplier,
+	handleTriggerDelete,
+	handleConfirmDelete,
+	handleCancelDelete,
+	modal,
 }: SupplierTableProps): JSX.Element {
-	const { handleSort, renderSortIcon } = useTableSort<SupplierSortField>();
-	const modal: UseStatusModalReturn = useStatusModal();
-	const [deletingId, setDeletingId] = useState<number | null>(null);
-
-	const handleConfirmDelete = (): void => {
-		if (deletingId !== null) {
-			onDeleteSupplier(deletingId);
-			setDeletingId(null);
-			modal.closeModal();
-		}
-	};
-
-	const handleCancelDelete = (): void => {
-		setDeletingId(null);
-		modal.closeModal();
-	};
-
 	const columns: Column<Supplier>[] = [
 		{
 			key: 'name',
@@ -120,8 +105,7 @@ export default function SupplierTable({
 						className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
 							e.stopPropagation();
-							onEditSupplier(row.id);
-							console.log('Sửa nhà cung cấp:', row.id);
+							handleEditSupplier(row);
 						}}
 					>
 						Sửa
@@ -132,10 +116,7 @@ export default function SupplierTable({
 						className='text-red-600 hover:text-red-800 p-0 h-auto font-medium cursor-pointer'
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
 							e.stopPropagation();
-							setDeletingId(row.id);
-							modal.showWarning(
-								`Bạn có chắc chắn muốn xoá biến thể "${row.name}" không?`,
-							);
+							handleTriggerDelete(row);
 						}}
 					>
 						Xoá
@@ -155,7 +136,7 @@ export default function SupplierTable({
 				data={suppliers}
 				columns={columns}
 				getRowKey={getRowKey}
-				onRowClick={(row: Supplier): void => onViewSupplier(row.id)}
+				onRowClick={(row: Supplier): void => handleViewSupplier(row)}
 				tableHeight={500}
 				stickyHeader={true}
 			/>

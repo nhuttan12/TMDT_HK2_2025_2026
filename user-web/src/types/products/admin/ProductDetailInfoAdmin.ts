@@ -1,5 +1,6 @@
 import { BaseProduct } from '@/types/products/admin/ProductBaseDTO';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
+import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
 
 export interface ProductDetailInfoAdmin extends BaseProduct {
 	id: number;
@@ -11,4 +12,6 @@ export interface ProductDetailInfoAdmin extends BaseProduct {
 	categoryId: number;
 	createdAt: string;
 	updatedAt: string;
+
+	productVariants: ProductVariant[];
 }

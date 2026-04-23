@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, JSX, SetStateAction } from 'react';
+import React, { ChangeEvent, JSX, SetStateAction } from 'react';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
 import Field from '@/components/layout/admin/field';
@@ -11,45 +11,37 @@ import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { UseProductVariantLogicReturn } from '@/hooks/products/admin/use-product-variant-logic';
 
-interface Props {
-	form: ProductVariantDetail;
-	setForm: React.Dispatch<React.SetStateAction<ProductVariantDetail>>;
+interface ProductVariantDetailUIProps extends UseProductVariantLogicReturn {
 	disabled: boolean;
-	onSubmit: (e: FormEvent) => void;
-	mode: AdminFormType;
-	loading: boolean;
 }
 
 export default function ProductVariantDetailUI({
 	form,
-	setForm,
 	disabled,
-	onSubmit,
-	mode,
 	loading,
-}: Props): JSX.Element {
+	isView,
+	isCreate,
+	handleInputChange,
+	handleSizeChange,
+	handleColorChange,
+	handleSalePriceChange,
+	handleCostPriceChange,
+	handleWeightChange,
+	handleLengthChange,
+	handleWidthChange,
+	handleHeightChange,
+	handleImagesChange,
+	handleSubmit,
+}: ProductVariantDetailUIProps): JSX.Element {
 	const discount: number = calculateDiscount(form.pricing.salePrice, form.pricing.costPrice);
-
-	const isView: boolean = mode === 'view';
-	const isCreate: boolean = mode === 'create';
-	// const isUpdate: boolean = mode === 'update';
-
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-		const { name, value } = e.target;
-
-		setForm((prev: ProductVariantDetail) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
 
 	return (
 		<AdminFormWrapper
 			title='Chi tiết biến thể sản phẩm'
 			description='Quản lý thông tin biến thể'
-			onSubmit={onSubmit}
+			onSubmit={handleSubmit}
 			actions={
 				!isView && (
 					<Button
@@ -61,7 +53,6 @@ export default function ProductVariantDetailUI({
 				)
 			}
 		>
-			{/* ===== BASIC ===== */}
 			<Field label='Tên biến thể'>
 				<Input
 					name='name'
@@ -82,7 +73,7 @@ export default function ProductVariantDetailUI({
 
 			<Field label='Nhà cung cấp'>
 				<Input
-					name='supplier'
+					name='supplierName'
 					value={form.supplierName}
 					onChange={handleInputChange}
 					disabled={disabled}
@@ -96,78 +87,45 @@ export default function ProductVariantDetailUI({
 				/>
 			</Field>
 
-			{/* ===== ATTRIBUTES ===== */}
 			<div className='space-y-2'>
 				<Label className='text-lg font-semibold'>Thuộc tính</Label>
-
 				<div className='grid grid-cols-2 gap-4'>
 					<Field label='Size'>
 						<Input
 							value={form.attributes?.[0]?.size || ''}
-							onChange={(e: ChangeEvent<HTMLInputElement>) =>
-								setForm((prev) => ({
-									...prev,
-									attributes: [{ ...prev.attributes[0], size: e.target.value }],
-								}))
-							}
+							onChange={handleSizeChange}
 							disabled={disabled}
 						/>
 					</Field>
-
 					<Field label='Màu sắc'>
 						<Input
 							value={form.attributes?.[0]?.color || ''}
-							onChange={(e: ChangeEvent<HTMLInputElement>) =>
-								setForm((prev) => ({
-									...prev,
-									attributes: [{ ...prev.attributes[0], color: e.target.value }],
-								}))
-							}
+							onChange={handleColorChange}
 							disabled={disabled}
 						/>
 					</Field>
 				</div>
 			</div>
 
-			{/* ===== PRICING ===== */}
 			<div className='space-y-2'>
 				<Label className='text-lg font-semibold'>Giá</Label>
-
 				<div className='grid grid-cols-2 gap-4'>
 					<Field label='Giá bán'>
 						<Input
 							type='number'
 							value={form.pricing.salePrice}
-							onChange={(e) =>
-								setForm((prev) => ({
-									...prev,
-									pricing: {
-										...prev.pricing,
-										salePrice: Number(e.target.value),
-									},
-								}))
-							}
+							onChange={handleSalePriceChange}
 							disabled={disabled}
 						/>
 					</Field>
-
 					<Field label='Giá nhập'>
 						<Input
 							type='number'
 							value={form.pricing.costPrice}
-							onChange={(e) =>
-								setForm((prev) => ({
-									...prev,
-									pricing: {
-										...prev.pricing,
-										costPrice: Number(e.target.value),
-									},
-								}))
-							}
+							onChange={handleCostPriceChange}
 							disabled={disabled}
 						/>
 					</Field>
-
 					<Field label='Chiết khấu (%)'>
 						<div className='relative'>
 							<Input
@@ -182,10 +140,8 @@ export default function ProductVariantDetailUI({
 				</div>
 			</div>
 
-			{/* ===== INVENTORY ===== */}
 			<div className='space-y-2'>
 				<Label className='text-lg font-semibold'>Tồn kho</Label>
-
 				<div className='grid grid-cols-3 gap-4'>
 					<Field label='Có thể bán'>
 						<Input
@@ -193,14 +149,12 @@ export default function ProductVariantDetailUI({
 							disabled
 						/>
 					</Field>
-
 					<Field label='Đang giữ'>
 						<Input
 							value={form.inventory.reserved}
 							disabled
 						/>
 					</Field>
-
 					<Field label='Sắp về'>
 						<Input
 							value={form.inventory.incoming}
@@ -210,82 +164,36 @@ export default function ProductVariantDetailUI({
 				</div>
 			</div>
 
-			{/* ===== SHIPPING ===== */}
 			{form.shipping && (
 				<div className='space-y-2'>
 					<Label className='text-lg font-semibold'>Vận chuyển</Label>
-
 					<Field label='Khối lượng (gram)'>
 						<Input
 							type='number'
 							value={form.shipping.weightInGram || ''}
-							onChange={(e) =>
-								setForm((prev) => ({
-									...prev,
-									shipping: {
-										...prev.shipping!,
-										weightInGram: Number(e.target.value),
-									},
-								}))
-							}
+							onChange={handleWeightChange}
 							disabled={disabled}
 						/>
 					</Field>
-
 					<div className='grid grid-cols-3 gap-4'>
 						<Field label='Dài'>
 							<Input
 								value={form.shipping.dimensionsInCm?.length || ''}
-								onChange={(e) =>
-									setForm((prev) => ({
-										...prev,
-										shipping: {
-											...prev.shipping!,
-											dimensionsInCm: {
-												...prev.shipping!.dimensionsInCm!,
-												length: Number(e.target.value),
-											},
-										},
-									}))
-								}
+								onChange={handleLengthChange}
 								disabled={disabled}
 							/>
 						</Field>
-
 						<Field label='Rộng'>
 							<Input
 								value={form.shipping.dimensionsInCm?.width || ''}
-								onChange={(e) =>
-									setForm((prev) => ({
-										...prev,
-										shipping: {
-											...prev.shipping!,
-											dimensionsInCm: {
-												...prev.shipping!.dimensionsInCm!,
-												width: Number(e.target.value),
-											},
-										},
-									}))
-								}
+								onChange={handleWidthChange}
 								disabled={disabled}
 							/>
 						</Field>
-
 						<Field label='Cao'>
 							<Input
 								value={form.shipping.dimensionsInCm?.height || ''}
-								onChange={(e) =>
-									setForm((prev) => ({
-										...prev,
-										shipping: {
-											...prev.shipping!,
-											dimensionsInCm: {
-												...prev.shipping!.dimensionsInCm!,
-												height: Number(e.target.value),
-											},
-										},
-									}))
-								}
+								onChange={handleHeightChange}
 								disabled={disabled}
 							/>
 						</Field>
@@ -293,16 +201,10 @@ export default function ProductVariantDetailUI({
 				</div>
 			)}
 
-			{/* ===== IMAGES ===== */}
 			<Field label='Hình ảnh'>
 				<MultiImageUpload
 					value={form.images}
-					onChange={(updater: SetStateAction<SortableImageForm[]>): void =>
-						setForm((prev: ProductVariantDetail) => ({
-							...prev,
-							images: typeof updater === 'function' ? updater(prev.images) : updater,
-						}))
-					}
+					onChange={handleImagesChange}
 					disabled={disabled}
 				/>
 			</Field>

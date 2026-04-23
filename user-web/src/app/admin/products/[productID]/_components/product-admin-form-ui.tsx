@@ -1,8 +1,5 @@
-import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
-import React, { ChangeEvent, FormEvent, JSX, SetStateAction, useState } from 'react';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import React, { JSX } from 'react';
 import { Column } from '@/types/uis/Column';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
@@ -12,89 +9,41 @@ import { Switch } from '@/components/ui/switch';
 import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Image from 'next/image';
-import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
 import Field from '@/components/layout/admin/field';
+import { UseProductAdminFormLogicReturn } from '@/hooks/products/admin/use-product-admin-form-logic';
 
-interface Props {
-	form: ProductDetailInfoAdmin;
-	mode: AdminFormType;
-	disabled: boolean;
-
-	productVariants?: ProductVariant[];
-
-	selected: number[];
-	onToggle: (id: number) => void;
-	onToggleAll: () => void;
-	isAllSelected: boolean;
-	isIndeterminate: boolean;
-
-	onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	onDescriptionChange: (val: string) => void;
-	onImagesChange: (updater: SetStateAction<SortableImageForm[]>) => void;
-	onStatusChange: (checked: boolean) => void;
-	onSubmit: (e: FormEvent) => void;
-
-	onVariantClick: (id: number) => void;
-	onAddVariant: () => void;
-	onDeleteVariant: (id: number) => void;
-	onEditVariant: (id: number) => void;
-}
+// Kế thừa toàn bộ interface từ hook
+type Props = UseProductAdminFormLogicReturn;
 
 export default function ProductAdminFormUI({
 	form,
-	mode,
-	disabled,
-	productVariants,
+	isCreate,
+	isView,
+	isUpdate,
 	selected,
-	onToggle,
-	onToggleAll,
+	toggle,
+	toggleAll,
 	isAllSelected,
 	isIndeterminate,
-	onInputChange,
-	onDescriptionChange,
-	onImagesChange,
-	onStatusChange,
-	onSubmit,
-	onVariantClick,
-	onAddVariant,
-	onDeleteVariant,
-	onEditVariant,
+	handleInputChange,
+	handleDescriptionChange,
+	handleImagesChange,
+	handleStatusChange,
+	handleSubmit,
+	handleRedirectToProductVariantDetail,
+	handleAddNewVariant,
+	handleTriggerDeleteVariant,
+	handleEditVariant,
+	modal,
+	handleConfirmDelete,
+	handleCancelDelete,
 }: Props): JSX.Element {
-	const isCreate: boolean = mode === 'create';
-	const isView: boolean = mode === 'view';
-	const isUpdate: boolean = mode === 'update';
-
-	const modal: UseStatusModalReturn = useStatusModal();
-	const [deletingId, setDeletingId] = useState<number | null>(null);
-
-	const handleConfirmDelete = (): void => {
-		if (deletingId !== null) {
-			onDeleteVariant(deletingId);
-			setDeletingId(null);
-			modal.closeModal();
-		}
-	};
-
-	const handleCancelDelete = (): void => {
-		setDeletingId(null);
-		modal.closeModal();
-	};
-
 	const productVariantColumns: Column<ProductVariant>[] = [
-		{
-			key: 'name',
-			header: 'Tên',
-		},
-		{
-			key: 'sku',
-			header: 'SKU',
-		},
-		{
-			key: 'quantity',
-			header: 'Tồn kho',
-		},
+		{ key: 'name', header: 'Tên' },
+		{ key: 'sku', header: 'SKU' },
+		{ key: 'quantity', header: 'Tồn kho' },
 		{
 			key: 'costPrice',
 			header: 'Giá nhập',
@@ -132,23 +81,19 @@ export default function ProductAdminFormUI({
 						className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
 							e.stopPropagation();
-							onEditVariant(row.id);
+							handleEditVariant(row.id);
 						}}
 					>
 						Sửa
 					</Button>
-
 					<Button
 						variant='link'
 						size='lg'
-						className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
+						className='text-red-600 p-0 h-auto font-medium cursor-pointer'
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
 							e.stopPropagation();
 							e.preventDefault();
-							setDeletingId(row.id);
-							modal.showWarning(
-								`Bạn có chắc chắn muốn xoá biến thể "${row.name}" không?`,
-							);
+							handleTriggerDeleteVariant(row);
 						}}
 					>
 						Xoá
@@ -163,7 +108,7 @@ export default function ProductAdminFormUI({
 			<AdminFormWrapper
 				title='Quản lý sản phẩm'
 				description='Quản lý thông tin chi tiết của sản phẩm'
-				onSubmit={onSubmit}
+				onSubmit={handleSubmit}
 				actions={
 					!isView && (
 						<Button type='submit'>
@@ -172,124 +117,107 @@ export default function ProductAdminFormUI({
 					)
 				}
 			>
-				{/* Name */}
 				<Field label='Tên sản phẩm'>
 					<Input
 						name='name'
 						value={form.name}
-						onChange={onInputChange}
-						disabled={disabled}
+						onChange={handleInputChange}
+						disabled={isView}
 					/>
 				</Field>
 
-				{/* Category */}
 				<Field label='Danh mục'>
 					<Input
 						type='number'
 						name='categoryId'
 						value={form.categoryId}
-						onChange={onInputChange}
-						disabled={disabled}
+						onChange={handleInputChange}
+						disabled={isView}
 					/>
 				</Field>
 
-				{/* Supplier */}
 				<Field label='Nhà cung cấp'>
 					<Input
-						name='supplier'
+						name='supplierName'
 						value={form.supplierName}
-						onChange={onInputChange}
-						disabled={disabled}
+						onChange={handleInputChange}
+						disabled={isView}
 					/>
 				</Field>
 
-				{/* Description */}
 				<Field label='Mô tả'>
 					<RichTextEditor
 						value={form.description}
-						onChange={onDescriptionChange}
-						disabled={disabled}
+						onChange={handleDescriptionChange}
+						disabled={isView}
 					/>
 				</Field>
 
-				{/* Status - Giữ nguyên layout ngang */}
 				{isUpdate && (
 					<div className='flex items-center gap-3'>
 						<Switch
 							checked={form.status}
-							onCheckedChange={onStatusChange}
+							onCheckedChange={handleStatusChange}
 						/>
 						<span>Hoạt động</span>
 					</div>
 				)}
 
-				{/* Sale price */}
-				<Field label='Giá bán'>
-					<Input
-						type='number'
-						name='salePrice'
-						onChange={onInputChange}
-						disabled={disabled}
-					/>
-				</Field>
-
-				{/* Import price */}
 				<Field label='Giá nhập'>
 					<Input
 						type='number'
 						name='importPrice'
 						value={form.importPrice}
-						onChange={onInputChange}
-						disabled={disabled}
+						onChange={handleInputChange}
+						disabled={isView}
 					/>
 				</Field>
 
-				{/* Discount */}
 				<Field label='Giảm giá'>
 					<Input
 						type='number'
 						name='discount'
 						value={form.discount}
-						onChange={onInputChange}
+						onChange={handleInputChange}
 						disabled
 					/>
 				</Field>
 
-				{/* Images */}
 				<Field label='Hình ảnh'>
 					<MultiImageUpload
 						value={form.images}
-						onChange={onImagesChange}
-						disabled={disabled}
+						onChange={handleImagesChange}
+						disabled={isView}
 					/>
 				</Field>
 
 				<div className='flex justify-between items-center mb-4'>
 					<h2 className='font-bold text-lg'>Danh sách biến thể sản phẩm</h2>
-
 					<Button
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
 							e.preventDefault();
-							onAddVariant();
+							handleAddNewVariant();
 						}}
 						className='cursor-pointer'
+						disabled={isView}
 					>
 						Thêm biến thể
 					</Button>
 				</div>
 
-				{/* Product Variant List */}
-				{!isCreate && productVariants && (
+				{!isCreate && form.productVariants && (
 					<DataTable
-						data={productVariants}
+						data={form.productVariants}
 						columns={productVariantColumns}
 						stickyHeader={false}
 						getRowKey={(row: ProductVariant): number => row.id}
-						onRowClick={(row: ProductVariant): void => onVariantClick(row.id)}
+						onRowClick={(row: ProductVariant): void =>
+							handleRedirectToProductVariantDetail(row.id)
+						}
 						selectable={{
 							selected,
-							onToggle,
-							onToggleAll,
+							onToggle: toggle,
+							onToggleAll: toggleAll,
 							isAllSelected,
 							isIndeterminate,
 						}}
@@ -297,7 +225,6 @@ export default function ProductAdminFormUI({
 				)}
 			</AdminFormWrapper>
 
-			{/* Modal Xác Nhận */}
 			<StatusModal
 				isOpen={modal.isOpen}
 				onClose={handleCancelDelete}
@@ -306,7 +233,6 @@ export default function ProductAdminFormUI({
 				description={modal.message}
 				confirmText={modal.status === 'warning' ? 'Hủy' : 'Đóng'}
 			>
-				{/* Khi trạng thái là warning (chuẩn bị xoá), ta tiêm thêm nút Xác Nhận màu đỏ vào Custom Content */}
 				{modal.status === 'warning' && (
 					<div className='flex w-full justify-center mt-4'>
 						<Button

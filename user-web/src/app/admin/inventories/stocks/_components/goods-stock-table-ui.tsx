@@ -8,24 +8,21 @@ import { getReplenishmentLabel } from '@/types/inventories/stocks/ReplenishmentL
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Pagination from '@/components/layout/share/pagination';
-import { useTableSort } from '@/hooks/share/use-table-sort';
-import { usePagination } from '@/hooks/share/use-pagination';
-import { ProductInStockSortField } from '@/types/inventories/stocks/ProductInStockSortField';
+import { UseGoodsStockLogicReturn } from '@/hooks/inventories/stocks/use-goods-stock-logic';
 
-interface GoodsStockTableProps {
+interface GoodsStockTableProps extends UseGoodsStockLogicReturn {
 	products: ProductInStock[];
-	onViewVariant: (row: ProductInStock) => void;
-	onEditVariant: (row: ProductInStock) => void;
 }
 
-export default function GoodsStockTable({
+export default function GoodsStockTableUi({
 	products,
-	onViewVariant,
-	onEditVariant,
+	handleViewVariant,
+	handleEditVariant,
+	handleSort,
+	renderSortIcon,
+	currentPage,
+	changePage,
 }: GoodsStockTableProps): JSX.Element {
-	const { handleSort, renderSortIcon } = useTableSort<ProductInStockSortField>();
-	const { currentPage, changePage } = usePagination();
-
 	const replenishmentConfigs: Record<ReplenishmentLevel, string> = {
 		immediate:
 			'bg-red-100 text-red-700 border border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-900',
@@ -129,25 +126,6 @@ export default function GoodsStockTable({
 			onHeaderClick: (): void => handleSort('supplierName'),
 			render: (row: ProductInStock): JSX.Element => <span>{row.supplierName}</span>,
 		},
-		// {
-		// 	key: 'action',
-		// 	header: <span className='block px-4'>Thao tác</span>,
-		// 	render: (row: ProductInStock): JSX.Element => (
-		// 		<div className='flex justify-center items-center w-full'>
-		// 			<Button
-		// 				variant='link'
-		// 				size='sm'
-		// 				className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
-		// 				onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
-		// 					e.stopPropagation();
-		// 					onEditVariant(row);
-		// 				}}
-		// 			>
-		// 				Sửa
-		// 			</Button>
-		// 		</div>
-		// 	),
-		// },
 	];
 
 	const getRowKey = (row: ProductInStock): number => {
@@ -166,7 +144,7 @@ export default function GoodsStockTable({
 					data={products}
 					columns={columns}
 					getRowKey={getRowKey}
-					onRowClick={onViewVariant}
+					onRowClick={handleViewVariant}
 					tableHeight={600}
 					stickyHeader={true}
 				/>

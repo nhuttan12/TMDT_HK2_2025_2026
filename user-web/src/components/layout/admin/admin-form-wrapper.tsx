@@ -1,9 +1,9 @@
-import React, { FormEvent, JSX } from 'react';
+import React, { JSX, SyntheticEvent } from 'react';
 
 interface AdminFormWrapperProps {
 	title: string;
 	description: string;
-	onSubmit: (e: FormEvent) => void;
+	onSubmit: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void;
 	children: React.ReactNode;
 	actions?: React.ReactNode;
 }

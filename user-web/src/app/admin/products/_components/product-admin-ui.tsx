@@ -8,39 +8,30 @@ import Pagination from '@/components/layout/share/pagination';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { FilterField } from '@/types/uis/FilterField';
+import { UseProductAdminLogicReturn } from '@/hooks/products/admin/use-product-admin-logic';
 
-interface Props {
+interface ProductAdminUiProps extends UseProductAdminLogicReturn {
 	products: ProductListInfoAdmin[];
-
-	currentPage: number;
-	onPageChange: (page: number) => void;
-
-	onSort: (field: ProductAdminSortField) => void;
-	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
-
-	onCreate: () => void;
-	onView: (id: number) => void;
-	onEdit: (id: number) => void;
-
-	filterSchema: FilterField<ProductAdminFilterValues>[];
-
 	customTitle?: string;
 	customDescription?: string;
 }
 
 export default function ProductAdminUi({
+	// Props riêng
 	products,
-	currentPage,
-	onPageChange,
-	onSort,
-	renderSortIcon,
-	onCreate,
-	onView,
-	onEdit,
-	filterSchema,
 	customTitle,
 	customDescription,
-}: Props): JSX.Element {
+
+	// Props được kế thừa từ hook (destructuring chuẩn xác tên gốc)
+	currentPage,
+	changePage,
+	handleSort,
+	renderSortIcon,
+	handleRedirectToAddNewProduct,
+	handleRedirectToProductViewMode,
+	handleRedirectToEditProductEditMode,
+	productFilterSchema,
+}: ProductAdminUiProps): JSX.Element {
 	return (
 		<div className='space-y-4'>
 			{/* Header */}
@@ -50,26 +41,26 @@ export default function ProductAdminUi({
 				searchPlaceholder='Tìm sản phẩm...'
 				searchKey='name'
 				addLabel='+ Thêm sản phẩm'
-				onAdd={onCreate}
-				filter
-				filterField={filterSchema}
+				onAdd={handleRedirectToAddNewProduct}
+				filter={true}
+				filterField={productFilterSchema}
 			/>
 
 			{/* Table */}
 			<div className='rounded-xl border bg-white'>
 				<ProductAdminTable
 					products={products}
-					handleSort={onSort}
+					handleSort={handleSort}
 					renderSortIcon={renderSortIcon}
-					onView={onView}
-					onEdit={onEdit}
+					onView={handleRedirectToProductViewMode}
+					onEdit={handleRedirectToEditProductEditMode}
 				/>
 			</div>
 
 			<Pagination
 				currentPage={currentPage}
 				totalPages={10}
-				onPageChange={onPageChange}
+				onPageChange={changePage}
 			/>
 		</div>
 	);
