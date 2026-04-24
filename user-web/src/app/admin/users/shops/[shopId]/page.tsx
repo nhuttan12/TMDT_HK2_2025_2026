@@ -5,7 +5,7 @@ import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Quản lý khách hàng',
+	title: 'Quản lý thông tin gian hàng',
 };
 
 interface Props {

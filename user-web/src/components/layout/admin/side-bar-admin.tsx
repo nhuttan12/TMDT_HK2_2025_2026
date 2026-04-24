@@ -96,7 +96,7 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 			{
 				title: 'Nhắn tin với khách hàng',
-				href: '/admin/users/customers/messages',
+				href: '/admin/users/shops/messages',
 				icon: <MessageCircle size={18} />,
 			},
 			// {
