@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
 // Định nghĩa Return Interface kèm theo Generic <T>
 export interface UseTableSelectionReturn<T> {
 	selected: T[];
-	toggle: (key: T) => void;
-	toggleAll: () => void;
+	onToggle: (key: T) => void;
+	onToggleAll: () => void;
 	isSelected: (key: T) => boolean;
 	isAllSelected: boolean;
 	isIndeterminate: boolean;
@@ -44,13 +44,13 @@ export function useTableSelection<T>(allKeys: T[]): UseTableSelectionReturn<T> {
 	const reset = useCallback((): void => setSelected([]), []);
 
 	return {
-		selected,
-		toggle,
-		toggleAll,
-		isSelected,
-		isAllSelected,
-		isIndeterminate,
-		reset,
-		setSelected, // optional nếu cần control ngoài
+		selected: selected,
+		onToggle: toggle,
+		onToggleAll: toggleAll,
+		isSelected: isSelected,
+		isAllSelected: isAllSelected,
+		isIndeterminate: isIndeterminate,
+		reset: reset,
+		setSelected: setSelected, // optional nếu cần control ngoài
 	};
 }

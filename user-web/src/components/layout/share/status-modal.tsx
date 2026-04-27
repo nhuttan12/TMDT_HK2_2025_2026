@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 
 interface StatusModalProps {
 	isOpen: boolean;

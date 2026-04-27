@@ -25,7 +25,7 @@ interface Props {
 export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Props): JSX.Element {
 	const allKeys: number[] = invoices.map((p: UserInvoice): number => p.id);
 
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
 		useTableSelection<number>(allKeys);
 
 	const changeStatus = (id: number, status: InvoiceStatus): void => {
@@ -110,8 +110,8 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 			getRowKey={(row: UserInvoice): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggle,
-				onToggleAll: toggleAll,
+				onToggle: onToggle,
+				onToggleAll: onToggleAll,
 				isAllSelected,
 				isIndeterminate,
 			}}

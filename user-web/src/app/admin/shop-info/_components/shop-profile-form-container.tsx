@@ -1,7 +1,7 @@
 'use client';
 
 import React, { JSX } from 'react';
-import { useShopProfileLogic } from '@/hooks/shops/use-shop-profile-logic';
+import { useShopProfileLogic } from '@/hooks/shops/admin/use-shop-profile-logic';
 import ShopProfileFormUi from '@/app/admin/shop-info/_components/shop-profile-form-ui';
 import { ShopProfile } from '@/types/shops/ShopProfile';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';

@@ -13,7 +13,7 @@ import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssu
 import { formatDateForInput } from '@/utils/shared/date';
 import { ProductSelectionGoodsIssueModal } from '@/app/admin/inventories/issues/_components/goods-issue-detail/product-selection-goods-issue-modal';
 import { StatusModal } from '@/components/layout/share/status-modal';
-import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import { Trash } from 'lucide-react';
 import { GoodsIssueLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-form-logic';
 
@@ -217,7 +217,7 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 				isOpen={statusModal.isOpen}
 				onClose={statusModal.closeModal}
 				status={statusModal.status}
-				title={MODAL_TITLE_MAP[statusModal.status]}
+				title={getStatusModalTitle(statusModal.status)}
 				description={statusModal.message}
 				confirmText='Đóng'
 			/>

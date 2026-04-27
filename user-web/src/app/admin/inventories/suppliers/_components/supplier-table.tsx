@@ -6,7 +6,7 @@ import { Column } from '@/types/uis/Column';
 import React, { JSX } from 'react';
 import { Button } from '@/components/ui/button';
 import { StatusModal } from '@/components/layout/share/status-modal';
-import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import { UseSupplierListLogicReturn } from '@/hooks/inventories/suppliers/use-supplier-list-logic';
 
 // Kế thừa toàn bộ logic từ Hook, ngoại trừ các biến của Pagination do Container đã xài
@@ -146,7 +146,7 @@ export default function SupplierTable({
 				isOpen={modal.isOpen}
 				onClose={handleCancelDelete}
 				status={modal.status}
-				title={MODAL_TITLE_MAP[modal.status] || 'Thông báo'}
+				title={getStatusModalTitle(modal.status)}
 				description={modal.message}
 				confirmText={modal.status === 'warning' ? 'Hủy' : 'Đóng'}
 			>

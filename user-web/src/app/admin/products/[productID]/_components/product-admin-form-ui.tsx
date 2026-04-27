@@ -10,7 +10,7 @@ import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Image from 'next/image';
 import { StatusModal } from '@/components/layout/share/status-modal';
-import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import Field from '@/components/layout/admin/field';
 import { UseProductAdminFormLogicReturn } from '@/hooks/products/admin/use-product-admin-form-logic';
 
@@ -23,8 +23,8 @@ export default function ProductAdminFormUI({
 	isView,
 	isUpdate,
 	selected,
-	toggle,
-	toggleAll,
+	onToggle,
+	onToggleAll,
 	isAllSelected,
 	isIndeterminate,
 	handleInputChange,
@@ -216,8 +216,8 @@ export default function ProductAdminFormUI({
 						}
 						selectable={{
 							selected,
-							onToggle: toggle,
-							onToggleAll: toggleAll,
+							onToggle: onToggle,
+							onToggleAll: onToggleAll,
 							isAllSelected,
 							isIndeterminate,
 						}}
@@ -229,7 +229,7 @@ export default function ProductAdminFormUI({
 				isOpen={modal.isOpen}
 				onClose={handleCancelDelete}
 				status={modal.status}
-				title={MODAL_TITLE_MAP[modal.status] || 'Thông báo'}
+				title={getStatusModalTitle(modal.status)}
 				description={modal.message}
 				confirmText={modal.status === 'warning' ? 'Hủy' : 'Đóng'}
 			>

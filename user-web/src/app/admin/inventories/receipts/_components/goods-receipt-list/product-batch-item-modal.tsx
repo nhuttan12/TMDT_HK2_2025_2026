@@ -34,7 +34,7 @@ export function ProductBatchItemModal({
 }: ProductBatchItemModalProps): JSX.Element {
 	const allKeys: number[] = variants.map((v: ProductVariantRow): number => v.id);
 
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
 		useTableSelection<number>(allKeys);
 
 	const handleConfirm = (): void => {
@@ -62,8 +62,8 @@ export function ProductBatchItemModal({
 					getRowKey={(row: ProductVariantRow): number => row.id}
 					selectable={{
 						selected,
-						onToggle: toggle,
-						onToggleAll: toggleAll,
+						onToggle: onToggle,
+						onToggleAll: onToggleAll,
 						isAllSelected,
 						isIndeterminate,
 					}}

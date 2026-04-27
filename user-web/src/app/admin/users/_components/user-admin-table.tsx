@@ -36,7 +36,7 @@ export default function UserAdminTable({
 }: Props): JSX.Element {
 	const allKeys: number[] = users.map((p: CustomerListAdmin): number => p.id);
 
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
 		useTableSelection<number>(allKeys);
 
 	const columns: Column<CustomerListAdmin>[] = [
@@ -176,8 +176,8 @@ export default function UserAdminTable({
 			getRowKey={(row: CustomerListAdmin): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggle,
-				onToggleAll: toggleAll,
+				onToggle: onToggle,
+				onToggleAll: onToggleAll,
 				isAllSelected,
 				isIndeterminate,
 			}}

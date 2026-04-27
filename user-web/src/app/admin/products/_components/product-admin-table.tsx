@@ -19,7 +19,7 @@ import {
 	UseProductAdminTableLogicReturn,
 } from '@/hooks/products/admin/use-product-admin-table-logic';
 import { StatusModal } from '@/components/layout/share/status-modal';
-import { MODAL_TITLE_MAP } from '@/utils/shared/mappers/modalTitleMap';
+import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 
 interface Props {
 	products: ProductListInfoAdmin[];
@@ -172,8 +172,8 @@ export default function ProductAdminTable({
 				getRowKey={(row: ProductListInfoAdmin): number => row.id}
 				selectable={{
 					selected: logic.selected,
-					onToggle: logic.toggle,
-					onToggleAll: logic.toggleAll,
+					onToggle: logic.onToggle,
+					onToggleAll: logic.onToggleAll,
 					isAllSelected: logic.isAllSelected,
 					isIndeterminate: logic.isIndeterminate,
 				}}
@@ -183,7 +183,7 @@ export default function ProductAdminTable({
 				isOpen={logic.modal.isOpen}
 				onClose={logic.handleCancelDelete}
 				status={logic.modal.status}
-				title={MODAL_TITLE_MAP[logic.modal.status] || 'Thông báo'}
+				title={getStatusModalTitle(logic.modal.status)}
 				description={logic.modal.message}
 				confirmText={logic.modal.status === 'warning' ? 'Hủy' : 'Đóng'}
 			>

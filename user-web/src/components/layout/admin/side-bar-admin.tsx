@@ -139,12 +139,17 @@ const sidebarData: SidebarItemInterface[] = [
 
 			// ----- MARKETING -----
 			{
-				title: 'Khuyến mãi sản phẩm',
-				href: '/admin/marketing/promotions',
+				title: 'Khuyến mãi sản phẩm của cửa hàng',
+				href: '/admin/marketing/store-product-promotions',
 				icon: <Tag size={18} />,
 			},
 			{
-				title: 'Mã giảm giá',
+				title: 'Mã giảm giá của cửa hàng',
+				href: '/admin/marketing/coupons',
+				icon: <TicketPercent size={18} />,
+			},
+			{
+				title: 'Mã giảm giá chung của toàn nghành hàng',
 				href: '/admin/marketing/coupons',
 				icon: <TicketPercent size={18} />,
 			},
