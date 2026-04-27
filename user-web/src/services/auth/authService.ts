@@ -2,16 +2,13 @@ import apiClient from "@/lib/axios";
 
 export const authService = {
         
-   login: async (Username: string, password: string) => {
-        const response = await apiClient.post("/Auth/login", { Username, password });
-        if(response.status !== 200){
-            throw new Error('Login failed');
-        }
-        console.log('Login successful:', response);
-        return response; 
-    },
-    loginWithGoogle: () => {
-        // alert('oke')
-        window.location.assign('/api/auth/google');
-    }
+   login: async (email: string, password: string) => {
+    // Chỉ gửi request và trả về data. Lỗi sẽ được TanStack Query bắt ở lớp Hook.
+    const response = await apiClient.post("/auth/login", { email, password });
+    return response.data; 
+  },
+  
+  loginWithGoogle: () => {
+    window.location.assign('/api/auth/google');
+  }
 }
