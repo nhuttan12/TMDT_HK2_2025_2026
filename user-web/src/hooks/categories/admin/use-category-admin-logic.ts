@@ -47,12 +47,12 @@ export function useCategoryAdminLogic(
 		router.push(`/admin/categories/update/${categoryId}`);
 
 	return {
-		handleRedirectToAddNew,
-		handleRedirectToView,
-		handleRedirectToEdit,
-		handleSort,
-		renderSortIcon,
-		pagination,
-		selection,
+		handleRedirectToAddNew: handleRedirectToAddNew,
+		handleRedirectToView: handleRedirectToView,
+		handleRedirectToEdit: handleRedirectToEdit,
+		handleSort: handleSort,
+		renderSortIcon: renderSortIcon,
+		pagination: pagination,
+		selection: selection,
 	};
 }

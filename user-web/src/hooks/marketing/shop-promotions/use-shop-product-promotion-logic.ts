@@ -4,11 +4,11 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { FilterField } from '@/types/uis/FilterField';
 import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { usePagination } from '@/hooks/share/use-pagination';
-import { StoreProductPromotion } from '@/types/marketing/store-product-promotions/StoreProductPromotion';
+import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { useState } from 'react';
 
-interface StoreProductPromotionFilterValues {
+interface ShopProductPromotionFilterValues {
 	productName?: string;
 	promotionPriceMin?: number;
 	promotionPriceMax?: number;
@@ -16,23 +16,22 @@ interface StoreProductPromotionFilterValues {
 	createdAtTo?: string;
 }
 
-export interface UseStoreProductPromotionLogicReturn extends UseTableSelectionReturn<number> {
+export interface UseShopProductPromotionLogicReturn extends UseTableSelectionReturn<number> {
 	currentPage: number;
 	changePage: (page: number) => void;
-	filterSchema: FilterField<StoreProductPromotionFilterValues>[];
-	handleAddNewPromotion: () => void;
-	handleEditPromotion: (id: number) => void;
-	handleDeletePromotion: (id: number) => void;
+	filterSchema: FilterField<ShopProductPromotionFilterValues>[];
+	handleAddNewProductVariant: (promotionId: number) => void;
+	handleViewProductVariant: (productId: number, productVariantId: number) => void;
 
 	modal: UseStatusModalReturn;
-	handleTriggerToggleStatus: (promotion: StoreProductPromotion) => void;
+	handleTriggerToggleStatus: (promotion: ShopProductPromotion) => void;
 	handleConfirmToggleStatus: () => void;
 	handleCancelModal: () => void;
 }
 
-export function useStoreProductPromotionLogic(
-	promotions: StoreProductPromotion[],
-): UseStoreProductPromotionLogicReturn {
+export function useShopProductPromotionLogic(
+	promotions: ShopProductPromotion[],
+): UseShopProductPromotionLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
 	// 1. Logic Table Selection
@@ -43,7 +42,7 @@ export function useStoreProductPromotionLogic(
 	const { currentPage, changePage } = usePagination();
 
 	// 3. Định nghĩa Filter Schema hiển thị trong Modal
-	const filterSchema: FilterField<StoreProductPromotionFilterValues>[] = [
+	const filterSchema: FilterField<ShopProductPromotionFilterValues>[] = [
 		{
 			key: 'promotionPriceMin',
 			label: 'Giá KM thấp nhất',
@@ -64,23 +63,18 @@ export function useStoreProductPromotionLogic(
 
 	// 4. Khởi tạo Modal State
 	const modal: UseStatusModalReturn = useStatusModal();
-	const [togglingPromotion, setTogglingPromotion] = useState<StoreProductPromotion | null>(null);
+	const [togglingPromotion, setTogglingPromotion] = useState<ShopProductPromotion | null>(null);
 
 	// 4. Các Event Handlers
-	const handleAddNewPromotion = (): void => {
-		router.push('/seller/promotions/add-new');
+	const handleAddNewProductVariant = (promotionId: number): void => {
+		router.push(`/admin/marketing/shop-promotions/${promotionId}/products/add-new`);
 	};
 
-	const handleEditPromotion = (id: number): void => {
-		router.push(`/seller/promotions/update/${id}`);
+	const handleViewProductVariant = (productId: number, productVariantId: number): void => {
+		router.push(`/admin/products/${productId}/variant/${productVariantId}`);
 	};
 
-	const handleDeletePromotion = (id: number): void => {
-		console.log('Xóa khuyến mãi ID:', id);
-		// Tích hợp logic Modal Confirm xóa ở đây nếu cần
-	};
-
-	const handleTriggerToggleStatus = (promotion: StoreProductPromotion): void => {
+	const handleTriggerToggleStatus = (promotion: ShopProductPromotion): void => {
 		setTogglingPromotion(promotion);
 		const actionText = promotion.status ? 'tắt' : 'bật';
 		modal.showWarning(
@@ -111,9 +105,8 @@ export function useStoreProductPromotionLogic(
 		currentPage: currentPage,
 		changePage: changePage,
 		filterSchema: filterSchema,
-		handleAddNewPromotion: handleAddNewPromotion,
-		handleEditPromotion: handleEditPromotion,
-		handleDeletePromotion: handleDeletePromotion,
+		handleAddNewProductVariant: handleAddNewProductVariant,
+		handleViewProductVariant: handleViewProductVariant,
 
 		modal: modal,
 		handleTriggerToggleStatus: handleTriggerToggleStatus,

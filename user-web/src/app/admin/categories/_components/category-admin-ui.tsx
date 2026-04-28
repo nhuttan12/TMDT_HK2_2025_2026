@@ -211,8 +211,8 @@ export function CategoryAdminUi({
 					getRowKey={(row) => row.id}
 					selectable={{
 						selected: selection.selected,
-						onToggle: selection.toggle,
-						onToggleAll: selection.toggleAll,
+						onToggle: selection.onToggle,
+						onToggleAll: selection.onToggleAll,
 						isAllSelected: selection.isAllSelected,
 						isIndeterminate: selection.isIndeterminate,
 					}}

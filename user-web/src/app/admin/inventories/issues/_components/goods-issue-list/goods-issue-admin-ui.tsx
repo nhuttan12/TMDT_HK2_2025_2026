@@ -12,7 +12,7 @@ import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/Good
 import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssueTypeLabel';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import { GoodsIssueAdminLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
-import GoodsIssueActions from "@/app/admin/inventories/issues/_components/goods-issue-list/goods-issue-actions";
+import AdminTableAction from "@/components/layout/admin/admin-table-action";
 
 interface GoodsIssueAdminUiProps extends GoodsIssueAdminLogicReturn {
 	issues: GoodsIssueList[];
@@ -143,7 +143,7 @@ export function GoodsIssueAdminUi({
 			key: 'actions',
 			header: <span className='text-right block px-4'>Hành động</span>,
 			render: (row) => (
-				<GoodsIssueActions
+				<AdminTableAction
 					id={row.id}
 					onEdit={handleRedirectToEdit}
 					onDelete={() => deleteModal.openConfirm(row)}

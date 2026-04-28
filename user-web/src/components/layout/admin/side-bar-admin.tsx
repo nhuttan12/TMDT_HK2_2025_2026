@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import {
+	BadgePercent,
 	Boxes,
 	Download,
 	ImageIcon,
@@ -13,7 +14,7 @@ import {
 	ShoppingCart,
 	Store,
 	Tag,
-	TicketPercent,
+	Tickets,
 	Truck,
 	Upload,
 	Users,
@@ -140,18 +141,18 @@ const sidebarData: SidebarItemInterface[] = [
 			// ----- MARKETING -----
 			{
 				title: 'Khuyến mãi sản phẩm của cửa hàng',
-				href: '/admin/marketing/store-product-promotions',
+				href: '/admin/marketing/shop-promotions',
 				icon: <Tag size={18} />,
 			},
 			{
 				title: 'Mã giảm giá của cửa hàng',
 				href: '/admin/marketing/coupons',
-				icon: <TicketPercent size={18} />,
+				icon: <BadgePercent size={18} />,
 			},
 			{
 				title: 'Mã giảm giá chung của toàn nghành hàng',
 				href: '/admin/marketing/coupons',
-				icon: <TicketPercent size={18} />,
+				icon: <Tickets size={18} />,
 			},
 			{
 				title: 'Flash Sale',

@@ -8,7 +8,7 @@ interface Props {
 	onDelete: (id: number) => void;
 }
 
-export default function GoodsIssueActions({ id, onEdit, onDelete }: Props): JSX.Element {
+export default function AdminTableAction({ id, onEdit, onDelete }: Props): JSX.Element {
 	// Ngăn chặn sự kiện click lan truyền lên Row của Table
 	function handleEdit(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.stopPropagation();
@@ -24,25 +24,17 @@ export default function GoodsIssueActions({ id, onEdit, onDelete }: Props): JSX.
 		<div className='flex items-center justify-end gap-2'>
 			<Button
 				variant='link'
-				className='px-2 text-blue-600 hover:text-blue-700 font-medium'
+				className='px-2 text-blue-600 hover:text-blue-700 font-medium cursor-pointer'
 				onClick={handleEdit}
 			>
-				<Pencil
-					size={14}
-					className='mr-1.5'
-				/>
 				Sửa
 			</Button>
 
 			<Button
 				variant='link'
-				className='px-2 text-red-500 hover:text-red-600 font-medium'
+				className='px-2 text-red-500 hover:text-red-600 font-medium cursor-pointer'
 				onClick={handleDelete}
 			>
-				<Trash
-					size={14}
-					className='mr-1.5'
-				/>
 				Xóa
 			</Button>
 		</div>

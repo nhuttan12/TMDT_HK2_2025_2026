@@ -5,26 +5,23 @@ import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Pagination from '@/components/layout/share/pagination';
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash } from 'lucide-react';
-import { UseStoreProductPromotionLogicReturn } from '@/hooks/marketing/store-product-promotions/use-store-product-promotion-logic';
-import { StoreProductPromotion } from '@/types/marketing/store-product-promotions/StoreProductPromotion';
+import { UseShopProductPromotionLogicReturn } from '@/hooks/marketing/shop-promotions/use-shop-product-promotion-logic';
+import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import { Switch } from '@/components/ui/switch';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 
-interface Props extends UseStoreProductPromotionLogicReturn {
-	promotions: StoreProductPromotion[];
+interface Props extends UseShopProductPromotionLogicReturn {
+	promotions: ShopProductPromotion[];
 }
 
-export default function StoreProductPromotionUi({
+export default function ShopProductPromotionUi({
 	promotions,
 	currentPage,
 	changePage,
 	filterSchema,
-	handleAddNewPromotion,
-	handleEditPromotion,
-	handleDeletePromotion,
+	handleViewProductVariant,
 	selected,
 	onToggle,
 	onToggleAll,
@@ -37,18 +34,18 @@ export default function StoreProductPromotionUi({
 	handleCancelModal,
 }: Props): JSX.Element {
 	// Khai báo cột cho DataTable
-	const columns: Column<StoreProductPromotion>[] = [
+	const columns: Column<ShopProductPromotion>[] = [
 		{
 			key: 'productName',
 			header: 'Tên Sản Phẩm',
-			render: (row: StoreProductPromotion): JSX.Element => (
+			render: (row: ShopProductPromotion): JSX.Element => (
 				<span className='font-medium'>{row.productName}</span>
 			),
 		},
 		{
 			key: 'promotionPrice',
 			header: 'Giá Khuyến Mãi',
-			render: (row) => (
+			render: (row: ShopProductPromotion): JSX.Element => (
 				<span className='text-red-600 font-semibold'>
 					{row.promotionPrice.toLocaleString()} đ
 				</span>
@@ -57,12 +54,12 @@ export default function StoreProductPromotionUi({
 		{
 			key: 'discount',
 			header: 'Giảm giá',
-			render: (row: StoreProductPromotion): JSX.Element => <span>{row.discount}%</span>,
+			render: (row: ShopProductPromotion): JSX.Element => <span>{row.discount}%</span>,
 		},
 		{
 			key: 'status',
 			header: 'Trạng thái',
-			render: (row: StoreProductPromotion): JSX.Element => (
+			render: (row: ShopProductPromotion): JSX.Element => (
 				<div onClick={(e) => e.stopPropagation()}>
 					{/* Bọc div stopPropagation để bấm Switch không bị trigger sự kiện Click dòng (onRowClick) của Table */}
 					<Switch
@@ -76,7 +73,7 @@ export default function StoreProductPromotionUi({
 		{
 			key: 'createdAt',
 			header: 'Ngày tạo',
-			render: (row: StoreProductPromotion): JSX.Element => (
+			render: (row: ShopProductPromotion): JSX.Element => (
 				<span className='text-muted-foreground'>
 					{formatDateTimeWithBrackets(row.createdAt)}
 				</span>
@@ -85,52 +82,22 @@ export default function StoreProductPromotionUi({
 		{
 			key: 'updatedAt',
 			header: 'Cập nhật',
-			render: (row: StoreProductPromotion): JSX.Element => (
+			render: (row: ShopProductPromotion): JSX.Element => (
 				<span className='text-muted-foreground'>
 					{formatDateTimeWithBrackets(row.updatedAt)}
 				</span>
 			),
 		},
-		// {
-		// 	key: 'actions',
-		// 	header: <span className='text-right block'>Hành động</span>,
-		// 	render: (row: StoreProductPromotion): JSX.Element => (
-		// 		<div className='flex justify-end gap-2'>
-		// 			<Button
-		// 				variant='ghost'
-		// 				size='icon'
-		// 				onClick={() => handleEditPromotion(row.id)}
-		// 			>
-		// 				<Pencil
-		// 					size={16}
-		// 					className='text-blue-600'
-		// 				/>
-		// 			</Button>
-		// 			<Button
-		// 				variant='ghost'
-		// 				size='icon'
-		// 				onClick={() => handleDeletePromotion(row.id)}
-		// 			>
-		// 				<Trash
-		// 					size={16}
-		// 					className='text-red-600'
-		// 				/>
-		// 			</Button>
-		// 		</div>
-		// 	),
-		// },
 	];
 
 	return (
 		<div className='space-y-4'>
 			{/* Header tích hợp sẵn thanh Search và Modal Filter */}
 			<AdminTableHeader
-				title='Chương trình khuyến mãi'
-				description='Quản lý giá ưu đãi và các đợt giảm giá sản phẩm của cửa hàng.'
+				title='Danh sách sản phẩm khuyến mãi của chương trình'
+				description='Quản lý thông tin của sản phẩm trong đợt ưu đãi của cửa hàng.'
 				searchPlaceholder='Tìm theo tên sản phẩm...'
 				searchKey='productName'
-				addLabel='+ Tạo khuyến mãi mới'
-				onAdd={handleAddNewPromotion}
 				filter={true}
 				filterField={filterSchema}
 			/>
@@ -140,8 +107,10 @@ export default function StoreProductPromotionUi({
 				<DataTable
 					data={promotions}
 					columns={columns}
-					getRowKey={(row: StoreProductPromotion): number => row.id}
-					onRowClick={(row: StoreProductPromotion): void => handleEditPromotion(row.id)}
+					getRowKey={(row: ShopProductPromotion): number => row.id}
+					onRowClick={(row: ShopProductPromotion): void => {
+						handleViewProductVariant(row.productId, row.productVariantId);
+					}}
 					selectable={{
 						selected,
 						onToggle,

@@ -1,5 +1,7 @@
-export interface StoreProductPromotion {
+export interface ShopProductPromotion {
 	id: number;
+	productId: number;
+	productVariantId: number;
 	productName: string;
 	createdAt: string;
 	updatedAt: string;

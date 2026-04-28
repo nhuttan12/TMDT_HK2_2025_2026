@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
+import AdminTableAction from '@/components/layout/admin/admin-table-action';
 
 interface Props {
 	receipts: GoodsReceiptList[];
@@ -136,37 +137,11 @@ export default function GoodsReceiptAdminTable({
 			key: 'actions',
 			header: <span className='text-right block'>Hành động</span>,
 			render: (row: GoodsReceiptList): JSX.Element => (
-				<div
-					className='text-right'
-					onClick={(e) => e.stopPropagation()}
-				>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								size='icon'
-							>
-								<MoreHorizontal size={16} />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem onClick={() => onEdit(row.id)}>
-								<Pencil
-									size={14}
-									className='mr-2'
-								/>
-								Chỉnh sửa
-							</DropdownMenuItem>
-							<DropdownMenuItem className='text-red-500'>
-								<Trash
-									size={14}
-									className='mr-2'
-								/>
-								Xóa
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
+				<AdminTableAction
+					id={row.id}
+					onEdit={onEdit}
+					onDelete={() => {}}
+				/>
 			),
 		},
 	];
