@@ -3,12 +3,11 @@ import type { NextRequest } from 'next/server';
 import { use } from 'react';
 import { useAuthStore } from './stores/auth.store';
 
-const PROTECTED_ROUTES = ['/dashboard', '/profile', '/orders'];
+const PROTECTED_ROUTES = [ '/profile', '/orders'];
 const AUTH_ROUTES = ['/login', '/register'];
 
 export function proxy(request: NextRequest) {
-  // const token = request.cookies.get('X-Access-Token')?.value;
-  const token = true; //TODO: Mock token để test, sau này sẽ xóa dòng này đi
+  const token = request.cookies.get('X-Access-Token')?.value;
   const { pathname } = request.nextUrl;
   // 1. Xác định trạng thái Route
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));

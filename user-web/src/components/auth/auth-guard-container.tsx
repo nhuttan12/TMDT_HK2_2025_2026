@@ -13,12 +13,15 @@ export function AuthGuardContainer({
 	const { isAuthorized } = useAuthHandlerLogic(fallbackPath);
 	const isHydrated = useStoreHydration();
 
+	if (!isHydrated) {
+		return <Loading />; // Chờ persist load xong dữ liệu cũ
+	}
+	console.log('isloign:' + isAuthorized);
 	// Nếu chưa xác thực xong, hiển thị UI loading (tương đương CanActivate trả về false/pending)
 	if (!isAuthorized) {
 		return <AuthHandlerUi />;
 	}
 
-	if (!isHydrated) return <Loading />; // Chờ persist load xong dữ liệu cũ
 	// Nếu hợp lệ, cho phép render nội dung bên trong
 	return <>{children}</>;
 }

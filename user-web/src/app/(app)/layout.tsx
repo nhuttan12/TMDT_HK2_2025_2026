@@ -7,15 +7,15 @@ import { HeaderContainer } from '@/components/layout/user/header-container';
 export default function AppLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
 		<div className='min-h-screen flex flex-col bg-[#f2f4f7]'>
-			<HeaderContainer />
 			<AuthGuardContainer>
+				<HeaderContainer />
 				<main className='flex-1'>
 					<div className='mx-auto max-w-275'>{children}</div>
 					<ChatBox />
 				</main>
-			</AuthGuardContainer>
 
-			<Footer />
+				<Footer />
+			</AuthGuardContainer>
 		</div>
 	);
 }

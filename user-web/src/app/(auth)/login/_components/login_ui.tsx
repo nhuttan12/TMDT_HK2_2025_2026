@@ -1,4 +1,3 @@
-// components/auth/login-ui.tsx
 'use client';
 
 import { Eye, EyeOff } from 'lucide-react';

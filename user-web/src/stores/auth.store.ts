@@ -23,8 +23,10 @@ export const useAuthStore = create<AuthState>()(
 					set({ isAuthenticated: true, user });
 				},
 
-				logout: (): void => {
+				logout: () => {
 					set({ isAuthenticated: false, user: null });
+
+					localStorage.removeItem('auth-storage');
 				},
 			}),
 			{
@@ -32,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
 				storage: createJSONStorage((): Storage => localStorage), // Chỉ định dùng localStorage
 			},
 		),
-		{ name: "AuthStore"}
+		{ name: 'auth-storage' },
 	),
 );
 

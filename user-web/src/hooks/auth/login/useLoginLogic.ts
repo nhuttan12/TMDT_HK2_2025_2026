@@ -1,7 +1,7 @@
 import { authService, LoginPayload, LoginResponse } from '@/services/auth/authService';
 import { useAuthStore } from '@/stores/auth.store';
 import { useMutation } from '@tanstack/react-query';
-import { useState, Dispatch, SetStateAction, FormEvent } from 'react';
+import { useState, Dispatch, SetStateAction, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 
@@ -16,7 +16,16 @@ export interface LoginReturn {
 export function useLoginLogic(): LoginReturn {
 	const router = useRouter();
 	const login = useAuthStore((state) => state.login);
+	const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+	const logout = useAuthStore((state) => state.logout);
 	const [formData, setFormData] = useState<LoginPayload>({ email: '', password: '' });
+
+	useEffect((): void => {
+		if (isAuthenticated) {
+			// logout();
+			// TODO: thực hiện chặn ở đây
+		}
+	}, [isAuthenticated, logout]);
 
 	// Định nghĩa Mutation: Quản lý vòng đời của request Login
 	const loginMutation = useMutation({
