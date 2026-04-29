@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth.store";
+import {authService} from "@/services/auth/authService";
 
 export interface AuthGuardProps {
   children: React.ReactNode;
@@ -10,22 +11,21 @@ export interface UseAuthGuardReturn {
   isAuthorized: boolean;
 }
 
-export function useAuthHandlerLogic(fallbackPath: string = "/auth/login"): UseAuthGuardReturn {
+export function useAuthHandlerLogic(fallbackPath: string = "/login"): UseAuthGuardReturn {
+  const checkMe = authService.checkMe();
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
   useEffect((): void => {
     const handleAuth = async (): Promise<void> => {
       if (!isAuthenticated) {
-         //TODO: thực hiện refresh token ở đây nếu có refresh token, sau đó cập nhật lại trạng thái isAuthenticated
-         // await authService.refreshToken();
-
-        router.push(fallbackPath);
+      // TODO: thực hiện call BE để lấy thông tin
+          checkMe;
+         router.push(fallbackPath);
       }
     };
 
     handleAuth();
-  }, [ isAuthenticated, router, fallbackPath]);
+  }, [ isAuthenticated, router,checkMe, fallbackPath]);
 
   return { isAuthorized: isAuthenticated };
 }

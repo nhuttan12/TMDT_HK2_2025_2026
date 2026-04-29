@@ -1,60 +1,61 @@
-import { authService } from "@/services/auth/authService";
+import { authService, LoginPayload, LoginResponse } from "@/services/auth/authService";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
-export function useAuthHook() {
-  // const router = useRouter();
-  const setAuthenticated = useAuthStore((state) => state.login);
-  const [formdata, setFormData] = useState({ username: '', password: '' });
+export function useLoginLogic() {
+  const router = useRouter();
+  const login = useAuthStore((state) => state.login);
+  const [formData, setFormData] = useState<LoginPayload>({ email: '', password: '' });
 
   // Định nghĩa Mutation: Quản lý vòng đời của request Login
   const loginMutation = useMutation({
     // 1. Hàm thực thi chính
-    mutationFn: ({ u, p }: { u: string; p: string }) => authService.login(u, p),
+    mutationFn: ({ email, password }: LoginPayload): Promise<LoginResponse> => authService.login({ email, password }),
 
     // 2. Khi bắt đầu gửi request (thay cho setIsLoading(true))
     onMutate: () => {
-      console.log("Đang bắt đầu đăng nhập...");
+      console.log("Đang bắt đầu đăng nhập..." + formData.email + " - " + formData.password);
     },
 
     // 3. Khi thành công
-    onSuccess: (data) => {
+    onSuccess: (data: LoginResponse) => {
       // Cập nhật Zustand Store
-      setAuthenticated(data.user);
+      login(data.user);
       // Điều hướng người dùng
-      // router.push('/dashboard');
+      router.push('/');
     },
 
     // 4. Khi thất bại (Thay cho try-catch)
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       const errorMsg = error.response?.data?.message || "Đăng nhập thất bại";
       alert(errorMsg);
 
       setFormData((prev) => ({
         ...prev,
-        password: '' 
+        password: ''
       }));
     }
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formdata.username || !formdata.password) {
+    if (!formData.email || !formData.password) {
       alert('Vui lòng điền đầy đủ thông tin');
       return;
     }
 
     // Kích hoạt mutation
     loginMutation.mutate({
-      u: formdata.username,
-      p: formdata.password
+      email: formData.email,
+      password: formData.password
     });
   };
 
   return {
     loginWithGoogle: authService.loginWithGoogle,
-    formdata,
+    formData: formData,
     setFormData,
     handleSubmit,
     // Lấy trạng thái trực tiếp từ TanStack Query

@@ -112,11 +112,6 @@ namespace api.Controllers
             await _authService.Register(req);
             return Ok("success");
         }
-        // TODO: forgot-password
-
-        // TODO: change-password
-
-
 
         private void SetTokenCookie(TokenResponse token)
         {
@@ -141,6 +136,7 @@ namespace api.Controllers
                 Expires = DateTime.UtcNow.AddDays(7)
             });
         }
+
 
     }
 

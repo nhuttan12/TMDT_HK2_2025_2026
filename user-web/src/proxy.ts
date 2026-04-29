@@ -6,25 +6,26 @@ import { useAuthStore } from './stores/auth.store';
 const PROTECTED_ROUTES = ['/dashboard', '/profile', '/orders'];
 const AUTH_ROUTES = ['/login', '/register'];
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get('X-Access-Token')?.value;
-  const { pathname, searchParams } = request.nextUrl;
+export function proxy(request: NextRequest) {
+  // const token = request.cookies.get('X-Access-Token')?.value;
+  const token = true; //TODO: Mock token để test, sau này sẽ xóa dòng này đi
+  const { pathname } = request.nextUrl;
   // 1. Xác định trạng thái Route
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
-  const isAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route));
+  // const isAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route));
 
   // 2. Xử lý Logic Điều hướng
   if (isProtectedRoute && !token) {
     // Lưu lại trang hiện tại để sau khi login xong quay lại đúng trang đó
-    const loginUrl = new URL('auth/login', request.url);
+    const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('callbackUrl', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthRoute && token) {
-    // Nếu đã login mà cố vào trang login/register thì đẩy về dashboard
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
+  // if (isAuthRoute && token) {
+  //   // Nếu đã login mà cố vào trang login/register thì đẩy về dashboard
+  //   return NextResponse.redirect(new URL('/', request.url));
+  // }
 
   return NextResponse.next();
 }
