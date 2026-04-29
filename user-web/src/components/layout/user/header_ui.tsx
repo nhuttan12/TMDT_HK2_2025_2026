@@ -89,7 +89,10 @@ const profileElements: RedirectElement[] = [
 
 /* ---------- Component ---------- */
 
-export default function Header() {
+interface headerProps{
+	isAuthenticated: boolean;
+}
+export default function Header_ui({isAuthenticated}:headerProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 
@@ -142,56 +145,58 @@ export default function Header() {
 						</InputGroup>
 					</div>
 
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
-								<Avatar className='h-8 w-8'>
-									<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
-									<AvatarFallback>U</AvatarFallback>
-								</Avatar>
-							</button>
-						</DropdownMenuTrigger>
+					{isAuthenticated ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
+									<Avatar className='h-8 w-8'>
+										<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
+										<AvatarFallback>U</AvatarFallback>
+									</Avatar>
+								</button>
+							</DropdownMenuTrigger>
 
-						<DropdownMenuContent
-							align='end'
-							className='w-48'
-						>
-							{profileElements.map(
-								(item: RedirectElement): JSX.Element => (
-									<Link
-										href={item.href}
-										key={item.key}
-									>
-										<DropdownMenuItem
+							<DropdownMenuContent
+								align='end'
+								className='w-48'
+							>
+								{profileElements.map(
+									(item: RedirectElement): JSX.Element => (
+										<Link
+											href={item.href}
 											key={item.key}
-											onClick={() => router.push(item.href)}
-											className='flex items-center justify-between cursor-pointer'
 										>
-											{item.label}
-											{item.icon}
-										</DropdownMenuItem>
-									</Link>
-								),
-							)}
-						</DropdownMenuContent>
-					</DropdownMenu>
+											<DropdownMenuItem
+												key={item.key}
+												onClick={() => router.push(item.href)}
+												className='flex items-center justify-between cursor-pointer'
+											>
+												{item.label}
+												{item.icon}
+											</DropdownMenuItem>
+										</Link>
+									),
+								)}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<div className='hidden lg:flex items-center gap-2'>
+							<Button
+								asChild
+								variant='outline'
+								className='bg-white text-black border-black hover:bg-gray-100'
+							>
+								<Link href='/auth/login'>Đăng nhập</Link>
+							</Button>
 
-					<div className='hidden lg:flex items-center gap-2'>
-						<Button
-							asChild
-							variant='outline'
-							className='bg-white text-black border-black hover:bg-gray-100'
-						>
-							<Link href='/auth/login'>Đăng nhập</Link>
-						</Button>
-
-						<Button
-							asChild
-							className='bg-black text-white! hover:bg-white hover:text-black!'
-						>
-							<Link href='/auth/register'>Đăng ký</Link>
-						</Button>
-					</div>
+							<Button
+								asChild
+								className='bg-black text-white! hover:bg-white hover:text-black!'
+							>
+								<Link href='/auth/register'>Đăng ký</Link>
+							</Button>
+						</div>
+					)}
 				</div>
 			</div>
 		</header>
