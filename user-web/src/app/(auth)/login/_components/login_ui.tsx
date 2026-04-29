@@ -9,19 +9,15 @@ import SocialLoginButtons from '@/components/auth/social-login-buttons';
 import { cn } from '@/lib/utils';
 import { BaseInputField } from '@/types/uis/BaseInputField';
 import React from 'react';
-import {LoginPayload} from "@/services/auth/authService";
+import {LoginReturn} from "@/hooks/auth/login/useLoginLogic";
 
 
 
-interface LoginUIProps {
+interface LoginUIProps extends LoginReturn {
 	fields: BaseInputField[];
-	formData: LoginPayload;
-	isLoading: boolean;
 	isVisible: boolean;
 	toggleVisibility: () => void;
 	onInputChange: (name: string, value: string) => void;
-	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-	onGoogleLogin: () => void;
 }
 
 export function LoginUI({
@@ -31,8 +27,8 @@ export function LoginUI({
 	isVisible,
 	toggleVisibility,
 	onInputChange,
-	onSubmit,
-	onGoogleLogin,
+	handleSubmit,
+	loginWithGoogle,
 }: LoginUIProps) {
 	return (
 		<div className='min-h-screen flex items-center justify-center bg-slate-100'>
@@ -46,7 +42,7 @@ export function LoginUI({
 				</h1>
 
 				<form
-					onSubmit={onSubmit}
+					onSubmit={handleSubmit}
 					className='flex flex-col space-y-4'
 				>
 					{fields.map((field) => (
@@ -86,7 +82,7 @@ export function LoginUI({
 						{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
 					</Button>
 
-					<SocialLoginButtons onLoginClick={(p) => p === 'google' && onGoogleLogin()} />
+					<SocialLoginButtons onLoginClick={(p) => p === 'google' && loginWithGoogle()} />
 				</form>
 			</div>
 		</div>

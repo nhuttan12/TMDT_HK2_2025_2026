@@ -3,7 +3,7 @@
 import { JSX, useState } from 'react';
 import { BaseInputField } from '@/types/uis/BaseInputField';
 import { LoginUI } from '@/app/(auth)/login/_components/login_ui';
-import {useLoginLogic} from "@/hooks/auth/login/useLoginLogic";
+import { LoginReturn, useLoginLogic } from '@/hooks/auth/login/useLoginLogic';
 
 const FIELDS: BaseInputField[] = [
 	{ name: 'email', label: 'Email', type: 'email', errorMessage: 'Email không hợp lệ' },
@@ -13,22 +13,23 @@ const FIELDS: BaseInputField[] = [
 
 export function LoginContainer(): JSX.Element {
 	const [isVisible, setIsVisible] = useState(false);
-	const { isLoading, loginWithGoogle, formData, setFormData, handleSubmit } = useLoginLogic();
+	const logic: LoginReturn = useLoginLogic();
+
+	const toggleVisibility = (): void => {
+		setIsVisible(!isVisible);
+	};
 
 	const handleInputChange = (name: string, value: string): void => {
-		setFormData({ ...formData, [name]: value });
+		logic.setFormData({ ...logic.formData, [name]: value });
 	};
 
 	return (
 		<LoginUI
 			fields={FIELDS}
-			formData={formData}
-			isLoading={isLoading}
 			isVisible={isVisible}
-			toggleVisibility={() => setIsVisible(!isVisible)}
+			toggleVisibility={toggleVisibility}
 			onInputChange={handleInputChange}
-			onSubmit={handleSubmit}
-			onGoogleLogin={loginWithGoogle}
+			{...logic}
 		/>
 	);
 }
