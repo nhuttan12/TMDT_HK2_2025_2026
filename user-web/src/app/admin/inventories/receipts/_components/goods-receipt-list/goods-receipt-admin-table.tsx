@@ -4,14 +4,6 @@ import { Column } from '@/types/uis/Column';
 import { JSX } from 'react';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import AdminTableAction from '@/components/layout/admin/admin-table-action';
 

@@ -1,7 +1,7 @@
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface UseSupplierLogicProps {
@@ -19,7 +19,7 @@ export interface UseSupplierFormLogicReturn {
 	handlePhoneChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleAddressChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	onFormSubmit: (e: FormEvent) => Promise<void>;
+	onFormSubmit: (e: SyntheticEvent) => Promise<void>;
 	handleBack: () => void;
 }
 
@@ -65,7 +65,7 @@ export function useSupplierFormLogic(props: UseSupplierLogicProps): UseSupplierF
 	};
 
 	// Hàm xử lý Submit Form (Có giả lập delay mạng)
-	const onFormSubmit = async (e: FormEvent): Promise<void> => {
+	const onFormSubmit = async (e: SyntheticEvent): Promise<void> => {
 		if (e) {
 			e.preventDefault();
 		}

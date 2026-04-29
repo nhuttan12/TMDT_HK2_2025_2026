@@ -7,16 +7,19 @@ import {
 	useShopProductPromotionLogic,
 	UseShopProductPromotionLogicReturn,
 } from '@/hooks/marketing/shop-promotions/use-shop-product-promotion-logic';
-import ShopProductPromotionUi from '@/app/admin/marketing/shop-promotions/[shopPromotionId]/products/_components/shop-product-promotion-ui';
+import ShopProductPromotionUi from '@/app/admin/marketing/shop-promotions/[shopPromotionId]/_components/shop-product-promotion-ui';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface Props {
 	promotionId: number;
 	initialPromotions: ShopProductPromotion[];
+	mode: AdminFormType;
 }
 
 export default function ShopProductPromotionContainer({
 	promotionId,
 	initialPromotions,
+	mode,
 }: Props): JSX.Element {
 	// 1. Lấy dữ liệu sống từ Tanstack Query
 	const { data: promotions = [] } = useShopProductPromotionQuery(promotionId, initialPromotions);
@@ -32,6 +35,7 @@ export default function ShopProductPromotionContainer({
 	return (
 		<ShopProductPromotionUi
 			promotions={promotions}
+			mode={mode}
 			{...logic}
 		/>
 	);

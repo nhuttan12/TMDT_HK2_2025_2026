@@ -13,21 +13,21 @@ interface Props {
 
 export function ShippingStatusBadge({ status }: Props): JSX.Element {
 	switch (status) {
-		case 'PREPARING':
+		case 'preparing':
 			return (
 				<Badge variant="secondary">
 					{getShippingStatusLabel(status)}
 				</Badge>
 			);
 
-		case 'SHIPPING':
+		case 'shipping':
 			return (
 				<Badge className="bg-blue-500">
 					{getShippingStatusLabel(status)}
 				</Badge>
 			);
 
-		case 'DELIVERED':
+		case 'delivered':
 			return (
 				<Badge className="bg-green-600">
 					{getShippingStatusLabel(status)}

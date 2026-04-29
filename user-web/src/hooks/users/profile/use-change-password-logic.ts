@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 export interface ChangePasswordLogicReturn {
 	oldPassword: string;
@@ -17,7 +17,7 @@ export interface ChangePasswordLogicReturn {
 	handleToggleShowNew: () => void;
 	handleToggleShowConfirm: () => void;
 	handleCloseDialog: () => void;
-	handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+	handleSubmit: (e: SyntheticEvent<HTMLFormElement>) => Promise<void>;
 }
 
 export function useChangePasswordLogic(): ChangePasswordLogicReturn {
@@ -50,7 +50,7 @@ export function useChangePasswordLogic(): ChangePasswordLogicReturn {
 	const handleNewPasswordChange = (val: string): void => setNewPassword(val);
 	const handleConfirmPasswordChange = (val: string): void => setConfirmPassword(val);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+	const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 
 		if (!oldPassword || !newPassword || !confirmPassword) {

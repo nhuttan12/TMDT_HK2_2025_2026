@@ -5,9 +5,9 @@ import { PartnerType } from '@/types/inventories/issues/uis/PartnerType';
  * Sử dụng Record để đảm bảo type-safety, bắt buộc phải định nghĩa đủ các key của PartnerType.
  */
 const PARTNER_TYPE_MAP: Record<PartnerType, string> = {
-	CUSTOMER: 'Khách hàng',
-	SUPPLIER: 'Nhà cung cấp',
-	INTERNAL: 'Nội bộ',
+	customer: 'Khách hàng',
+	supplier: 'Nhà cung cấp',
+	internal: 'Nội bộ',
 };
 
 /**

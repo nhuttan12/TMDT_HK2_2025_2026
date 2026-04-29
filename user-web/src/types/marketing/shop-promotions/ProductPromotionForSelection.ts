@@ -1,10 +1,8 @@
 import { ProductVariantStatus } from '@/types/products/admin/variant/ProductVariantStatus';
 
-export interface ProductPromotionForAdding {
+export interface ProductPromotionForSelection {
 	id: number;
 	productVariantName: string;
 	salePrice: number;
-	discountPrice: number;
-	discount: number;
 	status: ProductVariantStatus;
 }

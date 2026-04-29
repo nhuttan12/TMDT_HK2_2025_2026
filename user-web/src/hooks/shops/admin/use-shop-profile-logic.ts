@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { ShopProfile } from '@/types/shops/ShopProfile';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { useRouter } from 'next/navigation';
@@ -50,7 +50,7 @@ export function useShopProfileLogic({
 		);
 	};
 
-	const handleSubmit = async (e: FormEvent): Promise<void> => {
+	const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
 		e.preventDefault();
 
 		if (isView || !onMutate) return; // Chặn nếu là View hoặc không truyền hàm Mutate

@@ -39,11 +39,11 @@ export function useShopPromotionLogic(promotions: ShopPromotion[]): UseShopPromo
 
 	const handleViewPromotion = (id: number): void => {
 		// Thêm ID vào URL để biết đang xem sản phẩm của Promotion nào
-		router.push(`/admin/marketing/shop-promotions/${id}/products`);
+		router.push(`/admin/marketing/shop-promotions/${id}`);
 	};
 
 	const handleEditPromotion = (id: number): void => {
-		router.push(`/admin/marketing/shop-promotions/update/${id}`);
+		router.push(`/admin/marketing/shop-promotions/${id}/update`);
 	};
 
 	const handleDeletePromotion = (id: number): void => {

@@ -7,6 +7,7 @@ import { usePagination } from '@/hooks/share/use-pagination';
 import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { useState } from 'react';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface ShopProductPromotionFilterValues {
 	productName?: string;
@@ -102,6 +103,7 @@ export function useShopProductPromotionLogic(
 
 	return {
 		...selection,
+
 		currentPage: currentPage,
 		changePage: changePage,
 		filterSchema: filterSchema,

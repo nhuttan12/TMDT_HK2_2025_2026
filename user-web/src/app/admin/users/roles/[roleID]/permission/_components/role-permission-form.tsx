@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, JSX, SyntheticEvent, useState } from 'react';
+import { JSX, SyntheticEvent, useState } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
 import { Switch } from '@/components/ui/switch';
 import { RoleFormType } from '@/types/shared/admin/RoleFormType';

@@ -7,7 +7,7 @@ import { useGoodsReceiptExcelLogic } from '@/hooks/inventories/goods-receipts/us
 import { useGoodsReceiptNavigationLogic } from '@/hooks/inventories/goods-receipts/use-goods-receipt-navigation-logic';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
-import React from 'react';
+import { SyntheticEvent } from 'react';
 
 export interface UseGoodsReceiptDetailLogicProps {
 	formType: AdminFormType;
@@ -23,7 +23,7 @@ export interface UseGoodsReceiptDetailLogicReturn {
 	totalQuantity: number;
 	totalAmount: number;
 	updateReceiptField: (field: keyof GoodsReceiptDetail, value: string) => void;
-	handleSubmit: (e: React.FormEvent) => void;
+	handleSubmit: (e: SyntheticEvent) => void;
 	handleProductSelection: (product: ProductForGoodsReceipt) => void;
 	updateBatch: (batchId: number, data: Partial<GoodsReceiptBatch>) => void;
 	handleRedirectToBatchDetail: (batchID: number, mode: AdminFormType) => void;

@@ -2,8 +2,6 @@
 
 import { JSX } from 'react';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
-import { FilterField } from '@/types/uis/FilterField';
 import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
 import { useProductListInfoAdminQuery } from '@/queries/products/admin/use-product-list-info-admin-query';
 import {

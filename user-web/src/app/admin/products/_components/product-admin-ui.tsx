@@ -6,8 +6,6 @@ import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFil
 import ProductAdminTable from '@/app/admin/products/_components/product-admin-table';
 import Pagination from '@/components/layout/share/pagination';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
-import { FilterField } from '@/types/uis/FilterField';
 import { UseProductAdminLogicReturn } from '@/hooks/products/admin/use-product-admin-logic';
 
 interface ProductAdminUiProps extends UseProductAdminLogicReturn {

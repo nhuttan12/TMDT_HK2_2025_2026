@@ -11,32 +11,27 @@ import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceipt
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { UseGoodsReceiptDetailLogicReturn } from '@/hooks/inventories/goods-receipts/use-goods-receipt-logic';
 import GoodsReceiptStatusBadge from '@/app/admin/inventories/receipts/_components/goods-receipt-detail/goods-receipt-status-badge';
-import {
-	ProductSelectionGoodsReceiptModal
-} from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
-
+import { ProductSelectionGoodsReceiptModal } from '@/app/admin/inventories/receipts/_components/product-selection-goods-receipt-modal';
 
 // Extends trực tiếp Interface, chỉ khai báo thêm data tĩnh
 interface GoodsReceiptDetailUiProps extends UseGoodsReceiptDetailLogicReturn {
 	products: ProductForGoodsReceipt[];
 }
 
-export function GoodsReceiptDetailUi(props: GoodsReceiptDetailUiProps): JSX.Element {
-	const {
-		form,
-		batches,
-		isView,
-		isCreate,
-		totalQuantity,
-		totalAmount,
-		products,
-		updateReceiptField,
-		handleSubmit,
-		handleProductSelection,
-		handleRedirectToBatchDetail,
-		updateBatch,
-	} = props;
-
+export function GoodsReceiptDetailUi({
+	form,
+	batches,
+	isView,
+	isCreate,
+	totalQuantity,
+	totalAmount,
+	products,
+	updateReceiptField,
+	handleSubmit,
+	handleProductSelection,
+	handleRedirectToBatchDetail,
+	updateBatch,
+}: GoodsReceiptDetailUiProps): JSX.Element {
 	const itemColumns: Column<GoodsReceiptBatch>[] = [
 		{ key: 'productName', header: 'Tên sản phẩm' },
 		{

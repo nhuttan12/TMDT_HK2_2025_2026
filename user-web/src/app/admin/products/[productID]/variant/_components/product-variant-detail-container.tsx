@@ -1,10 +1,13 @@
 'use client';
 
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
-import { FormEvent, JSX, SyntheticEvent, useEffect, useState } from 'react';
+import { JSX } from 'react';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import ProductVariantDetailUI from '@/app/admin/products/[productId]/variant/_components/product-variant-detail-ui';
-import { useProductVariantLogic, UseProductVariantLogicReturn } from '@/hooks/products/admin/use-product-variant-logic';
+import {
+	useProductVariantLogic,
+	UseProductVariantLogicReturn,
+} from '@/hooks/products/admin/use-product-variant-logic';
 import { useProductVariantDetailQuery } from '@/queries/products/admin/use-product-variant-detail-query';
 
 interface ProductVariantDetailContainerProps {

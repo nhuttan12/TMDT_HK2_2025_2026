@@ -11,13 +11,17 @@ import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import { Switch } from '@/components/ui/switch';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface Props extends UseShopProductPromotionLogicReturn {
 	promotions: ShopProductPromotion[];
+	mode: AdminFormType;
 }
 
 export default function ShopProductPromotionUi({
 	promotions,
+	mode,
+
 	currentPage,
 	changePage,
 	filterSchema,
@@ -43,11 +47,20 @@ export default function ShopProductPromotionUi({
 			),
 		},
 		{
-			key: 'promotionPrice',
+			key: 'salePrice',
+			header: 'Giá bán',
+			render: (row: ShopProductPromotion): JSX.Element => (
+				<p className='text-muted-foreground line-through'>
+					{row.salePrice.toLocaleString()} đ
+				</p>
+			),
+		},
+		{
+			key: 'discountPrice',
 			header: 'Giá Khuyến Mãi',
 			render: (row: ShopProductPromotion): JSX.Element => (
 				<span className='text-red-600 font-semibold'>
-					{row.promotionPrice.toLocaleString()} đ
+					{row.discountPrice.toLocaleString()} đ
 				</span>
 			),
 		},
@@ -65,7 +78,10 @@ export default function ShopProductPromotionUi({
 					<Switch
 						checked={row.status}
 						onCheckedChange={() => handleTriggerToggleStatus(row)}
-						className='cursor-pointer'
+						disabled={mode === 'view'}
+						className={
+							mode === 'view' ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+						}
 					/>
 				</div>
 			),

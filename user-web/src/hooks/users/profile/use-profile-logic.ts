@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
 
 export interface ProfileLogicReturn {
 	formData: UserProfileInfo;
 	isSubmitting: boolean;
 	handleChange: (field: keyof UserProfileInfo, value: string) => void;
-	handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+	handleSubmit: (e: SyntheticEvent<HTMLFormElement>) => Promise<void>;
 }
 
 const defaultFormData: UserProfileInfo = {
@@ -38,7 +38,7 @@ export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 		}));
 	};
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+	const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 
 		try {

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, SetStateAction, useState } from 'react';
+import { ChangeEvent, SetStateAction, SyntheticEvent, useState } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 
@@ -27,7 +27,7 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	modal: UseStatusModalReturn;
 
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handleSubmit: (e: FormEvent) => void;
+	handleSubmit: (e: SyntheticEvent) => void;
 	handleStatusChange: (checked: boolean) => void;
 	handleImagesChange: (updater: SetStateAction<SortableImageForm[]>) => void;
 	handleDescriptionChange: (val: string) => void;
@@ -72,7 +72,7 @@ export function useProductAdminFormLogic(
 		);
 	};
 
-	const handleSubmit = (e: FormEvent): void => {
+	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 		if (isCreate) {
 			const dto: ProductCreateDTO = mapFormToCreateDTO(form);

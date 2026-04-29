@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, FormEvent, JSX, SyntheticEvent } from 'react';
+import React, { ChangeEvent, JSX, SyntheticEvent } from 'react';
 import { ShopProfile } from '@/types/shops/ShopProfile';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';

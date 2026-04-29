@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from 'react';
+import { JSX } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';

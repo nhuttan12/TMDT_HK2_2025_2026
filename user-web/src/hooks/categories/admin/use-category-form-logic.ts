@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { CategoryDetailInfoAdmin } from '@/types/categories/admin/CategoryDetailInfoAdmin';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { generateSlug } from '@/utils/shared/mappers/slug';
@@ -13,7 +13,7 @@ export interface CategoryFormLogicReturn {
 	handleInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	handleRichTextChange: (val: string) => void;
 	handleImageChange: (img: BaseImage | undefined) => void;
-	handleSubmit: (e: FormEvent) => void;
+	handleSubmit: (e: SyntheticEvent) => void;
 }
 
 export function useCategoryFormLogic(
@@ -39,7 +39,7 @@ export function useCategoryFormLogic(
 		setForm((prev: CategoryDetailInfoAdmin) => ({ ...prev, image: img }));
 	};
 
-	const handleSubmit = (e: FormEvent): void => {
+	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 
 		if (formType === 'create') {

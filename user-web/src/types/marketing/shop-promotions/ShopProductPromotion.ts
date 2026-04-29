@@ -5,7 +5,8 @@ export interface ShopProductPromotion {
 	productName: string;
 	createdAt: string;
 	updatedAt: string;
-	promotionPrice: number;
+	salePrice: number;
+	discountPrice: number;
 	discount: number;
 	status: boolean;
 }
