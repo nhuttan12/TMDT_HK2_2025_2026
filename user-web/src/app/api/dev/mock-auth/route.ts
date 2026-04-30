@@ -28,7 +28,7 @@ export async function GET() {
 		path: '/',
 		maxAge: 60 * 60 * 24*30, // 1 tháng
 	};
-	response.cookies.set('X-RefreshToken', 'mock-refresh-token-456', cookieRefresh);
+	response.cookies.set('X-Refresh-Token', 'mock-refresh-token-456', cookieRefresh);
 
 	return response;
 }

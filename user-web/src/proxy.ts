@@ -8,6 +8,7 @@ const AUTH_ROUTES = ['/login', '/register'];
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get('X-Access-Token')?.value;
+  console.log('proxy', request.url);
   const { pathname } = request.nextUrl;
   // 1. Xác định trạng thái Route
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));

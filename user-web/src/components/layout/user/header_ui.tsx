@@ -186,14 +186,14 @@ export default function Header_ui({isAuthenticated}:headerProps) {
 								variant='outline'
 								className='bg-white text-black border-black hover:bg-gray-100'
 							>
-								<Link href='/auth/login'>Đăng nhập</Link>
+								<Link href='/login'>Đăng nhập</Link>
 							</Button>
 
 							<Button
 								asChild
 								className='bg-black text-white! hover:bg-white hover:text-black!'
 							>
-								<Link href='/auth/register'>Đăng ký</Link>
+								<Link href='/register'>Đăng ký</Link>
 							</Button>
 						</div>
 					)}

@@ -30,9 +30,11 @@ export function useLoginLogic(): LoginReturn {
 	// Định nghĩa Mutation: Quản lý vòng đời của request Login
 	const loginMutation = useMutation({
 		// 1. Hàm thực thi chính
-		mutationFn: ({ email, password }: LoginPayload): Promise<LoginResponse> =>
-			authService.login({ email, password }),
-
+		mutationFn: ({ email, password }: LoginPayload): Promise<LoginResponse> => {
+			const resp = authService.login({ email, password })
+			console.log(resp)
+			return resp;
+		},
 		// 2. Khi bắt đầu gửi request (thay cho setIsLoading(true))
 		onMutate: () => {
 			console.log('Đang bắt đầu đăng nhập...' + formData.email + ' - ' + formData.password);
@@ -41,7 +43,10 @@ export function useLoginLogic(): LoginReturn {
 		// 3. Khi thành công
 		onSuccess: (data: LoginResponse) => {
 			// Cập nhật Zustand Store
-			login(data.user);
+			const user = {
+				username: formData.email,
+			}
+			login(user);
 			// Điều hướng người dùng
 			router.push('/');
 		},

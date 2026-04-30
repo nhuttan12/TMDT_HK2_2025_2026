@@ -121,7 +121,7 @@ namespace api.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
                 Path = "/", //Mặc định gửi cho tất cả request
                 Expires = DateTime.UtcNow.AddHours(1)
             });
@@ -131,7 +131,7 @@ namespace api.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict, // Thắt chặt hơn để chống CSRF
+                SameSite = SameSiteMode.None, // Thắt chặt hơn để chống CSRF
                 Path = "/api/auth/refresh-token", // CHỈ gửi khi gọi URL này
                 Expires = DateTime.UtcNow.AddDays(7)
             });

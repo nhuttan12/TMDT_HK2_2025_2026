@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { BaseInputField } from '@/types/uis/BaseInputField';
 import React from 'react';
 import {LoginReturn} from "@/hooks/auth/login/useLoginLogic";
+import Link from 'next/link';
 
 
 
@@ -83,6 +84,15 @@ export function LoginUI({
 
 					<SocialLoginButtons onLoginClick={(p) => p === 'google' && loginWithGoogle()} />
 				</form>
+				<div className='pt-3 text-sm text-slate-600 text-center'>
+					Bạn chưa có tài khoản?{' '}
+					<Link
+						href='/auth/register'
+						className='font-medium text-black hover:underline'
+					>
+						Đăng ký
+					</Link>
+				</div>
 			</div>
 		</div>
 	);

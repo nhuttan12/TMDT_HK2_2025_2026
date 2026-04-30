@@ -1,5 +1,5 @@
-import apiClient from '@/lib/axios';
 import { UserModel } from '@/stores/auth.store';
+import serverState from '@/lib/axios';
 
 export interface LoginPayload {
 	email: string;
@@ -8,20 +8,20 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-	user: {
-		username: string;
-	};
+	status: string;
 }
 
 export const authService = {
-	login: async ({ email, password }: LoginPayload): Promise<LoginResponse> => {
-		//TODO: remove
-			// Mock API: Giả lập thành công sau 1 giây
-		if (email === 'admin@gmail.com') {
-			return new Promise<{ user: { username: string } }>((resolve, reject) => {
+	login: (data: Partial<LoginPayload>): Promise<LoginResponse> => {
+		// //TODO: remove
+		// 	// Mock API: Giả lập thành công sau 1 giây
+		if (data.password === '1') {
+			return new Promise<{ status :'oke' }>((resolve, reject) => {
 				setTimeout(() => {
-					if (email === 'admin@gmail.com' && password === '1') {
-						resolve({ user: { username: 'admin' } });
+					if (data.email === 'admin@gmail.com' && data.password === '1') {
+						//  thực hiện gọi localhost:3000/api/dev/mock-auth
+						fetch('/api/dev/mock-auth');
+						resolve({ status: 'oke' });
 					} else {
 						reject(new Error('Invalid credentials'));
 					}
@@ -29,8 +29,7 @@ export const authService = {
 			});
 		}
 		// Chỉ gửi request và trả về data. Lỗi sẽ được TanStack Query bắt ở lớp Hook.
-		const response = await apiClient.post('/login', { email, password });
-		return response.data;
+		return serverState.post('/auth/login', data);
 	},
 	checkMe: (): UserModel => {
 		console.log('Checking me');
@@ -41,5 +40,8 @@ export const authService = {
 
 	loginWithGoogle: () => {
 		window.location.assign('/api/auth/google');
+	},
+	getProfile() {
+		return undefined;
 	},
 };

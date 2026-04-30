@@ -15,7 +15,7 @@ export async function logoutServerAction(): Promise<{ success: boolean }> {
 
 	// 2. Xóa các token bằng cách set Max-Age về 0
 	cookieStore.set('X-Access-Token', '', { ...cookieOptions, maxAge: 0 });
-	cookieStore.set('X-RefreshToken', '', { ...cookieOptions, maxAge: 0 });
+	cookieStore.set('X-Refresh-Token', '', { ...cookieOptions, maxAge: 0 });
 
 	// 3. Nếu Backend của bạn có API logout (để blacklist refresh token), hãy gọi ở đây
 	/*
