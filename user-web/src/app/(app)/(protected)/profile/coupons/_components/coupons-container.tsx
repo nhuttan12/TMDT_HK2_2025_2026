@@ -2,8 +2,8 @@
 
 import { JSX } from 'react';
 import { useCouponsQuery } from '@/queries/coupons/user/use-coupons-query';
-import { CouponsUi } from '@/app/(app)/profile/coupons/_components/coupon-ui';
 import { Coupon } from '@/types/coupons/Coupon';
+import { CouponsUi } from '@/app/(app)/(protected)/profile/coupons/_components/coupon-ui';
 
 interface CouponsContainerProps {
 	userId: number;

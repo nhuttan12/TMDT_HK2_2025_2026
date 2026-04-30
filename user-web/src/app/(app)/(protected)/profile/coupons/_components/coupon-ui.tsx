@@ -1,3 +1,4 @@
+
 import { JSX } from 'react';
 import { Card } from '@/components/ui/card';
 import { TicketPercent, Truck } from 'lucide-react';

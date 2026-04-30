@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth.store";
 import {authService} from "@/services/auth/authService";
-import { useStoreHydration } from '@/hooks/auth/guard/useStoreHydration';
 
 export interface AuthGuardProps {
   children: React.ReactNode;
@@ -16,7 +15,7 @@ export function useAuthHandlerLogic(fallbackPath: string = "/login"): UseAuthGua
   const checkMe = authService.checkMe();
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const h = useStoreHydration();
+  const h = useAuthStore((state) => state._hasHydrated);
   useEffect((): void => {
     const handleAuth = async (): Promise<void> => {
       if (h && !isAuthenticated) {
@@ -25,9 +24,12 @@ export function useAuthHandlerLogic(fallbackPath: string = "/login"): UseAuthGua
          router.push(fallbackPath);
       }
     };
-
     handleAuth();
   }, [ isAuthenticated, router,checkMe, fallbackPath,h]);
 
   return { isAuthorized: isAuthenticated };
 }
+
+// export function useAuthHandlerLogicAdmin(){
+//
+// }

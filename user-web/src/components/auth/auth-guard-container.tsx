@@ -1,27 +1,42 @@
 'use client';
 
-import { AuthGuardProps, useAuthHandlerLogic } from '@/hooks/auth/guard/useGuardHandler';
-import { AuthHandlerUi } from './AuthHandlerUi';
+import { AuthGuardProps, useAuthHandlerLogic } from '../../hooks/auth/guard/use-guard-handler';
 import Loading from '@/app/loading';
-import { useStoreHydration } from '@/hooks/auth/guard/useStoreHydration';
-import React from 'react';
+// import { useHydration } from '../../hooks/auth/guard/use-hydration';
+import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '@/stores/auth.store';
+import { AuthHandlerUi } from '@/components/auth/AuthHandlerUi';
+
+let isGlobalHydrated = false;
 
 export function AuthGuardContainer({
 	children,
 	fallbackPath = '/login',
 }: AuthGuardProps): React.JSX.Element {
-	const { isAuthorized } = useAuthHandlerLogic(fallbackPath);
-	const isHydrated = useStoreHydration();
+	const isAuthorized = useAuthStore((s) => s.isAuthenticated);
+	const _hasHydrated = useAuthStore((s) => s._hasHydrated);
 
-	if (!isHydrated) {
-		return <Loading />; // Chờ persist load xong dữ liệu cũ
+	// Local state để trigger render lần đầu ở Client
+	const [ready, setReady] = useState(isGlobalHydrated);
+
+	useEffect(() => {
+		if (_hasHydrated) {
+			isGlobalHydrated = true;
+			// eslint-disable-next-line react-hooks/set-state-in-effect
+			setReady(true);
+		}
+	}, [_hasHydrated]);
+
+	// 1. Nếu chưa hydrate lần đầu (F5 trang): Hiện Loading
+	if (!ready) {
+		return <Loading />;
 	}
-	console.log('isloign:' + isAuthorized);
-	// Nếu chưa xác thực xong, hiển thị UI loading (tương đương CanActivate trả về false/pending)
+
+	// 2. Nếu đã hydrate nhưng không có quyền: Trả về UI báo lỗi/Login
 	if (!isAuthorized) {
 		return <AuthHandlerUi />;
 	}
 
-	// Nếu hợp lệ, cho phép render nội dung bên trong
+	// 3. Nếu mọi thứ ổn: Render nội dung ngay lập tức
 	return <>{children}</>;
 }

@@ -1,3 +1,4 @@
+'use client';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import {

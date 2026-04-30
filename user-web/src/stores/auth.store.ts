@@ -7,9 +7,11 @@ export interface UserModel {
 }
 interface AuthState {
 	isAuthenticated: boolean;
+	_hasHydrated: boolean;
 	user: UserModel | null;
 	login: (user?: UserModel) => void;
 	logout: () => void;
+	setHasHydrated: (state: boolean) => void;
 }
 // quản lý đang nhập cảu người dùng
 export const useAuthStore = create<AuthState>()(
@@ -17,6 +19,7 @@ export const useAuthStore = create<AuthState>()(
 		persist(
 			(set) => ({
 				isAuthenticated: false,
+				_hasHydrated: false,
 				user: null,
 
 				login: (user?: UserModel): void => {
@@ -28,10 +31,14 @@ export const useAuthStore = create<AuthState>()(
 
 					localStorage.removeItem('auth-storage');
 				},
+				setHasHydrated: (state) => set({ _hasHydrated: state }),
 			}),
 			{
 				name: 'auth-storage', // Key duy nhất trong LocalStorage
 				storage: createJSONStorage((): Storage => localStorage), // Chỉ định dùng localStorage
+				onRehydrateStorage: () => (state) => {
+					state?.setHasHydrated(true);
+				},
 			},
 		),
 		{ name: 'auth-storage' },
