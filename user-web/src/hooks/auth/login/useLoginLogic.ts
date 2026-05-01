@@ -1,3 +1,4 @@
+'use client';
 import { authService, LoginPayload, LoginResponse } from '@/services/auth/authService';
 import { useAuthStore } from '@/stores/auth.store';
 import { useMutation } from '@tanstack/react-query';

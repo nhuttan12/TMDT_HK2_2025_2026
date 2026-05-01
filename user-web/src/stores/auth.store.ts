@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, devtools } from 'zustand/middleware';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 export interface UserModel {
 	username: string;
@@ -13,7 +12,7 @@ interface AuthState {
 	logout: () => void;
 	setHasHydrated: (state: boolean) => void;
 }
-// quản lý đang nhập cảu người dùng
+// quản lý đang nhập của người dùng
 export const useAuthStore = create<AuthState>()(
 	devtools(
 		persist(

@@ -1,5 +1,5 @@
 import { UserModel } from '@/stores/auth.store';
-import serverState from '@/lib/axios';
+import apiClient from '@/lib/api-client';
 
 export interface LoginPayload {
 	email: string;
@@ -29,7 +29,7 @@ export const authService = {
 			});
 		}
 		// Chỉ gửi request và trả về data. Lỗi sẽ được TanStack Query bắt ở lớp Hook.
-		return serverState.post('/auth/login', data);
+		return apiClient.post('/auth/login', data);
 	},
 	checkMe: (): UserModel => {
 		console.log('Checking me');
