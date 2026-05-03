@@ -5,7 +5,7 @@ import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
 import Field from '@/components/layout/admin/field';
 import { Input } from '@/components/ui/input';
-import { getProductVariantStatusLabel } from '@/types/products/admin/variant/ProductVariantStatusLabel';
+import { getProductVariantStatusLabel } from '@/utils/products/product-variant-status-label';
 import { Label } from '@/components/ui/label';
 import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';

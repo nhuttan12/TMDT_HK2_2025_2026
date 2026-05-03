@@ -1,4 +1,4 @@
-import { GoodsIssueType } from './GoodsIssueType';
+import { GoodsIssueType } from "@/types/inventories/issues/uis/GoodsIssueType";
 
 const GOODS_ISSUE_TYPE_LABEL: Record<GoodsIssueType, string> = {
 	retail: 'Bán lẻ',

@@ -16,7 +16,7 @@ import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
-import { getUserRoleLabel } from '@/types/users/UserRoleLabel';
+import { getUserRoleLabel } from '@/utils/users/user-role-label';
 
 interface Props {
 	users: CustomerListAdmin[];
@@ -110,7 +110,9 @@ export default function UserAdminTable({
 					{renderSortIcon('isActive')}
 				</div>
 			),
-			render: (row: CustomerListAdmin): JSX.Element => <UserStatusBadge status={row.status} />,
+			render: (row: CustomerListAdmin): JSX.Element => (
+				<UserStatusBadge status={row.status} />
+			),
 		},
 		{
 			key: 'createdAt',

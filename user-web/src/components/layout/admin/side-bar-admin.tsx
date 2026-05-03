@@ -146,12 +146,12 @@ const sidebarData: SidebarItemInterface[] = [
 			},
 			{
 				title: 'Mã giảm giá của cửa hàng',
-				href: '/admin/marketing/coupons',
+				href: '/admin/marketing/coupons/shop',
 				icon: <BadgePercent size={18} />,
 			},
 			{
 				title: 'Mã giảm giá chung của toàn nghành hàng',
-				href: '/admin/marketing/coupons',
+				href: '/admin/marketing/coupons/platform',
 				icon: <Tickets size={18} />,
 			},
 			{

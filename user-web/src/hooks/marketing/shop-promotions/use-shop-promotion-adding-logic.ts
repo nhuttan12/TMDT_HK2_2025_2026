@@ -1,14 +1,12 @@
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
+import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { useTableSort, UseTableSortReturn } from '@/hooks/share/use-table-sort';
-import { PromotionForAdding } from '@/types/marketing/shop-promotions/PromotionForAdding';
-import { ProductPromotionSortField } from '@/types/marketing/shop-promotions/ProductPromotionSortField';
 import { ProductPromotionForAdding } from '@/types/marketing/shop-promotions/ProductPromotionForAdding';
+import { ProductPromotionSortField } from '@/types/marketing/shop-promotions/ProductPromotionSortField';
+import { PromotionForAdding } from '@/types/marketing/shop-promotions/PromotionForAdding';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 
 export interface UseShopPromotionAddingLogicReturn {
 	form: Omit<PromotionForAdding, 'products'>; // Tạm bỏ products ra khỏi form tĩnh
@@ -38,7 +36,6 @@ export interface UseShopPromotionAddingLogicReturn {
 export function useShopPromotionAddingLogic(
 	availableProducts: ProductPromotionForAdding[],
 ): UseShopPromotionAddingLogicReturn {
-	const router: AppRouterInstance = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	// Khởi tạo Status Modal

@@ -1,0 +1,28 @@
+import { JSX } from 'react';
+import { Metadata } from 'next';
+import { CouponManagementContainer } from '../_components/coupon-management-container';
+import { getShopCouponsByShopId } from '@/services/marketing/coupon/admin/coupon-admin-service';
+
+export const metadata: Metadata = {
+	title: 'Danh sách mã giảm giá của cửa hàng',
+};
+
+interface Props {
+	params: Promise<{ shopPromotionId: string }>;
+}
+
+export default async function ShopCouponPage({ params }: Props): Promise<JSX.Element> {
+	const { shopPromotionId } = await params;
+	const id = parseInt(shopPromotionId);
+
+	// Gọi API/Service tại Server
+	const initialCoupons = await getShopCouponsByShopId(id);
+
+	return (
+		<CouponManagementContainer
+			scope='shop'
+			shopId={id}
+			initialCoupons={initialCoupons}
+		/>
+	);
+}

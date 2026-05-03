@@ -1,6 +1,6 @@
-import { Coupon } from '@/types/coupons/Coupon';
+import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 
-export async function getCouponsByUserId(userId: number): Promise<Coupon[]> {
+export async function getCouponsByUserId(userId: number): Promise<UserCoupon[]> {
 	// Giả lập độ trễ của API là 800ms
 	return new Promise((resolve) => {
 		setTimeout(() => {

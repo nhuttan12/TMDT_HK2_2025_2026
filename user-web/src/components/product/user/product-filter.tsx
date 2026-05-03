@@ -154,7 +154,7 @@ export default function ProductFilter(): JSX.Element {
 				<DialogFooter className='mt-6'>
 					<Button
 						onClick={applyFilterToUrl}
-						className='w-full'
+						className='w-full cursor-pointer'
 					>
 						Áp dụng
 					</Button>

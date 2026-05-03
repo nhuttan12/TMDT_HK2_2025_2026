@@ -1,6 +1,5 @@
-import React, { JSX } from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash } from 'lucide-react';
+import React, { JSX } from 'react';
 
 interface Props {
 	id: number;

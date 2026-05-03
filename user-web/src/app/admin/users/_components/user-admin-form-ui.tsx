@@ -15,12 +15,12 @@ import {
 } from '@/components/ui/select';
 
 import { formatDate } from '@/utils/shared/date';
-import { getUserRoleLabel } from '@/types/users/UserRoleLabel';
+import { getUserRoleLabel } from '@/utils/users/user-role-label';
 import { UserRole } from '@/types/users/UserRole';
 import { UseUserAdminFormLogicReturn } from '@/hooks/users/admin/use-user-admin-form-logic';
 
 // Kế thừa toàn bộ logic hook return
-type UserAdminFormUiProps = UseUserAdminFormLogicReturn
+type UserAdminFormUiProps = UseUserAdminFormLogicReturn;
 
 export default function UserAdminFormUi({
 	form,

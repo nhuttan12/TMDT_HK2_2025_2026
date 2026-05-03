@@ -1,13 +1,12 @@
-import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { FilterField } from '@/types/uis/FilterField';
-import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { usePagination } from '@/hooks/share/use-pagination';
-import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
+import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
+import { FilterField } from '@/types/uis/FilterField';
 import { useState } from 'react';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface ShopProductPromotionFilterValues {
 	productName?: string;

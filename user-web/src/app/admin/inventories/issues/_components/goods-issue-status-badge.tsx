@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { GoodsIssueStatus } from '@/types/inventories/issues/uis/GoodsIssueStatus';
-import { getGoodsIssueStatusLabel } from '@/types/inventories/issues/uis/GoodsIssueStatusLabel';
+import { getGoodsIssueStatusLabel } from '@/utils/inventories/issues/goods-issue-status-label';
 
 interface Props {
 	status: GoodsIssueStatus;

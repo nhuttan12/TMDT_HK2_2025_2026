@@ -10,7 +10,7 @@ import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { Plus, Trash2 } from 'lucide-react';
 import { ProductSelectionModal } from '@/app/admin/marketing/shop-promotions/add-new/_components/product-selection-modal';
-import { getProductVariantStatusLabel } from '@/types/products/admin/variant/ProductVariantStatusLabel';
+import { getProductVariantStatusLabel } from '@/utils/products/product-variant-status-label';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 
@@ -63,7 +63,8 @@ export default function ShopPromotionAddingUi({
 			header: 'Giá Sau Giảm (VNĐ)',
 			render: (row: ProductPromotionForAdding): JSX.Element => {
 				// Kiểm tra lỗi Real-time để bôi đỏ Input
-				const isError: boolean = row.discountPrice > 0 && row.discountPrice >= row.salePrice;
+				const isError: boolean =
+					row.discountPrice > 0 && row.discountPrice >= row.salePrice;
 
 				return (
 					<div

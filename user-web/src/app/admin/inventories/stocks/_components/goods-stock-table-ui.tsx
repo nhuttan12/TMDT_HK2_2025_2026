@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
-import { getReplenishmentLabel } from '@/types/inventories/stocks/ReplenishmentLevelLabel';
+import { getReplenishmentLabel } from '@/utils/inventories/stocks/replenishment-level-label';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Pagination from '@/components/layout/share/pagination';

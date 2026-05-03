@@ -8,7 +8,7 @@ import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSeria
 import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { getBatchItemStatusLabel } from '@/types/inventories/receipts/uis/BatchItemStatusLabel';
+import { getBatchItemStatusLabel } from '@/utils/inventories/receipts/batch-item-status-label';
 import {
 	Select,
 	SelectContent,

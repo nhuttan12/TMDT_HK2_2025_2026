@@ -9,10 +9,10 @@ import { Column } from '@/types/uis/Column';
 import { FilterField } from '@/types/uis/FilterField';
 import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
 import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/GoodsIssueAdminFilterValues';
-import { getGoodsIssueTypeLabel } from '@/types/inventories/issues/uis/GoodsIssueTypeLabel';
+import { getGoodsIssueTypeLabel } from '@/utils/inventories/issues/goods-issue-type-label';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
 import { GoodsIssueAdminLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
-import AdminTableAction from "@/components/layout/admin/admin-table-action";
+import AdminTableAction from '@/components/layout/admin/admin-table-action';
 
 interface GoodsIssueAdminUiProps extends GoodsIssueAdminLogicReturn {
 	issues: GoodsIssueList[];

@@ -105,10 +105,16 @@ export function DynamicFilter<T extends object>({
 						<Button
 							variant='ghost'
 							onClick={handleReset}
+							className='cursor-pointer'
 						>
 							Reset
 						</Button>
-						<Button onClick={() => onApply(values)}>Áp dụng</Button>
+						<Button
+							className='cursor-pointer'
+							onClick={() => onApply(values)}
+						>
+							Áp dụng
+						</Button>
 					</div>
 				</div>
 			</DialogContent>
