@@ -8,9 +8,9 @@ import { AxiosError } from 'axios';
 
 export interface LoginReturn {
 	loginWithGoogle: () => Promise<void>;
-	formData: LoginPayload;
 	handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 	isLoading: boolean;
+	formData: LoginPayload;
 	setFormData: Dispatch<SetStateAction<LoginPayload>>;
 }
 
@@ -18,23 +18,19 @@ export function useLoginLogic(): LoginReturn {
 	const router = useRouter();
 	const login = useAuthStore((state) => state.login);
 	const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-	const logout = useAuthStore((state) => state.logout);
 	const [formData, setFormData] = useState<LoginPayload>({ email: '', password: '' });
 
 	useEffect((): void => {
 		if (isAuthenticated) {
-			// logout();
-			// TODO: thực hiện chặn ở đây
+			router.push('/');
 		}
-	}, [isAuthenticated, logout]);
+	}, [isAuthenticated, router]);
 
 	// Định nghĩa Mutation: Quản lý vòng đời của request Login
 	const loginMutation = useMutation({
 		// 1. Hàm thực thi chính
 		mutationFn: ({ email, password }: LoginPayload): Promise<LoginResponse> => {
-			const resp = authService.login({ email, password })
-			console.log(resp)
-			return resp;
+			return  authService.login({ email, password });
 		},
 		// 2. Khi bắt đầu gửi request (thay cho setIsLoading(true))
 		onMutate: () => {
@@ -63,6 +59,7 @@ export function useLoginLogic(): LoginReturn {
 			}));
 		},
 	});
+
 	const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		if (!formData.email || !formData.password) {

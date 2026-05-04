@@ -2,8 +2,8 @@
 
 import { JSX, useState } from 'react';
 import { BaseInputField } from '@/types/uis/BaseInputField';
-import { LoginUI } from '@/app/(auth)/login/_components/login_ui';
-import { LoginReturn, useLoginLogic } from '@/hooks/auth/login/useLoginLogic';
+import { LoginUI } from './login-ui';
+import { LoginReturn, useLoginLogic } from '../../../../hooks/auth/login/use-login-logic';
 
 const FIELDS: BaseInputField[] = [
 	{ name: 'email', label: 'Email', type: 'email', errorMessage: 'Email không hợp lệ' },
