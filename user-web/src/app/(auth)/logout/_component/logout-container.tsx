@@ -2,7 +2,7 @@
 
 import { JSX, useEffect } from 'react';
 import { LogoutUI } from '@/app/(auth)/logout/_component/logout-ui';
-import { useLogoutLogic } from '../../../../hooks/auth/logout/useLogoutLogic';
+import { useLogoutLogic } from '../../../../hooks/auth/logout/use-logout-logic';
 
 export function LogoutContainer(): JSX.Element {
 	const { executeLogout } = useLogoutLogic();

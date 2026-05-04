@@ -11,6 +11,14 @@ export interface LoginResponse {
 	status: string;
 }
 
+export interface RegisterRequest {
+	email: string;
+	password: string;
+}
+export interface RegisterResponse {
+	email: string;
+}
+
 export const authService = {
 	login: (data: Partial<LoginPayload>): Promise<LoginResponse> => {
 		// //TODO: remove
@@ -30,6 +38,24 @@ export const authService = {
 		}
 		// Chỉ gửi request và trả về data. Lỗi sẽ được TanStack Query bắt ở lớp Hook.
 		return apiClient.post('/auth/login', data);
+	},
+	register: (data: RegisterRequest): Promise<RegisterResponse> => {
+		if (data.password === '1') {
+			return new Promise<{ email: 'oke' }>((resolve, reject) => {
+				setTimeout(() => {
+					if ( data.password === '1') {
+						//  thực hiện gọi localhost:3000/api/dev/mock-auth
+						fetch('/api/dev/mock-auth');
+						resolve({ email: 'oke' });
+					} else {
+						reject(new Error('Invalid credentials'));
+					}
+				}, 1000);
+			});
+		}
+		console.log(data);
+
+		return apiClient.post('/auth/register', data);
 	},
 	checkMe: (): UserModel => {
 		console.log('Checking me');
