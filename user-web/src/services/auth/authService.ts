@@ -1,5 +1,6 @@
 import { UserModel } from '@/stores/auth.store';
 import apiClient from '@/lib/api-client';
+import apiServer from '@/lib/api-server';
 
 export interface LoginPayload {
 	email: string;
@@ -17,6 +18,9 @@ export interface RegisterRequest {
 }
 export interface RegisterResponse {
 	email: string;
+}
+export interface RefreshTokenResponse {
+	token: string
 }
 
 export const authService = {
@@ -63,11 +67,14 @@ export const authService = {
 			username: 'tam',
 		};
 	},
-
 	loginWithGoogle: () => {
 		window.location.assign('/api/auth/google');
 	},
 	getProfile() {
 		return undefined;
+	},
+	refreshToken: (): Promise<RefreshTokenResponse> =>{
+		console.log('refreshToken')
+		return apiClient.post('/auth/refresh-token')
 	},
 };

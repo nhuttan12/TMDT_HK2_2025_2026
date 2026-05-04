@@ -19,5 +19,6 @@ export const authKeys = {
 	profile: () => [...authKeys.all, 'profile'] as const,
 	login: () => [...authKeys.all, 'login'] as const,
 	logout: () => [...authKeys.all, 'logout'] as const,
+	refreshToken:() => [...authKeys.all, 'refreshToken']
 
 };
