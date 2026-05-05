@@ -5,7 +5,7 @@ import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { UseMutationResult } from '@tanstack/react-query';
 import { SortableImageManagerUi } from '@/components/contents/sortable-image-manager-ui';
 import { useShopBannersLogic } from '@/hooks/contents/shop-banners/use-shop-banners-logic';
-import { UpdateShopBannerPayload } from '@/types/shops/UpdateShopBannerPayload';
+import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 import {
 	useShopBannersQuery,
 	useUpdateShopBannerMutation,
@@ -15,7 +15,9 @@ interface ShopBannerContainerProps {
 	initialShopBanners: SortableImageForm[];
 }
 
-export function ShopBannersContainer({ initialShopBanners }: ShopBannerContainerProps): JSX.Element {
+export function ShopBannersContainer({
+	initialShopBanners,
+}: ShopBannerContainerProps): JSX.Element {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
 	// 1. Khởi tạo React Query (Server State)

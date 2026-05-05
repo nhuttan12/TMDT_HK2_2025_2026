@@ -1,3 +1,5 @@
+'use client';
+
 import { CartItem } from '@/types/carts/CartItem';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { fetchUserCart } from '@/services/carts/cart-service';

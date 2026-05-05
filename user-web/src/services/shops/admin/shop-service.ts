@@ -1,4 +1,4 @@
-import { ShopProfile } from '@/types/shops/ShopProfile';
+import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
 const mockShopProfile: ShopProfile = {
 	name: 'Terrarium VN - Rừng trong kính',

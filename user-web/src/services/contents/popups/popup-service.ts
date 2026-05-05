@@ -1,5 +1,5 @@
-import { Popup } from '@/types/shops/Popup';
-import { UpdatePopupPayload } from '@/types/shops/UpdatePopupPayload';
+import { Popup } from '@/types/shops/admin/Popup';
+import { UpdatePopupPayload } from '@/types/shops/admin/UpdatePopupPayload';
 
 export async function fetchShopPopup(): Promise<Popup | undefined> {
 	await new Promise((resolve) => setTimeout(resolve, 800));

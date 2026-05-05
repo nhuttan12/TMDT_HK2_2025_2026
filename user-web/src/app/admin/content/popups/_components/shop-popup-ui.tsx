@@ -4,7 +4,7 @@ import React, { JSX } from 'react';
 import { BaseImage } from '@/types/images/admin/BaseImage';
 import { Button } from '@/components/ui/button';
 import { Save, AlertCircle } from 'lucide-react';
-import { Popup } from '@/types/shops/Popup';
+import { Popup } from '@/types/shops/admin/Popup';
 import SingleImageUpload from '@/components/image/admin/single-image-upload';
 
 interface ShopPopupUiProps {
@@ -27,7 +27,8 @@ export function ShopPopupUi(props: ShopPopupUiProps): JSX.Element {
 				<div>
 					<h1 className='text-xl font-bold text-gray-800'>Quản lý Popup Khuyến Mãi</h1>
 					<p className='text-sm text-gray-500 mt-1'>
-						Popup sẽ hiển thị duy nhất 1 hình ảnh ngay khi khách hàng truy cập vào trang chủ.
+						Popup sẽ hiển thị duy nhất 1 hình ảnh ngay khi khách hàng truy cập vào trang
+						chủ.
 					</p>
 				</div>
 

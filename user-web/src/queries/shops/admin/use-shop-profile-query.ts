@@ -8,8 +8,8 @@ import {
 	useQueryClient,
 	UseQueryResult,
 } from '@tanstack/react-query';
-import { getShopProfile, updateShopProfile } from '@/services/shops/shop-service';
-import { ShopProfile } from '@/types/shops/ShopProfile';
+import { getShopProfile, updateShopProfile } from '@/services/shops/admin/shop-service';
+import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
 const SHOP_KEYS = {
 	profile: ['shop-profile'] as const,

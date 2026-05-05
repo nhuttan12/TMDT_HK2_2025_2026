@@ -3,7 +3,7 @@
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { useEffect, useState } from 'react';
 
-import { UpdateHomeBannerPayload } from '@/types/shops/UpdateHomeBannerPayload';
+import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
 
 interface UseShopBannerLogicReturn {
 	banners: SortableImageForm[];
@@ -14,7 +14,9 @@ interface UseShopBannerLogicReturn {
 	preparePayload: () => UpdateHomeBannerPayload[];
 }
 
-export function useHomeBannerLogicAdmin(serverBanners: SortableImageForm[]): UseShopBannerLogicReturn {
+export function useHomeBannerLogicAdmin(
+	serverBanners: SortableImageForm[],
+): UseShopBannerLogicReturn {
 	// Local state cho thao tác DND và Upload chưa lưu
 	const [banners, setBanners] = useState<SortableImageForm[]>(serverBanners);
 
@@ -23,7 +25,9 @@ export function useHomeBannerLogicAdmin(serverBanners: SortableImageForm[]): Use
 		setBanners(serverBanners);
 	}, [serverBanners]);
 
-	const isUploading: boolean = banners.some((b: SortableImageForm): boolean => b.status === 'uploading');
+	const isUploading: boolean = banners.some(
+		(b: SortableImageForm): boolean => b.status === 'uploading',
+	);
 	const hasPrimary: boolean = banners.some((b: SortableImageForm): boolean => b.isPrimary);
 	const isValidToSave: boolean = !isUploading && banners.length > 0 && hasPrimary;
 

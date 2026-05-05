@@ -9,7 +9,7 @@ import {
 import { useHomeBannerLogicAdmin } from '@/hooks/contents/home-banners/admin/use-home-banner-logic-admin';
 import { UseMutationResult } from '@tanstack/react-query';
 import { SortableImageManagerUi } from '@/components/contents/sortable-image-manager-ui';
-import { UpdateHomeBannerPayload } from '@/types/shops/UpdateHomeBannerPayload';
+import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
 
 interface ShopBannerContainerProps {
 	initialBanners: SortableImageForm[];

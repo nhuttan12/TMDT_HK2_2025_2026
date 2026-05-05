@@ -1,6 +1,6 @@
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { ShopBanner } from '@/types/shops/ShopBanner';
-import { UpdateShopBannerPayload } from '@/types/shops/UpdateShopBannerPayload';
+import { ShopBanner } from '@/types/shops/admin/ShopBanner';
+import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 import { mapShopBannersToSortableForm } from '@/utils/content/shop-banners/mappers/admin-shop-banners';
 
 export async function getShopBanners(): Promise<SortableImageForm[]> {

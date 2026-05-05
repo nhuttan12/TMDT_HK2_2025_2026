@@ -2,8 +2,7 @@
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { useEffect, useState } from 'react';
-import { UpdateShopBannerPayload } from '@/types/shops/UpdateShopBannerPayload';
-
+import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 
 interface UseShopBannerLogicReturn {
 	homeBanners: SortableImageForm[];

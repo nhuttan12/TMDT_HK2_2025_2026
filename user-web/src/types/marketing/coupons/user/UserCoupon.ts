@@ -1,7 +1,7 @@
 import { CouponType } from './CouponType';
 
 export interface UserCoupon {
-	id: string;
+	id: number;
 	title: string;
 	couponType: CouponType;
 	description: string;

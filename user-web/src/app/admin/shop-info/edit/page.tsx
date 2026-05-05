@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { JSX } from 'react';
-import { ShopProfile } from '@/types/shops/ShopProfile';
-import { getShopProfile } from '@/services/shops/shop-service';
+import { ShopProfile } from '@/types/shops/admin/ShopProfile';
+import { getShopProfile } from '@/services/shops/admin/shop-service';
 import StoreProfileFormContainer from '@/app/admin/shop-info/_components/shop-profile-form-container';
 
 export const metadata: Metadata = {

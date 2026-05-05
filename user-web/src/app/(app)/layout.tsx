@@ -9,7 +9,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }): 
 			<Header />
 
 			<main className='flex-1'>
-				<div className='mx-auto max-w-275'>{children}</div>
+				<div className='mx-auto max-w-300'>{children}</div>
 				<ChatBox />
 			</main>
 

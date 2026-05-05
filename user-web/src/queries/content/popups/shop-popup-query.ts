@@ -6,9 +6,9 @@ import {
 	useQueryClient,
 	UseQueryResult,
 } from '@tanstack/react-query';
-import { UpdatePopupPayload } from '@/types/shops/UpdatePopupPayload';
+import { UpdatePopupPayload } from '@/types/shops/admin/UpdatePopupPayload';
 import { fetchShopPopup, updateShopPopup } from '@/services/contents/popups/popup-service';
-import { Popup } from '@/types/shops/Popup';
+import { Popup } from '@/types/shops/admin/Popup';
 
 export const SHOP_POPUP_QUERY_KEY: string[] = ['shop-popup'];
 

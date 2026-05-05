@@ -7,9 +7,9 @@ import {
 	useShopPopupQuery,
 	useUpdateShopPopupMutation,
 } from '@/queries/content/popups/shop-popup-query';
-import { UpdatePopupPayload } from '@/types/shops/UpdatePopupPayload';
+import { UpdatePopupPayload } from '@/types/shops/admin/UpdatePopupPayload';
 import { ShopPopupUi } from '@/app/admin/content/popups/_components/shop-popup-ui';
-import { Popup } from '@/types/shops/Popup';
+import { Popup } from '@/types/shops/admin/Popup';
 
 interface ShopPopupContainerProps {
 	initialPopup?: Popup;

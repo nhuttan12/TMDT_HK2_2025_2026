@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { ShopProfile } from '@/types/shops/ShopProfile';
+import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -12,11 +12,7 @@ interface UseShopProfileLogicProps {
 	onMutate?: (data: ShopProfile) => Promise<void>;
 }
 
-export function useShopProfileLogic({
-	initialData,
-	formType,
-	onMutate,
-}: UseShopProfileLogicProps) {
+export function useShopProfileLogic({ initialData, formType, onMutate }: UseShopProfileLogicProps) {
 	const router: AppRouterInstance = useRouter();
 
 	const [form, setForm] = useState<ShopProfile>(initialData);

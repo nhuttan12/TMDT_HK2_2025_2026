@@ -1,3 +1,5 @@
+'use client';
+
 import { CartItem } from '@/types/carts/CartItem';
 import { JSX } from 'react';
 import { useCartQuery } from '@/queries/carts/use-cart-query';

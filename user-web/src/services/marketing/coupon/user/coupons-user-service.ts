@@ -6,7 +6,7 @@ export async function getCouponsByUserId(userId: number): Promise<UserCoupon[]> 
 		setTimeout(() => {
 			resolve([
 				{
-					id: '1',
+					id: 1,
 					title: 'Giảm 20%',
 					couponType: 'Sale',
 					description: 'Giảm tối đa 100.000đ cho đơn từ 500.000đ',
@@ -14,7 +14,7 @@ export async function getCouponsByUserId(userId: number): Promise<UserCoupon[]> 
 					code: 'SALE20',
 				},
 				{
-					id: '2',
+					id: 2,
 					title: 'Freeship',
 					couponType: 'Ship',
 					description: 'Miễn phí vận chuyển cho đơn từ 200.000đ',

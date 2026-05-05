@@ -1,3 +1,5 @@
+'use client';
+
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { JSX } from 'react';
 import { useUserInvoicesQuery } from '@/queries/invoices/user/use-invoice-detail-query';

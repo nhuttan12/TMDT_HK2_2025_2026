@@ -154,11 +154,6 @@ const sidebarData: SidebarItemInterface[] = [
 				href: '/admin/marketing/coupons/platform',
 				icon: <Tickets size={18} />,
 			},
-			{
-				title: 'Flash Sale',
-				href: '/admin/marketing/flash-sales',
-				icon: <Zap size={18} />,
-			},
 		],
 	},
 	// {

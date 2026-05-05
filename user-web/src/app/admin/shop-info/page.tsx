@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import { getShopProfile } from '@/services/shops/shop-service';
+import { getShopProfile } from '@/services/shops/admin/shop-service';
 import { JSX } from 'react';
 import StoreProfileFormContainer from '@/app/admin/shop-info/_components/shop-profile-form-container';
-import { ShopProfile } from '@/types/shops/ShopProfile';
+import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
 export const metadata: Metadata = {
 	title: 'Thông tin cửa hàng',
