@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class createTable : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,10 +15,10 @@ namespace api.Migrations
                 name: "products",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,10 +29,10 @@ namespace api.Migrations
                 name: "roles",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,16 +43,16 @@ namespace api.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
-                    password_hash = table.Column<string>(type: "text", nullable: false),
-                    phone = table.Column<string>(type: "text", nullable: true),
-                    full_name = table.Column<string>(type: "text", nullable: false),
-                    create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    delete_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    role_id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    password_hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    full_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    create_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    update_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    delete_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    role_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,13 +69,12 @@ namespace api.Migrations
                 name: "addresses",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id1 = table.Column<string>(type: "text", nullable: false),
-                    address_url = table.Column<string>(type: "text", nullable: false),
-                    create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    is_used = table.Column<bool>(type: "boolean", nullable: false),
-                    user_id = table.Column<int>(type: "integer", nullable: true)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    user_id = table.Column<int>(type: "int", nullable: false),
+                    address_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    create_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    is_used = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,18 +83,19 @@ namespace api.Migrations
                         name: "fk_addresses_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "user_details",
                 columns: table => new
                 {
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    lock_time_start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    lock_time_end = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    avatar_url = table.Column<string>(type: "text", nullable: true),
-                    address_id = table.Column<string>(type: "text", nullable: true)
+                    user_id = table.Column<int>(type: "int", nullable: false),
+                    lock_time_start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    lock_time_end = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    avatar_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    address_id = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,16 +112,16 @@ namespace api.Migrations
                 name: "user_external_logins",
                 columns: table => new
                 {
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    provider = table.Column<string>(type: "text", nullable: false),
-                    provider_key = table.Column<string>(type: "text", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false),
+                    provider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    provider_key = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_external_logins", x => x.user_id);
+                    table.PrimaryKey("pk_user_external_logins", x => x.id);
                     table.ForeignKey(
-                        name: "fk_user_external_logins_users_user_id",
-                        column: x => x.user_id,
+                        name: "fk_user_external_logins_users_id",
+                        column: x => x.id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -132,6 +131,12 @@ namespace api.Migrations
                 name: "ix_addresses_user_id",
                 table: "addresses",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_external_logins_provider_id",
+                table: "user_external_logins",
+                columns: new[] { "provider", "id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_role_id",

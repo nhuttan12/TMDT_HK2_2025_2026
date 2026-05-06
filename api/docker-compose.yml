@@ -1,34 +1,39 @@
 version: "3.9"
 
 services:
-  postgres:
-    image: postgres:15.5
-    container_name: postgres-db
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-db
     restart: unless-stopped
+    
+    # Chạy với quyền root để tránh lỗi Permission Denied khi ghi vào volume trên Linux/Docker Desktop
+    user: root 
 
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - ACCEPT_EULA=Y 
+      # Đảm bảo MSSQL_SA_PASSWORD trong .env có ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD} 
+      - MSSQL_PID=${MSSQL_PID}
 
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${MSSQL_PORT}:1433"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - sqlserver_data:/var/opt/mssql
 
     networks:
       - backend
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
+      # Sử dụng đúng biến MSSQL_SA_PASSWORD để kiểm tra trạng thái
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-U", "sa", "-P", "${MSSQL_SA_PASSWORD}", "-Q", "SELECT 1"]
+      interval: 20s # Tăng thời gian chờ vì SQL Server khởi động khá chậm
+      timeout: 10s
       retries: 5
+      start_period: 30s # Cho phép container có 30 giây để khởi động trước khi bắt đầu kiểm tra
 
 volumes:
-  postgres_data:
+  sqlserver_data:
 
 networks:
   backend:
