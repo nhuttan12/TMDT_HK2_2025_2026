@@ -44,6 +44,8 @@ if (app.Environment.IsDevelopment())
         options.DocumentTitle = " Documentation";
     });
 }
+// Global exception handling middleware
+app.UseExceptionHandler();
 // Chuyển hướng HTTP sang HTTPS
 app.UseHttpsRedirection();
 // CORS middleware
@@ -52,8 +54,7 @@ app.UseCors("AllowSpecificOrigin");
 // tự động kiểm tra token trong header của các request đến và xác thực người dùng dựa trên token đó
 app.UseAuthentication();
 app.UseAuthorization();
-// Global exception handling middleware
-app.UseExceptionHandler();
+
 // Map controller routes
 app.MapControllers();
 app.Run();

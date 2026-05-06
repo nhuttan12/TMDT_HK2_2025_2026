@@ -13,7 +13,7 @@
                 cfg.AddMaps(typeof(Program).Assembly);
             });
 
-            // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API)
+            // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API) 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
             services.AddCors(options =>
             {

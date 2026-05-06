@@ -50,7 +50,7 @@ namespace api.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
 
-
+            // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             // Đăng ký global exception handler
