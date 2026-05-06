@@ -1,4 +1,5 @@
-﻿using api.Dtos.Users.Responses;
+﻿using api.Dtos.Common;
+using api.Dtos.Users.Responses;
 using api.Services.Auths;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -35,7 +36,7 @@ namespace api.Controllers
                 return Unauthorized("Invalid username or password");
             }
             SetTokenCookie(token);
-            return Ok("success");
+            return Ok(ApiResponse<string>.Success("success"));
         }
         [HttpDelete("logout")]
         public IActionResult Logout()
@@ -61,7 +62,7 @@ namespace api.Controllers
             if (token == null)
                 return BadRequest("Invalid refresh token");
             SetTokenCookie(token);
-            return Ok();
+            return Ok(ApiResponse<Boolean>.Success(true));
 
         }
 
@@ -110,7 +111,7 @@ namespace api.Controllers
         {
             // TODO: implement register logic
             await _authService.Register(req);
-            return Ok("success");
+            return Ok(ApiResponse<string>.Success("success"));
         }
 
         private void SetTokenCookie(TokenResponse token)

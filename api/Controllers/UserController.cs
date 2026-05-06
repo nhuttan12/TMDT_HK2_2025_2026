@@ -1,4 +1,6 @@
-﻿using api.Dtos.Users.Requests;
+﻿using api.Dtos;
+using api.Dtos.Common;
+using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Exceptions;
 using api.Models.Utilities;
@@ -27,19 +29,19 @@ namespace api.Controllers
     {
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<UserInfoDTO>> Create([FromBody] UserCreateDto userCreateDto)
+        public async Task<ActionResult> Create([FromBody] UserCreateDto userCreateDto)
         {
             var user = await UserService.CreateAsync(userCreateDto);
-            return Ok(user);
+            return Ok(ApiResponse<UserInfoDTO>.Success(user));
         }
 
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<UserInfoDTO>> GetById([FromRoute] int id)
+        public async Task<ActionResult> GetById([FromRoute] int id)
         {
             var user = await UserService.GetByIdAsync(id);
-            return Ok(user);
+            return Ok(ApiResponse<UserInfoDTO>.Success(user));
         }
 
         [HttpGet]
@@ -53,7 +55,7 @@ namespace api.Controllers
 
         [HttpGet("me")]
         [Authorize(Roles = "User, Admin, Shop")]
-        public async Task<ActionResult<UserInfoDTO>> GetCurrent()
+        public async Task<ActionResult> GetCurrent()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -61,15 +63,19 @@ namespace api.Controllers
                 throw new UnauthorizedException("You are not authorized.");
             }
             var user = await UserService.GetByIdAsync(int.Parse(userId));
-            return Ok(user);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found.");
+            }
+            return Ok(ApiResponse<UserInfoDTO>.Success(user));
         }
         // *********************************************************************
         [HttpPost("shop")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<UserInfoDTO>> CreateShop([FromBody] UserCreateShopDto userCreateDto)
+        public async Task<ActionResult> CreateShop([FromBody] UserCreateShopDto userCreateDto)
         {
             //TODO implement method create shop
-            return Ok();
+            return Ok(ApiResponse<string>.Success("success"));
         }
 
         [HttpPost("{id}/lock")]
