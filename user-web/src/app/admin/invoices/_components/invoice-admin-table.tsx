@@ -1,21 +1,15 @@
 'use client';
 
-import React, { JSX } from 'react';
 import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
-import { UserInvoice } from '@/types/invoices/user/UserInvoice';
-import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
-import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
-import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
+import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
+import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
+import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import { Column } from '@/types/uis/Column';
 import { getPaymentMethodLabel } from '@/utils/invoices/payment-method-label';
+import { JSX } from 'react';
+import { InvoiceStatusSelect } from './invoice-status-select';
 
 interface Props {
 	invoices: UserInvoice[];
@@ -54,7 +48,8 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 		{
 			key: 'paymentMethod',
 			header: 'Thanh toán',
-			render: (row: UserInvoice): string => getPaymentMethodLabel(row.paymentMethod as PaymentMethod),
+			render: (row: UserInvoice): string =>
+				getPaymentMethodLabel(row.paymentMethod as PaymentMethod),
 		},
 		{
 			key: 'totalItems',
@@ -69,35 +64,11 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 			key: 'actions',
 			header: 'Hành động',
 			render: (row: UserInvoice): JSX.Element => (
-				<Select
-					defaultValue={row.status}
-					onValueChange={(value: string): void =>
-						changeStatus(row.id, value as InvoiceStatus)
-					}
-				>
-					<SelectTrigger
-						className='w-40'
-						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => e.stopPropagation()}
-					>
-						<SelectValue />
-					</SelectTrigger>
-
-					<SelectContent>
-						{row.status === 'pending_approval' ? (
-							<>
-								<SelectItem value='APPROVE'>Duyệt đơn</SelectItem>
-								<SelectItem value='CANCEL'>Huỷ đơn</SelectItem>
-							</>
-						) : (
-							<>
-								<SelectItem value='PENDING'>Chờ thanh toán</SelectItem>
-								<SelectItem value='PAID'>Đã thanh toán</SelectItem>
-								<SelectItem value='COMPLETED'>Hoàn tất</SelectItem>
-								<SelectItem value='CANCELLED'>Đã huỷ</SelectItem>
-							</>
-						)}
-					</SelectContent>
-				</Select>
+				<InvoiceStatusSelect
+					invoiceId={row.id}
+					status={row.status}
+					onChangeStatus={changeStatus}
+				/>
 			),
 		},
 	];

@@ -3,7 +3,7 @@
 import React, { JSX, useState } from 'react';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { UseMutationResult } from '@tanstack/react-query';
-import { SortableImageManagerUi } from '@/components/contents/sortable-image-manager-ui';
+import { ShopBannersUi } from '@/app/admin/content/shop-banners/_components/shop-banners-ui';
 import { useShopBannersLogic } from '@/hooks/contents/shop-banners/use-shop-banners-logic';
 import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 import {
@@ -47,7 +47,7 @@ export function ShopBannersContainer({
 
 	// 4. Render UI
 	return (
-		<SortableImageManagerUi
+		<ShopBannersUi
 			images={homeBanners}
 			setImages={setHomeBanners}
 			isSubmitting={updateMutation.isPending} // Lấy trạng thái loading từ Tanstack Query

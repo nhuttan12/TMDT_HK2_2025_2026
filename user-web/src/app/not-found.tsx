@@ -3,8 +3,10 @@
 import { JSX } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function NotFound(): JSX.Element {
+    const router = useRouter();
 	return (
 		<div className='min-h-screen flex flex-col items-center justify-center text-center px-4'>
 			<h1 className='text-7xl font-bold mb-4'>404</h1>
@@ -25,7 +27,8 @@ export default function NotFound(): JSX.Element {
 
 				<Button
 					variant='outline'
-					onClick={() => window.history.back()}
+					onClick={() => router.back()}
+                    className='cursor-pointer'
 				>
 					Quay lại
 				</Button>

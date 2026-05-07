@@ -6,7 +6,7 @@ import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { Button } from '@/components/ui/button';
 import { Save, AlertCircle } from 'lucide-react';
 
-interface ShopBannerUIProps {
+interface ShopBannersUIProps {
 	images: SortableImageForm[];
 	setImages: React.Dispatch<React.SetStateAction<SortableImageForm[]>>;
 	isSubmitting: boolean;
@@ -19,9 +19,13 @@ interface ShopBannerUIProps {
 	title: string;
 	description: string;
 	missingPrimaryWarning?: string;
+
+	// Field cho phép tùy chỉnh chiều rộng/cao, cho phép nullable
+	imageWidth?: number | null;
+	imageHeight?: number | null;
 }
 
-export function SortableImageManagerUi({
+export function ShopBannersUi({
 	images,
 	setImages,
 	isSubmitting,
@@ -32,7 +36,7 @@ export function SortableImageManagerUi({
 	title,
 	description,
 	missingPrimaryWarning,
-}: ShopBannerUIProps): JSX.Element {
+}: ShopBannersUIProps): JSX.Element {
 	return (
 		<section className='bg-white p-6 rounded-xl shadow-sm border border-gray-100'>
 			<div className='flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4'>
@@ -45,7 +49,7 @@ export function SortableImageManagerUi({
 				<Button
 					onClick={onSave}
 					disabled={!isValidToSave || isSubmitting}
-					className='min-w-[140px]'
+					className='min-w-35'
 				>
 					{isSubmitting ? (
 						<span>Đang lưu...</span>
@@ -78,6 +82,8 @@ export function SortableImageManagerUi({
 					value={images}
 					onChange={setImages}
 					disabled={isSubmitting}
+                    width={850}
+                    height={300}
 				/>
 			</div>
 		</section>

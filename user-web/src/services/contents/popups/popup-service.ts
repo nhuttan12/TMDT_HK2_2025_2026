@@ -6,7 +6,7 @@ export async function fetchShopPopup(): Promise<Popup | undefined> {
 
 	return {
 		id: 'popup_1',
-		imageUrl: 'https://picsum.photos/800/800?popup',
+		imageUrl: 'https://mdcop.vn/wp-content/uploads/2020/02/Popup-1-1254x640.png',
 		isActive: true,
 	};
 }

@@ -8,9 +8,24 @@ export async function getShopBanners(): Promise<SortableImageForm[]> {
 
 	// Mock data đặc thù cho Slider (thường có kích thước khác banner, VD: 1200x400)
 	const dbData: ShopBanner[] = [
-		{ id: 101, url: 'https://picsum.photos/1200/400?1', order: 1, isPrimary: true },
-		{ id: 102, url: 'https://picsum.photos/1200/400?2', order: 2, isPrimary: false },
-		{ id: 103, url: 'https://picsum.photos/1200/400?3', order: 3, isPrimary: false },
+		{
+			id: 101,
+			url: 'https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png',
+			order: 1,
+			isPrimary: true,
+		},
+		{
+			id: 102,
+			url: 'https://file.hstatic.net/200000968796/file/demo2_90cd97089ecc451ca20779c42bdaa1c3.png',
+			order: 2,
+			isPrimary: false,
+		},
+		{
+			id: 103,
+			url: 'https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png',
+			order: 3,
+			isPrimary: false,
+		},
 	];
 
 	return dbData.map(mapShopBannersToSortableForm);

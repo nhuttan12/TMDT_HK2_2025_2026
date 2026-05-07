@@ -29,6 +29,8 @@ interface Props {
 	value: SortableImageForm[];
 	onChange: React.Dispatch<React.SetStateAction<SortableImageForm[]>>;
 	disabled?: boolean;
+	width?: number | null;
+	height?: number | null;
 }
 
 function fakeUpload(file: File, onProgress: (p: number) => void): Promise<string> {
@@ -47,10 +49,14 @@ function fakeUpload(file: File, onProgress: (p: number) => void): Promise<string
 	});
 }
 
-export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Element {
+export function MultiImageUpload({ value, onChange, disabled, width, height }: Props): JSX.Element {
 	const FILE_INPUT_ID = 'multi-image-upload';
 
 	const dndId: string = useId();
+
+	// Xử lý fallback về giá trị mặc định (96) nếu width/height là null hoặc undefined
+	const finalWidth: number = width ?? 96;
+	const finalHeight: number = height ?? 96;
 
 	// 1. Cấu hình Cảm biến (Sensors)
 	const sensors = useSensors(
@@ -181,11 +187,22 @@ export function MultiImageUpload({ value, onChange, disabled }: Props): JSX.Elem
 								<div
 									className={`border p-3 rounded flex gap-4 bg-white ${isDragging ? 'shadow-lg' : ''}`}
 								>
-									<ImagePreview
-										img={img}
-										width={96}
-										height={96}
-									/>
+									<div
+										className='flex items-center justify-center bg-gray-100 rounded-md overflow-hidden relative'
+										style={{
+											width: `${finalWidth}px`,
+											height: `${finalHeight}px`,
+											// Đảm bảo khung không bị bóp méo bởi Flexbox
+											minWidth: `${finalWidth}px`,
+											minHeight: `${finalHeight}px`,
+										}}
+									>
+										<ImagePreview
+											img={img}
+											width={finalWidth}
+											height={finalHeight}
+										/>
+									</div>
 
 									<div className='flex flex-col gap-2'>
 										{img.status === 'uploading' && (

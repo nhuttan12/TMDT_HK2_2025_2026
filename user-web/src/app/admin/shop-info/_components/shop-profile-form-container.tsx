@@ -13,7 +13,7 @@ interface ShopProfileContainerProps {
 	formType: AdminFormType;
 }
 
-export default function ShopProfileContainer({
+export default function ShopProfileFormContainer({
 	initialData,
 	formType,
 }: ShopProfileContainerProps): JSX.Element {
@@ -31,19 +31,5 @@ export default function ShopProfileContainer({
 		},
 	});
 
-	return (
-		<ShopProfileFormUi
-			form={logic.form}
-			loading={logic.loading}
-			isView={logic.isView}
-			isCreate={logic.isCreate}
-			isUpdate={logic.isUpdate}
-			isDisabled={logic.isDisabled}
-			onInputChange={logic.handleInputChange}
-			onDescriptionChange={logic.handleDescriptionChange}
-			onSubmit={logic.handleSubmit}
-			onEditClick={logic.handleEditClick}
-			onCancel={logic.handleCancel}
-		/>
-	);
+	return <ShopProfileFormUi {...logic} />;
 }

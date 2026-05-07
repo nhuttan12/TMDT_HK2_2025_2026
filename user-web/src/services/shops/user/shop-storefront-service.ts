@@ -22,6 +22,11 @@ export const getShopPublicInfoById = async (shopId: number): Promise<ShopStorefr
 					'https://www.shutterstock.com/image-vector/logo-terrarium-succulents-mini-garden-260nw-694576459.jpg',
 				coverUrl:
 					'https://terrariumvibe.com/wp-content/uploads/2024/03/Tieu-canh-Terrarium-4.jpg',
+				banners: [
+					'https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png',
+					'https://file.hstatic.net/200000968796/file/demo2_90cd97089ecc451ca20779c42bdaa1c3.png',
+					'https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png',
+				],
 				rating: 4.9,
 				followerCount: 15420,
 				seoTitle: 'Terrarium - Rừng Cây Trong Bể Kính',

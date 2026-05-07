@@ -14,6 +14,9 @@ export interface ShopStorefront {
 	logoUrl: string;
 	coverUrl: string;
 
+	// Mảng chứa các URL ảnh banner trượt của Shop
+	banners: string[];
+
 	// Chỉ số tương tác (Riêng của Storefront, Admin Profile không lưu cái này trực tiếp)
 	rating: number; // Đánh giá trung bình (VD: 4.8)
 	followerCount: number; // Số lượng người theo dõi

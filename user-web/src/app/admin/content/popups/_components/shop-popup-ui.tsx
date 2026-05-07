@@ -35,7 +35,7 @@ export function ShopPopupUi(props: ShopPopupUiProps): JSX.Element {
 				<Button
 					onClick={onSave}
 					disabled={!isValidToSave || isSubmitting}
-					className='min-w-[140px]'
+					className='min-w-35'
 				>
 					{isSubmitting ? (
 						<span>Đang lưu...</span>

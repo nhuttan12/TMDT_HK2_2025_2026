@@ -1,29 +1,15 @@
 'use client';
 
-import React, { ChangeEvent, JSX, SyntheticEvent } from 'react';
-import { ShopProfile } from '@/types/shops/admin/ShopProfile';
+import SingleImageUpload from '@/components/image/admin/single-image-upload';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
-import { Button } from '@/components/ui/button';
 import Field from '@/components/layout/admin/field';
-import { Input } from '@/components/ui/input';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { UseShopProfileLogicReturn } from '@/hooks/shops/admin/use-shop-profile-logic';
+import React, { JSX } from 'react';
 
-interface Props {
-	form: ShopProfile;
-	loading: boolean;
-	isView: boolean;
-	isCreate: boolean;
-	isUpdate: boolean;
-	isDisabled: boolean; // Dùng để khóa input khi view hoặc loading
-
-	// Nhận actions từ logic hook truyền xuống
-	onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-	onDescriptionChange: (value: string) => void;
-	onSubmit: (e: SyntheticEvent) => void;
-
-	onEditClick: () => void;
-	onCancel: () => void;
-}
+type ShopProfileFormUiProps = UseShopProfileLogicReturn;
 
 export default function ShopProfileFormUi({
 	form,
@@ -32,12 +18,14 @@ export default function ShopProfileFormUi({
 	isCreate,
 	isUpdate,
 	isDisabled,
-	onInputChange,
-	onDescriptionChange,
-	onSubmit,
-	onEditClick,
-	onCancel,
-}: Props): JSX.Element {
+	logoFile,
+	handleInputChange: onInputChange,
+	handleDescriptionChange: onDescriptionChange,
+	handleLogoChange: onLogoChange,
+	handleSubmit: onSubmit,
+	handleEditClick: onEditClick,
+	handleCancel: onCancel,
+}: ShopProfileFormUiProps): JSX.Element {
 	return (
 		<AdminFormWrapper
 			title='Thiết lập Cửa hàng'
@@ -53,7 +41,7 @@ export default function ShopProfileFormUi({
 								e.preventDefault();
 								onEditClick();
 							}}
-							className='cursor-pointer min-w-[120px]'
+							className='cursor-pointer min-w-30'
 						>
 							Điều chỉnh thông tin cửa hàng
 						</Button>
@@ -70,14 +58,14 @@ export default function ShopProfileFormUi({
 									onCancel();
 								}}
 								disabled={loading}
-								className='cursor-pointer min-w-[120px]'
+								className='cursor-pointer min-w-30'
 							>
 								Hủy
 							</Button>
 							<Button
 								type='submit'
 								disabled={loading}
-								className='cursor-pointer min-w-[120px]'
+								className='cursor-pointer min-w-30'
 							>
 								{loading ? 'Đang xử lý...' : 'Lưu thay đổi'}
 							</Button>
@@ -89,7 +77,7 @@ export default function ShopProfileFormUi({
 						<Button
 							type='submit'
 							disabled={loading}
-							className='cursor-pointer min-w-[120px]'
+							className='cursor-pointer min-w-30'
 						>
 							{loading ? 'Đang xử lý...' : 'Hoàn tất thiết lập'}
 						</Button>
@@ -118,6 +106,7 @@ export default function ShopProfileFormUi({
 						disabled={isDisabled}
 					/>
 				</Field>
+
 				<Field label='Hotline CSKH'>
 					<Input
 						name='phone'
@@ -134,6 +123,15 @@ export default function ShopProfileFormUi({
 				<RichTextEditor
 					value={form.description}
 					onChange={onDescriptionChange}
+					disabled={isDisabled}
+				/>
+			</Field>
+
+			{/* KHU VỰC LOGO */}
+			<Field label='Logo cửa hàng (Tỷ lệ 1:1)'>
+				<SingleImageUpload
+					value={{ imageUrl: form.logoUrl, file: logoFile }}
+					onChange={onLogoChange}
 					disabled={isDisabled}
 				/>
 			</Field>
@@ -188,6 +186,7 @@ export default function ShopProfileFormUi({
 						disabled={isDisabled}
 					/>
 				</Field>
+
 				<Field label='Tên Chủ Tài Khoản'>
 					<Input
 						name='accountName'

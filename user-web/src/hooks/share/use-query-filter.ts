@@ -1,11 +1,10 @@
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export function useQueryFilter<T extends object>() {
-	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
-	const search: string = searchParams.toString();
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const search = searchParams.toString();
 
 	const applyFilters = useCallback(
 		(filters: Partial<T>) => {

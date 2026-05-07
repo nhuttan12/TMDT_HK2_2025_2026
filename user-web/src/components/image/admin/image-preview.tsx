@@ -27,14 +27,16 @@ export default function ImagePreview({ img, width, height }: Props): JSX.Element
 
 	return src ? (
 		<Image
-			alt=''
+			alt='Preview'
 			src={src}
 			width={width}
 			height={height}
 			unoptimized
-			className='w-24 h-24 object-cover'
+			className='w-full h-full object-cover'
 		/>
 	) : (
-		<div>No image</div>
+		<div className='w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm'>
+			No image
+		</div>
 	);
 }

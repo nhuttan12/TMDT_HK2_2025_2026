@@ -9,6 +9,13 @@ import { ShopStorefrontLogicReturn } from '@/hooks/shops/user/use-shop-storefron
 import { ShopStorefront } from '@/types/shops/user/ShopStorefront';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from '@/components/ui/carousel';
 
 interface ShopStorefrontUiProps extends ShopStorefrontLogicReturn {
 	shopInfo: ShopStorefront;
@@ -32,6 +39,9 @@ export const ShopStorefrontUi = ({
 	currentPage,
 	changePage,
 }: ShopStorefrontUiProps): JSX.Element => {
+	const safeBanners: string[] = shopInfo.banners || [];
+	const safeCoupons: UserCoupon[] = coupons || [];
+
 	return (
 		<div className='min-h-screen bg-gray-50 pb-12'>
 			{/* HERO BANNER */}
@@ -72,49 +82,84 @@ export const ShopStorefrontUi = ({
 			</div>
 
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8'>
+				{/* SLIDER BANNER ZONE */}
+				{safeBanners.length > 0 && (
+					<section className='w-full rounded-xl overflow-hidden shadow-sm'>
+						{/* opts={{ loop: true }} giúp slider có thể cuộn vòng lặp bất tận */}
+						<Carousel
+							opts={{ loop: true }}
+							className='w-full'
+						>
+							<CarouselContent>
+								{safeBanners.map(
+									(bannerUrl: string, index: number): JSX.Element => (
+										<CarouselItem key={index}>
+											{/* Chiều cao Banner thay đổi linh hoạt theo kích thước màn hình để tránh bị vỡ ảnh */}
+											<div className='relative w-full h-50 sm:h-75 md:h-100 bg-gray-100'>
+												<img
+													src={bannerUrl}
+													alt={`${shopInfo.name} banner ${index + 1}`}
+													className='w-full h-full object-cover'
+												/>
+											</div>
+										</CarouselItem>
+									),
+								)}
+							</CarouselContent>
+							{/* Đưa nút Next/Prev lùi vào trong khung hình một chút */}
+							<CarouselPrevious className='left-4 bg-white/70 hover:bg-white border-0' />
+							<CarouselNext className='right-4 bg-white/70 hover:bg-white border-0' />
+						</Carousel>
+					</section>
+				)}
+
 				{/* VOUCHER ZONE */}
-				{coupons && coupons.length > 0 && (
+				{safeCoupons.length > 0 && (
 					<section className='bg-white p-6 rounded-xl shadow-sm'>
 						<h2 className='text-lg font-bold mb-4'>Mã Giảm Giá Của Shop</h2>
 						<div className='flex gap-4 overflow-x-auto pb-2'>
-							{coupons.map((coupon: UserCoupon) => (
-								<div
-									key={coupon.id}
-									className='min-w-70 border border-orange-200 bg-orange-50 rounded-lg p-4 flex flex-col gap-2'
-								>
-									<div className='flex justify-between items-start'>
-										<div>
-											<Badge
-												variant={
-													coupon.couponType === 'Sale'
-														? 'destructive'
-														: 'default'
-												}
+							{safeCoupons.map(
+								(coupon: UserCoupon): JSX.Element => (
+									<div
+										key={coupon.id}
+										className='min-w-70 border border-orange-200 bg-orange-50 rounded-lg p-4 flex flex-col gap-2'
+									>
+										<div className='flex justify-between items-start'>
+											<div>
+												<Badge
+													variant={
+														coupon.couponType === 'Sale'
+															? 'destructive'
+															: 'default'
+													}
+												>
+													{coupon.couponType}
+												</Badge>
+												<h3 className='font-bold text-orange-700 mt-2'>
+													{coupon.title}
+												</h3>
+											</div>
+										</div>
+										<p className='text-xs text-gray-600 line-clamp-2'>
+											{coupon.description}
+										</p>
+										<div className='mt-2 flex justify-between items-center'>
+											<span className='text-xs text-gray-500'>
+												HSD:{' '}
+												{new Date(coupon.expiredAt).toLocaleDateString(
+													'vi-VN',
+												)}
+											</span>
+											<Button
+												size='sm'
+												onClick={(): void => handleClaimCoupon(coupon.code)}
 											>
-												{coupon.couponType}
-											</Badge>
-											<h3 className='font-bold text-orange-700 mt-2'>
-												{coupon.title}
-											</h3>
+												Lưu mã
+											</Button>
 										</div>
 									</div>
-									<p className='text-xs text-gray-600 line-clamp-2'>
-										{coupon.description}
-									</p>
-									<div className='mt-2 flex justify-between items-center'>
-										<span className='text-xs text-gray-500'>
-											HSD:{' '}
-											{new Date(coupon.expiredAt).toLocaleDateString('vi-VN')}
-										</span>
-										<Button
-											size='sm'
-											onClick={(): void => handleClaimCoupon(coupon.code)}
-										>
-											Lưu mã
-										</Button>
-									</div>
-								</div>
-							))}
+								),
+							)}
 						</div>
 					</section>
 				)}

@@ -8,17 +8,13 @@ import {
 	useQueryClient,
 	UseQueryResult,
 } from '@tanstack/react-query';
-import { getShopProfile, updateShopProfile } from '@/services/shops/admin/shop-service';
+import { getShopProfile, updateShopProfile } from '@/services/shops/admin/shop-admin-service';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
-
-const SHOP_KEYS = {
-	profile: ['shop-profile'] as const,
-};
 
 // Hook lấy dữ liệu
 export function useShopProfile(initialData?: ShopProfile): UseQueryResult<ShopProfile, Error> {
 	return useQuery({
-		queryKey: SHOP_KEYS.profile,
+		queryKey: ['shop-profile'],
 		queryFn: getShopProfile,
 		initialData: initialData, // Sử dụng dữ liệu từ Server truyền xuống
 		staleTime: 1000 * 60 * 5, // Cache trong 5 phút
@@ -33,7 +29,7 @@ export function useUpdateShopProfile(): UseMutationResult<ShopProfile, Error, Sh
 		mutationFn: updateShopProfile,
 		onSuccess: (data: ShopProfile): void => {
 			// Cập nhật lại cache ngay lập tức sau khi sửa thành công
-			queryClient.setQueryData(SHOP_KEYS.profile, data);
+			queryClient.setQueryData(['shop-profile'], data);
 		},
 	});
 }

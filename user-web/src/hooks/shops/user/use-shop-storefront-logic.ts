@@ -1,3 +1,5 @@
+'use client';
+
 import { usePagination } from '@/hooks/share/use-pagination';
 import { useFollowShopMutation } from '@/queries/shops/user/use-shop-storefront-query';
 import { ShopPublicFilter } from '@/types/shops/user/ShopPublicFilter';

@@ -5,6 +5,7 @@ import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { BaseImage } from '@/types/images/admin/BaseImage';
 
 interface UseShopProfileLogicProps {
 	initialData: ShopProfile;
@@ -12,11 +13,34 @@ interface UseShopProfileLogicProps {
 	onMutate?: (data: ShopProfile) => Promise<void>;
 }
 
-export function useShopProfileLogic({ initialData, formType, onMutate }: UseShopProfileLogicProps) {
+export interface UseShopProfileLogicReturn {
+	form: ShopProfile;
+	loading: boolean;
+	isView: boolean;
+	isCreate: boolean;
+	isUpdate: boolean;
+	isDisabled: boolean;
+	logoFile?: File;
+	handleInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	handleDescriptionChange: (value: string) => void;
+	handleLogoChange: (img?: BaseImage) => void;
+	handleSubmit: (e: SyntheticEvent) => Promise<void>;
+	handleEditClick: () => void;
+	handleCancel: () => void;
+}
+
+export function useShopProfileLogic({
+	initialData,
+	formType,
+	onMutate,
+}: UseShopProfileLogicProps): UseShopProfileLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
 	const [form, setForm] = useState<ShopProfile>(initialData);
 	const [loading, setLoading] = useState<boolean>(false);
+
+	// State lưu trữ File vật lý để chuẩn bị gửi lên Server
+	const [logoFile, setLogoFile] = useState<File | undefined>(undefined);
 
 	// Xác định trạng thái của form
 	const isView: boolean = formType === 'view';
@@ -46,6 +70,21 @@ export function useShopProfileLogic({ initialData, formType, onMutate }: UseShop
 		);
 	};
 
+    const handleLogoChange = (img?: BaseImage): void => {
+		if (!img) {
+			// Người dùng bấm xóa ảnh: Xóa file vật lý & Xóa luôn URL cũ trong form
+			setLogoFile(undefined);
+			setForm((prev) => ({ ...prev, logoUrl: '' }));
+			return;
+		}
+
+		if (img.file) {
+			// Người dùng chọn ảnh mới: Lưu file vật lý vào state để dành lúc Submit
+			setLogoFile(img.file);
+			// Lưu ý: Ta KHÔNG cập nhật logoUrl ở đây vì ảnh chưa được upload thực sự lên server
+		}
+	};
+
 	const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
 		e.preventDefault();
 
@@ -71,16 +110,18 @@ export function useShopProfileLogic({ initialData, formType, onMutate }: UseShop
 	};
 
 	return {
-		form: form,
-		loading: loading,
-		isView: isView,
-		isCreate: isCreate,
-		isUpdate: isUpdate,
-		isDisabled: isDisabled,
-		handleInputChange: handleInputChange,
-		handleDescriptionChange: handleDescriptionChange,
-		handleSubmit: handleSubmit,
-		handleEditClick: handleEditClick,
-		handleCancel: handleCancel,
+		form,
+		loading,
+		isView,
+		isCreate,
+		isUpdate,
+		isDisabled,
+		logoFile, 
+		handleInputChange,
+		handleDescriptionChange,
+		handleLogoChange, // Trả hàm xử lý ra ngoài
+		handleSubmit,
+		handleEditClick,
+		handleCancel,
 	};
 }

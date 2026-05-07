@@ -8,7 +8,7 @@ import {
 } from '@/queries/content/home-banners/admin/home-banner-query-admin';
 import { useHomeBannerLogicAdmin } from '@/hooks/contents/home-banners/admin/use-home-banner-logic-admin';
 import { UseMutationResult } from '@tanstack/react-query';
-import { SortableImageManagerUi } from '@/components/contents/sortable-image-manager-ui';
+import { ShopBannersUi } from '@/app/admin/content/shop-banners/_components/shop-banners-ui';
 import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
 
 interface ShopBannerContainerProps {
@@ -46,7 +46,7 @@ export function ShopBannersContainer({ initialBanners }: ShopBannerContainerProp
 
 	// 4. Render UI
 	return (
-		<SortableImageManagerUi
+		<ShopBannersUi
 			images={banners}
 			setImages={setBanners}
 			isSubmitting={updateMutation.isPending} // Lấy trạng thái loading từ Tanstack Query

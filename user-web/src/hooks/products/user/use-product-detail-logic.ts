@@ -45,8 +45,8 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 	}, [selectedOptions, product.variants]); // Chỉ phụ thuộc vào data gốc của product
 
 	// Xác định giá hiển thị (Cần fallback cho minPrice/maxPrice nếu legacy data chỉ có price)
-	const minP = product.minPrice ?? product.price ?? 0;
-	const maxP = product.maxPrice ?? product.price ?? 0;
+	const minP = product.minPrice ?? 0;
+	const maxP = product.maxPrice ?? 0;
 
 	// Xác định giá hiển thị
 	const displayPrice: string = selectedVariant
@@ -65,8 +65,8 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		}
 
 		const safeImages: string[] = product.images || [];
-		return safeImages[0] || product.image || '';
-	}, [selectedVariant, selectedOptions, product.tierVariations, product.images, product.image]);
+		return safeImages[0] || product.images?.[0] || '';
+	}, [selectedVariant, selectedOptions, product.tierVariations, product.images]);
 
 	const currentStock: number = selectedVariant ? selectedVariant.stock : 0;
 
