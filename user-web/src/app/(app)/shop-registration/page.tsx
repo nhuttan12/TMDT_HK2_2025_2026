@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import ShopRegistrationContainer from './_components/shop-registration-container';
+import ShopRegistrationContainer from '@/components/shops/shop-registration-container';
 
 export const metadata: Metadata = {
 	title: 'Đăng ký mở cửa hàng',

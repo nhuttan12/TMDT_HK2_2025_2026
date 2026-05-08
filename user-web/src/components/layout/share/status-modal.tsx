@@ -127,7 +127,7 @@ export function StatusModal({
 						<Button
 							variant='outline'
 							onClick={onClose}
-							className='min-w-[120px] cursor-pointer'
+							className='min-w-30 cursor-pointer'
 						>
 							{confirmText}
 						</Button>

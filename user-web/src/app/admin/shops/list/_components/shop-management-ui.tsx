@@ -22,7 +22,7 @@ export function ShopManagementUi({
 	pagination,
 	totalPages,
 	handleRowClick,
-	handleAddShop,
+	handleApproveShop,
 }: ShopManagementUiProps): JSX.Element {
 	// Cấu hình filter field
 	const filterFields: FilterField<ShopAdmin>[] = [
@@ -31,9 +31,9 @@ export function ShopManagementUi({
 			label: 'Trạng thái',
 			type: 'select',
 			options: [
-				{ label: 'Hoạt động', value: 'ACTIVE' },
-				{ label: 'Tạm khóa', value: 'INACTIVE' },
-				{ label: 'Bị cấm', value: 'BANNED' },
+				{ label: 'Hoạt động', value: 'active' },
+				{ label: 'Tạm khóa', value: 'inactive' },
+				{ label: 'Bị cấm', value: 'banned' },
 			],
 		},
 	];
@@ -45,8 +45,8 @@ export function ShopManagementUi({
 				description='Xem danh sách, tìm kiếm và quản lý trạng thái của các cửa hàng trên hệ thống.'
 				searchPlaceholder='Tìm kiếm theo tên cửa hàng...'
 				searchKey='name'
-				onAdd={handleAddShop}
-				addLabel='+ Thêm Cửa Hàng'
+				onAdd={handleApproveShop}
+				addLabel='Phê duyệt cửa hàng'
 				filter={true}
 				filterField={filterFields}
 			/>

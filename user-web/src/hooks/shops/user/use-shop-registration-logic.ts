@@ -1,21 +1,7 @@
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
-
-export interface ShopRegistrationForm {
-	name: string;
-	email: string;
-	phone: string;
-	description: string;
-	address: string;
-	facebookUrl: string;
-	seoTitle: string;
-	metaDescription: string;
-	bankName: string;
-	accountName: string;
-	accountNumber: string;
-	termsAccepted: boolean; // Bổ sung trường bắt buộc cho Đăng ký
-}
+import { ShopRegistrationForm } from '@/types/shops/user/ShopRegistrationForm';
 
 export interface UseShopRegistrationLogicReturn {
 	form: ShopRegistrationForm;
@@ -26,24 +12,30 @@ export interface UseShopRegistrationLogicReturn {
 	handleSubmit: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
 }
 
-export function useShopRegistrationLogic(): UseShopRegistrationLogicReturn {
+interface UseShopRegistrationLogicProps {
+	initialData?: ShopRegistrationForm;
+}
+
+export function useShopRegistrationLogic({
+	initialData,
+}: UseShopRegistrationLogicProps = {}): UseShopRegistrationLogicReturn {
 	const router: AppRouterInstance = useRouter();
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const [form, setForm] = useState<ShopRegistrationForm>({
-		name: '',
-		email: '',
-		phone: '',
-		description: '',
-		address: '',
-		facebookUrl: '',
-		seoTitle: '',
-		metaDescription: '',
-		bankName: '',
-		accountName: '',
-		accountNumber: '',
-		termsAccepted: false,
-	});
+	const [form, setForm] = useState<ShopRegistrationForm>(
+		initialData || {
+			name: '',
+			email: '',
+			phone: '',
+			description: '',
+			address: '',
+			facebookUrl: '',
+			bankName: '',
+			accountName: '',
+			accountNumber: '',
+			termsAccepted: false,
+		},
+	);
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;

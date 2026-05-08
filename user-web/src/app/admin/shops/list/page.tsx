@@ -8,14 +8,16 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-	searchParams: { [key: string]: string | string[] | undefined };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function AdminShopsPage({ searchParams }: PageProps) {
 	// Lấy params từ Server
-	const page = Number(searchParams.page) || 1;
-	const name = typeof searchParams.name === 'string' ? searchParams.name : undefined;
-	const status = typeof searchParams.status === 'string' ? searchParams.status : undefined;
+	const resolvedParams = await searchParams;
+
+    const page = Number(resolvedParams.page) || 1;
+	const name = typeof resolvedParams.name === 'string' ? resolvedParams.name : undefined;
+	const status = typeof resolvedParams.status === 'string' ? resolvedParams.status : undefined;
 
 	// Fetch Data phía Server (SSR) để SEO và Render nhanh khung xương HTML
 	const initialData = await getAdminShops(page, name, status);

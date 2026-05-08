@@ -1,5 +1,5 @@
 export interface ShopProfile {
-	id: number; // Thêm ID để Admin gọi API cập nhật (PUT/PATCH) đúng shop của mình
+	id: number;
 
 	// 1. Thông tin cơ bản
 	name: string;

@@ -19,7 +19,7 @@ export interface ShopAdminTableLogicReturn {
 	columns: Column<ShopAdmin>[];
 	pagination: UsePaginationReturn;
 	handleRowClick: (row: ShopAdmin) => void;
-	handleAddShop: () => void;
+	handleApproveShop: () => void;
 }
 
 export function useShopAdminLogic({
@@ -48,8 +48,8 @@ export function useShopAdminLogic({
 		router.push(`/admin/shops/${shop.id}`);
 	};
 
-	const handleAddShop = () => {
-		router.push('/admin/shops/create');
+	const handleApproveShop = () => {
+		router.push('/admin/shops/approvals');
 	};
 
 	// Định nghĩa Columns cho DataTable
@@ -131,6 +131,6 @@ export function useShopAdminLogic({
 		columns,
 		pagination,
 		handleRowClick,
-		handleAddShop,
+		handleApproveShop,
 	};
 }
