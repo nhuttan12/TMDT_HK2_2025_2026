@@ -76,13 +76,13 @@ namespace api.Services.Auths
             return tokenHandler.WriteToken(token);
         }
 
-        public bool deleteToken(string token)
+        public bool DeleteToken(string token, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
 
 
-        public ClaimsPrincipal? ValidateToken(string token)
+        public ClaimsPrincipal ValidateToken(string token, CancellationToken ct = default)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {

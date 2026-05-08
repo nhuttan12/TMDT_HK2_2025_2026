@@ -1,0 +1,34 @@
+﻿using api.Dtos.Common;
+using api.Utilities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace api.Controllers
+{
+    [ApiController]
+    [Route("api/v1/[controller]")]
+    public abstract class BaseController : ControllerBase
+    {
+        // Helper method để chuyển đổi Result sang ActionResult
+        protected IActionResult HandleResult<T>(Result<T> result)
+        {
+            if (result.IsSuccess)
+                return Ok(ApiResponse<T>.Success(result.Value!));
+
+            return MapErrorToActionResult(result.Error);
+        }
+        private IActionResult MapErrorToActionResult(Error error)
+        {
+            var response = ApiResponse<object>.Failure(error.Code, error.Message);
+
+            return error.Type switch
+            {
+                ErrorType.Validation => BadRequest(response),
+                ErrorType.NotFound => NotFound(response),
+                ErrorType.Unauthorized => Unauthorized(response),
+                ErrorType.Forbidden => Forbid(), // Hoặc trả về 403 tùy chính sách
+                ErrorType.Conflict => Conflict(response),
+                _ => BadRequest(response) // Mặc định cho ErrorType.Failure
+            };
+        }
+    }
+}

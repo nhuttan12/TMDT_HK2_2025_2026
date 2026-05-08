@@ -10,10 +10,16 @@ namespace api.Exceptions
                                               Exception exception,
                                               CancellationToken cancellationToken)
         {
-            // 1. Logging lỗi với đầy đủ ngữ cảnh (Structured Logging)
+            //  Logging lỗi với đầy đủ ngữ cảnh (Structured Logging)
             logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
-
-            // 2. Xác định StatusCode và Error Code
+            //  Xử lý các trường hợp đặc biệt như OperationCanceledException (hủy bỏ yêu cầu)
+            if (exception is OperationCanceledException or TaskCanceledException)
+            {
+                logger.LogInformation("Yêu cầu đã bị hủy bởi người dùng hoặc hệ thống quá tải.");
+                httpContext.Response.StatusCode = 499; // Client Closed Request
+                return true;
+            }
+            //  Xác định StatusCode và Error Code
             var (statusCode, errorCode, message) = exception switch
             {
                 NotFoundException => (StatusCodes.Status404NotFound, "NOT_FOUND", exception.Message),
@@ -24,7 +30,7 @@ namespace api.Exceptions
                 _ => (StatusCodes.Status500InternalServerError, "INTERNAL_SERVER_ERROR", exception.Message)
             };
 
-            // 3. Chuẩn bị Response theo định dạng ApiResponse thống nhất
+            //  Chuẩn bị Response theo định dạng ApiResponse thống nhất
             var response = ApiResponse<object>.Failure(errorCode, message);
 
             httpContext.Response.StatusCode = statusCode;

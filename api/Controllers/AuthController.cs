@@ -1,11 +1,13 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Users.Responses;
 using api.Services.Auths;
+using api.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace api.Controllers
@@ -25,25 +27,27 @@ namespace api.Controllers
     /// <param name="_authService"></param>
     [ApiController]
     [Route("api/auth")]
-    public class AuthController(IConfiguration _config, IAuthService _authService) : ControllerBase
+    public class AuthController(IConfiguration _config, IAuthService _authService) : BaseController
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken ct)
         {
-            var token = await _authService.loginAsync(request);
+            var result = await _authService.LoginAsync(request, ct);
+            var token = result.Value;
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
             {
                 return Unauthorized("Invalid username or password");
             }
             SetTokenCookie(token);
-            return Ok(ApiResponse<string>.Success("success"));
+            return HandleResult(result);
         }
         [HttpDelete("logout")]
         public IActionResult Logout()
         {
             Response.Cookies.Delete("refresh-token");
             Response.Cookies.Delete("X-Access-Token");
-            return NoContent();
+            Result<Boolean> res = Result<Boolean>.Success(true);
+            return HandleResult(res);
         }
         /// <summary>
         /// thực hiện refresh token bằng cách lấy refresh token từ cookie, 
@@ -52,16 +56,16 @@ namespace api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshTokenAsync(CancellationToken ct = default)
         {
             var refreshToken = Request.Cookies["X-Access-Token"];
             if (string.IsNullOrEmpty(refreshToken))
-                return BadRequest("No refresh token provided");
+                return HandleResult(Result<bool>.Failure(new Error("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
 
             var token = await _authService.RefreshTokenAsync(refreshToken);
-            if (token == null)
-                return BadRequest("Invalid refresh token");
-            SetTokenCookie(token);
+            if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.RefreshToken) || string.IsNullOrEmpty(token.Value.AccessToken))
+                return HandleResult(Result<bool>.Failure(new Error("InvalidRefreshToken", "Invalid refresh token", ErrorType.BadRequest)));
+            SetTokenCookie(token.Value);
             return Ok(ApiResponse<Boolean>.Success(true));
 
         }
@@ -93,9 +97,9 @@ namespace api.Controllers
 
             var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl );
             var token = await _authService.HandleGoogleLogin(googleInfo);
-            if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
+            if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.AccessToken) || string.IsNullOrEmpty(token.Value.RefreshToken))
                 return BadRequest("Failed to generate tokens from Google info");
-            SetTokenCookie(token);
+            SetTokenCookie(token.Value);
 
             // Xóa Cookie ngay lập tức để duy trì tính Stateless cho API
             await HttpContext.SignOutAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
@@ -107,18 +111,17 @@ namespace api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest req)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest req, CancellationToken ct = default)
         {
-            // TODO: implement register logic
-            await _authService.Register(req);
+            await _authService.RegisterAsync(req, ct);
             return Ok(ApiResponse<string>.Success("success"));
         }
 
         private void SetTokenCookie(TokenResponse token)
         {
-            if (token == null || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.AccessToken))
-                throw new ArgumentException("TokenResponse must contain both AccessToken and RefreshToken");
-            Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions
+            if(token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.RefreshToken))
+                return;
+            Response.Cookies.Append("X-Access-Token", token.AccessToken!, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
@@ -128,7 +131,7 @@ namespace api.Controllers
             });
 
             // 2. Thiết lập Cookie cho Refresh Token (Chỉ gửi đến endpoint refresh)
-            Response.Cookies.Append("X-Refresh-Token", token.RefreshToken, new CookieOptions
+            Response.Cookies.Append("X-Refresh-Token", token.RefreshToken!, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,

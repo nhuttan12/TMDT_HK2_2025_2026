@@ -51,7 +51,7 @@ namespace api.Utilities
                     CreateAt = DateTime.UtcNow,
                     Role = myAppDBContext.Set<Role>().FirstOrDefault(r => r.Name == "Admin")!
                 };
-                newUser.PasswordHash = _authService.hashPassword(newUser, passwordAccount);
+                newUser.PasswordHash = _authService.HashPassword(newUser, passwordAccount);
                 myAppDBContext.Set<User>().Add(newUser);
             }
 
