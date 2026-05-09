@@ -8,6 +8,13 @@ using System.Text;
 
 namespace api.Services.Auths
 {
+    public interface ITokenService
+    {
+        string GenerateToken(User user, bool isAccessToken);
+        ClaimsPrincipal ValidateToken(string token, CancellationToken ct = default);
+        bool DeleteToken(string token, CancellationToken ct = default);
+        //Task UpdateRefreshTokenAsync(object id, string newRefreshToken);
+    }
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;
@@ -76,13 +83,13 @@ namespace api.Services.Auths
             return tokenHandler.WriteToken(token);
         }
 
-        public bool deleteToken(string token)
+        public bool DeleteToken(string token, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
 
 
-        public ClaimsPrincipal? ValidateToken(string token)
+        public ClaimsPrincipal ValidateToken(string token, CancellationToken ct = default)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {

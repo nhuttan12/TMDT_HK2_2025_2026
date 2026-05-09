@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			lang='en'
 			className='light'
 		>
-			<body>
+			<body suppressHydrationWarning={true}>
 				<LayoutScrollHandler noScrollPaths={NO_SCROLL_PAGES} />
 
 				<QueryProvider>{children}</QueryProvider>

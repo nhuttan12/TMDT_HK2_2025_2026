@@ -7,56 +7,81 @@ namespace api.Utilities
 {
     public class DbInitializer
     {
-        public static async Task SeedEverything(DbContext myAppDBContext, IConfiguration config, IAuthService _authService)
+       // Senior Tip: Sử dụng Static class cho Utility và nhận IServiceProvider để quản lý Scope tốt hơn
+    public static async Task SeedEverything(
+        DbContext context, 
+        IConfiguration config, 
+        IAuthService authService,
+        ILogger logger, // Luôn cần Logger để giám sát hệ thống
+        CancellationToken ct = default)
+    {
+        try
         {
-            //  Đảm bảo Database đã được tạo
-            await myAppDBContext.Database.MigrateAsync();
-            string emailAccount = config[key: "InitialSetup:Email"] ?? "Null";
-            string passwordAccount = config[key: "InitialSetup:Password"] ?? "Null";
-            List<string> roles = config.GetSection("InitialSetup:RoleList")
-                .GetChildren()
-                .Select(x => x.Value)
-                .Where(v => v != null)
-                .Select(v => v!)
-                .ToList();
+            logger.LogInformation("Bắt đầu quá trình khởi tạo và Seed dữ liệu Database...");
 
-            if (emailAccount == "Null" || passwordAccount == "Null" || roles.Count == 0)
+            // 1. Áp dụng Migration (Chỉ khi đã có bản Migration khớp với Model)
+            await context.Database.MigrateAsync(ct);
+
+            // 2. Lấy cấu hình từ appsettings.json/Environment
+            var email = config["InitialSetup:Email"];
+            var password = config["InitialSetup:Password"];
+            var roles = config.GetSection("InitialSetup:RoleList").Get<List<string>>();
+
+            // Defensive Programming: Fail Fast
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || roles == null || !roles.Any())
             {
-                throw new Exception("Initial setup configuration is missing or invalid.");
+                logger.LogError("Cấu hình InitialSetup thiếu thông tin nghiêm trọng!");
+                return;
             }
 
-            List<Role> roleList = myAppDBContext.Set<Role>().ToList();
-            foreach (var role in roles)
+            // 3. Xử lý Roles (Sử dụng IQueryable để tối ưu truy vấn)
+            var existingRoles = await context.Set<Role>().ToListAsync(ct);
+            foreach (var roleName in roles)
             {
-                if (!roleList.Any(r => r.Name == role))
+                if (!existingRoles.Any(r => r.Name == roleName))
                 {
-                    var newRole = new Role(role)
-                    {
-                        Name = role,
-                        Description = $"Role for {role}"
-                    };
-                    myAppDBContext.Set<Role>().Add(newRole);
+                    context.Set<Role>().Add(Role.Create(roleName));
+                    logger.LogInformation("Thêm Role mới: {RoleName}", roleName);
                 }
             }
-            await myAppDBContext.SaveChangesAsync();
+            await context.SaveChangesAsync(ct);
 
-            var Account = await myAppDBContext.Set<User>()
-                .FirstOrDefaultAsync(a => a.Email == emailAccount);
-            if (Account == null)
+            // 4. Xử lý Admin Account
+            var adminExists = await context.Set<User>().AnyAsync(u => u.Email == email, ct);
+            if (!adminExists)
             {
-                var newUser = new User
+                // Lấy Role Admin vừa tạo hoặc đã có
+                var adminRole = await context.Set<Role>()
+                    .FirstOrDefaultAsync(r => r.Name == "Admin", ct);
+
+                if (adminRole == null)
                 {
-                    Email = emailAccount,
-                    PasswordHash = "",
+                    logger.LogCritical("Không thể tạo Admin vì thiếu Role 'Admin' trong cấu hình!");
+                    return;
+                }
+
+                var adminUser = new User
+                {
+                    Email = email,
+                    PasswordHash = string.Empty, // Sẽ được hash ngay sau đây
                     CreateAt = DateTime.UtcNow,
-                    Role = myAppDBContext.Set<Role>().FirstOrDefault(r => r.Name == "Admin")!
+                    RoleId = adminRole.Id // Senior Tip: Ưu tiên dùng FK Id thay vì Navigation Property khi Seed
                 };
-                newUser.PasswordHash = _authService.hashPassword(newUser, passwordAccount);
-                myAppDBContext.Set<User>().Add(newUser);
+
+                adminUser.PasswordHash = authService.HashPassword(adminUser, password);
+                context.Set<User>().Add(adminUser);
+                
+                await context.SaveChangesAsync(ct);
+                logger.LogInformation("Tài khoản Admin đã được khởi tạo: {Email}", email);
             }
 
-            await myAppDBContext.SaveChangesAsync();
-
+            logger.LogInformation("Hoàn tất quá trình Seed dữ liệu thành công.");
         }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Lỗi nghiêm trọng trong quá trình DbInitializer.");
+            throw; // Re-throw để hệ thống không khởi động nếu DB lỗi
+        }
+    }
     }
 }

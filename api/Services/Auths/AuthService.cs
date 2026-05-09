@@ -9,51 +9,85 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using api.Repository.UserRepo;
 using api.Repository.RoleRepo;
+using api.Utilities;
 
-namespace api.Services.Auths
+namespace api.Services.Auths        
 {
-    public class AuthService(
-        IPasswordHasher<User> _passwordHasher, 
-        IAuthRepo _authRepo, 
-        ITokenService _tokenService, 
-        IMapper _mapper,
-        IRoleRepo _roleRepository,
-        IUnitOfWork _unitOfWork) : IAuthService
+    public interface IAuthService
     {
-        public string hashPassword(User user, string password)
+        public string HashPassword(User user, string password);
+        public bool VerifyPassword(User user, string password, string passwordHash);
+        public Task<Result<TokenResponse>> LoginAsync(LoginRequest req, CancellationToken ct = default);
+
+        public Task<Result<TokenResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default);
+        Task<Result<TokenResponse>> HandleGoogleLogin(GoogleInfoResponse googleInfo);
+        public Task<Result<UserInfoDTO>> RegisterAsync(RegisterRequest registerRequest, CancellationToken ct = default);
+    }
+    public class AuthService(
+       IPasswordHasher<User> passwordHasher,
+        IAuthRepo authRepo,
+        ITokenService tokenService,
+        IMapper mapper,
+        IRoleRepo roleRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<AuthService> logger) : IAuthService
+    {
+        private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
+        private readonly IAuthRepo _authRepo = authRepo;
+        private readonly ITokenService _tokenService = tokenService;
+        private readonly IMapper _mapper = mapper;
+        private readonly IRoleRepo _roleRepository = roleRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ILogger<AuthService> _logger = logger;
+        public string HashPassword(User user, string password)
         {
             return _passwordHasher.HashPassword(user, password);
         }
-        public bool verifyPassword(User user, string password, string passwordHash)
+
+        public bool VerifyPassword(User user, string password, string passwordHash)
         {
             var res = _passwordHasher.VerifyHashedPassword(user, passwordHash, password);
             return res == PasswordVerificationResult.Success;
         }
-        public async Task<TokenResponse> loginAsync(LoginRequest req)
+
+        public async Task<Result<TokenResponse>> LoginAsync(LoginRequest req, CancellationToken ct = default)
         {
-            // kiểm tra đầu vào 
-            if (req.Email == null || req.Password == null)
+            // 1. Fail Fast - Kiểm tra đầu vào cực kỳ khắt khe
+            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
             {
-                throw new BadRequestException("Email và password không phù hợp");
+                return Result<TokenResponse>.Failure(new Error("AUTH_001", "Email và mật khẩu không được để trống"), ErrorType.Validation);
             }
-            // lấy user 
-            var user = await _authRepo.GetUserByEmailAsync(req.Email);
-            // kiểm tra user có tồn tại và có đúng mật khẩu hay ko 
-            if (user == null || !verifyPassword(user, req.Password, user.PasswordHash))
-                throw new UnauthorizedException("Email và password không chính xác");
+
+            // 2. Truy vấn dữ liệu với CancellationToken
+            var user = await _authRepo.GetUserByEmailAsync(req.Email, ct);
+
+            // 3. Bảo mật: Không tiết lộ cụ thể sai Email hay sai Password để tránh dò quét (Brute-force)
+            if (user == null || !VerifyPassword(user, req.Password, user.PasswordHash))
+            {
+                _logger.LogWarning("Đăng nhập thất bại: {Email}", req.Email);
+                return Result<TokenResponse>.Failure(new Error("AUTH_002", "Email hoặc mật khẩu không chính xác"), ErrorType.Unauthorized);
+            }
+
+            // 4. Sinh Token
             return GenerateTokenResponse(user);
         }
-        public async Task<UserInfoDTO> Register(RegisterRequest request)
+
+        public async Task<Result<UserInfoDTO>> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
         {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+                return Result<UserInfoDTO>.Failure(new Error("AUTH_001", "Email và mật khẩu không được để trống"), ErrorType.Validation);
             // 1. Validation Logic
-            if (await _authRepo.ExistsByEmailAsync(request.Email))
+            if (await _authRepo.ExistsByEmailAsync(request.Email, ct))
             {
-                throw new BadRequestException("Tài khoản đã tồn tại");
+                return Result<UserInfoDTO>.Failure(new Error("AUTH_002", "Tài khoản đã tồn tại", ErrorType.Conflict));
             }
 
             // 2. Business Rule: Mỗi User mới phải có Role mặc định
-            var role = await _roleRepository.GetByNameAsync("User")
-                ?? throw new InternalServerErrorException("Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'");
+            var role = await _roleRepository.GetByNameAsync("User");
+            if (role == null)
+            {
+                 return Result<UserInfoDTO>.Failure(new Error("AUTH_003", "Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'", ErrorType.Failure));
+            }
 
             // 3. Domain Logic: Khởi tạo Entity thông qua Factory Method (Rich Domain Model)
             var newUser = User.Create(request.Email, role, "Local", string.Empty);
@@ -66,10 +100,10 @@ namespace api.Services.Auths
             await _authRepo.AddAsync(newUser);
             await _unitOfWork.CommitAsync(); 
 
-            return _mapper.Map<UserInfoDTO>(newUser);
+            return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(newUser));
         }
      
-        public async Task<TokenResponse> HandleGoogleLogin(GoogleInfoResponse googleInfo)
+        public async Task<Result<TokenResponse>> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
             // 1. Tìm user hiện có
             var user = await _authRepo.GetUserByEmailAsync(googleInfo.Email);
@@ -102,12 +136,12 @@ namespace api.Services.Auths
             return GenerateTokenResponse(user);
         }
 
-        public TokenResponse GenerateTokenResponse(User user)
+        public Result<TokenResponse> GenerateTokenResponse(User user)
         {
             var retk = _tokenService.GenerateToken(user, false);
             var actk = _tokenService.GenerateToken(user, true);
             if (retk == null || actk == null)
-                throw new UnauthorizedException("Failed to generate tokens");
+                return Result<TokenResponse>.Failure(new Error("AUTH_003", "Failed to generate tokens"));
             // TODO: Save the refresh token to the database
             //_context.RefreshTokens.Add(new RefreshToken { token = retk });
             //await _context.SaveChangesAsync();
@@ -116,22 +150,25 @@ namespace api.Services.Auths
                 AccessToken = actk,
                 RefreshToken = retk
             };
-            return res;
+            return Result<TokenResponse>.Success(res);
         }
        
 
-        public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
+        public async Task<Result<TokenResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
-            var principal = _tokenService.ValidateToken(refreshToken);
+            var principal = _tokenService.ValidateToken(refreshToken,ct);
 
-            var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new BadRequestException("Invalid refresh token");
-
-            var user = await _authRepo.GetByIdWithRoleAsync(int.Parse(sub));
+            var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (sub == null)
+            {
+                return Result<TokenResponse>.Failure(new Error("AUTH_001", "Invalid refresh token"), ErrorType.Unauthorized);
+            }
+               
+            var user = await _authRepo.GetByIdWithRoleAsync(int.Parse(sub), ct);
 
             if (user == null)
             {
-                throw new NotFoundException($"Không tìm thấy người dùng với ID: {sub}");
+               return Result<TokenResponse>.Failure(new Error("AUTH_002", "User not found"),ErrorType.BadRequest);
             }
 
             // TODO: 3. Kiểm tra các logic bổ sung (Ví dụ: User có bị khóa không?)
