@@ -1,9 +1,9 @@
+import { CouponManagementContainer } from '@/components/marketing/coupons/coupon-management-container';
 import {
     getPlatformCoupons
 } from '@/services/marketing/coupon/admin/coupon-admin-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
-import { CouponManagementContainer } from '../_components/coupon-management-container';
 
 export const metadata: Metadata = {
 	title: 'Danh sách mã giảm giá của toàn nghành hàng',

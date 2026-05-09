@@ -1,13 +1,13 @@
 'use client';
 
-import React, { JSX } from 'react';
-import ProductAdminUi from '@/app/admin/products/_components/product-admin-ui';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { useProductBySupplierQuery } from '@/queries/inventories/suppliers/use-product-by-supplier-query';
+import ProductAdminUi from '@/app/shop-owner/products/_components/product-admin-ui';
 import {
-	useSupplierProductLogic,
-	UseSupplierProductLogicReturn,
+    useSupplierProductLogic,
+    UseSupplierProductLogicReturn,
 } from '@/hooks/inventories/suppliers/use-supplier-product-logic';
+import { useProductBySupplierQuery } from '@/queries/inventories/suppliers/use-product-by-supplier-query';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { JSX } from 'react';
 
 interface SupplierProductContainerProps {
 	supplierId: number;

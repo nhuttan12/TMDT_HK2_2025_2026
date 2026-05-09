@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
+import { SidebarItem } from '@/types/uis/SidebarItem';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { JSX } from 'react';
 import { Separator } from '@/components/ui/separator';
 
 interface Props {
-	items: SidebarItemInterface[];
+	items: SidebarItem[];
 }
 
 export function ProfileSidebar({ items }: Props): JSX.Element {
@@ -18,7 +18,7 @@ export function ProfileSidebar({ items }: Props): JSX.Element {
 	return (
 		<Card className='w-64 h-fit p-4 rounded-2xl border border-slate-200 shadow-sm'>
 			<div className='space-y-1'>
-				{items.map((item: SidebarItemInterface, index: number): JSX.Element => {
+				{items.map((item: SidebarItem, index: number): JSX.Element => {
 					const isActive: boolean = pathname === item.href;
 
 					return (

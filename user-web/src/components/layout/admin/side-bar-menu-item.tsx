@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils';
-import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
+import { SidebarItem } from '@/types/uis/SidebarItem';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { JSX, useState } from 'react';
 
 interface SidebarMenuItemProps {
-	item: SidebarItemInterface;
+	item: SidebarItem;
 }
 
 export function SidebarMenuItem({ item }: SidebarMenuItemProps): JSX.Element {
