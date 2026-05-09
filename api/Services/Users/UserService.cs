@@ -14,6 +14,17 @@ using api.Utilities;
 
 namespace api.Services.Users
 {
+    public interface IUserService
+    {
+        public Task<Result<UserInfoDTO>> CreateAsync(UserCreateDto userCreateDto, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO?>> GetByIdAsync(int id, CancellationToken ct = default);
+        public ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default);
+        public Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
+        Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
+        Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
+    }
     public class UserService : IUserService
     {
         private readonly MyAppDbContext _context;
@@ -42,15 +53,13 @@ namespace api.Services.Users
             }
             user.Role = role;
 
-            _userRepo.AddNew(user, ct);   
+            await _userRepo.CreateAsync(user, ct);   
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
         }
-
         public Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
-
         public async Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default)
         {
             // 1. Validation (Có thể đưa vào FluentValidation)
@@ -70,19 +79,20 @@ namespace api.Services.Users
             return Result<Pagination<UserInfoDTO>>.Success(new Pagination<UserInfoDTO>(userDtos, totalCount, query.PageNumber, query.PageSize));
           
         }
-
-
         public async Task<Result<UserInfoDTO?>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
             return user == null ? throw new NotFoundException("No User witth id: " + id) : _mapper.Map<UserInfoDTO>(user);
         }
-        //**********************************************************************************
-        public Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default)
+        public async Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default)
         {
-            // TODO: Implement logic to retrieve user by email from the database
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(email)) return Result<User>.Failure(new Error("InvalidEmail", "Email cannot be null or empty."), ErrorType.BadRequest);
+
+            var user = await _userRepo.GetByEmailAsync(email, ct: ct);
+            return user == null ? Result<User>.Failure(new Error("UserNotFound", "No user found with the provided email."), ErrorType.NotFound) : Result<User>.Success(user);
         }
+        //**********************************************************************************
+
         public async Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
             // TODO: Implement logic to retrieve user by refresh token from the database

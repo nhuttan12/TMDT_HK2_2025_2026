@@ -8,6 +8,13 @@ using System.Text;
 
 namespace api.Services.Auths
 {
+    public interface ITokenService
+    {
+        string GenerateToken(User user, bool isAccessToken);
+        ClaimsPrincipal ValidateToken(string token, CancellationToken ct = default);
+        bool DeleteToken(string token, CancellationToken ct = default);
+        //Task UpdateRefreshTokenAsync(object id, string newRefreshToken);
+    }
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;

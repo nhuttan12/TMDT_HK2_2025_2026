@@ -36,7 +36,7 @@ namespace api.Controllers
             var token = result.Value;
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
             {
-                return Unauthorized("Invalid username or password");
+                return HandleResult(Result<string>.Failure(new Error("InvalidCredentials", "Email hoặc mật khẩu không đúng", ErrorType.Unauthorized)));
             }
             SetTokenCookie(token);
             return HandleResult(result);
@@ -61,12 +61,16 @@ namespace api.Controllers
             var refreshToken = Request.Cookies["X-Access-Token"];
             if (string.IsNullOrEmpty(refreshToken))
                 return HandleResult(Result<bool>.Failure(new Error("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
+            var refreshToken2 = Request.Cookies["X-Refresh-Token"];
+            if (string.IsNullOrEmpty(refreshToken2))
+                return HandleResult(Result<bool>.Failure(new Error("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
 
             var token = await _authService.RefreshTokenAsync(refreshToken);
             if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.RefreshToken) || string.IsNullOrEmpty(token.Value.AccessToken))
                 return HandleResult(Result<bool>.Failure(new Error("InvalidRefreshToken", "Invalid refresh token", ErrorType.BadRequest)));
             SetTokenCookie(token.Value);
-            return Ok(ApiResponse<Boolean>.Success(true));
+
+            return HandleResult(Result<TokenResponse>.Success(token.Value));
 
         }
 
@@ -113,8 +117,8 @@ namespace api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest req, CancellationToken ct = default)
         {
-            await _authService.RegisterAsync(req, ct);
-            return Ok(ApiResponse<string>.Success("success"));
+            var res = await _authService.RegisterAsync(req, ct);
+            return HandleResult(res);
         }
 
         private void SetTokenCookie(TokenResponse token)

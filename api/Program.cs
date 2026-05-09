@@ -23,11 +23,12 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var config = services.GetRequiredService<IConfiguration>();
-    var context = scope.ServiceProvider.GetRequiredService<MyAppDbContext>();
-    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+    var context = services.GetRequiredService<MyAppDbContext>();
+    var authService = services.GetRequiredService<IAuthService>();
+    var logger = services.GetRequiredService<ILogger<DbInitializer>>();
     // Truyền trực tiếp context vào để xử lý
 
-    await DbInitializer.SeedEverything(context, config, authService);
+    await DbInitializer.SeedEverything(context, config, authService, logger);
 }
 
 // 2. Cấu hình Middleware
