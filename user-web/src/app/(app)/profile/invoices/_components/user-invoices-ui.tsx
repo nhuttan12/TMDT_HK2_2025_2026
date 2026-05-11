@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/table';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
 import { UserInvoicesLogicReturn } from '@/hooks/invoices/user/use-user-invoices-logic';
-import {getInvoiceStatusColor} from "@/utils/invoices/invoice-status-color";
-import {InvoiceStatus} from "@/types/invoices/user/InvoiceStatus";
-import {getInvoiceStatusLabel} from "@/utils/invoices/invoice-status-label";
+import { getInvoiceStatusTextClassColor } from '@/utils/invoices/invoice-status-text-class-color';
+import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
+import { getInvoiceStatusLabel } from '@/utils/invoices/invoice-status-label';
 
 interface UserInvoicesUiProps extends UserInvoicesLogicReturn {
 	isLoading: boolean;
@@ -67,7 +67,7 @@ export function UserInvoicesUi({
 										<TableCell>{invoice.totalItems} sản phẩm</TableCell>
 										<TableCell>
 											<span
-												className={getInvoiceStatusColor(
+												className={getInvoiceStatusTextClassColor(
 													invoice.status as InvoiceStatus,
 												)}
 											>

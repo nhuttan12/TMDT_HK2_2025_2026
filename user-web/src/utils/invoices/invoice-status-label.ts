@@ -5,6 +5,9 @@ const INVOICE_STATUS_LABEL: Record<InvoiceStatus, string> = {
 	pending: 'Chờ thanh toán',
 	paid: 'Đã thanh toán',
 	cancelled: 'Đã hủy',
+    delivered: 'Đã giao',
+    returned: 'Đã hoàn trả',
+    shipping: 'Đang giao',
 	completed: 'Hoàn tất',
 };
 

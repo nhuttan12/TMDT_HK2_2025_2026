@@ -93,7 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 		<div className='h-screen bg-slate-50 flex overflow-hidden'>
 			{/* SIDEBAR */}
 			<div className='ps-3'>
-				<SidebarWrapper items={sidebarItems} />
+				<SidebarWrapper items={sidebarItems} role='admin'/>
 			</div>
 
 			{/* CONTENT WRAPPER */}
