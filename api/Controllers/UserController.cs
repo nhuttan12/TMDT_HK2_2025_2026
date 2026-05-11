@@ -70,7 +70,7 @@ namespace api.Controllers
 
         [HttpPut("me")]
         [Authorize(Roles = "User, Admin, Shop")]
-        public async Task<IActionResult> UpdateCurrentUserInfo(
+        public async Task<IActionResult> UpdateCurrent(
             [FromBody] UserUpdateDto req,
             CancellationToken cancellationToken)
         {
