@@ -1,15 +1,46 @@
 ﻿using api.Models;
 
-namespace api.Models.Users
-{
-    public class Address
-    {
-        public int Id { get; set; }
-        public int User_id { get; set; } 
-        public string Address_url { get; set; } = string.Empty;
-        public DateTime Create_at { get; set; } = DateTime.UtcNow;
-        public bool Is_used { get; set; } = false;
+namespace Api.Models.Users;
 
-        public virtual User User { get; set; } = null!;
+public class Address
+{
+    // Sử dụng private set để đảm bảo tính đóng gói (Encapsulation)
+    public int Id { get; private set; }
+    public int UserId { get; private set; }
+    public string AddressUrl { get; private set; } = string.Empty;
+    public DateTime CreatedAt { get; private set; }
+    public bool IsUsed { get; private set; }
+
+    // Navigation Property
+    public virtual User User { get; private set; } = null!;
+
+    // Constructor ẩn để ép buộc sử dụng Factory Method
+    private Address() { }
+
+    /// <summary>
+    /// Static Factory Method - Tuân thủ tư duy Defensive Programming
+    /// </summary>
+    public static Address Create(int userId, string addressUrl)
+    {
+        // Fail Fast: Kiểm tra dữ liệu đầu vào ngay lập tức
+        if (userId <= 0)
+            throw new ArgumentException("UserId không hợp lệ.", nameof(userId));
+
+        if (string.IsNullOrWhiteSpace(addressUrl))
+            throw new ArgumentException("Địa chỉ không được để trống.", nameof(addressUrl));
+
+        return new Address
+        {
+            UserId = userId,
+            AddressUrl = addressUrl.Trim(),
+            CreatedAt = DateTime.UtcNow,
+            IsUsed = false
+        };
+    }
+
+    // Business Logic Method: Thay đổi trạng thái object một cách tường minh
+    public void MarkAsUsed()
+    {
+        IsUsed = true;
     }
 }

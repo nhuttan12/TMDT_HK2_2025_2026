@@ -18,7 +18,7 @@ namespace api.Services.Users
     {
         public Task<Result<UserInfoDTO>> CreateAsync(UserCreateDto userCreateDto, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
-        public Task<Result<UserInfoDTO?>> GetByIdAsync(int id, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO>> GetByIdAsync(int id, CancellationToken ct = default);
         public ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default);
         public Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
@@ -31,13 +31,16 @@ namespace api.Services.Users
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
         private readonly IUserRepository _userRepo;
+        private readonly UnitOfWork _unitOfWork;
 
-        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository)
+
+        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository, UnitOfWork unitOfWork)
         {
             _context = context;
             _mapper = Mapper;
             _authService = authService;
             _userRepo = userRepository;
+            _unitOfWork = unitOfWork;   
         }
 
         public async Task<Result<UserInfoDTO>> CreateAsync(UserCreateDto userCreateDto, CancellationToken ct = default)
@@ -79,10 +82,16 @@ namespace api.Services.Users
             return Result<Pagination<UserInfoDTO>>.Success(new Pagination<UserInfoDTO>(userDtos, totalCount, query.PageNumber, query.PageSize));
           
         }
-        public async Task<Result<UserInfoDTO?>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<UserInfoDTO>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
-            return user == null ? throw new NotFoundException("No User witth id: " + id) : _mapper.Map<UserInfoDTO>(user);
+            if(user == null)
+            {
+                return Result<UserInfoDTO>.Failure(new Error("NoUser", $"No user found with id: {id}"), ErrorType.NotFound);
+            }
+            var dto = _mapper.Map<UserInfoDTO>(user);
+            return Result<UserInfoDTO>.Success(dto);
+
         }
         public async Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default)
         {
@@ -107,7 +116,13 @@ namespace api.Services.Users
         public async Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
         {
             // TODO: Implement logic to update user information in the database
-            throw new NotImplementedException();
+            var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
+            if (user == null)
+                return Result<UserInfoDTO>.Failure(new Error("NoUser", $"No user found with id: {id}"), ErrorType.NotFound);
+            user.Update(userUpdateDto.Fullname, userUpdateDto.PhoneNumber, userUpdateDto.AvatarUrl, userUpdateDto.Addresses, id);
+            _userRepo.Update(user);
+            await _unitOfWork.CommitAsync(ct);
+            return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
         }
 
     }

@@ -11,7 +11,7 @@ namespace api.Repository.UserRepo
         public Task<(IEnumerable<User> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default);
         
         public Task<User?> GetByEmailAsync(string email, bool trackChanges = false, CancellationToken ct = default);
-
+        Task UpdateAsync(User user, CancellationToken ct);
     }
     public class UserRepository(MyAppDbContext _context) : IUserRepository
     {
@@ -71,6 +71,12 @@ namespace api.Repository.UserRepo
             return await query.FirstOrDefaultAsync(u => u.Email == email, ct);
         }
 
+        public Task UpdateAsync(User user, CancellationToken ct)
+        {
+
+            throw new NotImplementedException();
+        }
+
         public IQueryable<User> FindAll(bool trackChanges = false)
         {
             return !trackChanges ? _context.Users.AsNoTracking() : _context.Users;
@@ -95,5 +101,7 @@ namespace api.Repository.UserRepo
         {
             _context.Users.Remove(entity);
         }
+
+      
     }
 }

@@ -3,7 +3,7 @@ namespace api.Repository
 {
     public interface IUnitOfWork
     {
-        Task CommitAsync();
+        Task CommitAsync(CancellationToken ct = default);
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -12,9 +12,9 @@ namespace api.Repository
         {
             _context = context;
         }
-        public async Task CommitAsync() 
+        public async Task CommitAsync(CancellationToken ct = default) 
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(ct);
         }
     }
 }
