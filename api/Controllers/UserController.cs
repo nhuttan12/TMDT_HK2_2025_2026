@@ -58,35 +58,42 @@ namespace api.Controllers
         [Authorize(Roles = "User, Admin, Shop")]
         public async Task<IActionResult> GetCurrent()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = AuthenticatedUserId;
             if (userId == null)
             {
                 return HandleResult(Result<bool>.Failure(new Error("Unauthorized","You are not authorized."),ErrorType.BadRequest));
             }
-            var user = await UserService.GetByIdAsync(int.Parse(userId));
+            var user = await UserService.GetByIdAsync(userId.Value);
             return HandleResult(user);
         }
       
 
-        [HttpPost("me")]
+        [HttpPut("me")]
         [Authorize(Roles = "User, Admin, Shop")]
-        public async Task<IActionResult> ChangeInfo([FromBody] UserUpdateDto req)
+        public async Task<IActionResult> UpdateCurrentUserInfo(
+            [FromBody] UserUpdateDto req,
+            CancellationToken cancellationToken)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = AuthenticatedUserId;
             if (userId == null)
             {
                 return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
             }
-            var newUser = await UserService.UpdateAsync(int.Parse(userId), req);
+            var newUser = await UserService.UpdateAsync(userId.Value, req, cancellationToken);
             return HandleResult(newUser);
         }
 
         [Authorize(Roles = "User")]
-        [HttpPost("me/change-password")]
-        public async Task<IActionResult> ChangeMypassword([FromBody] ChangePasswordDto req)
+        [HttpPatch("me/change-password")]
+        public async Task<IActionResult> ChangeMyPassword([FromBody] ChangePasswordDto req, CancellationToken cancellationToken)
         {
-            //TODO: implement method change my password
-            throw new NotImplementedException();
+            var userId = AuthenticatedUserId;
+            if (userId == null)
+            {
+                return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
+            }
+            var result = await UserService.ChangePasswordAsync(userId.Value, req, cancellationToken);
+            return HandleResult(result);
         }
         // *********************************************************************
 

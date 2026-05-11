@@ -1,16 +1,17 @@
-﻿using api.Models.Utilities;
-using api.Repository;
-using AutoMapper;
-using api.Controllers;
+﻿using api.Controllers;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Exceptions;
 using api.Models;
 using api.Models.Roles;
-using api.Services.Auths;
-using Microsoft.EntityFrameworkCore;
+using api.Models.Utilities;
+using api.Repository;
 using api.Repository.UserRepo;
+using api.Services.Auths;
 using api.Utilities;
+using AutoMapper;
+using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services.Users
 {
@@ -24,6 +25,7 @@ namespace api.Services.Users
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
+        Task<Result<object>> ChangePasswordAsync(int id, ChangePasswordDto request, CancellationToken ct = default);
     }
     public class UserService : IUserService
     {
@@ -112,10 +114,9 @@ namespace api.Services.Users
         {
             return await _context.Users.AnyAsync(u => u.Email == email, ct);
         }
-
+        
         public async Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
         {
-            // TODO: Implement logic to update user information in the database
             var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
                 return Result<UserInfoDTO>.Failure(new Error("NoUser", $"No user found with id: {id}"), ErrorType.NotFound);
@@ -125,6 +126,34 @@ namespace api.Services.Users
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
         }
 
-    }
+        public async Task<Result<object>> ChangePasswordAsync(
+            int id,
+            ChangePasswordDto request,
+            CancellationToken ct = default)
+        {
+            // 1. Fail Fast: Kiểm tra đầu vào cơ bản (có thể đã qua Validation ở Controller)
+            if (request.OldPassword == request.NewPassword)
+                return Result<object>.Failure(new Error("User.SamePassword", "Mật khẩu mới không được trùng mật khẩu cũ."), ErrorType.BadRequest);
 
+            // 2. I/O Bound
+            var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
+            if (user == null)
+                return Result<object>.Failure(new Error("User.NotFound", $"Người dùng ID {id} không tồn tại."), ErrorType.NotFound);
+
+            // 3. Logic Validation: Kiểm tra mật khẩu cũ thông qua AuthService
+            var isOldPasswordValid = _authService.VerifyPassword(user, request.OldPassword, user.PasswordHash);
+            if (!isOldPasswordValid)
+                return Result<object>.Failure(new Error("User.InvalidPassword", "Mật khẩu cũ không chính xác."), ErrorType.BadRequest);
+
+            // 4. Update & Hash
+            var newPasswordHash = _authService.HashPassword(user, request.NewPassword);
+            user.UpdatePassword(newPasswordHash);
+
+            // 5. Persistence: Sử dụng Unit of Work để đảm bảo Transaction
+            _userRepo.Update(user);
+            await _unitOfWork.CommitAsync(ct);
+
+            return Result<string>.Success("Password changed successfully.");
+        }
+    }
 }

@@ -58,5 +58,14 @@ namespace api.Models
             if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create( userId,a)));
             UpdateAt = DateTime.UtcNow;
         }
+
+        internal void UpdatePassword(string newHash)
+        {
+            if (string.IsNullOrWhiteSpace(newHash))
+                throw new ArgumentException("Password hash cannot be empty.");
+
+            PasswordHash = newHash;
+            UpdateAt = DateTime.UtcNow;
+        }
     }
 }
