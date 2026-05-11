@@ -1,8 +1,7 @@
-import { JSX } from 'react';
-import { Metadata } from 'next';
-import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
-import { getProductVariantDetailById } from '@/services/products/admin/product-variant-service';
 import ProductVariantDetailContainer from '@/components/products/variant/admin/product-variant-detail-container';
+import { getProductVariantDetailById } from '@/services/products/admin/product-variant-service';
+import { Metadata } from 'next';
+import { JSX } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Thông tin chi tiết biến thể sản phẩm',
@@ -22,7 +21,7 @@ export default async function Page({ params }: Props): Promise<JSX.Element> {
 		<ProductVariantDetailContainer
 			initialData={variant}
 			mode={'view'}
-            role={'shop-owner'}
+            role={'admin'}
 		/>
 	);
 }

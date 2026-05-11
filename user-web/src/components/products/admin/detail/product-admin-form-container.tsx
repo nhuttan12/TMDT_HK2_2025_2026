@@ -9,18 +9,20 @@ import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfo
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { JSX } from 'react';
 import ProductAdminFormUI from './product-admin-form-ui';
+import { AppRole } from '@/types/uis/AppRole';
 
-interface Props {
+interface ProductAdminFormContainerProps {
 	productId?: number;
 	formType: AdminFormType;
 	initialProductAdmin: ProductDetailInfoAdmin;
+    role: AppRole;
 }
 
 export default function ProductAdminFormContainer({
 	productId,
 	formType,
-	initialProductAdmin,
-}: Props): JSX.Element {
+	initialProductAdmin,role,
+}: ProductAdminFormContainerProps): JSX.Element {
 	// 1. Fetching Data
 	// Nếu productId bị undefined (do create), ta truyền tạm 0.
 	// Query bên dưới sẽ chặn việc gọi API với ID 0.
@@ -28,9 +30,10 @@ export default function ProductAdminFormContainer({
 	const { data: productAdmin } = useProductDetailAdminQuery(queryId, initialProductAdmin);
 
 	// 2. Logic Hook
-	const logic: UseProductAdminFormLogicReturn = useProductAdminFormLogic({
-		formType: formType,
+	const logic = useProductAdminFormLogic({
+		formType,
 		productAdmin: productAdmin ?? initialProductAdmin,
+        role
 	});
 
 	// 3. Render

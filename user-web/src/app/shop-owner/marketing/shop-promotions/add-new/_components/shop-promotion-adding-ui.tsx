@@ -13,6 +13,7 @@ import { getProductVariantStatusLabel } from '@/utils/products/product-variant-s
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import { ProductSelectionModal } from './product-selection-modal';
+import { getProductSystemStatusLabel } from '@/utils/products/product-system-status-label';
 
 interface Props extends UseShopPromotionAddingLogicReturn {
 	availableProducts: ProductPromotionForAdding[];
@@ -105,9 +106,15 @@ export default function ShopPromotionAddingUi({
 		{
 			key: 'status',
 			header: 'Trạng Thái',
-			render: (row: ProductPromotionForAdding): JSX.Element => (
-				<span>{getProductVariantStatusLabel(row.status)}</span>
-			),
+			render: (row: ProductPromotionForAdding): JSX.Element => {
+				if (row.systemStatus == 'banned')
+					return (
+						<span className='text-red-600'>
+							{getProductSystemStatusLabel(row.systemStatus)}
+						</span>
+					);
+				return <span>{getProductVariantStatusLabel(row.status)}</span>;
+			},
 		},
 		{
 			key: 'actions',

@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
 import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVariantDetail';
-import ProductVariantDetailContainer from '../_components/product-variant-detail-container';
+import ProductVariantDetailContainer from '@/components/products/variant/admin/product-variant-detail-container';
 
 export const metadata: Metadata = {
 	title: 'Thêm biến thể sản phẩm',
@@ -40,6 +40,7 @@ export default function Page({ params }: Props): JSX.Element {
 				height: 0,
 			},
 		},
+        systemStatus: 'pending_approval',
 		images: [],
 		createdAt: '',
 		updatedAt: '',
@@ -51,6 +52,7 @@ export default function Page({ params }: Props): JSX.Element {
 		<ProductVariantDetailContainer
 			initialData={emptyProductVariant}
 			mode={'create'}
+			role={'shop-owner'}
 		/>
 	);
 }

@@ -45,6 +45,7 @@ export async function getProductVariantDetailById(id: number): Promise<ProductVa
 						status: 'done',
 					},
 				],
+				systemStatus: 'approved',
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
 			});

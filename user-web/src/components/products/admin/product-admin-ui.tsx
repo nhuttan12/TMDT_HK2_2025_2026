@@ -7,6 +7,7 @@ import Pagination from '@/components/layout/share/pagination';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { UseProductAdminLogicReturn } from '@/hooks/products/admin/use-product-admin-logic';
 import ProductAdminTable from './product-admin-table';
+import { AppRole } from '@/types/uis/AppRole';
 
 interface ProductAdminUiProps extends UseProductAdminLogicReturn {
 	products: ProductListInfoAdmin[];

@@ -1,9 +1,9 @@
 import { JSX } from 'react';
 import { HomeBanner } from '@/types/uis/HomeBanner';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import ProductList from '@/components/product/user/product-list';
 import { HomeBannerLogicReturn } from '@/hooks/contents/home-banners/user/use-home-logic';
 import HomeBannerCarouselUi from '@/app/(app)/_components/home-banner-carousel-ui';
+import ProductList from '@/components/products/user/product-list';
 
 interface HomeUiProps extends HomeBannerLogicReturn {
 	banners: HomeBanner[];

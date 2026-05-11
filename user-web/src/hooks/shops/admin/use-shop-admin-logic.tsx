@@ -45,7 +45,7 @@ export function useShopAdminLogic({
 	const pagination: UsePaginationReturn = usePagination(data?.meta.totalPages || 1);
 
 	const handleRowClick = (shop: ShopAdmin) => {
-		router.push(`/admin/shops/${shop.id}`);
+		router.push(`/admin/shops/list/${shop.id}`);
 	};
 
 	const handleApproveShop = () => {

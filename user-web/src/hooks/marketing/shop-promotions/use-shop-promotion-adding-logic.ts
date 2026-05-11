@@ -86,6 +86,7 @@ export function useShopPromotionAddingLogic(
 					status: p.status,
 					discountPrice: 0,
 					discount: 0,
+					systemStatus: p.systemStatus,
 				};
 			});
 

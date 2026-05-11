@@ -8,14 +8,20 @@ import {
 	useQueryClient,
 	UseQueryResult,
 } from '@tanstack/react-query';
-import { getShopProfile, updateShopProfile } from '@/services/shops/admin/shop-admin-service';
+import {
+	getShopProfileByUserId,
+	updateShopProfile,
+} from '@/services/shops/admin/shop-admin-service';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
 // Hook lấy dữ liệu
-export function useShopProfile(initialData?: ShopProfile): UseQueryResult<ShopProfile, Error> {
+export function useShopProfile(
+	userId: number,
+	initialData?: ShopProfile,
+): UseQueryResult<ShopProfile, Error> {
 	return useQuery({
-		queryKey: ['shop-profile'],
-		queryFn: getShopProfile,
+		queryKey: ['shop-profile', userId],
+		queryFn: () => getShopProfileByUserId(userId),
 		initialData: initialData, // Sử dụng dữ liệu từ Server truyền xuống
 		staleTime: 1000 * 60 * 5, // Cache trong 5 phút
 	});

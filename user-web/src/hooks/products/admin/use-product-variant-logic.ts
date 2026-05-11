@@ -2,10 +2,12 @@ import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVari
 import { ChangeEvent, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { AppRole } from '@/types/uis/AppRole';
 
 export interface UseProductVariantLogicProps {
 	initialData: ProductVariantDetail;
 	mode: AdminFormType;
+    role: AppRole;
 }
 
 export interface UseProductVariantLogicReturn {
@@ -14,6 +16,8 @@ export interface UseProductVariantLogicReturn {
 	isView: boolean;
 	isCreate: boolean;
 	isUpdate: boolean;
+    isAdmin: boolean;
+    isShopOwner: boolean;
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleColorChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -36,6 +40,9 @@ export function useProductVariantLogic(
 	const isView: boolean = props.mode === 'view';
 	const isCreate: boolean = props.mode === 'create';
 	const isUpdate: boolean = props.mode === 'update';
+
+    const isAdmin: boolean = props.role === 'admin';
+    const isShopOwner: boolean = props.role === 'shop-owner';
 
 	useEffect(() => {
 		setForm(props.initialData);
@@ -170,21 +177,23 @@ export function useProductVariantLogic(
 	};
 
 	return {
-		form: form,
-		loading: loading,
-		isView: isView,
-		isCreate: isCreate,
-		isUpdate: isUpdate,
-		handleInputChange: handleInputChange,
-		handleSizeChange: handleSizeChange,
-		handleColorChange: handleColorChange,
-		handleSalePriceChange: handleSalePriceChange,
-		handleCostPriceChange: handleCostPriceChange,
-		handleWeightChange: handleWeightChange,
-		handleLengthChange: handleLengthChange,
-		handleWidthChange: handleWidthChange,
-		handleHeightChange: handleHeightChange,
-		handleImagesChange: handleImagesChange,
-		handleSubmit: handleSubmit,
+		form,
+		loading,
+		isView,
+		isCreate,
+		isUpdate,
+        isAdmin,
+        isShopOwner,
+		handleInputChange,
+		handleSizeChange,
+		handleColorChange,
+		handleSalePriceChange,
+		handleCostPriceChange,
+		handleWeightChange,
+		handleLengthChange,
+		handleWidthChange,
+		handleHeightChange,
+		handleImagesChange,
+		handleSubmit,
 	};
 }

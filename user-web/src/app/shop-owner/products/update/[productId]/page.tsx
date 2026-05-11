@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import { Metadata } from 'next';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { getProductDetailAdminByProductId } from '@/services/products/admin/product-admin-service';
-import ProductAdminFormContainer from '../../[productId]/_components/product-admin-form-container';
+import ProductAdminFormContainer from '@/components/products/admin/detail/product-admin-form-container';
 
 export const metadata: Metadata = {
 	title: 'Chỉnh sửa thông tin sản phẩm',
@@ -26,6 +26,7 @@ export default async function AddNewProductPage({ params }: Props): Promise<JSX.
 			formType={'update'}
 			productId={parsedId}
 			initialProductAdmin={initialProductAdmin}
+			role={'shop-owner'}
 		/>
 	);
 }

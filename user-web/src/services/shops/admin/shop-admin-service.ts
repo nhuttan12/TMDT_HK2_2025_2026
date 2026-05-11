@@ -2,7 +2,7 @@ import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopAdmin } from '@/types/shops/admin/ShopAdmin';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
-export async function getShopProfile(): Promise<ShopProfile> {
+export async function getShopProfileByUserId(userId: number): Promise<ShopProfile> {
 	await new Promise((resolve) => setTimeout(resolve, 500)); // Giả lập độ trễ API
 	return {
 		id: 88,

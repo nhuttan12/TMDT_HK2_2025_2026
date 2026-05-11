@@ -13,6 +13,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						discountPrice: 800000,
 						discount: calculateDiscount(950000, 800000),
 						status: 'active',
+						systemStatus: 'rejected',
 					},
 					{
 						id: 2,
@@ -21,6 +22,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						discountPrice: 190000,
 						discount: calculateDiscount(2100000, 190000),
 						status: 'inactive',
+						systemStatus: 'approved',
 					},
 					{
 						id: 3,
@@ -29,6 +31,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						discountPrice: 1550000,
 						discount: calculateDiscount(1850000, 1550000),
 						status: 'discontinued',
+						systemStatus: 'banned',
 					},
 					{
 						id: 4,
@@ -37,6 +40,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						discountPrice: 2900000,
 						discount: calculateDiscount(3200000, 2900000),
 						status: 'active',
+						systemStatus: 'pending_approval',
 					},
 				]),
 			500,

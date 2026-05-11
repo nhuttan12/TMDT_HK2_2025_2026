@@ -11,14 +11,16 @@ import ShopProfileFormUi from './shop-profile-form-ui';
 interface ShopProfileContainerProps {
 	initialData: ShopProfile;
 	formType: AdminFormType;
+	userId: number;
 }
 
 export default function ShopProfileFormContainer({
 	initialData,
 	formType,
+	userId,
 }: ShopProfileContainerProps): JSX.Element {
 	// 1. Kết nối TanStack Query
-	const { data: storeData } = useShopProfile(initialData);
+	const { data: storeData } = useShopProfile(userId, initialData);
 	const updateMutation: UseMutationResult<ShopProfile, Error, ShopProfile> =
 		useUpdateShopProfile();
 

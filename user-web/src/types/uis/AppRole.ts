@@ -1,1 +1,1 @@
-export type AppRole = 'admin' | 'shop-owner';
+export type AppRole = 'admin' | 'shop-owner' | 'customer';

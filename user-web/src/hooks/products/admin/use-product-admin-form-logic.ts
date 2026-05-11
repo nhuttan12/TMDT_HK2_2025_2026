@@ -13,10 +13,12 @@ import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/mappers
 import { generateSlug } from '@/utils/shared/mappers/slug';
 import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { AppRole } from '@/types/uis/AppRole';
 
 export interface UseProductAdminFormLogicProps {
 	formType: AdminFormType;
 	productAdmin: ProductDetailInfoAdmin;
+	role: AppRole;
 }
 
 export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<number> {
@@ -24,6 +26,8 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	isCreate: boolean;
 	isView: boolean;
 	isUpdate: boolean;
+	isShopOwner: boolean;
+    isAdmin: boolean;
 	modal: UseStatusModalReturn;
 
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -41,17 +45,22 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	handleCancelDelete: () => void;
 }
 
-export function useProductAdminFormLogic(
-	props: UseProductAdminFormLogicProps,
-): UseProductAdminFormLogicReturn {
+export function useProductAdminFormLogic({
+	formType,
+	productAdmin,
+	role,
+}: UseProductAdminFormLogicProps): UseProductAdminFormLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
-	const isCreate: boolean = props.formType === 'create';
-	const isView: boolean = props.formType === 'view';
-	const isUpdate: boolean = props.formType === 'update';
+	const isCreate: boolean = formType === 'create';
+	const isView: boolean = formType === 'view';
+	const isUpdate: boolean = formType === 'update';
+
+	const isShopOwner: boolean = role === 'shop-owner';
+    const isAdmin: boolean = role === 'admin';
 
 	// 1. Form State
-	const [form, setForm] = useState<ProductDetailInfoAdmin>(props.productAdmin);
+	const [form, setForm] = useState<ProductDetailInfoAdmin>(productAdmin);
 
 	// 2. Table Selection State
 	const allKeys: number[] = form.productVariants?.map((p: ProductVariant): number => p.id) ?? [];
@@ -142,21 +151,23 @@ export function useProductAdminFormLogic(
 
 	return {
 		...selection, // Spread selected, toggle, toggleAll, isAllSelected, isIndeterminate
-		form: form,
-		isCreate: isCreate,
-		isView: isView,
-		isUpdate: isUpdate,
-		modal: modal,
-		handleInputChange: handleInputChange,
-		handleSubmit: handleSubmit,
-		handleStatusChange: handleStatusChange,
-		handleImagesChange: handleImagesChange,
-		handleDescriptionChange: handleDescriptionChange,
-		handleRedirectToProductVariantDetail: handleRedirectToProductVariantDetail,
-		handleAddNewVariant: handleAddNewVariant,
-		handleEditVariant: handleEditVariant,
-		handleTriggerDeleteVariant: handleTriggerDeleteVariant,
-		handleConfirmDelete: handleConfirmDelete,
-		handleCancelDelete: handleCancelDelete,
+		form,
+		isCreate,
+		isView,
+		isUpdate,
+		isShopOwner,
+        isAdmin,
+		modal,
+		handleInputChange,
+		handleSubmit,
+		handleStatusChange,
+		handleImagesChange,
+		handleDescriptionChange,
+		handleRedirectToProductVariantDetail,
+		handleAddNewVariant,
+		handleEditVariant,
+		handleTriggerDeleteVariant,
+		handleConfirmDelete,
+		handleCancelDelete,
 	};
 }

@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ShopRegistrationPage(): JSX.Element {
-	return <ShopRegistrationContainer />;
+	return <ShopRegistrationContainer role='customer'/>;
 }

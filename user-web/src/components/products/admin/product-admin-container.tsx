@@ -8,12 +8,17 @@ import {
 	UseProductAdminLogicReturn,
 } from '@/hooks/products/admin/use-product-admin-logic';
 import ProductAdminUi from './product-admin-ui';
+import { AppRole } from '@/types/uis/AppRole';
 
-interface Props {
+interface ProductAdminContainerProps {
 	initialProducts: ProductListInfoAdmin[];
+    role: AppRole;
 }
 
-export default function ProductAdminContainer({ initialProducts }: Props): JSX.Element {
+export default function ProductAdminContainer({
+	initialProducts,
+    role,
+}: ProductAdminContainerProps): JSX.Element {
 	// 1. Data Source
 	const { data: products, isLoading: isProductsLoading } =
 		useProductListInfoAdminQuery(initialProducts);

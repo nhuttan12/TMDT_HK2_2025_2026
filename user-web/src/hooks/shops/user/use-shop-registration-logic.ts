@@ -10,6 +10,8 @@ export interface UseShopRegistrationLogicReturn {
 	handleDescriptionChange: (val: string) => void;
 	handleTermsChange: (checked: boolean) => void;
 	handleSubmit: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
+	handleApprove?: () => void;
+	handleReject?: () => void;
 }
 
 interface UseShopRegistrationLogicProps {

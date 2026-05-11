@@ -19,9 +19,9 @@ import {
 } from '@/hooks/products/admin/use-product-admin-table-logic';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
-import ProductStatusBadge from '../[productId]/_components/product-status-badge';
+import ProductStatusBadge from './detail/product-status-badge';
 
-interface Props {
+interface ProductAdminTableProps {
 	products: ProductListInfoAdmin[];
 	handleSort: (field: ProductAdminSortField) => void;
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
@@ -35,7 +35,7 @@ export default function ProductAdminTable({
 	renderSortIcon,
 	onView,
 	onEdit,
-}: Props): JSX.Element {
+}: ProductAdminTableProps): JSX.Element {
 	const logic: UseProductAdminTableLogicReturn = useProductAdminTableLogic({
 		products: products,
 	});

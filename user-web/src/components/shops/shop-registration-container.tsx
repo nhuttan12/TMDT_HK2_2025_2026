@@ -7,15 +7,18 @@ import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { ShopRegistrationForm } from '@/types/shops/user/ShopRegistrationForm';
 import { JSX } from 'react';
 import ShopRegistrationUi from './shop-registration-ui';
+import { AppRole } from '@/types/uis/AppRole';
 
 export interface ShopRegistrationContainerProps {
 	formType?: AdminFormType;
 	initialData?: ShopRegistrationForm;
+    role: AppRole
 }
 
 export default function ShopRegistrationContainer({
 	formType = 'create',
 	initialData,
+    role
 }: ShopRegistrationContainerProps): JSX.Element {
     const logic = useShopRegistrationLogic({ initialData });
     
@@ -24,6 +27,7 @@ export default function ShopRegistrationContainer({
 		<ShopRegistrationUi
 			{...logic}
 			formType={formType}
+            role={role}
 		/>
 	);
 }

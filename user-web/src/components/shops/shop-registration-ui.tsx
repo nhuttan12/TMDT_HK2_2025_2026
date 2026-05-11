@@ -10,23 +10,28 @@ import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { UseShopRegistrationLogicReturn } from '@/hooks/shops/user/use-shop-registration-logic';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { AdminFormWrapper } from '../layout/admin/admin-form-wrapper';
+import { AppRole } from '@/types/uis/AppRole';
 
 export interface ShopRegistrationUiProps extends UseShopRegistrationLogicReturn {
 	formType?: AdminFormType;
+	role: AppRole;
 }
 
 export default function ShopRegistrationUi({
 	form,
 	loading,
 	formType = 'create',
+	role,
 	handleInputChange,
 	handleDescriptionChange,
 	handleTermsChange,
 	handleSubmit,
+    handleApprove,
+    handleReject
 }: ShopRegistrationUiProps): JSX.Element {
 	const isView = formType === 'view';
 
-	// 1. Xử lý Tiêu đề & Mô tả tự động
+	// Xử lý Tiêu đề & Mô tả tự động
 	const formTitle = isView
 		? `Chi tiết đơn đăng ký ${form.id ? `#${form.id}` : ''}: ${form.name}`
 		: 'Đăng ký trở thành Nhà bán hàng';
@@ -35,33 +40,61 @@ export default function ShopRegistrationUi({
 		? 'Xem chi tiết thông tin gian hàng đăng ký.'
 		: 'Hãy điền thông tin bên dưới để bắt đầu kinh doanh trên nền tảng của chúng tôi.';
 
-	// 2. Tách phần "Chốt đơn" thành component actions riêng biệt
-	const formActions = !isView ? (
-		<div className='bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center gap-4 mt-6'>
-			<div className='flex items-center space-x-2'>
-				<Checkbox
-					id='terms'
-					checked={form.termsAccepted}
-					onCheckedChange={handleTermsChange}
-				/>
-				<Label
-					htmlFor='terms'
-					className='text-sm text-slate-700 cursor-pointer'
-				>
-					Tôi xác nhận các thông tin trên là chính xác và đồng ý với điều khoản.
-				</Label>
-			</div>
+	// Logic tách biệt vùng Actions theo Role
+	let formActions: React.ReactNode = null;
 
-			<Button
-				type='submit'
-				size='lg'
-				disabled={loading || !form.termsAccepted}
-				className='w-full max-w-sm font-semibold cursor-pointer h-12'
-			>
-				{loading ? 'Đang gửi đăng ký...' : 'Gửi Đơn Đăng Ký'}
-			</Button>
-		</div>
-	) : null;
+	if (role === 'admin' && isView) {
+		// Nhánh 1: Giao diện duyệt của Admin
+		formActions = (
+			<div className='flex items-center justify-center gap-4 p-6 mt-6 border rounded-xl'>
+				<Button
+					type='button' // Tránh trigger submit form
+					variant='outline'
+					onClick={handleReject}
+					disabled={loading}
+					className='w-40 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700'
+				>
+					Từ chối
+				</Button>
+				<Button
+					type='button'
+					onClick={handleApprove}
+					disabled={loading}
+					className='w-40 text-white'
+				>
+					{loading ? 'Đang xử lý...' : 'Phê duyệt'}
+				</Button>
+			</div>
+		);
+	} else if (role === 'customer' && !isView) {
+		// Nhánh 2: Giao diện nộp đơn của Customer
+		formActions = (
+			<div className='flex flex-col items-center gap-4 p-6 mt-6 border bg-slate-50 rounded-xl border-slate-200'>
+				<div className='flex items-center space-x-2'>
+					<Checkbox
+						id='terms'
+						checked={form.termsAccepted}
+						onCheckedChange={handleTermsChange}
+					/>
+					<Label
+						htmlFor='terms'
+						className='text-sm cursor-pointer text-slate-700'
+					>
+						Tôi xác nhận các thông tin trên là chính xác và đồng ý với điều khoản.
+					</Label>
+				</div>
+
+				<Button
+					type='submit'
+					size='lg'
+					disabled={loading || !form.termsAccepted}
+					className='w-full max-w-sm h-12 font-semibold text-white cursor-pointer'
+				>
+					{loading ? 'Đang gửi đăng ký...' : 'Gửi Đơn Đăng Ký'}
+				</Button>
+			</div>
+		);
+	}
 
 	return (
 		<AdminFormWrapper

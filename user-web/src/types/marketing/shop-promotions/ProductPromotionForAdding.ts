@@ -1,3 +1,4 @@
+import { ProductSystemStatus } from '@/types/products/admin/variant/ProductSystemStatus';
 import { ProductVariantStatus } from '@/types/products/admin/variant/ProductVariantStatus';
 
 export interface ProductPromotionForAdding {
@@ -7,4 +8,5 @@ export interface ProductPromotionForAdding {
 	discountPrice: number;
 	discount: number;
 	status: ProductVariantStatus;
+    systemStatus: ProductSystemStatus;
 }

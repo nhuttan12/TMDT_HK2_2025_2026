@@ -2,9 +2,7 @@
 
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import React, { ChangeEvent, JSX, useId } from 'react';
-import { SortableImageItem } from '@/components/image/admin/sortable-image-item';
 import { Button } from '@/components/ui/button';
-import ImagePreview from '@/components/image/admin/image-preview';
 import { Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,10 +22,13 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { isDragging } from 'motion-dom';
+import ImagePreview from './image-preview';
+import { SortableImageItem } from './sortable-image-item';
 
 interface Props {
 	value: SortableImageForm[];
 	onChange: React.Dispatch<React.SetStateAction<SortableImageForm[]>>;
+	isAdmin: boolean;
 	disabled?: boolean;
 	width?: number | null;
 	height?: number | null;
@@ -49,7 +50,14 @@ function fakeUpload(file: File, onProgress: (p: number) => void): Promise<string
 	});
 }
 
-export function MultiImageUpload({ value, onChange, disabled, width, height }: Props): JSX.Element {
+export function MultiImageUpload({
+	value,
+	onChange,
+	isAdmin,
+	disabled,
+	width,
+	height,
+}: Props): JSX.Element {
 	const FILE_INPUT_ID = 'multi-image-upload';
 
 	const dndId: string = useId();
@@ -158,16 +166,18 @@ export function MultiImageUpload({ value, onChange, disabled, width, height }: P
 				disabled={disabled}
 			/>
 
-			<Label htmlFor={!disabled ? FILE_INPUT_ID : undefined}>
-				<Button
-					className={`cursor-pointer ${disabled ? 'opacity-50' : ''}`}
-					type='button'
-					asChild
-					disabled={disabled}
-				>
-					<span>Chọn ảnh</span>
-				</Button>
-			</Label>
+			{!isAdmin && (
+				<Label htmlFor={!disabled ? FILE_INPUT_ID : undefined}>
+					<Button
+						className={`cursor-pointer ${disabled ? 'opacity-50' : ''}`}
+						type='button'
+						asChild
+						disabled={disabled}
+					>
+						<span>Chọn ảnh</span>
+					</Button>
+				</Label>
+			)}
 
 			{/* 4. Khởi tạo Context cho DND Kit */}
 			<DndContext

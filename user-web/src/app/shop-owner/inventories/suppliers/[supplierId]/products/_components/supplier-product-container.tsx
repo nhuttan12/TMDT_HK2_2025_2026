@@ -1,6 +1,6 @@
 'use client';
 
-import ProductAdminUi from '@/app/shop-owner/products/_components/product-admin-ui';
+import ProductAdminUi from '@/components/products/admin/product-admin-ui';
 import {
     useSupplierProductLogic,
     UseSupplierProductLogicReturn,

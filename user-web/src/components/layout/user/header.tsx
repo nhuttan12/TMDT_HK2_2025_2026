@@ -1,6 +1,6 @@
 'use client';
 
-import { ListOrdered, LogOut, Search, ShoppingCart, User } from 'lucide-react';
+import { ListOrdered, LogOut, Search, ShoppingCart, Sprout, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { JSX, ReactNode } from 'react';
@@ -52,12 +52,32 @@ interface RedirectElement {
 }
 
 /* ---------- Data ---------- */
-
-const headerElements: RedirectElement[] = [
-	{ key: 'home', label: 'Trang chủ', href: '/' },
-	{ key: 'products', label: 'Sản phẩm', href: '/products' },
-	{ key: 'men', label: 'Đồ nam', href: '/men' },
-	{ key: 'women', label: 'Đồ nữ', href: '/women' },
+export const headerElements: RedirectElement[] = [
+	{
+		key: 'home',
+		label: 'Trang chủ',
+		href: '/',
+	},
+	{
+		key: 'terrariums',
+		label: 'Bể kính tiểu cảnh',
+		href: '/terrariums',
+	},
+	{
+		key: 'plants-moss',
+		label: 'Cây & Rêu',
+		href: '/plants-moss',
+	},
+	{
+		key: 'accessories',
+		label: 'Phụ kiện & Đất nền',
+		href: '/accessories',
+	},
+	{
+		key: 'diy-kits',
+		label: 'Bộ tự làm (DIY)',
+		href: '/diy-kits',
+	},
 ];
 
 const profileElements: RedirectElement[] = [
@@ -100,11 +120,21 @@ export default function Header() {
 				<div className='flex items-center gap-6'>
 					<Link
 						href='/'
-                        aria-label='Home'
+						aria-label='Home'
 						className='flex items-center gap-2'
 					>
-						<AcmeLogo />
-						<span className='hidden text-xl sm:block font-bold'>ACME</span>
+						{/* Khối Logo Icon */}
+						<div className='flex items-center justify-center w-8 h-8 transition-colors rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200'>
+							<Sprout
+								className='w-5 h-5'
+								strokeWidth={2.5}
+							/>
+						</div>
+
+						{/* Khối Text Thương hiệu */}
+						<span className='hidden text-xl font-extrabold tracking-tight transition-colors text-slate-800 sm:block group-hover:text-emerald-700'>
+							TerraCraft
+						</span>
 					</Link>
 
 					<NavigationMenu className='hidden sm:flex'>
@@ -117,7 +147,7 @@ export default function Header() {
 										<NavigationMenuLink
 											asChild
 											className={cn(
-												'rounded-md px-3 py-2 text-base font-medium transition-colors',
+												'rounded-md px-3 py-2 text-sm font-medium transition-colors',
 												isActive
 													? 'bg-slate-100 text-black'
 													: 'text-slate-600 hover:text-black',

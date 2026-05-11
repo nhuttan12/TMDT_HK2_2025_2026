@@ -4,7 +4,7 @@ import { SidebarItem } from '@/types/uis/SidebarItem';
 import { JSX } from 'react';
 import { SidebarMenuItem } from '../admin/side-bar-menu-item';
 import { AppRole } from '@/types/uis/AppRole';
-import { LucideIcon, ShieldCheck, Store } from 'lucide-react';
+import { LucideIcon, ShieldCheck, Store, User } from 'lucide-react';
 
 interface SidebarProps {
 	items: SidebarItem[];
@@ -31,10 +31,16 @@ const ROLE_BRAND_CONFIGS: Record<AppRole, RoleBrandConfig> = {
 		iconBgClass: 'bg-teal-100',
 		iconColorClass: 'text-teal-700',
 	},
+	'customer': {
+		title: '',
+		Icon: User,
+		iconBgClass: '',
+		iconColorClass: '',
+	},
 };
 
 export default function Sidebar({ items, role }: SidebarProps): JSX.Element {
-    const currentBrand: RoleBrandConfig = ROLE_BRAND_CONFIGS[role];
+	const currentBrand: RoleBrandConfig = ROLE_BRAND_CONFIGS[role];
 	const BrandIcon: LucideIcon = currentBrand.Icon;
 
 	return (

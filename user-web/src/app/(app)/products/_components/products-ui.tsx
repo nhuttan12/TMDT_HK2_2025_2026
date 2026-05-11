@@ -1,11 +1,11 @@
 'use client';
 
 import { JSX } from 'react';
-import ProductFilter from '@/components/product/user/product-filter';
-import ProductList from '@/components/product/user/product-list';
 import Pagination from '@/components/layout/share/pagination';
 import { UsePaginationReturn } from '@/hooks/share/use-pagination';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import ProductFilter from '@/components/products/user/product-filter';
+import ProductList from '@/components/products/user/product-list';
 
 interface ProductUiProps extends UsePaginationReturn {
 	products: ProductUserCard[];

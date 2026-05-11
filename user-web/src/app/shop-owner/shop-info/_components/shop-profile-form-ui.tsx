@@ -1,6 +1,6 @@
 'use client';
 
-import SingleImageUpload from '@/components/image/admin/single-image-upload';
+import SingleImageUpload from '@/components/images/admin/single-image-upload';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import Field from '@/components/layout/admin/field';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';

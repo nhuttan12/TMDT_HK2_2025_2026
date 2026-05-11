@@ -1,6 +1,5 @@
 'use client';
 
-import { InvoiceStatusBadge } from '@/components/invoice/invoice-status-badge';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
@@ -10,6 +9,7 @@ import { Column } from '@/types/uis/Column';
 import { getPaymentMethodLabel } from '@/utils/invoices/payment-method-label';
 import { JSX } from 'react';
 import { InvoiceStatusSelect } from './invoice-status-select';
+import { InvoiceStatusBadge } from '@/components/invoices/invoice-status-badge';
 
 interface Props {
 	invoices: UserInvoice[];

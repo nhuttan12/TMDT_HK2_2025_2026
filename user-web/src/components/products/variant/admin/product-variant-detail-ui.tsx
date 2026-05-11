@@ -7,9 +7,11 @@ import Field from '@/components/layout/admin/field';
 import { Input } from '@/components/ui/input';
 import { getProductVariantStatusLabel } from '@/utils/products/product-variant-status-label';
 import { Label } from '@/components/ui/label';
-import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 import { UseProductVariantLogicReturn } from '@/hooks/products/admin/use-product-variant-logic';
+import { getProductSystemStatusLabel } from '@/utils/products/product-system-status-label';
+import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
+import { AppRole } from '@/types/uis/AppRole';
 
 interface ProductVariantDetailUIProps extends UseProductVariantLogicReturn {
 	disabled: boolean;
@@ -21,6 +23,8 @@ export default function ProductVariantDetailUI({
 	loading,
 	isView,
 	isCreate,
+    isShopOwner,
+    isAdmin,
 	handleInputChange,
 	handleSizeChange,
 	handleColorChange,
@@ -34,6 +38,7 @@ export default function ProductVariantDetailUI({
 	handleSubmit,
 }: ProductVariantDetailUIProps): JSX.Element {
 	const discount: number = calculateDiscount(form.pricing.salePrice, form.pricing.costPrice);
+    const isFieldDisabledForShopOwner = !isView && isShopOwner;
 
 	return (
 		<AdminFormWrapper
@@ -41,7 +46,7 @@ export default function ProductVariantDetailUI({
 			description='Quản lý thông tin biến thể'
 			onSubmit={handleSubmit}
 			actions={
-				!isView && (
+				isFieldDisabledForShopOwner && (
 					<Button
 						className='cursor-pointer'
 						type='submit'
@@ -80,7 +85,11 @@ export default function ProductVariantDetailUI({
 
 			<Field label='Trạng thái'>
 				<Input
-					value={getProductVariantStatusLabel(form.status)}
+					value={
+						form.systemStatus == 'banned'
+							? getProductSystemStatusLabel(form.systemStatus)
+							: getProductVariantStatusLabel(form.status)
+					}
 					disabled
 				/>
 			</Field>
@@ -202,12 +211,13 @@ export default function ProductVariantDetailUI({
 			<Field label='Hình ảnh'>
 				<MultiImageUpload
 					value={form.images}
+                    isAdmin={isAdmin}
 					onChange={handleImagesChange}
 					disabled={disabled}
 				/>
 			</Field>
 
-			{isView && (
+			{isFieldDisabledForShopOwner && (
 				<Button
 					variant={'default'}
 					type='submit'

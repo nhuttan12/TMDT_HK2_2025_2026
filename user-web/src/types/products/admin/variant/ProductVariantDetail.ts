@@ -4,6 +4,7 @@ import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { ProductVariantPricing } from '@/types/products/admin/variant/ProductVariantPricing';
 import { ProductVariantInventory } from '@/types/products/admin/variant/ProductVariantInventory';
 import { ProductVariantShipping } from '@/types/products/admin/variant/ProductVariantShipping';
+import { ProductSystemStatus } from './ProductSystemStatus';
 
 export interface ProductVariantDetail {
 	id: number;
@@ -15,6 +16,9 @@ export interface ProductVariantDetail {
 	attributes: ProductVariantAttribute[];
 
 	status: ProductVariantStatus;
+
+    // system status
+    systemStatus: ProductSystemStatus;
 
 	// pricing
 	pricing: ProductVariantPricing;

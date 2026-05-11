@@ -5,7 +5,7 @@ import { BaseImage } from '@/types/images/admin/BaseImage';
 import { Button } from '@/components/ui/button';
 import { Save, AlertCircle } from 'lucide-react';
 import { Popup } from '@/types/shops/admin/Popup';
-import SingleImageUpload from '@/components/image/admin/single-image-upload';
+import SingleImageUpload from '@/components/images/admin/single-image-upload';
 
 interface ShopPopupUiProps {
 	popup: Popup | undefined;

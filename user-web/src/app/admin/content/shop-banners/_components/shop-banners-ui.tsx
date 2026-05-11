@@ -2,9 +2,9 @@
 
 import React, { JSX } from 'react';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { MultiImageUpload } from '@/components/image/admin/multi-image-upload';
 import { Button } from '@/components/ui/button';
 import { Save, AlertCircle } from 'lucide-react';
+import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
 
 interface ShopBannersUIProps {
 	images: SortableImageForm[];
@@ -80,6 +80,7 @@ export function ShopBannersUi({
 			<div className='bg-gray-50 p-6 rounded-lg border border-dashed border-gray-300'>
 				<MultiImageUpload
 					value={images}
+                    isAdmin={false}
 					onChange={setImages}
 					disabled={isSubmitting}
                     width={850}

@@ -4,10 +4,6 @@ import { JSX } from 'react';
 import Image from 'next/image';
 import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
 import { Separator } from '@radix-ui/react-separator';
-import { ProductDetailCarousel } from '@/components/product/user/product-detail-carousel';
-import CommentItem from '@/components/product/user/comment-item';
-import Rating from '@/components/product/user/rating';
-import ReadMoreHtml from '@/components/product/user/read-more-html';
 import { Button } from '@/components/ui/button';
 import { Review } from '@/types/products/user/Review';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
@@ -15,6 +11,10 @@ import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { ProductDetailLogicReturn } from '@/hooks/products/user/use-product-detail-logic';
 import { ProductTierVariation } from '@/types/products/user/ProductTierVariation';
 import Link from 'next/link';
+import { ProductDetailCarousel } from '@/components/products/user/product-detail-carousel';
+import ReadMoreHtml from '@/components/products/user/read-more-html';
+import Rating from '@/components/products/user/rating';
+import CommentItem from '@/components/products/user/comment-item';
 
 interface ProductDetailUiProps extends ProductDetailLogicReturn {
 	product: ProductDetail;
