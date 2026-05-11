@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { HomeBanner } from '@/types/uis/HomeBanner';
 import { getHomeBanners } from '@/services/contents/home-banners/user/home-banners-service';
+import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
 
 export function useHomeBannersQuery(
 	initialData?: HomeBanner[],

@@ -2,9 +2,9 @@
 
 import { JSX, useRef } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import { HomeBanner } from '@/types/uis/HomeBanner';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
+import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
 
 interface BannerProps {
 	banners: HomeBanner[];
@@ -20,25 +20,33 @@ export default function HomeBannerCarouselUi({ banners }: BannerProps): JSX.Elem
 			className='w-full'
 		>
 			<CarouselContent>
-				{banners.map(
-					(banner: HomeBanner): JSX.Element => (
-						<CarouselItem
-							key={banner.id}
-							className='basis-full'
-						>
-							<a href={banner.redirectUrl}>
+				{[...banners]
+					.sort((a, b) => a.order - b.order)
+					.map(
+						(banner: HomeBanner): JSX.Element => (
+							<CarouselItem
+								key={banner.id}
+								className='basis-full'
+							>
+								{/* <a href={banner.redirectUrl}> */}
 								<Image
-									src={banner.imageUrl}
-									alt={banner.title}
+									src={banner.url}
+									// Tự động generate alt text để tốt cho SEO
+									alt={
+										banner.isPrimary
+											? 'Banner chính TerraCraft'
+											: `Banner sự kiện ${banner.order}`
+									}
 									width={1600}
 									height={400}
-									className='w-full h-[400px] object-cover rounded-xl'
-									priority
+									// 2. Thay h-100 bằng h-[400px] để Tailwind hiểu và crop ảnh đúng chuẩn
+									className='object-cover w-full h-100 rounded-xl'
+									priority={banner.isPrimary} // Chỉ ưu tiên load nhanh cho ảnh Primary
 								/>
-							</a>
-						</CarouselItem>
-					),
-				)}
+								{/* </a> */}
+							</CarouselItem>
+						),
+					)}
 			</CarouselContent>
 		</Carousel>
 	);

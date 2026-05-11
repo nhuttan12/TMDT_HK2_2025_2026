@@ -9,12 +9,12 @@ interface Props {
 
 export default function AdminTableAction({ id, onEdit, onDelete }: Props): JSX.Element {
 	// Ngăn chặn sự kiện click lan truyền lên Row của Table
-	function handleEdit(e: React.MouseEvent<HTMLButtonElement>): void {
+	const handleEdit = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.stopPropagation();
 		onEdit(id);
 	}
 
-	function handleDelete(e: React.MouseEvent<HTMLButtonElement>): void {
+	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.stopPropagation();
 		onDelete(id);
 	}

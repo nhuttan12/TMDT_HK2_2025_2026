@@ -1,16 +1,17 @@
 'use client';
 
-import { JSX } from 'react';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
-import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
 import Pagination from '@/components/layout/share/pagination';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { UseProductAdminLogicReturn } from '@/hooks/products/admin/use-product-admin-logic';
+import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { JSX } from 'react';
 import ProductAdminTable from './product-admin-table';
-import { AppRole } from '@/types/uis/AppRole';
 
 interface ProductAdminUiProps extends UseProductAdminLogicReturn {
 	products: ProductListInfoAdmin[];
+	productApproval?: boolean;
+	addLabel?: string;
 	customTitle?: string;
 	customDescription?: string;
 }
@@ -18,8 +19,10 @@ interface ProductAdminUiProps extends UseProductAdminLogicReturn {
 export default function ProductAdminUi({
 	// Props riêng
 	products,
+	productApproval,
 	customTitle,
 	customDescription,
+	addLabel,
 
 	// Props được kế thừa từ hook (destructuring chuẩn xác tên gốc)
 	currentPage,
@@ -29,6 +32,7 @@ export default function ProductAdminUi({
 	handleRedirectToAddNewProduct,
 	handleRedirectToProductViewMode,
 	handleRedirectToEditProductEditMode,
+	handleDeleteProduct,
 	productFilterSchema,
 }: ProductAdminUiProps): JSX.Element {
 	return (
@@ -39,7 +43,7 @@ export default function ProductAdminUi({
 				description={customDescription || 'Quản lý toàn bộ sản phẩm trong hệ thống'}
 				searchPlaceholder='Tìm sản phẩm...'
 				searchKey='name'
-				addLabel='+ Thêm sản phẩm'
+				addLabel={addLabel}
 				onAdd={handleRedirectToAddNewProduct}
 				filter={true}
 				filterField={productFilterSchema}
@@ -49,10 +53,12 @@ export default function ProductAdminUi({
 			<div className='rounded-xl border bg-white'>
 				<ProductAdminTable
 					products={products}
+					productApproval={productApproval}
 					handleSort={handleSort}
 					renderSortIcon={renderSortIcon}
 					onView={handleRedirectToProductViewMode}
 					onEdit={handleRedirectToEditProductEditMode}
+					onDelete={handleDeleteProduct}
 				/>
 			</div>
 

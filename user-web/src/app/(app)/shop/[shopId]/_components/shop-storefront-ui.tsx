@@ -16,6 +16,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel';
+import { CouponList } from '@/components/marketing/coupons/user/coupon-list';
 
 interface ShopStorefrontUiProps extends ShopStorefrontLogicReturn {
 	shopInfo: ShopStorefront;
@@ -113,55 +114,12 @@ export const ShopStorefrontUi = ({
 					</section>
 				)}
 
-				{/* VOUCHER ZONE */}
+				{/* COUPON ZONE */}
 				{safeCoupons.length > 0 && (
-					<section className='bg-white p-6 rounded-xl shadow-sm'>
-						<h2 className='text-lg font-bold mb-4'>Mã Giảm Giá Của Shop</h2>
-						<div className='flex gap-4 overflow-x-auto pb-2'>
-							{safeCoupons.map(
-								(coupon: UserCoupon): JSX.Element => (
-									<div
-										key={coupon.id}
-										className='min-w-70 border border-orange-200 bg-orange-50 rounded-lg p-4 flex flex-col gap-2'
-									>
-										<div className='flex justify-between items-start'>
-											<div>
-												<Badge
-													variant={
-														coupon.couponType === 'Sale'
-															? 'destructive'
-															: 'default'
-													}
-												>
-													{coupon.couponType}
-												</Badge>
-												<h3 className='font-bold text-orange-700 mt-2'>
-													{coupon.title}
-												</h3>
-											</div>
-										</div>
-										<p className='text-xs text-gray-600 line-clamp-2'>
-											{coupon.description}
-										</p>
-										<div className='mt-2 flex justify-between items-center'>
-											<span className='text-xs text-gray-500'>
-												HSD:{' '}
-												{new Date(coupon.expiredAt).toLocaleDateString(
-													'vi-VN',
-												)}
-											</span>
-											<Button
-												size='sm'
-												onClick={(): void => handleClaimCoupon(coupon.code)}
-											>
-												Lưu mã
-											</Button>
-										</div>
-									</div>
-								),
-							)}
-						</div>
-					</section>
+					<CouponList
+						coupons={safeCoupons}
+						onClaimClick={handleClaimCoupon}
+					/>
 				)}
 
 				{/* PRODUCT SECTION */}

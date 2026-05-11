@@ -1,7 +1,7 @@
 import { getCouponDetailById } from '@/services/marketing/coupon/admin/coupon-admin-service';
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import { CouponFormContainer } from '@/components/marketing/coupons/coupon-form-container';
+import { CouponFormContainer } from '@/components/marketing/coupons/admin/coupon-form-container';
 
 interface Props {
 	// NextJS 16 yêu cầu params phải là Promise

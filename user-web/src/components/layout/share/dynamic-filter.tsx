@@ -41,7 +41,7 @@ export function DynamicFilter<T extends object>({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className='rounded-full'>Lọc</Button>
+				<Button className='rounded-full cursor-pointer'>Lọc</Button>
 			</DialogTrigger>
 			<DialogContent className='max-w-lg'>
 				<DialogHeader>

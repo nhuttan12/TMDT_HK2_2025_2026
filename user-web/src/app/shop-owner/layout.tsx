@@ -14,7 +14,6 @@ import {
     Tag,
     Truck,
     Upload,
-    Users,
     Warehouse
 } from 'lucide-react';
 import { Metadata } from 'next';
@@ -39,7 +38,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 			icon: <Package size={18} />,
 			children: [
 				{ title: 'Danh sách', href: '/shop-owner/products', icon: <Package size={18} /> },
-				{ title: 'Danh mục', href: '/shop-owner/categories', icon: <Package size={18} /> },
 			],
 		},
 		{

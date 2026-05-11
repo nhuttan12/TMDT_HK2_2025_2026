@@ -166,3 +166,111 @@ export async function getProductDetailAdminByProductId(
 		}, 500);
 	});
 }
+
+export const getProductListInfoByShopId = async (
+	userId: number,
+): Promise<ProductListInfoAdmin[]> => {
+	const mockProducts: ProductListInfoAdmin[] = [
+		{
+			id: 1,
+			name: 'Bonsai Tree Ecosystem',
+			slug: 'bonsai-tree-ecosystem',
+			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 2,
+			name: 'Rainforest Moss Bowl',
+			slug: 'rainforest-moss-bowl',
+			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 3,
+			name: 'Desert Succulent Oasis',
+			slug: 'desert-succulent-oasis',
+			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
+			status: false,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 4,
+			name: 'Geometric Glass Terrarium',
+			slug: 'geometric-glass-terrarium',
+			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 5,
+			name: 'Fittonia Closed Bottle',
+			slug: 'fittonia-closed-bottle',
+			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
+			status: false,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+	];
+
+	return mockProducts;
+};
+
+export const getProductListInfoAdminForProductApprovals = async (): Promise<
+	ProductListInfoAdmin[]
+> => {
+	const mockProducts: ProductListInfoAdmin[] = [
+		{
+			id: 1,
+			name: 'Bonsai Tree Ecosystem',
+			slug: 'bonsai-tree-ecosystem',
+			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 2,
+			name: 'Rainforest Moss Bowl',
+			slug: 'rainforest-moss-bowl',
+			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 3,
+			name: 'Desert Succulent Oasis',
+			slug: 'desert-succulent-oasis',
+			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
+			status: false,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 4,
+			name: 'Geometric Glass Terrarium',
+			slug: 'geometric-glass-terrarium',
+			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
+			status: true,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+		{
+			id: 5,
+			name: 'Fittonia Closed Bottle',
+			slug: 'fittonia-closed-bottle',
+			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
+			status: false,
+			createdAt: '2024-01-10T10:00:00Z',
+			updatedAt: '2024-02-01T15:30:00Z',
+		},
+	];
+
+	return mockProducts;
+};

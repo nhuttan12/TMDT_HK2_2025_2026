@@ -1,4 +1,4 @@
-import { CouponManagementContainer } from '@/components/marketing/coupons/coupon-management-container';
+import { CouponManagementContainer } from '@/components/marketing/coupons/admin/coupon-management-container';
 import {
     getPlatformCoupons
 } from '@/services/marketing/coupon/admin/coupon-admin-service';

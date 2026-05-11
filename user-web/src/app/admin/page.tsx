@@ -8,7 +8,7 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
 	const initialData = await getDashboardStats();
 
 	return (
-		<main className='min-h-screen bg-slate-50'>
+		<main className='min-h-screen'>
 			<div className='max-w-7xl mx-auto py-8'>
 				<h1 className='text-3xl font-extrabold text-slate-900 mb-8 px-6'>
 					Tổng hợp thông tin chỉ dữ liệu

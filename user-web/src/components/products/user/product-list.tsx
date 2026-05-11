@@ -16,7 +16,7 @@ export default function ProductList({ products = [] }: ProductListProps): JSX.El
 	}
 
 	return (
-		<section className='mt-3'>
+		<section>
 			<div className='max-w-7xl mx-auto px-4'>
 				<div className='bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-6'>
 					<div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6'>

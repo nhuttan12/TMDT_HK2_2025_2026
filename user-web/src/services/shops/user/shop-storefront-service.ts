@@ -107,7 +107,7 @@ export const getShopPublicCoupons = async (shopId: number): Promise<UserCoupon[]
 				{
 					id: 1,
 					title: 'Giảm 100K',
-					couponType: 'Sale',
+					couponType: 'sale',
 					description: 'Áp dụng cho đơn hàng từ 500K. Số lượng có hạn.',
 					expiredAt: '2026-06-30T23:59:59Z',
 					code: 'TECH100',
@@ -115,7 +115,7 @@ export const getShopPublicCoupons = async (shopId: number): Promise<UserCoupon[]
 				{
 					id: 2,
 					title: 'Miễn phí vận chuyển',
-					couponType: 'Ship',
+					couponType: 'ship',
 					description: 'Giảm tối đa 30K phí vận chuyển cho đơn từ 150K.',
 					expiredAt: '2026-05-15T23:59:59Z',
 					code: 'FREESHIP30',

@@ -1,6 +1,9 @@
 import SidebarWrapper from '@/components/layout/share/sidebar-wrapper';
 import { SidebarItem } from '@/types/uis/SidebarItem';
 import {
+    Boxes,
+	BoxesIcon,
+	ClipboardClock,
 	FileText,
 	ImageIcon,
 	LayoutDashboard,
@@ -33,8 +36,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 			title: 'Sản phẩm',
 			icon: <Package size={18} />,
 			children: [
-				{ title: 'Danh sách', href: '/admin/products', icon: <Package size={18} /> },
+				{ title: 'Danh sách', href: '/admin/products', icon: <BoxesIcon size={18} /> },
 				{ title: 'Danh mục', href: '/admin/categories', icon: <Package size={18} /> },
+				{
+					title: 'Phê duyệt',
+					href: '/admin/product-approvals',
+					icon: <ClipboardClock size={18} />,
+				},
 			],
 		},
 		{
@@ -93,7 +101,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 		<div className='h-screen bg-slate-50 flex overflow-hidden'>
 			{/* SIDEBAR */}
 			<div className='ps-3'>
-				<SidebarWrapper items={sidebarItems} role='admin'/>
+				<SidebarWrapper
+					items={sidebarItems}
+					role='admin'
+				/>
 			</div>
 
 			{/* CONTENT WRAPPER */}

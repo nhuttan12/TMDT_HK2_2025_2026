@@ -39,7 +39,7 @@ export function CouponsUi(props: CouponsUiProps): JSX.Element {
 								>
 									{/* Left */}
 									<div className='w-32 bg-red-500 text-white flex flex-col items-center justify-center p-4 relative'>
-										{coupon.couponType === 'Sale' ? (
+										{coupon.couponType === 'sale' ? (
 											<TicketPercent size={28} />
 										) : (
 											<Truck size={28} />

@@ -1,1 +1,1 @@
-export type CouponType = 'Sale' | 'Ship';
+export type CouponType = 'sale' | 'ship';

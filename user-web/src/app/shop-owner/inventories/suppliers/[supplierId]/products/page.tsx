@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import { Metadata } from 'next';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { getProductBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
-import SupplierProductContainer from './_components/supplier-product-container';
+import ProductAdminContainer from '@/components/products/admin/product-admin-container';
 
 interface SupplierProductsPageProps {
 	params: {
@@ -26,14 +26,13 @@ export default async function SupplierProductsPage({
 	// 2. Fetch dữ liệu từ Server
 	const supplierName = 'Công ty TNHH Nhập khẩu Vina'; // Ví dụ: await fetchSupplierName(supplierId);
 
-	const products: ProductListInfoAdmin[] = await getProductBySupplierId(supplierId);
+	const products = await getProductBySupplierId(supplierId);
 
 	// 3. Render Container và truyền Props xuống
 	return (
-		<SupplierProductContainer
-			supplierId={supplierId}
-			supplierName={supplierName}
+		<ProductAdminContainer
 			initialProducts={products}
+			role={'shop-owner'}
 		/>
 	);
 }

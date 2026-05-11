@@ -1,30 +1,35 @@
 'use client';
 
-import { JSX } from 'react';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { useProductAdminLogic } from '@/hooks/products/admin/use-product-admin-logic';
 import { useProductListInfoAdminQuery } from '@/queries/products/admin/use-product-list-info-admin-query';
-import {
-	useProductAdminLogic,
-	UseProductAdminLogicReturn,
-} from '@/hooks/products/admin/use-product-admin-logic';
-import ProductAdminUi from './product-admin-ui';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { AppRole } from '@/types/uis/AppRole';
+import { JSX } from 'react';
+import ProductAdminUi from './product-admin-ui';
 
 interface ProductAdminContainerProps {
 	initialProducts: ProductListInfoAdmin[];
-    role: AppRole;
+	role: AppRole;
+	productApproval?: boolean;
+	addLabel?: string;
+	customTitle?: string;
+	customDescription?: string;
 }
 
 export default function ProductAdminContainer({
 	initialProducts,
-    role,
+	addLabel,
+	role,
+	productApproval,
+    customTitle,
+    customDescription
 }: ProductAdminContainerProps): JSX.Element {
 	// 1. Data Source
 	const { data: products, isLoading: isProductsLoading } =
 		useProductListInfoAdminQuery(initialProducts);
 
 	// 2. Logic Hook
-	const logic: UseProductAdminLogicReturn = useProductAdminLogic();
+	const logic = useProductAdminLogic({ role, productApproval });
 
 	const isPageLoading: boolean = isProductsLoading;
 
@@ -36,6 +41,10 @@ export default function ProductAdminContainer({
 	return (
 		<ProductAdminUi
 			products={products ?? []}
+			addLabel={addLabel}
+			productApproval={productApproval}
+            customTitle={customTitle}
+            customDescription={customDescription}
 			{...logic}
 		/>
 	);

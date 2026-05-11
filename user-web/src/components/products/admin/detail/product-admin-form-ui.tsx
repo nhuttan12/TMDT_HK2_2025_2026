@@ -13,12 +13,16 @@ import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import Field from '@/components/layout/admin/field';
 import { UseProductAdminFormLogicReturn } from '@/hooks/products/admin/use-product-admin-form-logic';
 import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
+import AdminTableAction from '@/components/layout/admin/admin-table-action';
 
 // Kế thừa toàn bộ interface từ hook
-type ProductAdminFormUIProps = UseProductAdminFormLogicReturn;
+interface ProductAdminFormUIProps extends UseProductAdminFormLogicReturn {
+	productApproval?: boolean;
+}
 
 export default function ProductAdminFormUI({
 	form,
+	productApproval = false,
 	isCreate,
 	isView,
 	isUpdate,
@@ -41,6 +45,8 @@ export default function ProductAdminFormUI({
 	modal,
 	handleConfirmDelete,
 	handleCancelDelete,
+	handleApproveProduct,
+	handleRejectProduct,
 }: ProductAdminFormUIProps): JSX.Element {
 	const isFieldDisabledForShopOwner = !isView && isShopOwner;
 
@@ -81,31 +87,11 @@ export default function ProductAdminFormUI({
 						key: 'action',
 						header: <span className='block px-4'>Thao tác</span>,
 						render: (row: ProductVariant): JSX.Element => (
-							<div className='flex justify-center items-center w-full gap-4'>
-								<Button
-									variant='link'
-									size='lg'
-									className='text-blue-600 p-0 h-auto font-medium cursor-pointer'
-									onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
-										e.stopPropagation();
-										handleEditVariant(row.id);
-									}}
-								>
-									Sửa
-								</Button>
-								<Button
-									variant='link'
-									size='lg'
-									className='text-red-600 p-0 h-auto font-medium cursor-pointer'
-									onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
-										e.stopPropagation();
-										e.preventDefault();
-										handleTriggerDeleteVariant(row);
-									}}
-								>
-									Xoá
-								</Button>
-							</div>
+							<AdminTableAction
+								id={row.id}
+								onDelete={handleTriggerDeleteVariant}
+								onEdit={handleEditVariant}
+							/>
 						),
 					},
 				]
@@ -119,11 +105,31 @@ export default function ProductAdminFormUI({
 				description='Quản lý thông tin chi tiết của sản phẩm'
 				onSubmit={handleSubmit}
 				actions={
-					isFieldDisabledForShopOwner && (
-						<Button type='submit'>
+					isFieldDisabledForShopOwner ? (
+						<Button
+							type='submit'
+							className='cursor-pointer'
+						>
 							{isCreate ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}
 						</Button>
-					)
+					) : isAdmin && productApproval ? (
+						<div className='flex gap-3'>
+							<Button
+								variant='outline'
+								className='cursor-pointer'
+								onClick={handleRejectProduct}
+							>
+								Từ chối
+							</Button>
+							<Button
+								type='submit'
+								className='cursor-pointer'
+								onClick={handleApproveProduct}
+							>
+								Phê duyệt sản phẩm
+							</Button>
+						</div>
+					) : null
 				}
 			>
 				<Field label='Tên sản phẩm'>
@@ -195,7 +201,7 @@ export default function ProductAdminFormUI({
 				<Field label='Hình ảnh'>
 					<MultiImageUpload
 						value={form.images}
-                        isAdmin={isAdmin}
+						isAdmin={isAdmin}
 						onChange={handleImagesChange}
 						disabled={isView}
 					/>

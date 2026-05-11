@@ -1,24 +1,18 @@
-import { JSX } from 'react';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import Image from 'next/image';
-import { formatDate } from '@/utils/shared/date';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
-import { Column } from '@/types/uis/Column';
+import AdminTableAction from '@/components/layout/admin/admin-table-action';
 import { DataTable } from '@/components/layout/admin/data-table';
+import { StatusModal } from '@/components/layout/share/status-modal';
+import { Button } from '@/components/ui/button';
 import {
 	useProductAdminTableLogic,
 	UseProductAdminTableLogicReturn,
 } from '@/hooks/products/admin/use-product-admin-table-logic';
-import { StatusModal } from '@/components/layout/share/status-modal';
+import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { Column } from '@/types/uis/Column';
+import { formatDate } from '@/utils/shared/date';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
+import Image from 'next/image';
+import { JSX } from 'react';
 import ProductStatusBadge from './detail/product-status-badge';
 
 interface ProductAdminTableProps {
@@ -27,16 +21,20 @@ interface ProductAdminTableProps {
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
 	onView: (id: number) => void;
 	onEdit: (id: number) => void;
+	onDelete: (id: number) => void;
+	productApproval?: boolean;
 }
 
 export default function ProductAdminTable({
 	products,
+	productApproval = false,
 	handleSort,
 	renderSortIcon,
 	onView,
 	onEdit,
+	onDelete,
 }: ProductAdminTableProps): JSX.Element {
-	const logic: UseProductAdminTableLogicReturn = useProductAdminTableLogic({
+	const logic = useProductAdminTableLogic({
 		products: products,
 	});
 
@@ -118,49 +116,22 @@ export default function ProductAdminTable({
 				<span className='text-muted-foreground'>{formatDate(row.updatedAt)}</span>
 			),
 		},
-		{
-			key: 'actions',
-			header: <span className='text-right block'>Hành động</span>,
-			render: (row: ProductListInfoAdmin): JSX.Element => (
-				<div
-					className='text-right'
-					onClick={(e) => e.stopPropagation()}
-				>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								size='icon'
-								className='cursor-pointer'
-							>
-								<MoreHorizontal size={16} />
-							</Button>
-						</DropdownMenuTrigger>
 
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem
-								className='cursor-pointer'
-								onClick={() => onEdit(row.id)}
-							>
-								<Pencil
-									size={14}
-									className='mr-2'
-								/>
-								Chỉnh sửa
-							</DropdownMenuItem>
-
-							<DropdownMenuItem className='text-red-500 cursor-pointer'>
-								<Trash
-									size={14}
-									className='mr-2'
-								/>
-								Xóa
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			),
-		},
+		...(!productApproval
+			? [
+					{
+						key: 'actions',
+						header: <span className='text-right block'>Hành động</span>,
+						render: (row: ProductListInfoAdmin): JSX.Element => (
+							<AdminTableAction
+								id={row.id}
+								onDelete={onDelete}
+								onEdit={onEdit}
+							/>
+						),
+					},
+				]
+			: []),
 	];
 
 	return (

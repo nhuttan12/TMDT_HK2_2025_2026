@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
 import { getShopCouponsByShopId } from '@/services/marketing/coupon/admin/coupon-admin-service';
-import { CouponManagementContainer } from '@/components/marketing/coupons/coupon-management-container';
+import { CouponManagementContainer } from '@/components/marketing/coupons/admin/coupon-management-container';
 
 export const metadata: Metadata = {
 	title: 'Danh sách mã giảm giá của cửa hàng',

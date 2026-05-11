@@ -1,7 +1,7 @@
 'use client';
 
 import React, { JSX } from 'react';
-import { CouponFormUi } from './coupon-form-ui';
+import { CouponFormUi } from '../admin/coupon-form-ui';
 import { AdminCoupon } from '@/types/marketing/coupons/admin/AdminCoupon';
 import { useCouponFormLogic } from '@/hooks/marketing/coupons/admin/use-coupon-form-logic';
 import { useCouponDetailByCouponIdQuery } from '@/queries/marketing/coupons/admin/use-coupon-detail-by-coupon-id-query';

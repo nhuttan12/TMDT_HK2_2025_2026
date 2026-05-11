@@ -19,6 +19,7 @@ export interface UseProductAdminFormLogicProps {
 	formType: AdminFormType;
 	productAdmin: ProductDetailInfoAdmin;
 	role: AppRole;
+	productApproval?: boolean;
 }
 
 export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<number> {
@@ -27,7 +28,7 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	isView: boolean;
 	isUpdate: boolean;
 	isShopOwner: boolean;
-    isAdmin: boolean;
+	isAdmin: boolean;
 	modal: UseStatusModalReturn;
 
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -40,15 +41,19 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	handleAddNewVariant: () => void;
 	handleEditVariant: (variantId: number) => void;
 
-	handleTriggerDeleteVariant: (variant: ProductVariant) => void;
+	handleTriggerDeleteVariant: (variantId: number) => void;
 	handleConfirmDelete: () => void;
 	handleCancelDelete: () => void;
+
+	handleApproveProduct: () => void;
+	handleRejectProduct: () => void;
 }
 
 export function useProductAdminFormLogic({
 	formType,
 	productAdmin,
 	role,
+	productApproval = false,
 }: UseProductAdminFormLogicProps): UseProductAdminFormLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
@@ -57,7 +62,7 @@ export function useProductAdminFormLogic({
 	const isUpdate: boolean = formType === 'update';
 
 	const isShopOwner: boolean = role === 'shop-owner';
-    const isAdmin: boolean = role === 'admin';
+	const isAdmin: boolean = role === 'admin';
 
 	// 1. Form State
 	const [form, setForm] = useState<ProductDetailInfoAdmin>(productAdmin);
@@ -131,9 +136,9 @@ export function useProductAdminFormLogic({
 		router.push(`/admin/products/${form.id}/variant/edit/${variantId}`);
 	};
 
-	const handleTriggerDeleteVariant = (variant: ProductVariant): void => {
-		setDeletingId(variant.id);
-		modal.showWarning(`Bạn có chắc chắn muốn xoá biến thể "${variant.name}" không?`);
+	const handleTriggerDeleteVariant = (variantId: number): void => {
+		setDeletingId(variantId);
+		modal.showWarning(`Bạn có chắc chắn muốn xoá biến thể "${variantId}" không?`);
 	};
 
 	const handleConfirmDelete = (): void => {
@@ -149,6 +154,16 @@ export function useProductAdminFormLogic({
 		modal.closeModal();
 	};
 
+	const handleApproveProduct = () => {
+		if (!productApproval) return;
+		router.push('/admin/product-approvals');
+	};
+
+	const handleRejectProduct = () => {
+		if (!productApproval) return;
+		router.back();
+	};
+
 	return {
 		...selection, // Spread selected, toggle, toggleAll, isAllSelected, isIndeterminate
 		form,
@@ -156,7 +171,7 @@ export function useProductAdminFormLogic({
 		isView,
 		isUpdate,
 		isShopOwner,
-        isAdmin,
+		isAdmin,
 		modal,
 		handleInputChange,
 		handleSubmit,
@@ -169,5 +184,7 @@ export function useProductAdminFormLogic({
 		handleTriggerDeleteVariant,
 		handleConfirmDelete,
 		handleCancelDelete,
+		handleApproveProduct,
+		handleRejectProduct,
 	};
 }

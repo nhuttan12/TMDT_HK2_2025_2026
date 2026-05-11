@@ -26,10 +26,17 @@ export function AdminFormWrapper({
 
 			<form
 				onSubmit={onSubmit}
-				className='space-y-6 w-full max-w-4xl mx-auto mt-5 shadow-xl p-7 rounded-2xl border'
+				className='relative w-full max-w-4xl mx-auto mt-5'
 			>
-				{children}
-				{actions}
+				<div className='p-7 pb-1 space-y-6 bg-white border shadow-sm rounded-2xl border-slate-200'>
+					{children}
+
+					{actions && (
+						<div className='flex justify-end gap-4 p-4 mt-2 bg-white border rounded-xl border-slate-200'>
+							{actions}
+						</div>
+					)}
+				</div>
 			</form>
 		</>
 	);

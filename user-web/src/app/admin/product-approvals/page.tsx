@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { JSX } from 'react';
 
 export const metadata: Metadata = {
-	title: 'Quản lý sản phẩm của nền tảng',
+	title: 'Phê duyệt sản phẩm được đăng bán của cửa hàng',
 };
 
 export default async function ProductsPage(): Promise<JSX.Element> {
@@ -13,8 +13,10 @@ export default async function ProductsPage(): Promise<JSX.Element> {
 	return (
 		<ProductAdminContainer
 			initialProducts={products}
-			addLabel={'+ Phê duyệt sản phẩm cửa hàng'}
 			role={'admin'}
+            productApproval={true}
+            customTitle={'Phê duyệt sản phẩm'}
+            customDescription={'Phê duyệt sản phẩm của tất cả cửa hàng'}
 		/>
 	);
 }

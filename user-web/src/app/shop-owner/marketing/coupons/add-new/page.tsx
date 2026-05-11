@@ -1,4 +1,4 @@
-import { CouponFormContainer } from '@/components/marketing/coupons/coupon-form-container';
+import { CouponFormContainer } from '@/components/marketing/coupons/admin/coupon-form-container';
 import { AdminCoupon } from '@/types/marketing/coupons/admin/AdminCoupon';
 import { Metadata } from 'next';
 import { JSX } from 'react';
