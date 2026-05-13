@@ -6,6 +6,8 @@ using api.Services.Auths;
 using api.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using api.Repository.UserRepo;
+using api.Repository.RoleRepo;
 
 namespace api.Extensions
 {
@@ -16,20 +18,39 @@ namespace api.Extensions
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            // Nếu connection string chứa biến, chúng ta thay thế nó bằng giá trị thực tế từ Environment
+            connectionString = connectionString
+                .Replace("${MSSQL_PORT}", Environment.GetEnvironmentVariable("MSSQL_PORT") ?? "1433")
+                .Replace("${MSSQL_SA_PASSWORD}", Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD") ?? "YourStrongPassword123!");
             // Đăng ký các dịch vụ bảo mật tại đây
-            // Đăng ký DbContext với PostgreSQL
+            // Đăng ký DbContext với SQL Server
             services.AddDbContext<MyAppDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                .UseSnakeCaseNamingConvention());
+                options.UseSqlServer(connectionString,
+                sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+                }));
+
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            // dang ky ropository
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRoleRepo, RoleRepo>();
+            services.AddScoped<IAuthRepo, AuthRepo>();
+
 
             // Đăng ký các service
-            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
 
-
+            // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             // Đăng ký global exception handler

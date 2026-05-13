@@ -10,7 +10,7 @@ namespace api.Repository.Configurations
         {
             builder.ToTable("addresses");
             builder.HasKey(a => a.Id);
-            builder.Property(a => a.Id).UseIdentityByDefaultColumn();
+            builder.Property(a => a.Id).UseIdentityColumn();
         }
     }
 }

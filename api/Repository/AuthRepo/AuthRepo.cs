@@ -6,27 +6,26 @@ namespace api.Repository.UserRepo
 {
     public interface IAuthRepo
     {
-        public Task<User?> GetUserByEmailAsync(string email);
-        Task<bool> ExistsByEmailAsync(string email);
-        Task AddAsync(User user);
+        public Task<User?> GetUserByEmailAsync(string email, CancellationToken ct = default);
+        Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default);
+        Task AddAsync(User user, CancellationToken ct = default);
 
-        Task<User?> GetByIdWithRoleAsync(int userId);
+        Task<User?> GetByIdWithRoleAsync(int userId, CancellationToken ct = default);
     }
     public class AuthRepo(MyAppDbContext _context) : IAuthRepo
     {
-        public async Task<User?> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email, CancellationToken ct = default)
             =>  await _context.Users
                 .Include(u => u.Role)
-                .SingleOrDefaultAsync(u => u.Email == email);
+                .SingleOrDefaultAsync(u => u.Email == email, ct);
         
-        public async Task<bool> ExistsByEmailAsync(string email)
-            => await _context.Users.AnyAsync(u => u.Email == email);
+        public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default)
+            => await _context.Users.AnyAsync(u => u.Email == email, ct);
 
-        public async Task AddAsync(User user)
-            => await _context.Users.AddAsync(user);
-
-        public async Task<User?> GetByIdWithRoleAsync(int userId)
-            => await _context.Users
+        public async Task AddAsync(User user, CancellationToken ct = default)
+            => await _context.Users.AddAsync(user, ct); 
+        public async Task<User?> GetByIdWithRoleAsync(int userId, CancellationToken ct = default)
+            => await _context.Users 
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == userId);
     }

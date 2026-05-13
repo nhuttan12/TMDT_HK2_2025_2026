@@ -23,11 +23,12 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var config = services.GetRequiredService<IConfiguration>();
-    var context = scope.ServiceProvider.GetRequiredService<MyAppDbContext>();
-    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+    var context = services.GetRequiredService<MyAppDbContext>();
+    var authService = services.GetRequiredService<IAuthService>();
+    var logger = services.GetRequiredService<ILogger<DbInitializer>>();
     // Truyền trực tiếp context vào để xử lý
 
-    await DbInitializer.SeedEverything(context, config, authService);
+    await DbInitializer.SeedEverything(context, config, authService, logger);
 }
 
 // 2. Cấu hình Middleware
@@ -44,6 +45,8 @@ if (app.Environment.IsDevelopment())
         options.DocumentTitle = " Documentation";
     });
 }
+// Global exception handling middleware
+app.UseExceptionHandler();
 // Chuyển hướng HTTP sang HTTPS
 app.UseHttpsRedirection();
 // CORS middleware
@@ -52,8 +55,7 @@ app.UseCors("AllowSpecificOrigin");
 // tự động kiểm tra token trong header của các request đến và xác thực người dùng dựa trên token đó
 app.UseAuthentication();
 app.UseAuthorization();
-// Global exception handling middleware
-app.UseExceptionHandler();
+
 // Map controller routes
 app.MapControllers();
 app.Run();
