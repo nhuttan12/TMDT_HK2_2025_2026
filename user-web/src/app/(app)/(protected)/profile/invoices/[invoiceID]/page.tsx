@@ -1,7 +1,7 @@
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import { getInvoiceDetailByInvoiceId } from '@/services/invoices/user/invoice-service';
-import InvoicesDetailContainer from '@/app/(app)/profile/invoices/[invoiceId]/_components/invoices-detail-container';
 import { JSX } from 'react';
+import InvoicesDetailContainer from './_components/invoices-detail-container';
 
 interface Props {
 	params: { invoiceId: string };

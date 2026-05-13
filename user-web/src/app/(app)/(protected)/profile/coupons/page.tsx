@@ -1,7 +1,7 @@
 ﻿import { JSX } from 'react';
-import CouponsContainer from '@/app/(app)/profile/coupons/_components/coupons-container';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 import { getCouponsByUserId } from '@/services/marketing/coupon/user/coupons-user-service';
+import CouponsContainer from './_components/coupons-container';
 
 export default async function CouponsPage(): Promise<JSX.Element> {
 	// TODO: Lấy userId từ session/token trên server. Tạm thời hardcode là 1 để chạy luồng.

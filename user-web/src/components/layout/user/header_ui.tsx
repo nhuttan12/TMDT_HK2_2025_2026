@@ -104,17 +104,17 @@ const profileElements: RedirectElement[] = [
 
 /* ---------- Component ---------- */
 
-interface HeaderProps{
+interface HeaderProps {
 	isAuthenticated: boolean;
 }
 
-export default function HeaderUi({isAuthenticated}:HeaderProps) {
+export default function HeaderUi({ isAuthenticated }: HeaderProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-white'>
-				<div className='mx-auto flex flex-col h-full max-w-7xl px-4 py-4 gap-2'>
+			<div className='mx-auto flex flex-col h-full max-w-7xl px-4 py-4 gap-2'>
 				<Link href={'/shop-registration'}>
 					<span className='pl-3 text-sm'>Đăng ký bán hàng</span>
 				</Link>
@@ -166,70 +166,71 @@ export default function HeaderUi({isAuthenticated}:HeaderProps) {
 					</div>
 
 					{/* Right */}
-				<div className='ml-auto flex items-center gap-3'>
-					<div className='hidden sm:block'>
-						<InputGroup className='max-w-xs'>
-							<InputGroupInput placeholder='Search...' />
-							<InputGroupAddon>
-								<Search />
-							</InputGroupAddon>
-						</InputGroup>
-					</div>
-
-					{isAuthenticated ? (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
-									<Avatar className='h-8 w-8'>
-										<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
-										<AvatarFallback>U</AvatarFallback>
-									</Avatar>
-								</button>
-							</DropdownMenuTrigger>
-
-							<DropdownMenuContent
-								align='end'
-								className='w-48'
-							>
-								{profileElements.map(
-									(item: RedirectElement): JSX.Element => (
-										<Link
-											href={item.href}
-											key={item.key}
-										>
-											<DropdownMenuItem
-												key={item.key}
-												onClick={() => router.push(item.href)}
-												className='flex items-center justify-between cursor-pointer'
-											>
-												{item.label}
-												{item.icon}
-											</DropdownMenuItem>
-										</Link>
-									),
-								)}
-							</DropdownMenuContent>
-						</DropdownMenu>
-					) : (
-						<div className='hidden lg:flex items-center gap-2'>
-							<Button
-								asChild
-								variant='outline'
-								className='bg-white text-black border-black hover:bg-gray-100'
-							>
-								<Link href='/login'>Đăng nhập</Link>
-							</Button>
-
-							<Button
-								asChild
-								className='bg-black text-white! hover:bg-white hover:text-black!'
-							>
-								<Link href='/register'>Đăng ký</Link>
-							</Button>
+					<div className='ml-auto flex items-center gap-3'>
+						<div className='hidden sm:block'>
+							<InputGroup className='max-w-xs'>
+								<InputGroupInput placeholder='Search...' />
+								<InputGroupAddon>
+									<Search />
+								</InputGroupAddon>
+							</InputGroup>
 						</div>
-					)}
+
+						{isAuthenticated ? (
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
+										<Avatar className='h-8 w-8'>
+											<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
+											<AvatarFallback>U</AvatarFallback>
+										</Avatar>
+									</button>
+								</DropdownMenuTrigger>
+
+								<DropdownMenuContent
+									align='end'
+									className='w-48'
+								>
+									{profileElements.map(
+										(item: RedirectElement): JSX.Element => (
+											<Link
+												href={item.href}
+												key={item.key}
+											>
+												<DropdownMenuItem
+													key={item.key}
+													onClick={() => router.push(item.href)}
+													className='flex items-center justify-between cursor-pointer'
+												>
+													{item.label}
+													{item.icon}
+												</DropdownMenuItem>
+											</Link>
+										),
+									)}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						) : (
+							<div className='hidden lg:flex items-center gap-2'>
+								<Button
+									asChild
+									variant='outline'
+									className='bg-white text-black border-black hover:bg-gray-100'
+								>
+									<Link href='/login'>Đăng nhập</Link>
+								</Button>
+
+								<Button
+									asChild
+									className='bg-black text-white! hover:bg-white hover:text-black!'
+								>
+									<Link href='/register'>Đăng ký</Link>
+								</Button>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
-		</header>		</header>
+		</header>
 	);
 }

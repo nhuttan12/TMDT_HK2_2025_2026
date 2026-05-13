@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import Footer from '@/components/layout/user/footer';
-import ChatBox from '@/components/user/user/chatbox';
 import { HeaderContainer } from '@/components/layout/user/header-container';
 import AuthContainer from '@/app/(auth)/_component/auth-container';
+import ChatBoxContainer from '@/components/chat/user/chat-box-container';
 
 export default function AppLayout({ children }: { children: React.ReactNode }): JSX.Element {
 	return (
@@ -11,7 +11,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }): 
 				<HeaderContainer />
 				<main className='flex-1'>
 					<div className='mx-auto max-w-275'>{children}</div>
-					<ChatBox />
+					<ChatBoxContainer />
 				</main>
 
 				<Footer />
