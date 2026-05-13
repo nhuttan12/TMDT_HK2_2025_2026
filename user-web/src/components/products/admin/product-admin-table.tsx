@@ -14,6 +14,7 @@ import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import Image from 'next/image';
 import { JSX } from 'react';
 import ProductStatusBadge from './detail/product-status-badge';
+import ProductSystemStatusBadge from './detail/product-system-status-badge';
 
 interface ProductAdminTableProps {
 	products: ProductListInfoAdmin[];
@@ -84,9 +85,13 @@ export default function ProductAdminTable({
 				</div>
 			),
 			onHeaderClick: (): void => handleSort('status'),
-			render: (row: ProductListInfoAdmin): JSX.Element => (
-				<ProductStatusBadge status={row.status} />
-			),
+			render: (row: ProductListInfoAdmin): JSX.Element => {
+				if (productApproval) {
+					return <ProductSystemStatusBadge status={row.systemStatus} />;
+				} else {
+					return <ProductStatusBadge status={row.status} />;
+				}
+			},
 		},
 		{
 			key: 'createdAt',

@@ -2,6 +2,7 @@ import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductShop } from '@/types/products/user/ProductShop';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { Review } from '@/types/products/user/Review';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
 	const reviews: Review[] = [

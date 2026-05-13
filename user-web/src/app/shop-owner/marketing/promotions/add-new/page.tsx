@@ -14,5 +14,10 @@ export default async function ShopPromotionAddingPage(): Promise<JSX.Element> {
 	const initialAvailableProducts: ProductPromotionForAdding[] =
 		await getAvailableProductsForPromotion();
 
-	return <ShopPromotionAddingContainer initialAvailableProducts={initialAvailableProducts} />;
+	return (
+		<ShopPromotionAddingContainer
+			initialAvailableProducts={initialAvailableProducts}
+			role={'shop-owner'}
+		/>
+	);
 }

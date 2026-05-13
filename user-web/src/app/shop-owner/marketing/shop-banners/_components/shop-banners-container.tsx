@@ -1,15 +1,15 @@
 'use client';
 
-import React, { JSX, useState } from 'react';
-import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { UseMutationResult } from '@tanstack/react-query';
-import { ShopBannersUi } from '@/app/admin/content/shop-banners/_components/shop-banners-ui';
 import { useShopBannersLogic } from '@/hooks/contents/shop-banners/use-shop-banners-logic';
-import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 import {
-	useShopBannersQuery,
-	useUpdateShopBannerMutation,
+    useShopBannersQuery,
+    useUpdateShopBannerMutation,
 } from '@/queries/content/shop-banners/shop-banner-query';
+import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
+import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
+import { UseMutationResult } from '@tanstack/react-query';
+import { JSX, useState } from 'react';
+import { ShopBannersUi } from './shop-banners-ui';
 
 interface ShopBannerContainerProps {
 	initialShopBanners: SortableImageForm[];

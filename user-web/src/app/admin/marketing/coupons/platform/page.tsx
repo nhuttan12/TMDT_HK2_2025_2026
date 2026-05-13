@@ -1,7 +1,5 @@
 import { CouponManagementContainer } from '@/components/marketing/coupons/admin/coupon-management-container';
-import {
-    getPlatformCoupons
-} from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getPlatformCoupons } from '@/services/marketing/coupon/admin/coupon-admin-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 
@@ -17,6 +15,7 @@ export default async function ShopCouponPage(): Promise<JSX.Element> {
 		<CouponManagementContainer
 			scope='platform'
 			initialCoupons={initialCoupons}
+			role={'admin'}
 		/>
 	);
 }

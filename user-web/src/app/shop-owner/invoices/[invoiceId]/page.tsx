@@ -17,7 +17,7 @@ export default async function Page({ params }: PageProps): Promise<JSX.Element> 
 	const id: number = parseInt(invoiceId);
 
 	// Gọi service lấy data tại Server
-	const initialInvoice: InvoiceDetail = await getUserInvoiceDetailByInvoiceId(id);
+	const initialInvoice = await getUserInvoiceDetailByInvoiceId(id);
 
 	return (
 		<InvoiceDetailAdminContainer

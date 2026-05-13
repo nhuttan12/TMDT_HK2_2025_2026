@@ -1,13 +1,12 @@
 'use client';
 
-import { JSX } from 'react';
-import { UserInvoice } from '@/types/invoices/user/UserInvoice';
-import InvoiceAdminUi from './invoice-admin-ui';
-import { useUserInvoiceListQuery } from '@/queries/invoices/admin/use-user-invoice-list-query';
 import {
-	useInvoiceAdminLogic,
-	UseInvoiceAdminLogicReturn,
+    useInvoiceAdminLogic
 } from '@/hooks/invoices/admin/use-invoice-admin-logic';
+import { useUserInvoiceListQuery } from '@/queries/invoices/admin/use-user-invoice-list-query';
+import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import { JSX } from 'react';
+import InvoiceAdminUi from './invoice-admin-ui';
 
 interface Props {
 	initialInvoices: UserInvoice[];
@@ -15,7 +14,7 @@ interface Props {
 
 export default function InvoiceAdminContainer({ initialInvoices }: Props): JSX.Element {
 	const { data: invoicesData } = useUserInvoiceListQuery(initialInvoices);
-	const logic: UseInvoiceAdminLogicReturn = useInvoiceAdminLogic();
+	const logic = useInvoiceAdminLogic();
 
 	return (
 		<InvoiceAdminUi

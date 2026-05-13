@@ -6,12 +6,13 @@ import { JSX } from 'react';
 interface CouponListProps {
 	coupons: UserCoupon[];
 	onClaimClick: (couponId: string) => void;
+	label: string;
 }
 
-export const CouponList = ({ coupons, onClaimClick }: CouponListProps) => {
+export const CouponList = ({ coupons, onClaimClick, label }: CouponListProps) => {
 	return (
 		<section className='bg-white p-6 rounded-xl shadow-sm'>
-			<h2 className='text-lg font-bold mb-4'>Mã Giảm Giá Của Shop</h2>
+			<h2 className='text-lg font-bold mb-4'>{label}</h2>
 			<div className='flex gap-4 overflow-x-auto pb-2'>
 				{coupons.map(
 					(coupon: UserCoupon): JSX.Element => (

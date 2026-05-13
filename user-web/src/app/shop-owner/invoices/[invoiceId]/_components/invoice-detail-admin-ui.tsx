@@ -10,7 +10,7 @@ import {
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import { JSX } from 'react';
 import Image from 'next/image';
-import {getPaymentMethodLabel} from "@/utils/invoices/payment-method-label";
+import { getPaymentMethodLabel } from '@/utils/invoices/payment-method-label';
 import { InvoiceStatusBadge } from '@/components/invoices/invoice-status-badge';
 import { ShippingStatusBadge } from '@/components/invoices/shipping-status-badge';
 
@@ -132,7 +132,7 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 											alt={item.productName}
 											width={50}
 											height={50}
-											className='rounded'
+											className='h-12 w-12 aspect-square object-cover rounded-full border border-gray-200'
 										/>
 
 										<span>{item.productName}</span>

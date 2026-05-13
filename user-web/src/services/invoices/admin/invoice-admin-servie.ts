@@ -101,7 +101,7 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 	return new Promise<InvoiceDetail>((resolve) => {
 		setTimeout((): void => {
 			resolve({
-				invoiceId: 1024,
+				invoiceId: invoiceId, // Tự động lấy ID được truyền vào
 				createdAt: '2026-03-12T10:20:00',
 				paidAt: '2026-03-12T10:22:00',
 				status: 'paid',
@@ -114,22 +114,47 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 				estimatedDelivery: '2026-03-17T00:00:00',
 				items: [
 					{
-						productId: 1,
-						productName: 'Mechanical Keyboard RK84',
+						productId: 101,
+						productName: 'Bể Terrarium Trụ Tròn Size M',
 						imageUrl:
-							'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJY_rdiAA2nRvjtwKfi_mz4VB9_GlS7wGVcg&s',
-						price: 1200000,
+							'https://bizweb.dktcdn.net/100/181/287/files/ho-kho-bau.jpg?v=1694160724978',
+						price: 550000,
 						quantity: 1,
-						discount: 100000,
-						subTotal: 1200000,
-						totalPrice: 1100000,
+						discount: 50000,
+						subTotal: 550000,
+						totalPrice: 500000,
 					},
-					// ... các sản phẩm khác
+					{
+						productId: 102,
+						productName: 'Cây Cẩm Nhung Fittonia Đỏ (Chậu Mini)',
+						imageUrl:
+							'https://lanhatreehouse.com/wp-content/uploads/2024/06/cay-cam-nhung-la-do.jpg',
+						price: 35000,
+						quantity: 2,
+						discount: 0,
+						subTotal: 70000,
+						totalPrice: 70000,
+					},
+					{
+						productId: 103,
+						productName: 'Đèn LED Quang Phổ Chiếu Sáng Bể Kính',
+						imageUrl:
+							'https://images.congtydenled.com.vn/haledco/2022/03/den-led-ho-ca-mini.jpg',
+						price: 200000,
+						quantity: 1,
+						discount: 20000,
+						subTotal: 200000,
+						totalPrice: 180000,
+					},
 				],
-				subTotal: 3700000,
-				shippingFee: 30000,
-				discountAmount: 300000,
-				grandTotal: 3430000,
+				// Tổng cộng tiền hàng (550k + 70k + 200k)
+				subTotal: 820000,
+				// Phí vận chuyển hàng dễ vỡ
+				shippingFee: 40000,
+				// Tổng giảm giá (50k bể + 20k đèn + 30k voucher áp dụng thêm)
+				discountAmount: 100000,
+				// Tổng thanh toán (820k + 40k - 100k)
+				grandTotal: 760000,
 			});
 		}, 500);
 	});

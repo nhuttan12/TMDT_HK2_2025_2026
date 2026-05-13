@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-	params: Promise<{ shopPromotionId: string }>;
+	params: Promise<{ promotionId: string }>;
 }
 
 export default async function StoreProductPromotionPage({ params }: Props): Promise<JSX.Element> {
-	const { shopPromotionId } = await params;
-	const id: number = parseInt(shopPromotionId);
+	const { promotionId } = await params;
+	const id = parseInt(promotionId);
 
-	const initialPromotions: ShopProductPromotion[] = await getStoreProductPromotions(id);
+	const initialPromotions = await getStoreProductPromotions(id);
 
 	return (
 		<ShopProductPromotionContainer

@@ -42,13 +42,25 @@ export function HomeUi({
 	return (
 		<>
 			{/* HERO BANNER SECTION */}
-			<div className='w-full mt-10 rounded-2xl drop-shadow-lg min-h-100 bg-slate-50 flex items-center justify-center'>
+			<div className='w-full mt-5 rounded-2xl drop-shadow-lg min-h-100 bg-slate-50 flex items-center justify-center'>
 				{isLoadingBanners ? (
 					<span className='text-slate-400'>Đang tải Banner...</span>
 				) : (
 					<HomeBannerCarouselUi banners={banners} />
 				)}
 			</div>
+
+			{/* DANH MỤC SẢN PHẨM */}
+			<section className='max-w-7xl mx-auto mt-10 space-y-6'>
+				{isLoadingCategories ? (
+					<div className='flex flex-col items-center justify-center py-10 gap-2 text-slate-500 bg-white border border-slate-200 rounded-2xl'>
+						<Spinner className='size-8' />
+						<span>Đang tải danh mục...</span>
+					</div>
+				) : (
+					<CategoryListUi categories={categories} />
+				)}
+			</section>
 
 			{/* MÃ GIẢM GIÁ TOÀN NGHÀNH */}
 			<section className='max-w-7xl mx-auto mt-10'>
@@ -60,19 +72,8 @@ export function HomeUi({
 					<CouponList
 						coupons={coupons}
 						onClaimClick={handleClaimCoupon}
+						label={'Mã giảm giá toàn nghành'}
 					/>
-				)}
-			</section>
-
-			{/* DANH MỤC SẢN PHẨM */}
-			<section className='max-w-7xl mx-auto mt-10 space-y-6'>
-				{isLoadingCategories ? (
-					<div className='flex flex-col items-center justify-center py-10 gap-2 text-slate-500 bg-white border border-slate-200 rounded-2xl'>
-						<Spinner className='size-8' />
-						<span>Đang tải danh mục...</span>
-					</div>
-				) : (
-					<CategoryListUi categories={categories} />
 				)}
 			</section>
 

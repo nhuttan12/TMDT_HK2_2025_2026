@@ -21,7 +21,7 @@ export default function Page({ params }: Props): JSX.Element {
 		productId: productId,
 		name: '',
 		sku: '',
-		attributes: [{ size: '', color: '' }],
+		attributes: [{ size: ''}],
 		status: 'active',
 		pricing: {
 			salePrice: 0,

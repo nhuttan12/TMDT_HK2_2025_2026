@@ -14,7 +14,7 @@ export interface GoodsReceiptBatch {
 	totalPrice: number;
 
 	manufacturedAt?: string;
-	expiredAt?: string;
+	expiredAt: string;
 
 	isSerialInputted: boolean;
 }

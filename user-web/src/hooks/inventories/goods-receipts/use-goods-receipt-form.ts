@@ -86,6 +86,7 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 			productName: product.name,
 			batchNumber: '',
 			quantity: 1,
+			expiredAt: '',
 			unitPrice: 0,
 			totalPrice: 0,
 			isSerialInputted: false,

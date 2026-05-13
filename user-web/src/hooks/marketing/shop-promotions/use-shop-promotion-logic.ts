@@ -6,6 +6,7 @@ import { ShopPromotion } from '@/types/marketing/shop-promotions/ShopPromotion';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { AppRole } from '@/types/uis/AppRole';
 
 export interface UseShopPromotionLogicReturn extends UseTableSelectionReturn<number> {
 	modal: UseStatusModalReturn;
@@ -18,7 +19,15 @@ export interface UseShopPromotionLogicReturn extends UseTableSelectionReturn<num
 	handleCancelModal: () => void;
 }
 
-export function useShopPromotionLogic(promotions: ShopPromotion[]): UseShopPromotionLogicReturn {
+interface UseShopPromotionLogicProps {
+	promotions: ShopPromotion[];
+	role: AppRole;
+}
+
+export function useShopPromotionLogic({
+	promotions,
+	role,
+}: UseShopPromotionLogicProps): UseShopPromotionLogicReturn {
 	const router: AppRouterInstance = useRouter();
 
 	// 1. Logic Selection
@@ -33,17 +42,19 @@ export function useShopPromotionLogic(promotions: ShopPromotion[]): UseShopPromo
 		payload: ShopPromotion | number;
 	} | null>(null);
 
+	const route = role == 'admin' ? 'admin' : role == 'shop-owner' ? 'shop-owner' : '';
+
 	const handleAddPromotion = (): void => {
-		router.push('/admin/marketing/shop-promotions/add-new');
+		router.push(`/${route}/marketing/promotions/add-new`);
 	};
 
 	const handleViewPromotion = (id: number): void => {
 		// Thêm ID vào URL để biết đang xem sản phẩm của Promotion nào
-		router.push(`/admin/marketing/shop-promotions/${id}`);
+		router.push(`/${route}/marketing/promotions/${id}`);
 	};
 
 	const handleEditPromotion = (id: number): void => {
-		router.push(`/admin/marketing/shop-promotions/${id}/update`);
+		router.push(`/${route}/marketing/promotions/${id}/update`);
 	};
 
 	const handleDeletePromotion = (id: number): void => {
@@ -54,9 +65,7 @@ export function useShopPromotionLogic(promotions: ShopPromotion[]): UseShopPromo
 	const handleTriggerToggleStatus = (promotion: ShopPromotion): void => {
 		setActiveAction({ type: 'toggle', payload: promotion });
 		const actionText = promotion.status ? 'tắt' : 'bật';
-		modal.showWarning(
-			`Bạn có chắc chắn muốn ${actionText} mã "${promotion.name}" không?`,
-		);
+		modal.showWarning(`Bạn có chắc chắn muốn ${actionText} mã "${promotion.name}" không?`);
 	};
 
 	const handleConfirmAction = (): void => {

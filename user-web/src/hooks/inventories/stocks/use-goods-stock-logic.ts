@@ -23,12 +23,12 @@ export function useGoodsStockLogic(): UseGoodsStockLogicReturn {
 
 	// Hàm xử lý chuyển hướng sang trang chỉnh sửa
 	const handleEditVariant = (row: ProductInStock): void => {
-		router.push(`/admin/products/${row.productId}/variant/edit/${row.productVariantId}`);
+		router.push(`/shop-owner/products/${row.productId}/variant/edit/${row.productVariantId}`);
 	};
 
 	// Hàm xử lý chuyển hướng sang trang chi tiết
 	const handleViewVariant = (row: ProductInStock): void => {
-		router.push(`/admin/products/${row.productId}/variant/${row.productVariantId}`);
+		router.push(`/shop-owner/products/${row.productId}/variant/${row.productVariantId}`);
 	};
 
 	// 3. Trả về object tuân thủ interface UseProductInStockLogicReturn

@@ -3,11 +3,10 @@ import { usePagination, UsePaginationReturn } from '@/hooks/share/use-pagination
 import { useQueryFilter } from '@/hooks/share/use-query-filter';
 import { useTableSort, UseTableSortReturn } from '@/hooks/share/use-table-sort';
 import { AdminCoupon } from '@/types/marketing/coupons/admin/AdminCoupon';
-import {
-	CouponFilterParams,
-} from '@/types/marketing/coupons/admin/CouponFilterParams';
+import { CouponFilterParams } from '@/types/marketing/coupons/admin/CouponFilterParams';
 import { CouponSortField } from '@/types/marketing/coupons/admin/CouponSortField';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { AppRole } from '@/types/uis/AppRole';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
@@ -18,7 +17,7 @@ export interface CouponManagementLogicReturn {
 	onDeleteCoupon: (id: number) => void;
 	onEditCoupon: (id: number) => void;
 	onViewCoupon: (id: number) => void;
-    onAddCoupon: () => void;
+	onAddCoupon: () => void;
 	pagination: UsePaginationReturn & { totalPages: number };
 	sortConfig: UseTableSortReturn<CouponSortField>;
 	filterConfig: {
@@ -27,14 +26,22 @@ export interface CouponManagementLogicReturn {
 	};
 }
 
-export const useCouponManagementLogic = (
-	apiResponse: PaginationResponse<AdminCoupon> | undefined,
-): CouponManagementLogicReturn => {
+interface UseCouponManagementLogicProps {
+	apiResponse: PaginationResponse<AdminCoupon> | undefined;
+	role: AppRole;
+}
+
+export const useCouponManagementLogic = ({
+	apiResponse,
+	role,
+}: UseCouponManagementLogicProps): CouponManagementLogicReturn => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	const totalPages: number = apiResponse?.meta.totalPages || 1;
+
+	const route = role == 'admin' ? 'admin' : role == 'shop-owner' ? 'shop-owner' : '';
 
 	const sortConfig = useTableSort<CouponSortField>();
 	const { applyFilters } = useQueryFilter<CouponFilterParams & { search?: string }>();
@@ -67,16 +74,16 @@ export const useCouponManagementLogic = (
 	};
 
 	const handleEditCoupon = (couponId: number): void => {
-		router.push(`/admin/marketing/coupons/${couponId}/edit`);
+		router.push(`/${route}}/marketing/coupons/${couponId}/edit`);
 	};
 
 	const handleViewCoupon = (couponId: number): void => {
-		router.push(`/admin/marketing/coupons/${couponId}`);
+		router.push(`/${route}/marketing/coupons/${couponId}`);
 	};
 
-    const handleAddCoupon = (): void => {
-        router.push(`/admin/marketing/coupons/add-new`);
-    };
+	const handleAddCoupon = (): void => {
+		router.push(`/${route}/marketing/coupons/add-new`);
+	};
 
 	const handleApplyFilter = (filters: Partial<CouponFilterParams>): void => {
 		const cleanedFilters = { ...filters };
@@ -96,7 +103,7 @@ export const useCouponManagementLogic = (
 		onDeleteCoupon: handleDeleteCoupon,
 		onEditCoupon: handleEditCoupon,
 		onViewCoupon: handleViewCoupon,
-        onAddCoupon: handleAddCoupon,
+		onAddCoupon: handleAddCoupon,
 		pagination: {
 			...pagination,
 			totalPages, // Trả ra UI để vẽ thanh trang

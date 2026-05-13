@@ -119,6 +119,7 @@ export const ShopStorefrontUi = ({
 					<CouponList
 						coupons={safeCoupons}
 						onClaimClick={handleClaimCoupon}
+						label={'Mã Giảm Giá Của Shop'}
 					/>
 				)}
 

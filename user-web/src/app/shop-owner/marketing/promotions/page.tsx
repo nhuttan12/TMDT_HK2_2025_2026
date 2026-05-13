@@ -9,11 +9,14 @@ export const metadata: Metadata = {
 	description: 'Quản lý toàn bộ đợt khuyến mãi của cửa hàng trên hệ thống.',
 };
 
-
 export default async function ShopPromotionPage(): Promise<JSX.Element> {
-
 	// Gọi API/Service tại Server
 	const initialPromotions: ShopPromotion[] = await getShopPromotions();
 
-	return <ShopPromotionContainer initialPromotions={initialPromotions} />;
+	return (
+		<ShopPromotionContainer
+			initialPromotions={initialPromotions}
+			role={'shop-owner'}
+		/>
+	);
 }

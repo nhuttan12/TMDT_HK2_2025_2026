@@ -30,11 +30,11 @@ export function useSupplierListLogic(): UseSupplierListLogicReturn {
 	const [deletingId, setDeletingId] = useState<number | null>(null);
 
 	const handleViewSupplier = (row: Supplier): void => {
-		router.push(`/admin/inventories/suppliers/${row.id}/products`);
+		router.push(`/shop-owner/inventories/suppliers/${row.id}/products`);
 	};
 
 	const handleEditSupplier = (row: Supplier): void => {
-		router.push(`/admin/inventories/suppliers/${row.id}/edit`);
+		router.push(`/shop-owner/inventories/suppliers/${row.id}/edit`);
 	};
 
 	// Bật modal cảnh báo khi nhấn nút xoá

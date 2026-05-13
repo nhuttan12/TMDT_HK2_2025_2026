@@ -18,7 +18,7 @@ export default async function GoodsIssuePage({ params }: Props): Promise<JSX.Ele
 	const issueId: number = Number(params.id);
 
 	// 2. Gọi Server-Side Fetching
-	const goodsIssueDetail: GoodsIssueDetail = await getGoodsIssueById(issueId);
+	const goodsIssueDetail = await getGoodsIssueById(issueId);
 
 	// 3. Truyền dữ liệu xuống Container
 	return (

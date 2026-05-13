@@ -8,8 +8,8 @@ import {
 } from '@/queries/content/home-banners/admin/home-banner-query-admin';
 import { useHomeBannerLogicAdmin } from '@/hooks/contents/home-banners/admin/use-home-banner-logic-admin';
 import { UseMutationResult } from '@tanstack/react-query';
-import { ShopBannersUi } from '@/app/admin/content/shop-banners/_components/shop-banners-ui';
 import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
+import { ShopBannersUi } from '@/app/shop-owner/marketing/shop-banners/_components/shop-banners-ui';
 
 interface ShopBannerContainerProps {
 	initialBanners: SortableImageForm[];

@@ -11,11 +11,5 @@ export const metadata: Metadata = {
 export default async function ShopDecorationPage(): Promise<JSX.Element> {
 	const initialBanners: SortableImageForm[] = await getHomeBannersAdmin();
 
-	return (
-		<main className='min-h-screen p-4 md:p-8'>
-			<div className='max-w-6xl mx-auto'>
-				<ShopBannersContainer initialBanners={initialBanners} />
-			</div>
-		</main>
-	);
+	return <ShopBannersContainer initialBanners={initialBanners} />;
 }

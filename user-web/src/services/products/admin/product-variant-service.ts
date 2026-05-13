@@ -7,39 +7,41 @@ export async function getProductVariantDetailById(id: number): Promise<ProductVa
 			resolve({
 				id: id,
 				productId: 101,
-				name: 'Áo thun đen M',
-				sku: 'TS-BLACK-M',
-				attributes: [{ size: 'M', color: 'Đen' }],
+				name: 'Bể Terrarium Trụ Tròn Size M',
+				sku: 'TERRA-CYL-M',
+				attributes: [{ size: '20cm x 20cm x 30cm' }],
 				status: 'active',
 				pricing: {
-					salePrice: 100000,
-					costPrice: 70000,
+					salePrice: 550000,
+					costPrice: 350000,
 				},
-				supplierName: 'Công ty ABC',
+				supplierName: 'Xưởng Thủy Tinh GreenLife',
 				inventory: {
 					available: 50,
 					reserved: 5,
 					incoming: 10,
 				},
 				shipping: {
-					weightInGram: 200,
+					weightInGram: 1500, // Bể kính khá nặng
 					dimensionsInCm: {
-						length: 30,
-						width: 20,
-						height: 2,
+						length: 25,
+						width: 25,
+						height: 35,
 					},
 				},
 				images: [
 					{
 						localId: 'img-1',
-						imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
+						imageUrl:
+							'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5lijlGUc-rWzrpMjhX9xnmiOuAeBnpN5L6Q&s',
 						isPrimary: true,
 						order: 0,
 						status: 'done',
 					},
 					{
 						localId: 'img-2',
-						imageUrl: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c',
+						imageUrl:
+							'https://bizweb.dktcdn.net/100/181/287/files/wonder1.jpg?v=1701920670951',
 						isPrimary: false,
 						order: 1,
 						status: 'done',

@@ -73,7 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 		},
 		{
 			title: 'Nhắn tin với khách hàng',
-			href: '/shop-owner/users/shops/messages',
+			href: '/shop-owner/messages',
 			icon: <MessageCircle size={18} />,
 		},
 		{
@@ -83,14 +83,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 				// ----- CONTENT -----
 				{
 					title: 'Ảnh quảng cáo',
-					href: '/shop-owner/content/shop-banners',
+					href: '/shop-owner/marketing/shop-banners',
 					icon: <Images size={18} />,
 				},
 
 				// ----- MARKETING -----
 				{
 					title: 'Khuyến mãi sản phẩm của cửa hàng',
-					href: '/shop-owner/marketing/shop-promotions',
+					href: '/shop-owner/marketing/promotions',
 					icon: <Tag size={18} />,
 				},
 				{

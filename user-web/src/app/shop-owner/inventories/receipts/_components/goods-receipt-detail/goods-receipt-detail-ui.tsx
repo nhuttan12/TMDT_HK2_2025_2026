@@ -5,7 +5,7 @@ import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import Field from '@/components/layout/admin/field';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { DataTable } from '@/components/layout/admin/data-table';
-import { formatDateForInput } from '@/utils/shared/date';
+import { formatDate, formatDateForInput } from '@/utils/shared/date';
 import { Column } from '@/types/uis/Column';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
@@ -70,16 +70,25 @@ export function GoodsReceiptDetailUi({
 		{
 			key: 'expiredAt',
 			header: 'Ngày hết hạn',
-			render: (item: GoodsReceiptBatch): JSX.Element => (
-				<Input
-					type='date'
-					value={item.expiredAt || ''}
-					disabled={isView}
-					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						updateBatch(item.id, { expiredAt: e.target.value });
-					}}
-				/>
-			),
+			render: (item: GoodsReceiptBatch): JSX.Element => {
+				// Ép kiểu an toàn: Cắt lấy phần 'YYYY-MM-DD' từ chuỗi ISO
+				// Ví dụ: '2026-05-12T...Z'.split('T')[0] => '2026-05-12'
+				const dateValueForInput = item.expiredAt ? item.expiredAt.split('T')[0] : '';
+
+				return (
+					<Input
+						type='date'
+						value={dateValueForInput} // Nhét chuỗi YYYY-MM-DD vào đây
+						disabled={isView}
+						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
+							// e.target.value của thẻ type="date" mặc định trả ra 'YYYY-MM-DD'
+							// Nếu backend của bạn cần full ISO, bạn có thể nối thêm đuôi giờ vào
+							// Ví dụ: const isoString = new Date(e.target.value).toISOString();
+							updateBatch(item.id, { expiredAt: e.target.value });
+						}}
+					/>
+				);
+			},
 		},
 		{
 			key: 'isSerialInputted',

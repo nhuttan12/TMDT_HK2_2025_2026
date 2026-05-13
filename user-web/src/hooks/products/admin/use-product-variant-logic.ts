@@ -20,7 +20,6 @@ export interface UseProductVariantLogicReturn {
     isShopOwner: boolean;
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handleColorChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSalePriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleCostPriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleWeightChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -59,15 +58,6 @@ export function useProductVariantLogic(
 			(prev: ProductVariantDetail): ProductVariantDetail => ({
 				...prev,
 				attributes: [{ ...prev.attributes[0], size: e.target.value }],
-			}),
-		);
-	};
-
-	const handleColorChange = (e: ChangeEvent<HTMLInputElement>): void => {
-		setForm(
-			(prev: ProductVariantDetail): ProductVariantDetail => ({
-				...prev,
-				attributes: [{ ...prev.attributes[0], color: e.target.value }],
 			}),
 		);
 	};
@@ -186,7 +176,6 @@ export function useProductVariantLogic(
         isShopOwner,
 		handleInputChange,
 		handleSizeChange,
-		handleColorChange,
 		handleSalePriceChange,
 		handleCostPriceChange,
 		handleWeightChange,

@@ -26,11 +26,11 @@ export function useInvoiceAdminLogic(): UseInvoiceAdminLogicReturn {
 	const handleStatusChange = (status: InvoiceStatus): void => {
 		const params: URLSearchParams = new URLSearchParams(searchParams.toString());
 		params.set('status', status);
-		router.push(`/admin/invoices?${params.toString()}`);
+		router.push(`/shop-owner/invoices?${params.toString()}`);
 	};
 
 	const handleRedirectToInvoiceDetail = (invoiceId: number): void => {
-		router.push(`/admin/invoices/${invoiceId}`);
+		router.push(`/shop-owner/invoices/${invoiceId}`);
 	};
 
 	const paymentMethods: PaymentMethod[] = [

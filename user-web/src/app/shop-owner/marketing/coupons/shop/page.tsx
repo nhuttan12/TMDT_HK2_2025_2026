@@ -21,6 +21,7 @@ export default async function ShopCouponPage({ params }: Props): Promise<JSX.Ele
 	return (
 		<CouponManagementContainer
 			scope='shop'
+			role={'shop-owner'}
 			shopId={id}
 			initialCoupons={initialCoupons}
 		/>

@@ -17,18 +17,18 @@ export function AdminFormWrapper({
 }: AdminFormWrapperProps): JSX.Element {
 	return (
 		<>
-			<div className='flex justify-between items-center'>
-				<div>
-					<h1 className='text-2xl font-bold'>{title}</h1>
-					<p className='text-sm text-muted-foreground'>{description}</p>
-				</div>
-			</div>
-
 			<form
 				onSubmit={onSubmit}
 				className='relative w-full max-w-4xl mx-auto mt-5'
 			>
 				<div className='p-7 pb-1 space-y-6 bg-white border shadow-sm rounded-2xl border-slate-200'>
+					<div className='flex justify-between items-center'>
+						<div>
+							<h1 className='text-2xl font-bold'>{title}</h1>
+							<p className='text-sm text-muted-foreground'>{description}</p>
+						</div>
+					</div>
+
 					{children}
 
 					{actions && (

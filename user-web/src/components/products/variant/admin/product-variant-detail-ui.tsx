@@ -1,17 +1,16 @@
 'use client';
 
-import React, { JSX } from 'react';
+import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
-import { Button } from '@/components/ui/button';
 import Field from '@/components/layout/admin/field';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getProductVariantStatusLabel } from '@/utils/products/product-variant-status-label';
 import { Label } from '@/components/ui/label';
-import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 import { UseProductVariantLogicReturn } from '@/hooks/products/admin/use-product-variant-logic';
 import { getProductSystemStatusLabel } from '@/utils/products/product-system-status-label';
-import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
-import { AppRole } from '@/types/uis/AppRole';
+import { getProductVariantStatusLabel } from '@/utils/products/product-variant-status-label';
+import { calculateDiscount } from '@/utils/shared/calculateDiscount';
+import { JSX } from 'react';
 
 interface ProductVariantDetailUIProps extends UseProductVariantLogicReturn {
 	disabled: boolean;
@@ -27,7 +26,6 @@ export default function ProductVariantDetailUI({
     isAdmin,
 	handleInputChange,
 	handleSizeChange,
-	handleColorChange,
 	handleSalePriceChange,
 	handleCostPriceChange,
 	handleWeightChange,
@@ -101,13 +99,6 @@ export default function ProductVariantDetailUI({
 						<Input
 							value={form.attributes?.[0]?.size || ''}
 							onChange={handleSizeChange}
-							disabled={disabled}
-						/>
-					</Field>
-					<Field label='Màu sắc'>
-						<Input
-							value={form.attributes?.[0]?.color || ''}
-							onChange={handleColorChange}
 							disabled={disabled}
 						/>
 					</Field>
