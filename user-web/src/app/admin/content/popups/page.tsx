@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { ShopPopupContainer } from '@/app/admin/content/popups/_components/shop-popup-container';
-import { Popup } from '@/types/shops/Popup';
+import { Popup } from '@/types/shops/admin/Popup';
 import { fetchShopPopup } from '@/services/contents/popups/popup-service';
 import { Metadata } from 'next';
 

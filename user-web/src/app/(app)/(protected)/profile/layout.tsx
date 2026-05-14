@@ -1,9 +1,9 @@
 import { ProfileSidebar } from '@/components/user/user/profile-sidebar';
-import { SidebarItemInterface } from '@/types/uis/SidebarItemInterface';
+import { SidebarItem } from '@/types/uis/SidebarItem';
 import { KeyRound, Receipt, TicketPercent, User } from 'lucide-react';
 import { JSX } from 'react';
 
-const items: SidebarItemInterface[] = [
+const items: SidebarItem[] = [
 	{
 		title: 'Thông tin hồ sơ',
 		href: '/profile',

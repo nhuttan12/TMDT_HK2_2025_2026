@@ -4,8 +4,8 @@ const PAYMENT_METHOD_LABEL: Record<PaymentMethod, string> = {
 	COD: 'Thanh toán khi nhận hàng',
 	VNPAY: 'VNPAY',
 	MoMo: 'Ví MoMo',
-	CREDIT_CARD: 'Thẻ tín dụng',
-	BANK_TRANSFER: 'Chuyển khoản ngân hàng',
+	credit_card: 'Thẻ tín dụng',
+	bank_transfer: 'Chuyển khoản ngân hàng',
 };
 
 export function getPaymentMethodLabel(method: PaymentMethod): string {

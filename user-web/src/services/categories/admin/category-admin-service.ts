@@ -7,9 +7,9 @@ export async function getAdminCategories(): Promise<CategoryListItemAdmin[]> {
 			resolve([
 				{
 					id: 1,
-					name: 'Điện thoại',
-					slug: 'dien-thoai',
-					image: 'https://crdms.images.consumerreports.org/prod/products/cr/models/399694-smartphones-apple-iphone-11-10008711.png',
+					name: 'Bể kính',
+					slug: 'be-kinh',
+					image: 'https://file.hstatic.net/1000100178/file/be-ca-mat-kinh-duc_f6d0bb000d624d5085737e5f0f7ffd3d_grande.jpg',
 					productCount: 120,
 					status: true,
 					createdAt: '2024-01-01T08:00:00Z',
@@ -17,9 +17,9 @@ export async function getAdminCategories(): Promise<CategoryListItemAdmin[]> {
 				},
 				{
 					id: 2,
-					name: 'Laptop',
-					slug: 'laptop',
-					image: 'https://cdn.thewirecutter.com/wp-content/media/2024/07/laptopstopicpage-2048px-3685-2x1-1.jpg?width=2048&quality=75&crop=2:1&auto=webp',
+					name: 'Cây cảnh & Rêu',
+					slug: 'cay-canh-reu',
+					image: 'https://product.hstatic.net/200000903579/product/0091c1ffabe216bc4ff3_c9281a4d4db7465babe6f5d56d4974b0_master.jpg',
 					productCount: 85,
 					status: true,
 					createdAt: '2024-01-05T09:15:00Z',
@@ -27,9 +27,9 @@ export async function getAdminCategories(): Promise<CategoryListItemAdmin[]> {
 				},
 				{
 					id: 3,
-					name: 'Phụ kiện',
-					slug: 'phu-kien',
-					image: 'https://i.ytimg.com/vi/xq7Z5fXpKL8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBG994a2YhKIUsCAqBy9oGKQxCUPw',
+					name: 'Đất nền & Sỏi',
+					slug: 'dat-nen-soi',
+					image: 'https://file.hstatic.net/200000573099/file/trai-nen_0af0c88ac73a48b9b656232b42c7de17_grande.png',
 					productCount: 0,
 					status: false,
 					createdAt: '2024-02-01T11:00:00Z',
@@ -40,18 +40,21 @@ export async function getAdminCategories(): Promise<CategoryListItemAdmin[]> {
 	});
 }
 
-export async function getCategoryAdminDetailByCategoryId(categoryId: number): Promise<CategoryResponse> {
+export async function getCategoryAdminDetailByCategoryId(
+	categoryId: number,
+): Promise<CategoryResponse> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve({
 				id: categoryId,
-				name: 'Điện thoại',
-				slug: 'dien-thoai',
-				description: 'Danh mục điện thoại cao cấp',
+				name: 'Bể kính',
+				slug: 'be-kinh',
+				description:
+					'Chuyên cung cấp các loại bể kính đa giác, trụ tròn, và bình thủy tinh có nắp đậy chuyên dụng cho việc setup hệ sinh thái Terrarium kín và hở.',
 				status: true,
 				productCount: 120,
 				imageUrl:
-					'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:100/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_1.png',
+					'https://file.hstatic.net/1000100178/file/be-ca-mat-kinh-duc_f6d0bb000d624d5085737e5f0f7ffd3d_grande.jpg',
 				createdAt: '2024-01-01T10:00:00Z',
 				updatedAt: '2024-02-01T10:00:00Z',
 			});

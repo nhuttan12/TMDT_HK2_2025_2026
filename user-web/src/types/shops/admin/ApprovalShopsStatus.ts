@@ -1,0 +1,1 @@
+export type ApprovalShopsStatus = 'pending-approval' | 'approved' | 'rejected';

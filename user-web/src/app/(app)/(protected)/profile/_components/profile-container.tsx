@@ -3,7 +3,7 @@
 import { JSX } from 'react';
 import { ProfileUi } from './profile-ui';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
-import { useProfileQuery } from '@/queries/users/use-profile-query';
+import { useProfileQuery } from '@/queries/users/user/use-profile-query';
 import { ProfileLogicReturn, useProfileLogic } from '@/hooks/users/profile/use-profile-logic';
 
 interface ProfileContainerProps {

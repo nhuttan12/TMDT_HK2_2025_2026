@@ -1,12 +1,12 @@
 'use client';
 
-import React, { JSX, useEffect, useState } from 'react';
+import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DynamicFilter } from '@/components/layout/share/dynamic-filter';
-import { FilterField } from '@/types/uis/FilterField';
 import { useQueryFilter } from '@/hooks/share/use-query-filter';
+import { FilterField } from '@/types/uis/FilterField';
 import { Timeout } from '@radix-ui/primitive';
+import React, { JSX, ReactNode, useEffect, useState } from 'react';
 
 interface Props<T> {
 	title: string;
@@ -16,7 +16,7 @@ interface Props<T> {
 	onAdd?: () => void;
 	addLabel?: string;
 
-	actions?: React.ReactNode;
+	actions?: ReactNode;
 
 	filter?: boolean;
 	filterField?: FilterField<T>[];

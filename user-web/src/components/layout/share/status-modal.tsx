@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 
 interface StatusModalProps {
 	isOpen: boolean;
@@ -127,7 +127,7 @@ export function StatusModal({
 						<Button
 							variant='outline'
 							onClick={onClose}
-							className='min-w-[120px] cursor-pointer'
+							className='min-w-30 cursor-pointer'
 						>
 							{confirmText}
 						</Button>

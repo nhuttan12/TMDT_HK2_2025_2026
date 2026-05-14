@@ -1,10 +1,18 @@
+'use client';
+
 import { CartItem } from '@/types/carts/CartItem';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { fetchUserCart } from '@/services/carts/cart-service';
+import { getUserCartByUserId } from '@/services/carts/cart-service';
 
-export function useCartQuery(): UseQueryResult<CartItem[], Error> {
+export function useCartQuery(userId: number, initialData?: CartItem[]): UseQueryResult<CartItem[], Error> {
 	return useQuery({
-		queryKey: ['cart-items'],
-		queryFn: fetchUserCart,
+		queryKey: ['cart-items', userId],
+		queryFn: () => getUserCartByUserId(userId),
+		enabled: !!userId,
+		initialData: initialData,
+		staleTime: 1000 * 60 * 1,
+
+		// Cơ chế Fetch định kỳ (Polling)
+		refetchInterval: 1000 * 60 * 5,
 	});
 }

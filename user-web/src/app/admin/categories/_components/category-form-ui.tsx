@@ -5,8 +5,8 @@ import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import RichTextEditor from '@/components/layout/admin/rich-text-editor';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import Field from '@/components/layout/admin/field';
-import SingleImageUpload from '@/components/image/admin/single-image-upload';
 import { CategoryFormLogicReturn } from '@/hooks/categories/admin/use-category-form-logic';
+import SingleImageUpload from '@/components/images/admin/single-image-upload';
 
 interface CategoryFormUiProps extends CategoryFormLogicReturn {
 	formType: AdminFormType;

@@ -21,21 +21,21 @@ export const useGoodsReceiptNavigationLogic = (): UseGoodsReceiptNavigationLogic
 	): void => {
 		const path: string =
 			mode === 'view'
-				? `/admin/inventories/receipts/${receiptID}/batches/${batchID}`
-				: `/admin/inventories/receipts/${receiptID}/batches/${batchID}/add-new`;
+				? `/shop-owner/inventories/receipts/${receiptID}/batches/${batchID}`
+				: `/shop-owner/inventories/receipts/${receiptID}/batches/${batchID}/add-new`;
 		router.push(path);
 	};
 
 	const handleRedirectToAddNewReceiptDetail = (): void => {
-		router.push(`/admin/inventories/receipts/add-new`);
+		router.push(`/shop-owner/inventories/receipts/add-new`);
 	};
 
 	const handleRedirectToEditReceiptDetail = (receiptID: number): void => {
-		router.push(`/admin/inventories/receipts/${receiptID}/edit`);
+		router.push(`/shop-owner/inventories/receipts/${receiptID}/edit`);
 	};
 
 	const handleRedirectToReceiptDetail = (receiptID: number): void => {
-		router.push(`/admin/inventories/receipts/${receiptID}`);
+		router.push(`/shop-owner/inventories/receipts/${receiptID}`);
 	};
 
 	return {

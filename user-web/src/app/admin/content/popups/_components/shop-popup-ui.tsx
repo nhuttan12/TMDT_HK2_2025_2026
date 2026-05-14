@@ -4,8 +4,8 @@ import React, { JSX } from 'react';
 import { BaseImage } from '@/types/images/admin/BaseImage';
 import { Button } from '@/components/ui/button';
 import { Save, AlertCircle } from 'lucide-react';
-import { Popup } from '@/types/shops/Popup';
-import SingleImageUpload from '@/components/image/admin/single-image-upload';
+import { Popup } from '@/types/shops/admin/Popup';
+import SingleImageUpload from '@/components/images/admin/single-image-upload';
 
 interface ShopPopupUiProps {
 	popup: Popup | undefined;
@@ -27,14 +27,15 @@ export function ShopPopupUi(props: ShopPopupUiProps): JSX.Element {
 				<div>
 					<h1 className='text-xl font-bold text-gray-800'>Quản lý Popup Khuyến Mãi</h1>
 					<p className='text-sm text-gray-500 mt-1'>
-						Popup sẽ hiển thị duy nhất 1 hình ảnh ngay khi khách hàng truy cập vào trang chủ.
+						Popup sẽ hiển thị duy nhất 1 hình ảnh ngay khi khách hàng truy cập vào trang
+						chủ.
 					</p>
 				</div>
 
 				<Button
 					onClick={onSave}
 					disabled={!isValidToSave || isSubmitting}
-					className='min-w-[140px]'
+					className='min-w-35'
 				>
 					{isSubmitting ? (
 						<span>Đang lưu...</span>

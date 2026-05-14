@@ -102,11 +102,11 @@ export const useProductVariantListLogic = ({
 	};
 
 	const handleRedirectToDetail = (row: BatchItemSerial): void => {
-		router.push(`/admin/products/${row.productId}/variant/${row.productVariantId}`);
+		router.push(`/shop-owner/products/${row.productId}/variant/${row.productVariantId}`);
 	};
 
 	const handleRedirectToCreateBatchReceipt = (): void => {
-		router.push('/admin/inventories/receipts/add-new');
+		router.push('/shop-owner/inventories/receipts/add-new');
 	};
 
 	return {

@@ -42,18 +42,20 @@ export function DataTable<T extends object>({
 	const overflowClass = stickyHeader ? 'overflow-y-scroll' : 'overflow-y-auto';
 
 	if (selectable) {
+		const getCheckboxState = (): boolean | 'indeterminate' => {
+			if (selectable.isIndeterminate) {
+				return 'indeterminate';
+			}
+			return selectable.isAllSelected ?? selectable.selected.length === data.length;
+		};
+
 		const selectColumn: Column<T> = {
 			key: '__select',
 			header: (
 				<Checkbox
 					data-no-row-click
 					className={borderClass}
-					checked={selectable.isAllSelected ?? selectable.selected.length === data.length}
-					ref={(el: HTMLButtonElement): void => {
-						if (el && selectable.isIndeterminate !== undefined) {
-							(el as HTMLInputElement).indeterminate = selectable.isIndeterminate;
-						}
-					}}
+					checked={getCheckboxState()}
 					onCheckedChange={(): void => {
 						selectable.onToggleAll();
 					}}

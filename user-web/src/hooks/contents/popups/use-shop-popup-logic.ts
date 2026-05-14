@@ -1,8 +1,8 @@
 'use client';
 
-import { Popup } from '@/types/shops/Popup';
+import { Popup } from '@/types/shops/admin/Popup';
 import { BaseImage } from '@/types/images/admin/BaseImage';
-import { UpdatePopupPayload } from '@/types/shops/UpdatePopupPayload';
+import { UpdatePopupPayload } from '@/types/shops/admin/UpdatePopupPayload';
 import { useEffect, useState } from 'react';
 
 interface UseShopPopupLogicReturn {

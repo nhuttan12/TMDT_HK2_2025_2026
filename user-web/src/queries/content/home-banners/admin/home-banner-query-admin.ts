@@ -4,7 +4,7 @@ import {
 	getHomeBannersAdmin,
 	updateHomeBannersAdmin,
 } from '@/services/contents/home-banners/admin/home-banner-service-admin';
-import { UpdateHomeBannerPayload } from '@/types/shops/UpdateHomeBannerPayload';
+import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
 
 export function useHomeBannersQueryAdmin(
 	initialData: SortableImageForm[],

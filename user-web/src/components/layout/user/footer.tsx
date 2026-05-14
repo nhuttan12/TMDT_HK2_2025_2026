@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default function Footer(): JSX.Element {
 	return (
-		<footer className='mt-16 border-t border-slate-200 bg-white'>
+		<footer className='mt-8 border-t border-slate-200 bg-white'>
 			<div className='mx-auto max-w-[1700px] px-4 py-10'>
 				<div className='grid grid-cols-1 gap-8 text-center sm:grid-cols-3 sm:text-left'>
 					{/* Column 1 */}

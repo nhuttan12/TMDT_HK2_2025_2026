@@ -8,15 +8,12 @@ export default async function InvoicesPage(): Promise<JSX.Element> {
 	const userId: number = 1;
 
 	// Server-Side Fetching (RSC) với tham số userId
-	const initialInvoices: UserInvoice[] = await getUserInvoicesByUserId(userId);
+	const initialInvoices = await getUserInvoicesByUserId(userId);
 
 	return (
-		<div className='container mx-auto p-4'>
-			<h1 className='text-2xl font-bold mb-6'>Lịch sử hóa đơn</h1>
 			<UserInvoicesContainer
 				userId={userId}
 				initialInvoices={initialInvoices}
 			/>
-		</div>
 	);
 }

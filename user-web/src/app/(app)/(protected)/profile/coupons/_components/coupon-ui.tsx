@@ -2,10 +2,10 @@
 import { JSX } from 'react';
 import { Card } from '@/components/ui/card';
 import { TicketPercent, Truck } from 'lucide-react';
-import { Coupon } from '@/types/coupons/Coupon';
+import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 
 interface CouponsUiProps {
-	coupons: Coupon[];
+	coupons: UserCoupon[];
 	isLoading: boolean;
 }
 
@@ -33,14 +33,14 @@ export function CouponsUi(props: CouponsUiProps): JSX.Element {
 				) : (
 					<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 						{coupons.map(
-							(coupon: Coupon): JSX.Element => (
+							(coupon: UserCoupon): JSX.Element => (
 								<Card
 									key={coupon.id}
 									className='flex overflow-hidden rounded-2xl shadow-sm border border-slate-200'
 								>
 									{/* Left */}
 									<div className='w-32 bg-red-500 text-white flex flex-col items-center justify-center p-4 relative'>
-										{coupon.couponType === 'Sale' ? (
+										{coupon.couponType === 'sale' ? (
 											<TicketPercent size={28} />
 										) : (
 											<Truck size={28} />

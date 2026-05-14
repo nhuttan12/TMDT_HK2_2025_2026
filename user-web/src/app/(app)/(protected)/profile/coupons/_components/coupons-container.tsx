@@ -1,20 +1,20 @@
-'use client';
+﻿'use client';
 
 import { JSX } from 'react';
-import { useCouponsQuery } from '@/queries/coupons/user/use-coupons-query';
-import { Coupon } from '@/types/coupons/Coupon';
-import { CouponsUi } from '@/app/(app)/(protected)/profile/coupons/_components/coupon-ui';
+import { useCouponUserQuery } from '@/queries/marketing/coupons/user/use-coupon-user-query';
+import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
+import { CouponsUi } from './coupon-ui';
 
 interface CouponsContainerProps {
 	userId: number;
-	initialCoupons: Coupon[];
+	initialCoupons: UserCoupon[];
 }
 
 export default function CouponsContainer(props: CouponsContainerProps): JSX.Element {
 	const { userId, initialCoupons } = props;
 
 	// Truyền userId và initialCoupons vào Query
-	const { data: coupons = [], isLoading } = useCouponsQuery(userId, initialCoupons);
+	const { data: coupons = [], isLoading } = useCouponUserQuery(userId, initialCoupons);
 
 	return (
 		<CouponsUi

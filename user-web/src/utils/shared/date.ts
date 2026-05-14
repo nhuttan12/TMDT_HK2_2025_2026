@@ -47,3 +47,15 @@ export function formatDateTimeWithBrackets(isoString: string): string {
 
 	return `${year}-${month}-${day} [${hours}:${minutes}]`;
 }
+
+/**
+ * Trích xuất phần ngày và giờ (YYYY-MM-DDThh:mm) từ chuỗi thời gian định dạng chuẩn ISO 8601.
+ * Thường được sử dụng chuyên biệt để binding (gắn) dữ liệu mặc định vào thẻ HTML <input type="datetime-local" />.
+ *
+ * @param {string} isoString - Chuỗi thời gian chuẩn ISO (VD: "2026-04-15T18:19:32.000Z").
+ * @returns {string} Chuỗi ngày giờ định dạng YYYY-MM-DDThh:mm (VD: "2026-04-15T18:19"), hoặc chuỗi rỗng nếu không có đầu vào.
+ */
+export function formatForDateTimeInput(isoString: string): string {
+    if (!isoString) return '';
+    return isoString.substring(0, 16);
+}

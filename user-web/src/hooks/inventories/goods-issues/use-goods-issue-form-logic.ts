@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
@@ -25,7 +25,7 @@ export interface GoodsIssueLogicReturn {
 	handleUpdateItem: (id: number, fields: Partial<GoodsIssueItem>) => void;
 	handleRemoveItem: (itemId: number) => void;
 	handleAddProductToForm: (selectedProduct: ProductForGoodsIssue) => void;
-	onFormSubmit: (e: FormEvent) => Promise<void>;
+	onFormSubmit: (e: SyntheticEvent) => Promise<void>;
 	handleBack: () => void;
 }
 
@@ -98,7 +98,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 	};
 
 	// Logic Submit tập trung
-	const onFormSubmit = async (e: FormEvent): Promise<void> => {
+	const onFormSubmit = async (e: SyntheticEvent): Promise<void> => {
 		e.preventDefault();
 		try {
 			statusModal.showLoading('Đang xử lý dữ liệu, vui lòng chờ...');
@@ -107,6 +107,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 				isCreate ? 'Tạo phiếu xuất kho thành công!' : 'Cập nhật phiếu xuất kho thành công!',
 			);
 		} catch (error) {
+			console.error(error);
 			statusModal.showError(
 				'Lưu dữ liệu thất bại. Vui lòng kiểm tra lại kết nối hoặc số lượng tồn kho.',
 			);

@@ -1,6 +1,8 @@
 import { ProductDetail } from '@/types/products/user/ProductDetail';
+import { ProductShop } from '@/types/products/user/ProductShop';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { Review } from '@/types/products/user/Review';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
 	const reviews: Review[] = [
@@ -9,9 +11,11 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			userName: 'Nguyễn Minh Anh',
 			createdAt: '2026-02-10T08:15:00Z',
 			rating: 5,
-			content: 'Sản phẩm rất tốt, đóng gói kỹ, giao hàng nhanh. Sẽ ủng hộ shop dài dài.',
+			content:
+				'Bể setup rất đẹp, rêu xanh mướt và bố cục đá lũa rất tự nhiên. Đóng gói lớp chống sốc dày đặc nên bình thủy tinh không hề xước vỡ.',
 			shopReply: {
-				content: 'Cảm ơn anh/chị đã tin tưởng và ủng hộ shop ❤️',
+				content:
+					'Cảm ơn anh/chị đã tin tưởng và ủng hộ GreenSpace ❤️ Chúc anh/chị có những phút giây thư giãn bên bình Terrarium ạ.',
 				createdAt: '2026-02-10T09:00:00Z',
 			},
 		},
@@ -20,16 +24,19 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			userName: 'Trần Quốc Bảo',
 			createdAt: '2026-02-09T14:20:00Z',
 			rating: 4,
-			content: 'Chất lượng ổn trong tầm giá, nhưng giao hàng hơi chậm.',
+			content:
+				'Hệ sinh thái ổn định, nắp đậy khít giữ ẩm tốt. Giao hàng hơi chậm do đợi shop setup mới.',
 		},
 		{
 			id: 'cmt-003',
 			userName: 'Lê Thu Trang',
 			createdAt: '2026-02-08T11:05:00Z',
 			rating: 4.5,
-			content: 'Sản phẩm giống mô tả, dùng khá hài lòng. Đáng tiền.',
+			content:
+				'Bể giống hình 100%, nhìn bên ngoài sống động hơn nhiều. Cây cẩm nhung lên màu rất đẹp.',
 			shopReply: {
-				content: 'Shop rất vui khi chị hài lòng ạ!',
+				content:
+					'Shop rất vui khi chị hài lòng ạ! Nhớ bật đèn quang hợp 6-8 tiếng mỗi ngày chị nhé.',
 				createdAt: '2026-02-08T12:00:00Z',
 			},
 		},
@@ -38,16 +45,18 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			userName: 'Phạm Gia Hưng',
 			createdAt: '2026-02-07T18:40:00Z',
 			rating: 3,
-			content: 'Dùng tạm ổn, chưa thật sự xuất sắc như mong đợi.',
+			content:
+				'Bể đẹp nhưng size S hơi nhỏ so với mình tưởng tượng, nên mua size M sẽ hợp để bàn làm việc hơn.',
 		},
 		{
 			id: 'cmt-005',
 			userName: 'Hoàng Mỹ Linh',
 			createdAt: '2026-02-07T09:22:00Z',
 			rating: 5,
-			content: 'Mình rất thích sản phẩm này, sẽ giới thiệu bạn bè.',
+			content:
+				'Quá ưng ý, mình mua làm quà tặng sinh nhật bạn, bạn mình thích mê. Sẽ mua thêm một bình đa giác cho bản thân.',
 			shopReply: {
-				content: 'Cảm ơn chị đã giới thiệu shop đến bạn bè 🥰',
+				content: 'Cảm ơn chị đã chọn sản phẩm của shop làm quà tặng 🥰',
 				createdAt: '2026-02-07T10:00:00Z',
 			},
 		},
@@ -56,10 +65,11 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			userName: 'Đặng Thanh Tùng',
 			createdAt: '2026-02-06T15:30:00Z',
 			rating: 2,
-			content: 'Sản phẩm không đúng kỳ vọng, hơi thất vọng.',
+			content:
+				'Trong lúc vận chuyển bị xô lệch đất, làm rêu dính lên kính khá nhiều, phải ngồi vệ sinh lại.',
 			shopReply: {
 				content:
-					'Shop xin lỗi về trải nghiệm chưa tốt. Anh vui lòng inbox để shop hỗ trợ nhé!',
+					'Shop vô cùng xin lỗi về sự cố xô lệch do vận chuyển. Anh vui lòng check inbox để shop hướng dẫn cách vệ sinh và định hình lại bố cục nhé!',
 				createdAt: '2026-02-06T16:00:00Z',
 			},
 		},
@@ -68,143 +78,171 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			userName: 'Võ Thảo Nhi',
 			createdAt: '2026-02-05T20:10:00Z',
 			rating: 5,
-			content: 'Quá tuyệt vời, không có gì để chê.',
+			content:
+				'Đèn LED rất sáng và sang, rêu đầu đinh mọc dày. Tư vấn viên rất nhiệt tình chỉ cách chăm sóc.',
 		},
 		{
 			id: 'cmt-008',
 			userName: 'Bùi Quang Huy',
 			createdAt: '2026-02-04T13:55:00Z',
 			rating: 4,
-			content: 'Mọi thứ đều ổn, đóng gói chắc chắn.',
+			content:
+				'Kiểu dáng bình trụ tròn dễ nhìn ngắm từ mọi góc độ. Giá hơi cao xíu nhưng xứng đáng.',
 		},
 		{
 			id: 'cmt-009',
 			userName: 'Phan Ngọc Mai',
 			createdAt: '2026-02-03T10:12:00Z',
 			rating: 4.5,
-			content: 'Chất lượng tốt, giá hợp lý.',
+			content: 'Chất lượng kính trong suốt, không bị bọt khí. Layout hài hòa.',
 		},
 		{
 			id: 'cmt-010',
 			userName: 'Lý Đức Anh',
 			createdAt: '2026-02-02T16:45:00Z',
 			rating: 1,
-			content: 'Giao nhầm màu, cần shop hỗ trợ đổi trả.',
+			content: 'Giao nhầm mẫu bình đa giác thành bình bầu dục, cần shop hỗ trợ đổi lại.',
 			shopReply: {
 				content:
-					'Shop xin lỗi về sự cố này. Anh vui lòng kiểm tra tin nhắn để shop hỗ trợ đổi trả ạ.',
+					'Shop thành thật xin lỗi về sự nhầm lẫn này. Anh vui lòng kiểm tra tin nhắn, shipper bên shop sẽ qua đổi lại đúng mẫu ngay trong ngày ạ.',
 				createdAt: '2026-02-02T17:30:00Z',
 			},
 		},
 	];
 
+	const shop: ProductShop = {
+		id: 88,
+		shopName: 'GreenSpace Official',
+		shopSlug: 'greenspace-official',
+	};
+
 	const productDetail: ProductDetail = {
 		id: productId,
-		name: 'Khoai Tây Hồng VietGAP 500G (Túi)',
-		brand: 'Trường Phát',
-		price: 33000,
-		image: 'https://cdn.hstatic.net/products/1000141988/x__l_ch_romaine_vietgap_tr__ng_ph_t_200_g___g_i____1__3fc777e3da9141469eb15bc5d28c62b1_master.png',
-		rating: 4.5,
-		discount: 0.5,
+		name: 'Bể Terrarium Kín Hệ Sinh Thái Nhiệt Đới (Tặng Kèm Đèn LED)',
+		brand: 'GreenSpace Nature',
+		rating: 4.8,
+		discount: 10,
+
+		shop: shop,
+
+		// Cập nhật khoảng giá mới
+		minPrice: 350000,
+		maxPrice: 650000,
+
+		// Danh sách hình ảnh dùng cho Carousel (Slider)
+		images: [
+			'https://product.hstatic.net/200000968796/product/tf-050__1__e92a04f7e9f34d5b96d792a2bfd9e9a3.png',
+			'https://product.hstatic.net/200000968796/product/tf-050__2__76a0ba361de34342840587659c088bf3.png',
+			'https://product.hstatic.net/200000968796/product/tf-050_a7908d3ec6a84732a1c5524c9eda1ae1.png',
+		],
 		description:
 			'<p>\n' +
-			'  Khô mực Song Phương là sản phẩm hải sản khô chất lượng cao, được tuyển chọn từ\n' +
-			'  những con mực tươi sống đánh bắt trực tiếp từ các vùng biển nổi tiếng của Việt Nam.\n' +
-			'  Với kích thước size S (nhỏ vừa), mực có độ mềm, ngọt thanh và rất dễ chế biến,\n' +
-			'  phù hợp cho các bữa ăn gia đình hoặc làm món nhắm tinh tế.\n' +
+			'  Terrarium Hệ Sinh Thái Nhiệt Đới Kín là sự kết hợp hoàn hảo giữa nghệ thuật sắp đặt\n' +
+			'  và thiên nhiên thu nhỏ. Môi trường bên trong bình thủy tinh hoàn toàn khép kín,\n' +
+			'  tạo ra một chu trình quang hợp và bay hơi nước tự nhiên, giúp cây cối tự duy trì\n' +
+			'  sự sống mà bạn hầu như không cần phải tốn công chăm sóc.\n' +
 			'</p>\n' +
 			'\n' +
-			'<h3>Đặc điểm nổi bật</h3>\n' +
+			'<h3>Thành phần bố cục</h3>\n' +
 			'<ul>\n' +
 			'  <li>\n' +
-			'    <strong>Kích thước phù hợp (Size S):</strong>\n' +
-			'    Với mật độ khoảng 70 - 80 con/kg, những con mực này có kích thước vừa vặn,\n' +
-			'    không quá dày nhưng thịt rất dai và ngọt. Đây là size mực lý tưởng để nướng\n' +
-			'    ăn liền hoặc làm mực ngào.\n' +
+			'    <strong>Thảm rêu xanh:</strong>\n' +
+			'    Sử dụng rêu đầu đinh và rêu nhung ( Cushion Moss ) giữ ẩm cực tốt, tạo cảm giác\n' +
+			'    như một thảm cỏ xanh mướt giữa khu rừng.\n' +
 			'  </li>\n' +
 			'  <li>\n' +
-			'    <strong>Độ tươi và khô chuẩn:</strong>\n' +
-			'    Mực được phơi dưới nắng tự nhiên giúp thân mực khô đều, có màu hồng nhạt đẹp mắt,\n' +
-			'    lớp phấn trắng mỏng bao phủ bên ngoài (dấu hiệu của mực tươi được phơi ngay).\n' +
+			'    <strong>Cây điểm xuyết:</strong>\n' +
+			'    Các loại cây họ dương xỉ, cẩm nhung (Fittonia), la hán đỏ... có sức sống dẻo dai\n' +
+			'    và ưa môi trường độ ẩm cao.\n' +
 			'  </li>\n' +
 			'  <li>\n' +
-			'    <strong>Vị ngọt tự nhiên:</strong>\n' +
-			'    Khi nướng hoặc chế biến, mực tỏa mùi thơm đặc trưng của biển, thịt mực càng nhai\n' +
-			'    càng ngọt, không bị đắng hay mặn gắt.\n' +
+			'    <strong>Đá và Lũa:</strong>\n' +
+			'    Đá trầm tích và lũa tự nhiên được xử lý sạch sẽ để không sinh nấm mốc, tạo\n' +
+			'    chiều sâu và vẻ đẹp hoang sơ cho bố cục.\n' +
 			'  </li>\n' +
 			'  <li>\n' +
-			'    <strong>Đóng hộp sang trọng:</strong>\n' +
-			'    Hộp 150g được đóng gói kỹ lưỡng, sạch sẽ, không chỉ giúp bảo quản tốt chất lượng\n' +
-			'    mực mà còn rất lịch sự khi dùng làm quà biếu tặng.\n' +
+			'    <strong>Chất nền:</strong>\n' +
+			'    Gồm 4 lớp tiêu chuẩn (Đá sỏi lọc nước, than hoạt tính khử mùi, màng lọc, và đất Akadama cao cấp).\n' +
 			'  </li>\n' +
 			'</ul>\n' +
 			'\n' +
-			'<h3>Gợi ý món ngon</h3>\n' +
+			'<h3>Hướng dẫn chăm sóc Terrarium Khép Kín</h3>\n' +
 			'<ul>\n' +
 			'  <li>\n' +
-			'    <strong>Mực nướng truyền thống:</strong>\n' +
-			'    Nướng bằng cồn, than hoặc nồi chiên không dầu. Sau khi chín, đập dập và xé tơi\n' +
-			'    từng sợi, chấm cùng tương ớt hoặc Sốt kim quất Vina V&amp;T.\n' +
+			'    <strong>Ánh sáng:</strong>\n' +
+			'    Sử dụng đèn LED quang hợp (được tặng kèm) chiếu sáng từ 6 - 8 tiếng mỗi ngày.\n' +
+			'    Tuyệt đối không để bình dưới ánh nắng mặt trời trực tiếp vì hiệu ứng nhà kính\n' +
+			'    sẽ làm chết rêu.\n' +
 			'  </li>\n' +
 			'  <li>\n' +
-			'    <strong>Mực khô chiên nước mắm:</strong>\n' +
-			'    Cắt mực thành miếng vừa ăn, chiên vàng rồi sốt cùng nước mắm tỏi ớt đường.\n' +
-			'    Đây là món "bắt mồi" cực đỉnh.\n' +
+			'    <strong>Tưới nước:</strong>\n' +
+			'    Vì là hệ sinh thái kín, bạn chỉ cần xịt phum sương nhẹ 1-2 lần mỗi THÁNG nếu thấy\n' +
+			'    lớp thành kính thiếu đọng nước. Nếu nước đọng thành giọt lớn trên kính, hãy mở nắp\n' +
+			'    khoảng 2 tiếng để bay bớt hơi ẩm.\n' +
 			'  </li>\n' +
 			'  <li>\n' +
-			'    <strong>Gỏi xoài mực khô:</strong>\n' +
-			'    Mực nướng xé nhỏ trộn cùng xoài xanh bào sợi, rau thơm (ngò rí, húng quế)\n' +
-			'    và nước mắm chua ngọt.\n' +
-			'  </li>\n' +
-			'  <li>\n' +
-			'    <strong>Nấu nước dùng:</strong>\n' +
-			'    Cho 1-2 con mực khô vào nồi nước lèo (hủ tiếu, phở) sẽ giúp nước dùng có\n' +
-			'    vị ngọt thanh và hương thơm đậm đà hơn hẳn.\n' +
+			'    <strong>Vệ sinh:</strong>\n' +
+			'    Dùng khăn mềm lau nhẹ bên ngoài mặt kính. Cắt tỉa những lá úa vàng (nếu có)\n' +
+			'    bằng nhíp chuyên dụng để tránh lây nấm.\n' +
 			'  </li>\n' +
 			'</ul>\n' +
-			'\n' +
-			'<h3>Hướng dẫn bảo quản</h3>\n' +
-			'<p>Để giữ mực luôn ngon, không bị mốc hay cứng:</p>\n' +
-			'<ul>\n' +
-			'  <li>\n' +
-			'    <strong>Bảo quản lạnh (Ưu tiên):</strong>\n' +
-			'    Gói kín mực bằng giấy báo hoặc túi nilon, sau đó cho vào ngăn mát (nếu dùng ngay)\n' +
-			'    hoặc ngăn đá (nếu muốn để lâu trên 3 tháng).\n' +
-			'  </li>\n' +
-			'  <li>\n' +
-			'    <strong>Tránh độ ẩm:</strong>\n' +
-			'    Không để mực ở nơi ẩm ướt vì mực khô rất dễ hút ẩm và sinh nấm mốc.\n' +
-			'  </li>\n' +
-			'  <li>\n' +
-			'    <strong>Cách xử lý mực bị cứng:</strong>\n' +
-			'    Nếu mực để tủ đông quá lâu bị khô cứng, bạn có thể ngâm nước ấm khoảng\n' +
-			'    5 phút trước khi chế biến để mực mềm trở lại.\n' +
-			'  </li>\n' +
-			'</ul>\n' +
-			'\n' +
-			'<h4>Mua hải sản khô ở đâu?</h4>\n' +
-			'<p>\n' +
-			'  Nếu bạn chưa biết mua hải sản khô ở đâu tại TP.HCM, bạn có thể tham khảo\n' +
-			'  hệ thống cửa hàng Farmers Market để lựa chọn sản phẩm đạt chuẩn chất lượng,\n' +
-			'  an tâm về nguồn gốc với giá thành tốt nhất.\n' +
-			'</p>\n' +
-			'\n' +
-			'<h4>Hệ thống cửa hàng</h4>\n' +
-			'<ul>\n' +
-			'  <li>Farmers Market Hai Bà Trưng (104 Hai Bà Trưng, Phường Đa Kao, Quận 1)</li>\n' +
-			'  <li>Farmers Market Nguyễn Thị Minh Khai (496 Nguyễn Thị Minh Khai, Phường 2, Quận 3)</li>\n' +
-			'  <li>Farmers Market Phan Xích Long (218 Phan Xích Long, Phường 2, Phú Nhuận)</li>\n' +
-			'  <li>Farmers Market Nguyễn Thị Thập (486 Nguyễn Thị Thập, Tân Quy, Quận 7)</li>\n' +
-			'  <li>Farmers Market Hoàng Hoa Thám (99 Hoàng Hoa Thám, Phường 6, Bình Thạnh)</li>\n' +
-			'  <li>Farmers Market Tân Bình (43 Võ Thành Trang, Phường 11, Tân Bình)</li>\n' +
-			'  <li>Farmers Market Gò Vấp (16 Quang Trung, Phường 10, Gò Vấp)</li>\n' +
-			'</ul>\n' +
-			'\n' +
-			'<p><strong>Thời gian mở cửa:</strong> 6h30 - 22h30 (Tất cả các ngày trong tuần)</p>\n' +
 			'\n' +
 			'<p>\n' +
-			'  Tư vấn viên của Farmers Market rất vinh hạnh được giải đáp mọi thắc mắc của Quý Khách.\n' +
+			'  <em>Lưu ý: Bể sẽ được đóng gói bằng hệ thống chèn xốp chuyên dụng, đảm bảo\n' +
+			'  nguyên vẹn bố cục 100% khi vận chuyển đi xa.</em>\n' +
 			'</p>\n',
+
+		// THÊM MỚI: Tầng phân loại (Tier Variations)
+		tierVariations: [
+			{
+				name: 'Kích thước',
+				options: ['Size S (15x15cm)', 'Size M (20x20cm)'],
+				images: [
+					'https://product.hstatic.net/200000968796/product/tf-015__10__68fd61d9f51f4a2e847776fe8e76d7e2.png',
+					'https://product.hstatic.net/200000968796/product/tf-015_310e9bd59abe4f549496e108f0fb909e.png',
+				],
+			},
+			{
+				name: 'Kiểu bình thủy tinh',
+				options: ['Trụ Tròn', 'Đa Giác'],
+			},
+		],
+
+		// THÊM MỚI: Các biến thể vật lý (Variants / SKUs)
+		variants: [
+			{
+				id: 101,
+				sku: 'TER-S-TRON',
+				tierIndex: [0, 0], // Size S, Trụ Tròn
+				price: 350000,
+				stock: 12,
+				isActive: true,
+			},
+			{
+				id: 102,
+				sku: 'TER-S-DAGIAC',
+				tierIndex: [0, 1], // Size S, Đa Giác
+				price: 420000,
+				stock: 5,
+				isActive: true,
+			},
+			{
+				id: 103,
+				sku: 'TER-M-TRON',
+				tierIndex: [1, 0], // Size M, Trụ Tròn
+				price: 550000,
+				stock: 0, // Hết hàng để test UI
+				isActive: true,
+			},
+			{
+				id: 104,
+				sku: 'TER-M-DAGIAC',
+				tierIndex: [1, 1], // Size M, Đa Giác
+				price: 650000,
+				stock: 8,
+				isActive: true,
+			},
+		],
 		reviews: reviews,
 	};
 
@@ -215,47 +253,47 @@ export const getRelatedProducts = async (categoryName: string): Promise<ProductU
 	const relatedProducts: ProductUserCard[] = [
 		{
 			id: 2,
-			name: 'Xà lách Romaine VietGAP 200G',
-			price: 25000,
+			name: 'Rêu Đầu Đinh (Pin Cushion Moss) Hộp 15x15cm',
+			price: 45000,
 			discount: 10,
-			rating: 4.5,
-			image: 'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?q=80&w=800',
+			rating: 4.8,
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_2_b0773e2fca4a47888df3165ae33ba42c.png',
 			isInWishlist: false,
 		},
 		{
 			id: 3,
-			name: 'Cà chua bi Đà Lạt 500G',
-			price: 32000,
+			name: 'Bình Thủy Tinh Đa Giác Viền Đồng Size L',
+			price: 250000,
 			discount: 0,
-			rating: 4.8,
-			image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?q=80&w=800',
+			rating: 4.9,
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_3_d40a99a57d74431dade36456338e91d7.png',
 			isInWishlist: false,
 		},
 		{
 			id: 4,
-			name: 'Khoai tây Đà Lạt 1KG',
-			price: 40000,
+			name: 'Đèn LED Quang Hợp Mini Đế Gỗ (Full Spectrum)',
+			price: 180000,
 			discount: 5,
 			rating: 4.6,
-			image: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRLhT2Ikxp2a-v-AqVFxWZZFMtT6_m602j8zdlMUuGelpUwuFRp',
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_4_c19ce15b3a044fe59c2adf07cddc4d31.png',
 			isInWishlist: false,
 		},
 		{
 			id: 5,
-			name: '[Đông lạnh] Pizza Ristorante Piccola Margherita Dr. Oetker 270G',
-			price: 169000,
-			discount: 5,
-			rating: 4.6,
-			image: 'https://product.hstatic.net/1000141988/product/pizza_ristorante_piccola_margherita_dr._oetker_270_g_bd46821fd58b4ae48d55375ca25590e6_master.jpg',
-			isInWishlist: false,
+			name: 'Đất Nền Akadama Nhật Bản Chuyên Terrarium (Túi 1KG)',
+			price: 65000,
+			discount: 0,
+			rating: 4.7,
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_5_477bfdf38cd04929afc984c0b73c0ee2.png',
+			isInWishlist: true,
 		},
 		{
 			id: 6,
-			name: 'Khô mực size S 70 - 80 Song Phương 150 g (hộp)',
-			price: 235000,
-			discount: 5,
-			rating: 4.6,
-			image: 'https://cdn.hstatic.net/products/1000141988/kh__m_c_size_s_70_-_80_song_ph__ng_150_g___h_p___878c79ee628a476f8e32807009fa9289_master.jpg',
+			name: 'Bộ Dụng Cụ Trồng Terrarium Cao Cấp (Nhíp, Kéo, Xẻng Mini)',
+			price: 120000,
+			discount: 15,
+			rating: 4.5,
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_6_665a02b1d3ef464494d118525b2e3dc6.png',
 			isInWishlist: false,
 		},
 	];
@@ -266,79 +304,267 @@ export const getRelatedProducts = async (categoryName: string): Promise<ProductU
 export const getProductsHome = async (): Promise<ProductUserCard[]> => {
 	const products: ProductUserCard[] = [
 		{
-			id: 1,
-			name: 'Orange',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbB_doR9LVg_xVbDXOOZc3TNbgNCEIzLLKw&s',
-			price: 5.5,
+			id: 7,
+			name: 'Bể Terrarium Trụ Tròn Size M (Kèm Đèn)',
+			image: 'https://cdn.hstatic.net/products/200000968796/cao_7_acd749099ceb4f6aa01a3fe1aca37890.png',
+			price: 550000,
 			isInWishlist: true,
+			rating: 4.9,
+			discount: 10,
+		},
+		{
+			id: 8,
+			name: 'Cây Cẩm Nhung Fittonia Đỏ Chậu Nhỏ',
+			image: 'https://product.hstatic.net/200000968796/product/tf-015__1__9a93238e4b604c918e65941527286733.png',
+			price: 35000,
+			isInWishlist: false,
+			rating: 4.7,
+			discount: 0,
+		},
+		{
+			id: 9,
+			name: 'Combo Rêu Nhung, Dương Xỉ, Đất Nền Tự Setup',
+			image: 'https://product.hstatic.net/200000968796/product/tf-015__2__297a7cdae0e7481c8a82971aad9a7750.png',
+			price: 150000,
+			isInWishlist: false,
+			rating: 4.8,
+			discount: 5,
+		},
+		{
+			id: 10,
+			name: 'Bình Xịt Phun Sương Mini Bằng Đồng Cao Cấp',
+			image: 'https://product.hstatic.net/200000968796/product/tf-015__6__7f6dcd819fcc4c99b2beed47477926e1.png',
+			price: 85000,
+			isInWishlist: false,
 			rating: 4.6,
 			discount: 0,
 		},
 		{
-			id: 2,
-			name: 'Tangerine',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-fSVx2LYnvTgOi1oiw2lONk1EkZf3ZOJTGQ&s',
-			price: 3.0,
-			isInWishlist: false,
-			rating: 4.7,
-			discount: 0,
-		},
-		{
-			id: 3,
-			name: 'Raspberry',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSk-k_lv6L0dU7km1VpLN0IQV-Nr8jVNS69vw&s',
-			price: 10.0,
-			isInWishlist: false,
-			rating: 4.5,
-			discount: 0,
-		},
-		{
-			id: 4,
-			name: 'Lemon',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQg7t4ogMfd_ii5A99O4xakAhyFqnjYecZAw&s',
-			price: 5.3,
-			isInWishlist: false,
-			rating: 4.7,
-			discount: 0.5,
-		},
-		{
-			id: 5,
-			name: 'Avocado',
-			image: 'https://domf5oio6qrcr.cloudfront.net/medialibrary/16762/gettyimages-961101662.jpg',
-			price: 15.7,
+			id: 11,
+			name: 'Đá Trầm Tích Vụn Rải Đường Mòn Terrarium (500g)',
+			image: 'https://product.hstatic.net/200000968796/product/tf-015__3__eb5511ad6edf4a279b55a95220ec179d.png',
+			price: 25000,
 			isInWishlist: true,
 			rating: 4.5,
 			discount: 0,
 		},
 		{
-			id: 6,
-			name: 'Lemon 2',
-			image: 'https://media.istockphoto.com/id/1130558991/photo/whole-lemon-isolated-on-white-background-clipping-path-full-depth-of-field.jpg?s=612x612&w=0&k=20&c=un9FPAWPWX5VDdWrV_FIv1-M5sPD6z_isJZA6HFyy_I=',
-			price: 8.0,
-			isInWishlist: false,
-			rating: 4.7,
-			discount: 0.5,
-		},
-		{
-			id: 7,
-			name: 'Banana',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMZw3NVvQB7ew-0I7zWlJw5b6iaU9TrcGY4Q&s',
-			price: 7.5,
-			isInWishlist: true,
-			rating: 4.7,
-			discount: 0,
-		},
-		{
-			id: 8,
-			name: 'Watermelon',
-			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCR2eBUKsjuLAl0oqz7YvkZJFU1C3znejG4g&s',
-			price: 12.2,
+			id: 12,
+			name: 'Paludarium - Bể Thủy Sinh Bán Cạn Độc Bản',
+			image: 'https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?q=80&w=800',
+			price: 1250000,
 			isInWishlist: false,
 			rating: 5.0,
-			discount: 0.3,
+			discount: 15,
+		},
+		{
+			id: 13,
+			name: 'Lọc Thác Bể Thủy Sinh Mini SoBo',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 110000,
+			isInWishlist: true,
+			rating: 4.4,
+			discount: 0,
+		},
+		{
+			id: 14,
+			name: 'Đèn Chiếu Điểm Spotlight Hồ Thủy Sinh Rọi Cây',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___4__8de9057e82334ecb84a81d2f45452153.png',
+			price: 220000,
+			isInWishlist: false,
+			rating: 4.8,
+			discount: 10,
+		},
+		{
+			id: 15,
+			name: 'Bể Kính Đa Giác Geometric Khung Đồng Vàng',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 320000,
+			isInWishlist: false,
+			rating: 4.9,
+			discount: 15,
+		},
+		{
+			id: 16,
+			name: 'Rêu Sừng Hươu Xanh Mướt (Hộp 15x15cm)',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 55000,
+			isInWishlist: true,
+			rating: 4.8,
+			discount: 0,
+		},
+		{
+			id: 17,
+			name: 'Tiểu Cảnh Bonsai Mini Gỗ Lũa Tự Nhiên',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 850000,
+			isInWishlist: false,
+			rating: 5.0,
+			discount: 20,
+		},
+		{
+			id: 18,
+			name: 'Combo Cây Cắt Cắm Thủy Sinh Dễ Trồng',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 120000,
+			isInWishlist: false,
+			rating: 4.6,
+			discount: 0,
+		},
+		{
+			id: 19,
+			name: 'Bình Cầu Thủy Tinh Trồng Sen Đá Trong Suốt',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 185000,
+			isInWishlist: true,
+			rating: 4.7,
+			discount: 10,
+		},
+		{
+			id: 20,
+			name: 'Bộ Kéo Cắt Nhíp Gắp Aquascape Chuyên Dụng',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 250000,
+			isInWishlist: false,
+			rating: 4.9,
+			discount: 5,
+		},
+		{
+			id: 21,
+			name: 'Bóng Đèn LED Quang Phổ Trồng Cây Trong Nhà',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 190000,
+			isInWishlist: true,
+			rating: 4.8,
+			discount: 0,
+		},
+		{
+			id: 22,
+			name: 'Đất Nền Trộn Sẵn Phù Hợp Mọi Loại Terrarium',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 65000,
+			isInWishlist: false,
+			rating: 4.5,
+			discount: 0,
+		},
+		{
+			id: 23,
+			name: 'Cây Dương Xỉ Lá Me Rủ Xanh Tốt',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 45000,
+			isInWishlist: false,
+			rating: 4.7,
+			discount: 10,
+		},
+		{
+			id: 24,
+			name: 'Bình Lọ Thủy Tinh Nắp Bần Làm Terrarium Kín',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 155000,
+			isInWishlist: true,
+			rating: 4.9,
+			discount: 0,
+		},
+		{
+			id: 25,
+			name: 'Sỏi Cuội Trắng Tự Nhiên Trang Trí (Túi 1kg)',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 30000,
+			isInWishlist: false,
+			rating: 4.6,
+			discount: 0,
+		},
+		{
+			id: 26,
+			name: 'Combo 3 Chậu Sen Đá Size Mini Dễ Thương',
+			image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+			price: 99000,
+			isInWishlist: false,
+			rating: 4.8,
+			discount: 12,
 		},
 	];
 
 	return products;
 };
 
+export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve([
+				{
+					id: 101,
+					name: 'Bể Kính Đa Giác Basic 20x20',
+					image: 'https://caydeban.com.vn/image/cache/catalog/products/Terrariums/MS01/Terrarium-MS01_6634-600x600.JPG',
+					price: 350000,
+					discount: 22,
+					rating: 4.9,
+					isInWishlist: false,
+				},
+				{
+					id: 102,
+					name: 'Rêu Đầu Rìu (Hộp Nhỏ)',
+					image: 'https://bizweb.dktcdn.net/thumb/grande/100/519/158/files/reu-mini-taiwan-thuy-sinh.jpg?v=1718441622291',
+					price: 65000,
+					discount: 0,
+					rating: 4.8,
+					isInWishlist: true,
+				},
+				{
+					id: 103,
+					name: 'Combo Đất Nền Terrarium 3 Lớp',
+					image: 'https://pos.nvncdn.com/524fc3-178700/ps/20250423_dd4liBuXnx.jpeg?v=1745413756',
+					price: 120000,
+					discount: 10,
+					rating: 5.0,
+					isInWishlist: false,
+				},
+				{
+					id: 104,
+					name: 'Cây Fittonia Xanh Gân Trắng',
+					image: 'https://dalat.flowers/ShowTopicSubImage.aspx?id=38057',
+					price: 45000,
+					discount: 0,
+					rating: 4.7,
+					isInWishlist: true,
+				},
+				{
+					id: 105,
+					name: 'Đèn LED Chiếu Sáng Kẹp Thành Bể',
+					image: 'https://cacanhkimgiang.com/wp-content/uploads/2020/09/den-roxin-k400.jpg',
+					price: 220000,
+					discount: 21,
+					rating: 4.6,
+					isInWishlist: false,
+				},
+				{
+					id: 106,
+					name: 'Đá Tai Mèo Mini Set 500g',
+					image: 'https://terrariumvibe.com/wp-content/uploads/2025/05/da-tai-meo-1.jpg',
+					price: 35000,
+					discount: 0,
+					rating: 4.9,
+					isInWishlist: false,
+				},
+				{
+					id: 107,
+					name: 'Bộ Dụng Cụ Chăm Sóc 3 Món Inox',
+					image: 'https://www.dtcworld.com.vn/storage/product-images/4140/Cutlery%20Set_20230329151347.jpg',
+					price: 180000,
+					discount: 15,
+					rating: 4.8,
+					isInWishlist: false,
+				},
+				{
+					id: 108,
+					name: 'Bình Xịt Phun Sương Cấp Ẩm Cao Cấp',
+					image: 'https://bizweb.dktcdn.net/100/460/752/products/binh-xit-650ml.jpg?v=1723690487857',
+					price: 85000,
+					discount: 22,
+					rating: 4.9,
+					isInWishlist: true,
+				},
+			]);
+		}, 600);
+	});
+};

@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, SyntheticEvent } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,7 +55,7 @@ export function ChangePasswordUi({
 
 					<CardContent className='pt-6'>
 						<form
-							onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}
+							onSubmit={(e: SyntheticEvent<HTMLFormElement>) => handleSubmit(e)}
 							className='space-y-6'
 						>
 							{/* Old Password */}
