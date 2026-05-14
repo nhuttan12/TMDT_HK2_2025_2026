@@ -2,9 +2,9 @@ import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { JSX } from 'react';
 import { getProductDetailById, getRelatedProducts } from '@/services/products/user/product-service';
-import ProductDetailContainer from '@/app/(app)/products/[productId]/_components/product-detail-container';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import ProductDetailContainer from '@/app/(app)/products/[productId]/_components/product-detail-container';
 
 interface Props {
 	params: Promise<{ productId: string }>;
