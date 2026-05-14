@@ -1,9 +1,9 @@
-import React from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 export interface Column<T> {
 	key: keyof T | string;
-	header: React.ReactNode;
-	render?: (row: T, index?: number) => React.ReactNode;
+	header: ReactNode;
+	render?: (row: T, index?: number) => ReactNode;
 	className?: string;
-	onHeaderClick?: (e: React.MouseEvent<HTMLTableCellElement>) => void;
+	onHeaderClick?: (e: MouseEvent<HTMLTableCellElement>) => void;
 }

@@ -1,14 +1,13 @@
 import { CartItem } from '@/types/carts/CartItem';
 import { JSX } from 'react';
 import UserCartContainer from '@/app/(app)/carts/_components/user-cart-container';
-import { fetchUserCart } from '@/services/carts/cart-service';
+import { getUserCartByUserId } from '@/services/carts/cart-service';
 
-interface Props {
-	params: { id: string };
-}
+export default async function Cart(): Promise<JSX.Element> {
+    // Mock User ID get from token
+    const userId = 1;
 
-export default async function Cart({ params }: Props): Promise<JSX.Element> {
-	const cartItems: CartItem[] = await fetchUserCart();
+	const cartItems: CartItem[] = await getUserCartByUserId(userId);
 
-	return <UserCartContainer carts={cartItems} />;
+	return <UserCartContainer carts={cartItems} userId={userId} />;
 }

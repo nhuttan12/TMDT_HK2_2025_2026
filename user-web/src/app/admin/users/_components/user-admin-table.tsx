@@ -1,8 +1,7 @@
 import { JSX } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { getUserRoleLabel } from '@/types/users/UserRole';
-import UserStatusBadge from '@/components/user/admin/user-status-badge';
+import UserStatusBadge from '@/app/admin/users/_components/user-status-badge';
 import { formatDate } from '@/utils/shared/date';
 import {
 	DropdownMenu,
@@ -12,14 +11,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Ban, MoreHorizontal, Pencil } from 'lucide-react';
-import { UserListAdmin } from '@/types/users/admin/UserListAdmin';
+import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 import { Column } from '@/types/uis/Column';
 import { DataTable } from '@/components/layout/admin/data-table';
 import { useTableSelection } from '@/hooks/share/use-table-selection';
+import { getUserRoleLabel } from '@/utils/users/user-role-label';
 
 interface Props {
-	users: UserListAdmin[];
+	users: CustomerListAdmin[];
 	handleSort: (field: UserAdminSortField) => void;
 	renderSortIcon: (field: UserAdminSortField) => JSX.Element | null;
 
@@ -34,12 +34,12 @@ export default function UserAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const allKeys: number[] = users.map((p: UserListAdmin): number => p.id);
+	const allKeys: number[] = users.map((p: CustomerListAdmin): number => p.id);
 
-	const { selected, toggle, toggleAll, isAllSelected, isIndeterminate } =
+	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
 		useTableSelection<number>(allKeys);
 
-	const columns: Column<UserListAdmin>[] = [
+	const columns: Column<CustomerListAdmin>[] = [
 		{
 			key: 'fullName',
 			header: (
@@ -51,7 +51,7 @@ export default function UserAdminTable({
 					{renderSortIcon('fullName')}
 				</div>
 			),
-			render: (row: UserListAdmin): JSX.Element => (
+			render: (row: CustomerListAdmin): JSX.Element => (
 				<div className='flex items-center gap-3'>
 					<div className='relative w-10 h-10 rounded-full overflow-hidden border'>
 						<Image
@@ -76,7 +76,7 @@ export default function UserAdminTable({
 					{renderSortIcon('email')}
 				</div>
 			),
-			render: (row: UserListAdmin): JSX.Element => (
+			render: (row: CustomerListAdmin): JSX.Element => (
 				<span className='text-muted-foreground'>{row.email}</span>
 			),
 		},
@@ -95,7 +95,7 @@ export default function UserAdminTable({
 					{renderSortIcon('role')}
 				</div>
 			),
-			render: (row: UserListAdmin): JSX.Element => (
+			render: (row: CustomerListAdmin): JSX.Element => (
 				<Badge variant='secondary'>{getUserRoleLabel(row.role)}</Badge>
 			),
 		},
@@ -110,7 +110,9 @@ export default function UserAdminTable({
 					{renderSortIcon('isActive')}
 				</div>
 			),
-			render: (row: UserListAdmin): JSX.Element => <UserStatusBadge status={row.status} />,
+			render: (row: CustomerListAdmin): JSX.Element => (
+				<UserStatusBadge status={row.status} />
+			),
 		},
 		{
 			key: 'createdAt',
@@ -123,14 +125,14 @@ export default function UserAdminTable({
 					{renderSortIcon('createdAt')}
 				</div>
 			),
-			render: (row: UserListAdmin): JSX.Element => (
+			render: (row: CustomerListAdmin): JSX.Element => (
 				<span className='text-muted-foreground'>{formatDate(row.createdAt)}</span>
 			),
 		},
 		{
 			key: 'actions',
 			header: <span className='text-right block'>Hành động</span>,
-			render: (row: UserListAdmin): JSX.Element => (
+			render: (row: CustomerListAdmin): JSX.Element => (
 				<div
 					className='text-right'
 					onClick={(e) => e.stopPropagation()}
@@ -172,12 +174,12 @@ export default function UserAdminTable({
 		<DataTable
 			data={users}
 			columns={columns}
-			onRowClick={(row: UserListAdmin): void => onView(row.id)}
-			getRowKey={(row: UserListAdmin): number => row.id}
+			onRowClick={(row: CustomerListAdmin): void => onView(row.id)}
+			getRowKey={(row: CustomerListAdmin): number => row.id}
 			selectable={{
 				selected: selected,
-				onToggle: toggle,
-				onToggleAll: toggleAll,
+				onToggle: onToggle,
+				onToggleAll: onToggleAll,
 				isAllSelected,
 				isIndeterminate,
 			}}

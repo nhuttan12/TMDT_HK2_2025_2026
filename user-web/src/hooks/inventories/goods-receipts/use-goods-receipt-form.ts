@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
-import { FormEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
@@ -63,7 +63,7 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 	}
 
 	// Handler dùng arrow function
-	const handleSubmit = (e: FormEvent): void => {
+	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 
 		const payload: GoodsReceiptDetail = {
@@ -86,6 +86,7 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 			productName: product.name,
 			batchNumber: '',
 			quantity: 1,
+			expiredAt: '',
 			unitPrice: 0,
 			totalPrice: 0,
 			isSerialInputted: false,

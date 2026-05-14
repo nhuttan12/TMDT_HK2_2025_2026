@@ -43,6 +43,9 @@ const eslintConfig = defineConfig([
 			'import/no-unresolved': 'error',
 			'import/no-duplicates': 'error',
 			'import/named': 'error',
+
+			// Rule này sẽ check tất cả những gì bị gạch ngang (deprecated)
+			'@typescript-eslint/no-deprecated': 'warn',
 		},
 	},
 
@@ -57,6 +60,7 @@ const eslintConfig = defineConfig([
 		'next-env.d.ts',
 		'tailwind.config.ts',
 		'tailwind.config.js',
+		'src/components/ui/**',
 	]),
 ]);
 

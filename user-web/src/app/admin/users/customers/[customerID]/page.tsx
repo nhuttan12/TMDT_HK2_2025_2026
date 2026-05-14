@@ -1,6 +1,29 @@
 import { JSX } from 'react';
-import UserAdminForm from '@/components/user/admin/user-admin-form';
+import { getUserDetailAdminById } from '@/services/users/admin/user-service';
+import UserAdminFormContainer from '@/app/admin/users/_components/user-admin-form-container';
+import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
+import { Metadata } from 'next';
 
-export default function Index(): JSX.Element {
-	return <UserAdminForm formType={'view'} />;
+export const metadata: Metadata = {
+	title: 'Quản lý khách hàng',
+};
+
+interface Props {
+	params: Promise<{ userId: string }>;
+}
+
+export default async function Page({ params }: Props): Promise<JSX.Element> {
+	const { userId } = await params;
+	const id: number = parseInt(userId);
+
+	// Fetch data tại Server
+	const initialData: UserDetailInfoAdmin = await getUserDetailAdminById(id);
+
+	return (
+		<UserAdminFormContainer
+			userId={id}
+			formType='view'
+			initialData={initialData}
+		/>
+	);
 }

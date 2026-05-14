@@ -8,12 +8,16 @@ export interface UsePaginationReturn {
 	changePage: (page: number) => void;
 }
 
-export function usePagination(): UsePaginationReturn {
+export function usePagination(totalPagesFromApi: number = 1): UsePaginationReturn {
 	const router: AppRouterInstance = useRouter();
 	const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
 	const pageParam: number = Number(searchParams.get('page'));
-	const currentPage: number = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+	let currentPage: number = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
+	if (currentPage > totalPagesFromApi && totalPagesFromApi > 0) {
+		currentPage = totalPagesFromApi;
+	}
 
 	const changePage = (page: number): void => {
 		//guard

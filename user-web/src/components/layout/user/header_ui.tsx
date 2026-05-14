@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { ListOrdered, LogOut, Search, ShoppingCart, User } from 'lucide-react';
+import { ListOrdered, LogOut, Search, ShoppingCart, Sprout, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { JSX, ReactNode } from 'react';
@@ -52,12 +52,27 @@ interface RedirectElement {
 }
 
 /* ---------- Data ---------- */
-
-const headerElements: RedirectElement[] = [
-	{ key: 'home', label: 'Trang chủ', href: '/' },
-	{ key: 'products', label: 'Sản phẩm', href: '/products' },
-	{ key: 'men', label: 'Đồ nam', href: '/men' },
-	{ key: 'women', label: 'Đồ nữ', href: '/women' },
+export const headerElements: RedirectElement[] = [
+	{
+		key: 'terrariums',
+		label: 'Bể kính tiểu cảnh',
+		href: '/terrariums',
+	},
+	{
+		key: 'plants-moss',
+		label: 'Cây & Rêu',
+		href: '/plants-moss',
+	},
+	{
+		key: 'accessories',
+		label: 'Phụ kiện & Đất nền',
+		href: '/accessories',
+	},
+	{
+		key: 'diy-kits',
+		label: 'Bộ tự làm (DIY)',
+		href: '/diy-kits',
+	},
 ];
 
 const profileElements: RedirectElement[] = [
@@ -89,114 +104,131 @@ const profileElements: RedirectElement[] = [
 
 /* ---------- Component ---------- */
 
-interface headerProps{
+interface HeaderProps {
 	isAuthenticated: boolean;
 }
-export default function Header_ui({isAuthenticated}:headerProps) {
+
+export default function HeaderUi({ isAuthenticated }: HeaderProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-white'>
-			<div className='mx-auto flex h-16 max-w-7xl items-center px-4'>
-				{/* Left */}
-				<div className='flex items-center gap-6'>
-					<Link
-						href='/public'
-						className='flex items-center gap-2'
-					>
-						<AcmeLogo />
-						<span className='hidden text-xl sm:block font-bold'>ACME</span>
-					</Link>
+			<div className='mx-auto flex flex-col h-full max-w-7xl px-4 py-4 gap-2'>
+				<Link href={'/shop-registration'}>
+					<span className='pl-3 text-sm'>Đăng ký bán hàng</span>
+				</Link>
+				<div className='mx-auto flex h-full w-full items-center'>
+					{/* Left */}
+					<div className='flex items-center gap-6'>
+						<Link
+							href='/'
+							aria-label='Home'
+							className='flex items-center gap-2'
+						>
+							{/* Khối Logo Icon */}
+							<div className='flex items-center justify-center w-8 h-8 transition-colors rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200'>
+								<Sprout
+									className='w-5 h-5'
+									strokeWidth={2.5}
+								/>
+							</div>
 
-					<NavigationMenu className='hidden sm:flex'>
-						<NavigationMenuList className='gap-3'>
-							{headerElements.map((item) => {
-								const isActive = pathname === item.href;
+							{/* Khối Text Thương hiệu */}
+							<span className='hidden text-xl font-extrabold tracking-tight transition-colors text-slate-800 sm:block group-hover:text-emerald-700'>
+								TerraCraft
+							</span>
+						</Link>
 
-								return (
-									<NavigationMenuItem key={item.key}>
-										<NavigationMenuLink
-											asChild
-											className={cn(
-												'rounded-md px-3 py-2 text-base font-medium transition-colors',
-												isActive
-													? 'bg-slate-100 text-black'
-													: 'text-slate-600 hover:text-black',
-											)}
-										>
-											<Link href={item.href}>{item.label}</Link>
-										</NavigationMenuLink>
-									</NavigationMenuItem>
-								);
-							})}
-						</NavigationMenuList>
-					</NavigationMenu>
-				</div>
+						<NavigationMenu className='hidden sm:flex'>
+							<NavigationMenuList className='gap-3'>
+								{headerElements.map((item) => {
+									const isActive = pathname === item.href;
 
-				{/* Right */}
-				<div className='ml-auto flex items-center gap-3'>
-					<div className='hidden sm:block'>
-						<InputGroup className='max-w-xs'>
-							<InputGroupInput placeholder='Search...' />
-							<InputGroupAddon>
-								<Search />
-							</InputGroupAddon>
-						</InputGroup>
+									return (
+										<NavigationMenuItem key={item.key}>
+											<NavigationMenuLink
+												asChild
+												className={cn(
+													'inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors',
+													isActive
+														? 'bg-slate-100 text-black'
+														: 'text-slate-600 hover:text-black',
+												)}
+											>
+												<Link href={item.href}>{item.label}</Link>
+											</NavigationMenuLink>
+										</NavigationMenuItem>
+									);
+								})}
+							</NavigationMenuList>
+						</NavigationMenu>
 					</div>
 
-					{isAuthenticated ? (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
-									<Avatar className='h-8 w-8'>
-										<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
-										<AvatarFallback>U</AvatarFallback>
-									</Avatar>
-								</button>
-							</DropdownMenuTrigger>
-
-							<DropdownMenuContent
-								align='end'
-								className='w-48'
-							>
-								{profileElements.map(
-									(item: RedirectElement): JSX.Element => (
-										<Link
-											href={item.href}
-											key={item.key}
-										>
-											<DropdownMenuItem
-												key={item.key}
-												onClick={() => router.push(item.href)}
-												className='flex items-center justify-between cursor-pointer'
-											>
-												{item.label}
-												{item.icon}
-											</DropdownMenuItem>
-										</Link>
-									),
-								)}
-							</DropdownMenuContent>
-						</DropdownMenu>
-					) : (
-						<div className='hidden lg:flex items-center gap-2'>
-							<Button
-								asChild
-								variant='outline'
-								className='bg-white text-black border-black hover:bg-gray-100'
-							>
-								<Link href='/login'>Đăng nhập</Link>
-							</Button>
-
-							<Button
-								asChild
-								className='bg-black text-white! hover:bg-white hover:text-black!'
-							>
-								<Link href='/register'>Đăng ký</Link>
-							</Button>
+					{/* Right */}
+					<div className='ml-auto flex items-center gap-3'>
+						<div className='hidden sm:block'>
+							<InputGroup className='max-w-xs'>
+								<InputGroupInput placeholder='Search...' />
+								<InputGroupAddon>
+									<Search />
+								</InputGroupAddon>
+							</InputGroup>
 						</div>
-					)}
+
+						{isAuthenticated ? (
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<button className='rounded-full focus:outline-none focus:ring-2 focus:ring-black/40 cursor-pointer'>
+										<Avatar className='h-8 w-8'>
+											<AvatarImage src='https://i.pravatar.cc/150?u=a042581f4e29026704d' />
+											<AvatarFallback>U</AvatarFallback>
+										</Avatar>
+									</button>
+								</DropdownMenuTrigger>
+
+								<DropdownMenuContent
+									align='end'
+									className='w-48'
+								>
+									{profileElements.map(
+										(item: RedirectElement): JSX.Element => (
+											<Link
+												href={item.href}
+												key={item.key}
+											>
+												<DropdownMenuItem
+													key={item.key}
+													onClick={() => router.push(item.href)}
+													className='flex items-center justify-between cursor-pointer'
+												>
+													{item.label}
+													{item.icon}
+												</DropdownMenuItem>
+											</Link>
+										),
+									)}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						) : (
+							<div className='hidden lg:flex items-center gap-2'>
+								<Button
+									asChild
+									variant='outline'
+									className='bg-white text-black border-black hover:bg-gray-100'
+								>
+									<Link href='/login'>Đăng nhập</Link>
+								</Button>
+
+								<Button
+									asChild
+									className='bg-black text-white! hover:bg-white hover:text-black!'
+								>
+									<Link href='/register'>Đăng ký</Link>
+								</Button>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</header>

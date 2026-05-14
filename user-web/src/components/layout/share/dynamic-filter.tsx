@@ -41,7 +41,7 @@ export function DynamicFilter<T extends object>({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className='rounded-full'>Lọc</Button>
+				<Button className='rounded-full cursor-pointer'>Lọc</Button>
 			</DialogTrigger>
 			<DialogContent className='max-w-lg'>
 				<DialogHeader>
@@ -105,10 +105,16 @@ export function DynamicFilter<T extends object>({
 						<Button
 							variant='ghost'
 							onClick={handleReset}
+							className='cursor-pointer'
 						>
 							Reset
 						</Button>
-						<Button onClick={() => onApply(values)}>Áp dụng</Button>
+						<Button
+							className='cursor-pointer'
+							onClick={() => onApply(values)}
+						>
+							Áp dụng
+						</Button>
 					</div>
 				</div>
 			</DialogContent>

@@ -11,7 +11,7 @@ import {
 	getShopBanners,
 	updateShopBanners,
 } from '@/services/contents/shop-banners/shop-banner-service';
-import { UpdateShopBannerPayload } from '@/types/shops/UpdateShopBannerPayload';
+import { UpdateShopBannerPayload } from '@/types/shops/admin/UpdateShopBannerPayload';
 
 export const SHOP_SLIDER_QUERY_KEY: string[] = ['shop-banners'];
 

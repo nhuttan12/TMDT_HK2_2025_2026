@@ -32,11 +32,11 @@ export function useGoodsIssueAdminLogic(): GoodsIssueAdminLogicReturn {
 	const pagination = usePagination();
 	const deleteModal = useConfirmDelete<GoodsIssueList>();
 
-	const handleRedirectToAddNew = (): void => router.push(`/admin/inventories/issues/add-new`);
+	const handleRedirectToAddNew = (): void => router.push(`/shop-owner/inventories/issues/add-new`);
 	const handleRedirectToView = (id: number): void =>
-		router.push(`/admin/inventories/issues/${id}`);
+		router.push(`/shop-owner/inventories/issues/${id}`);
 	const handleRedirectToEdit = (id: number): void =>
-		router.push(`/admin/inventories/issues/${id}/edit`);
+		router.push(`/shop-owner/inventories/issues/${id}/edit`);
 
 	const handleExecuteDelete = (): void => {
 		if (deleteModal.selectedItem) {

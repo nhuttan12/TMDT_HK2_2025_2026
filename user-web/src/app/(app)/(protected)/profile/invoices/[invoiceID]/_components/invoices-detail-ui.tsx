@@ -39,7 +39,9 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 					<h1 className='text-2xl font-bold text-slate-800'>
 						Hóa đơn #{invoice.invoiceId}
 					</h1>
-					<p className='text-slate-500 mt-1'>Ngày tạo: {formatDateTimeWithBrackets(invoice.createdAt)}</p>
+					<p className='text-slate-500 mt-1'>
+						Ngày tạo: {formatDateTimeWithBrackets(invoice.createdAt)}
+					</p>
 				</div>
 
 				<span className='px-4 py-2 rounded-lg bg-slate-100 text-slate-700 font-medium'>
@@ -69,9 +71,7 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 
 					<div>
 						<p className='font-medium text-slate-800'>Phương thức thanh toán</p>
-						<p>
-							{getPaymentMethodLabel(invoice.paymentMethod) ?? invoice.paymentMethod}
-						</p>
+						<p>{getPaymentMethodLabel(invoice.paymentMethod)}</p>
 					</div>
 
 					<div>

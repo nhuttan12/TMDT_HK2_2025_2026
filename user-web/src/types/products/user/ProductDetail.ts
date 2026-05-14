@@ -1,14 +1,29 @@
 import { Review } from '@/types/products/user/Review';
+import { ProductTierVariation } from './ProductTierVariation';
+import { ProductVariant } from './ProductVariant';
+import { ProductShop } from './ProductShop';
 
 export interface ProductDetail {
 	id: number;
 	name: string;
 	brand: string;
-	price: number;
-	image: string;
-	discount: number;
-	rating: number;
 	description: string;
+	rating: number;
+	discount: number;
+
+    // Tích hợp thông tin Shop vào chi tiết sản phẩm
+	shop: ProductShop;
+
+	// Xóa `price` đơn, thay bằng khoảng giá hiển thị ban đầu (VD: 150.000đ - 200.000đ)
+	minPrice: number;
+	maxPrice: number;
+
+	// Xóa `image` đơn, thay bằng danh sách ảnh gốc của sản phẩm để làm Carousel
+	images: string[];
+
+	// Nhúng hệ thống phân loại vào
+	tierVariations: ProductTierVariation[];
+	variants: ProductVariant[];
 
 	reviews: Review[];
 }

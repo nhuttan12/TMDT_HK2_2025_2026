@@ -1,17 +1,20 @@
-import { JSX } from 'react';
-import ProductAdminContainer from '@/app/admin/products/_components/product-admin-container';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import ProductAdminContainer from '@/components/products/admin/product-admin-container';
+import { getProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
 import { Metadata } from 'next';
-import { fetchProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
-
-
+import { JSX } from 'react';
 
 export const metadata: Metadata = {
-	title: 'Quản lý sản phẩm của cửa hàng',
+	title: 'Quản lý sản phẩm của nền tảng',
 };
 
 export default async function ProductsPage(): Promise<JSX.Element> {
-	const products: ProductListInfoAdmin[] = await fetchProductListInfoAdmin();
+	const products = await getProductListInfoAdmin();
 
-	return <ProductAdminContainer initialProducts={products} />;
+	return (
+		<ProductAdminContainer
+			initialProducts={products}
+			addLabel={'+ Phê duyệt sản phẩm cửa hàng'}
+			role={'admin'}
+		/>
+	);
 }

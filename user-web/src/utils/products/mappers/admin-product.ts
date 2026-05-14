@@ -11,6 +11,7 @@ export const mapProductAdminToFormState = (product: ProductDetailInfoAdmin): Pro
 	importPrice: product.importPrice,
 	discount: product.discount,
 	status: product.status,
+    systemStatus: product.systemStatus,
 	categoryId: product.categoryId,
 	createdAt: product.createdAt,
 	updatedAt: product.updatedAt,
@@ -23,6 +24,7 @@ export const mapFormToCreateDTO = (form: ProductFormState): ProductCreateDTO => 
 	description: form.description,
 	discount: form.discount,
 	status: form.status,
+	systemStatus: form.systemStatus,
 	categoryId: form.categoryId,
 	images: form.images,
 });
