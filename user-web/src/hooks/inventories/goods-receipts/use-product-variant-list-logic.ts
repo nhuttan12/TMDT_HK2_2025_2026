@@ -1,24 +1,27 @@
 'use client';
 
-import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useMemo, useState } from 'react';
 
-import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
+import { usePagination, UsePaginationReturn } from '@/hooks/share/use-pagination';
+import { useBatchReceiptStore } from '@/stores/batch-receipt.store';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
-import { usePagination, UsePaginationReturn } from '@/hooks/share/use-pagination';
 
 // 1. Khai báo Interface đầu vào
 export interface UseProductVariantListLogicProps {
 	batchId: number;
 	initialProductVariants?: BatchItemSerial[];
+	totalPagesFromApi?: number;
 }
 
 // 2. Khai báo Interface trả về để Container và UI sử dụng
 export interface UseProductVariantListLogicReturn extends UsePaginationReturn {
 	displayData: BatchItemSerial[];
 	isModalOpen: boolean;
+	totalQuantity: number;
+	totalAmount: number;
+	totalPages: number;
 	setIsModalOpen: (open: boolean) => void;
 	handleSelectVariants: (variants: ProductVariantRow[]) => void;
 	handleUpdateItem: (itemId: number, fields: Partial<BatchItemSerial>) => void;
@@ -30,33 +33,29 @@ export interface UseProductVariantListLogicReturn extends UsePaginationReturn {
 export const useProductVariantListLogic = ({
 	batchId,
 	initialProductVariants = [],
+	totalPagesFromApi = 1,
 }: UseProductVariantListLogicProps): UseProductVariantListLogicReturn => {
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 
 	// --- Local UI States ---
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const { currentPage, changePage } = usePagination();
 
 	// --- Zustand Store ---
-	const batchItems: BatchItemSerial[] = useBatchReceiptStore(
-		(s: BatchReceiptStore): BatchItemSerial[] => {
-			if (batchId === undefined) return [];
-			return s.batchItemsByBatchId[batchId] ?? [];
-		},
-	);
+	const batchItems: BatchItemSerial[] = useBatchReceiptStore((s): BatchItemSerial[] => {
+		if (batchId === undefined) return [];
+		return s.batchItemsByBatchId[batchId] ?? [];
+	});
 
-	const generateId = useBatchReceiptStore((s: BatchReceiptStore): (() => number) => s.generateId);
+	const generateId = useBatchReceiptStore((s): (() => number) => s.generateId);
 	const addBatchItems = useBatchReceiptStore(
-		(s: BatchReceiptStore): ((batchId: number, items: BatchItemSerial[]) => void) =>
-			s.addBatchItems,
+		(s): ((batchId: number, items: BatchItemSerial[]) => void) => s.addBatchItems,
 	);
 	const removeBatchItem = useBatchReceiptStore(
-		(s: BatchReceiptStore): ((batchId: number, itemId: number) => void) => s.removeBatchItem,
+		(s): ((batchId: number, itemId: number) => void) => s.removeBatchItem,
 	);
 	const updateBatchItem = useBatchReceiptStore(
-		(
-			s: BatchReceiptStore,
-		): ((batchId: number, itemId: number, fields: Partial<BatchItemSerial>) => void) =>
+		(s): ((batchId: number, itemId: number, fields: Partial<BatchItemSerial>) => void) =>
 			s.updateBatchItem,
 	);
 
@@ -71,6 +70,18 @@ export const useProductVariantListLogic = ({
 		return batchItems.length > 0 ? batchItems : filteredInitialItems;
 	}, [batchItems, filteredInitialItems]);
 
+	// Vì mỗi row là 1 Serial, số lượng chính là độ dài mảng. 
+	// Nếu sau này bạn gộp nhóm lại có trường quantity, thì dùng reduce.
+	const totalQuantity: number = displayData.length;
+
+	// Tính tổng tiền dựa trên giá nhập (costPrice). Ép kiểu an toàn bằng Number()
+	const totalAmount: number = useMemo((): number => {
+		return displayData.reduce((sum: number, item: BatchItemSerial): number => {
+			const price: number = Number(item.costPrice) || 0;
+			return sum + price;
+		}, 0);
+	}, [displayData]);
+
 	// --- Logic Xử lý Sự kiện (Actions) ---
 	const handleSelectVariants = (variants: ProductVariantRow[]): void => {
 		const newItems: BatchItemSerial[] = variants.map(
@@ -82,6 +93,7 @@ export const useProductVariantListLogic = ({
 					productVariantId: v.id,
 					productVariantName: v.name,
 					serialNumber: '',
+					costPrice: 0,
 					appearanceCondition: '',
 					status: 'in_stock',
 					importDate: new Date().toISOString(),
@@ -115,8 +127,10 @@ export const useProductVariantListLogic = ({
 		setIsModalOpen,
 		currentPage,
 		changePage,
-		// Trả về Data & Actions
-		displayData,
+		totalQuantity,
+		totalAmount,
+		totalPages: totalPagesFromApi,
+		displayData: displayData,
 		handleSelectVariants,
 		handleUpdateItem,
 		handleRemoveItem,

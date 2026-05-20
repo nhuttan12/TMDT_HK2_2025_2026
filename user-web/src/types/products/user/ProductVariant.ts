@@ -1,4 +1,4 @@
-// Ghi nhận các biến thể vật lý tồn tại trong kho (SKU)
+// Ghi nhận các phân loại vật lý tồn tại trong kho (SKU)
 export interface ProductVariant {
 	id: number;
 	sku: string; // Mã lưu kho sản phẩm
@@ -10,5 +10,5 @@ export interface ProductVariant {
 	price: number; // Mức giá riêng của phân loại này
 	stock: number; // Số lượng tồn kho (Nếu = 0 thì UI sẽ disable nút chọn)
 	isActive: boolean; // Trạng thái chủ động tắt/bật từ admin
-	image?: string; // Hình ảnh riêng biệt khi nhấn vào biến thể này (ghi đè ảnh gốc)
+	image?: string; // Hình ảnh riêng biệt khi nhấn vào phân loại này (ghi đè ảnh gốc)
 }

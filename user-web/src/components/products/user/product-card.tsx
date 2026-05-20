@@ -1,13 +1,12 @@
 'use client';
 
-import React, { JSX, useState } from 'react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Star } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { JSX, useState } from 'react';
 
 interface ProductCardProps {
 	product: ProductUserCard;
@@ -15,7 +14,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, elementWidth }: ProductCardProps): JSX.Element {
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 
 	const [isWishlisted, setIsWishlisted] = useState(product.isInWishlist);
 

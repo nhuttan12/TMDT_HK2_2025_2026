@@ -138,7 +138,7 @@ export function useProductAdminFormLogic({
 
 	const handleTriggerDeleteVariant = (variantId: number): void => {
 		setDeletingId(variantId);
-		modal.showWarning(`Bạn có chắc chắn muốn xoá biến thể "${variantId}" không?`);
+		modal.showWarning(`Bạn có chắc chắn muốn xoá phân loại "${variantId}" không?`);
 	};
 
 	const handleConfirmDelete = (): void => {

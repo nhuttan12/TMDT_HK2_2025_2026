@@ -1,40 +1,45 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DashboardLogicReturn } from '@/hooks/analyst/use-dashboard-logic';
 import { DashboardStatsResponse } from '@/types/analyst/DashboardStatsResponse';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 import { getInvoiceStatusHexColor } from '@/utils/invoices/invoice-status-hex-color';
 import { getInvoiceStatusLabel } from '@/utils/invoices/invoice-status-label';
-import { getInvoiceStatusTextClassColor } from '@/utils/invoices/invoice-status-text-class-color';
-import { formatDate } from '@/utils/shared/date';
+import { formatDate, formatDateForInput } from '@/utils/shared/date';
 import { RefreshCcw } from 'lucide-react';
 import React from 'react';
 import {
-	Bar,
-	BarChart,
-	CartesianGrid,
-	Cell,
-	Line,
-	LineChart,
-	Pie,
-	PieChart,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Cell,
+    Legend,
+    Line,
+    LineChart,
+    Pie,
+    PieChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from 'recharts';
 
-export interface DashboardChartsUiProps {
-	data: DashboardStatsResponse;
-	timeRange: string;
-	isFetching: boolean;
-	onTimeRangeChange: (range: string) => void;
-	onRefresh: () => void;
+interface DashboardChartsUiProps extends DashboardLogicReturn {
+    data: DashboardStatsResponse;
+    isFetching: boolean;
+    onRefresh: () => void;
 }
 
 export const DashboardChartsUi = ({
 	data,
-	timeRange,
-	isFetching,
-	onTimeRangeChange,
-	onRefresh,
+    timeRange,
+    startDate,
+    endDate,
+    isFetching,
+    onTimeRangeChange,
+    onDateRangeChange,
+    onRefresh,
 }: DashboardChartsUiProps): React.ReactElement => {
 	// Hàm hỗ trợ format tiền tệ cho trục Y và Tooltip
 	const formatCurrency = (value: number): string => {
@@ -49,34 +54,63 @@ export const DashboardChartsUi = ({
 			{/* Header & Controls */}
 			<div className='flex items-center justify-between'>
 				<h2 className='text-2xl font-bold text-slate-800'>Tổng quan kinh doanh</h2>
-				<div className='flex items-center gap-4'>
-					<select
-						className='p-2 text-sm border rounded-md border-slate-300'
-						value={timeRange}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
-							onTimeRangeChange(e.target.value);
-						}}
-					>
-						<option value='7_days'>7 ngày qua</option>
-						<option value='30_days'>30 ngày qua</option>
-					</select>
+				<div className='flex flex-wrap items-center gap-4'>
+                    {/* 1. Select Time Range (Shadcn UI) */}
+                    <Select
+                        value={timeRange}
+                        onValueChange={onTimeRangeChange}
+                    >
+                        <SelectTrigger className='w-[140px] bg-white'>
+                            <SelectValue placeholder='Chọn mốc...' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value='day'>Theo Ngày</SelectItem>
+                            <SelectItem value='month'>Theo Tháng</SelectItem>
+                            <SelectItem value='year'>Theo Năm</SelectItem>
+                        </SelectContent>
+                    </Select>
 
-					<button
-						onClick={onRefresh}
-						disabled={isFetching}
-						className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
-					>
-						<RefreshCcw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-						Làm mới
-					</button>
-				</div>
-			</div>
+                    {/* 2. Date Range Picker (2 Inputs với dấu - ) */}
+                    <div className='flex items-center gap-2'>
+                        <Input
+                            type='date'
+                            className='w-auto bg-white'
+                            // Thẻ input type=date yêu cầu format YYYY-MM-DD
+                            value={formatDateForInput(startDate)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                // Gửi giá trị mới (tự tạo thành chuỗi ISO giả lập để backend dễ xử lý)
+                                // Lưu ý: Logic convert thành ISO chính xác có timezone nên xử lý ở Hook
+                                onDateRangeChange(e.target.value, endDate);
+                            }}
+                        />
+                        <span className='text-slate-400'>-</span>
+                        <Input
+                            type='date'
+                            className='w-auto bg-white'
+                            value={formatDateForInput(endDate)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                onDateRangeChange(startDate, e.target.value);
+                            }}
+                        />
+                    </div>
+
+                    {/* Refresh Button */}
+                    <Button
+                        onClick={onRefresh}
+                        disabled={isFetching}
+                        className='flex items-center gap-2 transition-colors disabled:cursor-not-allowed'
+                    >
+                        <RefreshCcw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+                        Làm mới
+                    </Button>
+                </div>
+            </div>
 
 			{/* Charts Grid */}
-			<div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
+			<div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
 				{/* 1. Cơ cấu trạng thái (Pie Chart) */}
-				<div className='p-4 bg-white border rounded-lg shadow-sm border-slate-200 h-80'>
-					<h3 className='mb-4 text-sm font-semibold text-slate-600'>Cơ cấu trạng thái</h3>
+				<div className='p-4 pb-10 bg-white border rounded-lg shadow-sm border-slate-200 h-[450px]'>
+					<h3 className='mb-4 text-lg font-semibold text-slate-600'>Cơ cấu trạng thái</h3>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'
@@ -86,10 +120,10 @@ export const DashboardChartsUi = ({
 								data={data.statusStructure}
 								dataKey='count'
 								nameKey='status'
-								cx='50%'
+								cx='40%'
 								cy='50%'
-								innerRadius={60}
-								outerRadius={80}
+								innerRadius={100}
+								outerRadius={140}
 								paddingAngle={5}
 							>
 								{data.statusStructure.map((entry, index) => {
@@ -102,6 +136,25 @@ export const DashboardChartsUi = ({
 									);
 								})}
 							</Pie>
+
+							<Legend
+								layout='vertical'
+								verticalAlign='middle'
+								align='right'
+								formatter={(value: string): React.ReactNode => {
+									// Type Guard & Fallback an toàn cho tên status truyền vào
+									const safeName: string =
+										typeof value === 'string' ? value : String(value ?? '');
+
+									// Trả về chuỗi tiếng Việt đã được format
+									return (
+										<span className='text-sm font-medium text-slate-600'>
+											{getInvoiceStatusLabel(safeName as InvoiceStatus)}
+										</span>
+									);
+								}}
+							/>
+
 							<Tooltip
 								formatter={(
 									value:
@@ -134,8 +187,8 @@ export const DashboardChartsUi = ({
 				</div>
 
 				{/* 2. Biến động GMV (Line Chart) */}
-				<div className='p-4 bg-white border rounded-lg shadow-sm border-slate-200 h-80'>
-					<h3 className='mb-4 text-sm font-semibold text-slate-600'>Biến động GMV</h3>
+				<div className='p-4 pb-10 bg-white border rounded-lg shadow-sm border-slate-200 h-[450px]'>
+					<h3 className='mb-4 text-lg font-semibold text-slate-600'>Biến động GMV</h3>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'
@@ -190,8 +243,8 @@ export const DashboardChartsUi = ({
 				</div>
 
 				{/* 3. Lưu lượng hóa đơn (Bar Chart) */}
-				<div className='p-4 bg-white border rounded-lg shadow-sm border-slate-200 h-80'>
-					<h3 className='mb-4 text-sm font-semibold text-slate-600'>Lưu lượng hóa đơn</h3>
+				<div className='p-4 pb-10 bg-white border rounded-lg shadow-sm border-slate-200 h-[450px]'>
+					<h3 className='mb-4 text-lg font-semibold text-slate-600'>Lưu lượng hóa đơn</h3>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'

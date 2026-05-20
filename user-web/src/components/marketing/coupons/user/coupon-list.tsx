@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
+import { getCouponTypeLabel } from '@/utils/marketings/coupons/coupon-type-label-mapping';
 import { JSX } from 'react';
 
 interface CouponListProps {
@@ -27,7 +28,7 @@ export const CouponList = ({ coupons, onClaimClick, label }: CouponListProps) =>
 											coupon.couponType === 'sale' ? 'destructive' : 'default'
 										}
 									>
-										{coupon.couponType}
+										{getCouponTypeLabel(coupon.couponType)}
 									</Badge>
 									<h3 className='font-bold text-orange-700 mt-2'>
 										{coupon.title}
@@ -39,7 +40,7 @@ export const CouponList = ({ coupons, onClaimClick, label }: CouponListProps) =>
 							</p>
 							<div className='mt-2 flex justify-between items-center'>
 								<span className='text-xs text-gray-500'>
-									HSD: {new Date(coupon.expiredAt).toLocaleDateString('vi-VN')}
+									Hết hạn: {new Date(coupon.expiredAt).toLocaleDateString('vi-VN')}
 								</span>
 								<Button
 									size='sm'

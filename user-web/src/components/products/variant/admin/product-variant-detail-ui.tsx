@@ -40,8 +40,8 @@ export default function ProductVariantDetailUI({
 
 	return (
 		<AdminFormWrapper
-			title='Chi tiết biến thể sản phẩm'
-			description='Quản lý thông tin biến thể'
+			title='Chi tiết sản phẩm phân loại'
+			description='Quản lý thông tin phân loại'
 			onSubmit={handleSubmit}
 			actions={
 				isFieldDisabledForShopOwner && (
@@ -49,12 +49,12 @@ export default function ProductVariantDetailUI({
 						className='cursor-pointer'
 						type='submit'
 					>
-						{isCreate ? 'Tạo biến thể' : 'Cập nhật biến thể'}
+						{isCreate ? 'Tạo phân loại' : 'Cập nhật phân loại'}
 					</Button>
 				)
 			}
 		>
-			<Field label='Tên biến thể'>
+			<Field label='Tên phân loại'>
 				<Input
 					name='name'
 					value={form.name}
@@ -215,7 +215,7 @@ export default function ProductVariantDetailUI({
 					disabled={loading}
 					className='cursor-pointer'
 				>
-					{loading ? 'Đang xử lý...' : isCreate ? 'Tạo biến thể' : 'Cập nhật'}
+					{loading ? 'Đang xử lý...' : isCreate ? 'Tạo phân loại' : 'Cập nhật'}
 				</Button>
 			)}
 		</AdminFormWrapper>

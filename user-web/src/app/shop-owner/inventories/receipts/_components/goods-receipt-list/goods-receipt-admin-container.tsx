@@ -13,6 +13,7 @@ import { useGoodsReceiptNavigationLogic } from '@/hooks/inventories/goods-receip
 import { useProductsForGoodsReceiptQuery } from '@/queries/inventories/goods-receipts/products/use-products-for-receipt-query';
 import { useProductVariantsQuery } from '@/queries/inventories/goods-receipts/products/use-product-variants-query';
 import GoodsReceiptAdminUi from './goods-receipt-admin-ui';
+import GlobalLoading from '@/app/loading';
 
 interface GoodsReceiptAdminContainerProps {
 	initialReceipts: GoodsReceiptList[];
@@ -24,7 +25,11 @@ export default function GoodsReceiptAdminContainer({
 	// 1. Data Fetching (Lấy dữ liệu thô)
 	const { data: receipts = [] } = useGoodsReceiptsQuery({ initialData: initialReceipts });
 	const { data: products = [] } = useProductsForGoodsReceiptQuery();
-	const { data: variants = [] } = useProductVariantsQuery();
+	const {
+		data: variants,
+		isLoading: isVariantLoading,
+		isError: isVariantError,
+	} = useProductVariantsQuery();
 
 	// 2. Logic Hooks (Nhận nguyên object trả về thay vì destructure)
 	const excelLogic = useGoodsReceiptExcelLogic();
@@ -32,13 +37,23 @@ export default function GoodsReceiptAdminContainer({
 	const sortLogic = useTableSort<GoodsReceiptSortField>();
 	const paginationLogic = usePagination();
 
+	const resolveVariant = variants?.data ?? [];
+
+	if (isVariantLoading) {
+		<GlobalLoading />;
+	}
+
+	if (isVariantError) {
+		return <div>Đã xảy ra lỗi khi tải danh sách sản phẩm.</div>;
+	}
+
 	// 3. Truyền dữ liệu xuống Dumb Component UI bằng Spread Operator
 	return (
 		<GoodsReceiptAdminUi
 			// Dữ liệu độc lập
 			receipts={receipts}
 			products={products}
-			variants={variants}
+			variants={resolveVariant}
 			// Trải toàn bộ các state và action từ Hooks xuống
 			{...excelLogic}
 			{...navigationLogic}

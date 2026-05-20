@@ -1,11 +1,10 @@
 import { DataTable } from '@/components/layout/admin/data-table';
-import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
-import { Column } from '@/types/uis/Column';
-import { JSX } from 'react';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
+import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
+import { Column } from '@/types/uis/Column';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
-import AdminTableAction from '@/components/layout/admin/admin-table-action';
+import { JSX } from 'react';
 
 interface Props {
 	receipts: GoodsReceiptList[];
@@ -69,7 +68,7 @@ export default function GoodsReceiptAdminTable({
 			key: 'totalQuantity',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Số lượng máy</span>
+					<span>Số lượng</span>
 					{renderSortIcon('totalQuantity')}
 				</div>
 			),
@@ -124,17 +123,6 @@ export default function GoodsReceiptAdminTable({
 			),
 			onHeaderClick: (): void => handleSort('createdAt'),
 			render: (row: GoodsReceiptList): string => formatDateTimeWithBrackets(row.createdAt),
-		},
-		{
-			key: 'actions',
-			header: <span className='text-right block'>Hành động</span>,
-			render: (row: GoodsReceiptList): JSX.Element => (
-				<AdminTableAction
-					id={row.id}
-					onEdit={onEdit}
-					onDelete={() => {}}
-				/>
-			),
 		},
 	];
 

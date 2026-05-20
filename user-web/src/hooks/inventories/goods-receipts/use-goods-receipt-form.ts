@@ -1,12 +1,12 @@
 'use client';
 
 import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
+import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
-import { SyntheticEvent, useEffect, useState } from 'react';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { SyntheticEvent, useEffect, useState } from 'react';
 
 export interface UseGoodsReceiptFormProps {
 	formType: AdminFormType;
@@ -52,7 +52,16 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 			}
 			setDraftKey(currentKey);
 		}
-	}, [formType, goodsReceipt.id, draftKey, isCreate, reset, setBatches, setDraftKey]);
+	}, [
+		formType,
+		goodsReceipt.id,
+		draftKey,
+		isCreate,
+		reset,
+		setBatches,
+		setDraftKey,
+		goodsReceipt.batches,
+	]);
 
 	// Helper function dùng từ khóa function
 	function updateReceiptField<K extends keyof GoodsReceiptDetail>(
@@ -87,9 +96,7 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 			batchNumber: '',
 			quantity: 1,
 			expiredAt: '',
-			unitPrice: 0,
 			totalPrice: 0,
-			isSerialInputted: false,
 		};
 		addBatch(newBatch);
 	};

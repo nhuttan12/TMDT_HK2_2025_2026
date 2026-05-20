@@ -4,7 +4,6 @@ export interface UpdateGoodsReceiptBatchDto {
 	productId: number;
 
 	quantity: number;
-	unitPrice: number;
 
 	batchNumber?: string;
 	serialNumber?: string;

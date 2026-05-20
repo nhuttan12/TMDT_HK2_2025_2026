@@ -18,7 +18,7 @@ interface ProductBatchItemModalProps {
 const variantColumns: Column<ProductVariantRow>[] = [
 	{
 		key: 'name',
-		header: 'Tên biến thể',
+		header: 'Tên phân loại',
 	},
 	{
 		key: 'sku',
@@ -53,7 +53,7 @@ export function ProductBatchItemModal({
 		>
 			<DialogContent className='max-w-3xl'>
 				<DialogHeader>
-					<DialogTitle>Chọn biến thể sản phẩm</DialogTitle>
+					<DialogTitle>Chọn sản phẩm phân loại</DialogTitle>
 				</DialogHeader>
 
 				<DataTable<ProductVariantRow>

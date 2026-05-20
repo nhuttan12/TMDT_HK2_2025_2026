@@ -20,6 +20,9 @@ export default function ProductVariantListInBatchUi({
 	isModalOpen,
 	setIsModalOpen,
 	currentPage,
+	totalPages,
+	totalQuantity,
+	totalAmount,
 	changePage,
 	handleSelectVariants,
 	handleUpdateItem,
@@ -43,7 +46,7 @@ export default function ProductVariantListInBatchUi({
 				})}
 			/>
 
-			{/* Modal chọn biến thể (Chỉ sử dụng data từ Query) */}
+			{/* Modal chọn sản phẩm phân loại (Chỉ sử dụng data từ Query) */}
 			<ProductBatchItemModal
 				variants={availableVariants}
 				open={isModalOpen}
@@ -53,7 +56,7 @@ export default function ProductVariantListInBatchUi({
 
 			{/* Content Table */}
 			<div className='space-y-4 border p-4 rounded-lg'>
-				<h3 className='font-semibold'>Danh sách biến thể sản phẩm trong lô</h3>
+				<h3 className='font-semibold'>Danh sách sản phẩm phân loại trong lô</h3>
 
 				<ProductVariantListInBatchTableUI
 					mode={mode}
@@ -77,13 +80,27 @@ export default function ProductVariantListInBatchUi({
 			</div>
 
 			{/* Pagination */}
-			{displayData.length > 10 && (
+			{totalPages > 1 && (
 				<Pagination
 					currentPage={currentPage}
-					totalPages={10} // Nên được tính toán từ backend hoặc logic pagination nếu có
+					totalPages={totalPages} // Nên được tính toán từ backend hoặc logic pagination nếu có
 					onPageChange={changePage}
 				/>
 			)}
+
+			{/* Total amount */}
+			<div className='flex justify-end gap-12 mt-8 pt-6 pb-6 border-t'>
+				<div className='text-right'>
+					<p className='text-sm text-muted-foreground'>Tổng số lượng</p>
+					<p className='text-2xl font-bold'>{totalQuantity}</p>
+				</div>
+				<div className='text-right'>
+					<p className='text-sm text-muted-foreground'>Tổng giá trị</p>
+					<p className='text-2xl font-bold text-blue-600'>
+						{totalAmount.toLocaleString()} ₫
+					</p>
+				</div>
+			</div>
 		</div>
 	);
 }

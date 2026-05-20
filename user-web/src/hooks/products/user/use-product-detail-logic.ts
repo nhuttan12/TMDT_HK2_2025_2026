@@ -90,7 +90,7 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		setQuantity((prev: number): number => (prev > 1 ? prev - 1 : 1));
 	};
 
-	// Helper tạo CartItem chuẩn xác từ biến thể đã chọn
+	// Helper tạo CartItem chuẩn xác từ phân loại đã chọn
 	const createCartItem = (): CartItem | null => {
 		if (!selectedVariant) return null;
 

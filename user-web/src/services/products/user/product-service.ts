@@ -208,7 +208,7 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			},
 		],
 
-		// THÊM MỚI: Các biến thể vật lý (Variants / SKUs)
+		// THÊM MỚI: Các phân loại vật lý (Variants / SKUs)
 		variants: [
 			{
 				id: 101,

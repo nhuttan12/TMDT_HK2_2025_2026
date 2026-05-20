@@ -208,7 +208,7 @@ export default function ProductAdminFormUI({
 				</Field>
 
 				<div className='flex justify-between items-center mb-4'>
-					<h2 className='font-bold text-lg'>Danh sách biến thể sản phẩm</h2>
+					<h2 className='font-bold text-lg'>Danh sách sản phẩm phân loại</h2>
 					{!isAdmin && (
 						<Button
 							onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -218,7 +218,7 @@ export default function ProductAdminFormUI({
 							className='cursor-pointer'
 							disabled={isView}
 						>
-							Thêm biến thể
+							Thêm phân loại sản phẩm
 						</Button>
 					)}
 				</div>

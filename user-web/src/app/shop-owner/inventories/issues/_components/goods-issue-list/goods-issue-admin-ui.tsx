@@ -1,17 +1,15 @@
-import { JSX } from 'react';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { DataTable } from '@/components/layout/admin/data-table';
 import Pagination from '@/components/layout/share/pagination';
-import DeleteConfirmModal from '@/components/layout/admin/delete-confirm-modal';
+import { JSX } from 'react';
 
+import { GoodsIssueAdminLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
+import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/GoodsIssueAdminFilterValues';
+import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
 import { Column } from '@/types/uis/Column';
 import { FilterField } from '@/types/uis/FilterField';
-import { GoodsIssueList } from '@/types/inventories/issues/uis/GoodsIssueList';
-import { GoodsIssueAdminFilterValues } from '@/types/inventories/issues/uis/GoodsIssueAdminFilterValues';
 import { getGoodsIssueTypeLabel } from '@/utils/inventories/issues/goods-issue-type-label';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
-import { GoodsIssueAdminLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-admin-logic';
-import AdminTableAction from '@/components/layout/admin/admin-table-action';
 import GoodsIssueStatusBadge from '../goods-issue-status-badge';
 
 interface GoodsIssueAdminUiProps extends GoodsIssueAdminLogicReturn {
@@ -54,12 +52,10 @@ export function GoodsIssueAdminUi({
 	isLoading,
 	handleRedirectToAddNew,
 	handleRedirectToView,
-	handleRedirectToEdit,
 	handleSort,
 	renderSortIcon,
 	pagination,
 	deleteModal,
-	handleExecuteDelete,
 }: GoodsIssueAdminUiProps): JSX.Element {
 	// Khai báo Column động trực tiếp trong UI để dễ dàng sử dụng props logic
 	const columns: Column<GoodsIssueList>[] = [
@@ -139,17 +135,6 @@ export function GoodsIssueAdminUi({
 			onHeaderClick: () => handleSort('status'),
 			render: (row) => <GoodsIssueStatusBadge status={row.status} />,
 		},
-		{
-			key: 'actions',
-			header: <span className='text-right block px-4'>Hành động</span>,
-			render: (row) => (
-				<AdminTableAction
-					id={row.id}
-					onEdit={handleRedirectToEdit}
-					onDelete={() => deleteModal.openConfirm(row)}
-				/>
-			),
-		},
 	];
 
 	return (
@@ -185,14 +170,6 @@ export function GoodsIssueAdminUi({
 					onPageChange={pagination.changePage}
 				/>
 			)}
-
-			<DeleteConfirmModal
-				isOpen={deleteModal.isOpen}
-				title='Xác nhận xóa phiếu xuất?'
-				description={`Bạn có chắc chắn muốn xóa phiếu ${deleteModal.selectedItem?.code}? Hành động này không thể hoàn tác.`}
-				onClose={deleteModal.closeConfirm}
-				onConfirm={handleExecuteDelete}
-			/>
 		</div>
 	);
 }

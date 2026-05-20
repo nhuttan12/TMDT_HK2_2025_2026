@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { JSX } from 'react';
 
 export const metadata: Metadata = {
-	title: 'Thông tin chi tiết biến thể sản phẩm',
+	title: 'Thông tin chi tiết sản phẩm phân loại',
 };
 
 interface Props {

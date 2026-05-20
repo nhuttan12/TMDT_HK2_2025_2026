@@ -22,7 +22,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			supplierName: 'Nhà phân phối XYZ',
 			importDate: new Date('2026-03-24T14:00:00Z').toISOString(),
 			totalBatches: 1, // Chỉ nhập 1 lô duy nhất
-			totalQuantity: 50, // Nhưng số lượng máy trong lô rất lớn
+			totalQuantity: 50, // Nhưng số lượng trong lô rất lớn
 			totalAmount: 1250000000, // 1 tỷ 250 triệu VNĐ
 			status: 'confirmed',
 			createdAt: new Date('2026-03-24T10:15:00Z').toISOString(),

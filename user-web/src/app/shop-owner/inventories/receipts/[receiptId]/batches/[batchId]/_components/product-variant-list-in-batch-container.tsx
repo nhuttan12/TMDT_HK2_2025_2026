@@ -1,13 +1,12 @@
 'use client';
 
-import React, { JSX } from 'react';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
-import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
 import {
-	useProductVariantListLogic,
-	UseProductVariantListLogicReturn,
+    useProductVariantListLogic
 } from '@/hooks/inventories/goods-receipts/use-product-variant-list-logic';
 import { useProductVariantsQuery } from '@/queries/inventories/goods-receipts/products/use-product-variants-query';
+import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
+import { JSX } from 'react';
 import ProductVariantListInBatchUi from './product-variant-list-in-batch-ui';
 
 interface Props {
@@ -22,17 +21,22 @@ export default function ProductVariantListInBatchContainer({
 	mode,
 }: Props): JSX.Element {
 	// 1. Data Fetching
-	const { data: availableVariants = [] } = useProductVariantsQuery();
+	const { data: availableVariants } = useProductVariantsQuery();
 
 	// 2. Gọi Logic Hook duy nhất
-	const productVariantListLogic: UseProductVariantListLogicReturn = useProductVariantListLogic({
+	const productVariantListLogic = useProductVariantListLogic({
 		batchId,
 		initialProductVariants: productVariants,
+		totalPagesFromApi: availableVariants?.meta.totalPages,
 	});
+
+	const resolveVariant = availableVariants?.data ?? [];
+
+	// 3. Truyền dữ liệu xuống Dumb Component UI bằng Spread Operator
 
 	return (
 		<ProductVariantListInBatchUi
-			availableVariants={availableVariants}
+			availableVariants={resolveVariant}
 			mode={mode}
 			{...productVariantListLogic}
 		/>

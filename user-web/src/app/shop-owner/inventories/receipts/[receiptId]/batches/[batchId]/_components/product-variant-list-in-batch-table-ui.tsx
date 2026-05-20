@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import React, { ChangeEvent, JSX } from 'react';
-import { Input } from '@/components/ui/input';
+import { DataTable } from '@/components/layout/admin/data-table';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItemStatus } from '@/types/inventories/receipts/uis/BatchItemStatus';
 import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
 import { Column } from '@/types/uis/Column';
-import { DataTable } from '@/components/layout/admin/data-table';
-import { getBatchItemStatusLabel } from '@/utils/inventories/receipts/batch-item-status-label';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
-import { BatchItemStatus } from '@/types/inventories/receipts/uis/BatchItemStatus';
+import { Trash2 } from 'lucide-react';
+import React, { ChangeEvent, JSX } from 'react';
+import BatchItemStatusBadge from './batch-item-status-badge';
 
 interface Props {
 	data: BatchItemSerial[];
@@ -34,15 +34,29 @@ export function ProductVariantListInBatchTableUI({
 	onRemove,
 	onRedirect,
 }: Props): React.JSX.Element {
+	const handleCostPriceChange = (id: number, e: ChangeEvent<HTMLInputElement>): void => {
+		const rawValue: string = e.target.value;
+
+		if (rawValue === '') {
+			onUpdate(id, { costPrice: 0 });
+			return;
+		}
+
+		const numericValue: number = parseFloat(rawValue);
+		if (!Number.isNaN(numericValue) && numericValue >= 0) {
+			onUpdate(id, { costPrice: numericValue });
+		}
+	};
+
 	const columns: Column<BatchItemSerial>[] = [
 		{
 			key: 'productVariantName',
-			header: 'Biến thể',
+			header: 'Sản phẩm phân loại',
 			render: (row: BatchItemSerial): JSX.Element => <span>{row.productVariantName}</span>,
 		},
 		{
 			key: 'serialNumber',
-			header: 'Serial *',
+			header: 'Mã Serial *',
 			render: (row: BatchItemSerial): JSX.Element =>
 				isView ? (
 					<span>{row.serialNumber}</span>
@@ -51,6 +65,21 @@ export function ProductVariantListInBatchTableUI({
 						value={row.serialNumber}
 						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
 							onUpdate(row.id, { serialNumber: e.target.value })
+						}
+					/>
+				),
+		},
+		{
+			key: 'costPrice',
+			header: 'Giá nhập',
+			render: (row: BatchItemSerial): JSX.Element =>
+				isView ? (
+					<span>{row.costPrice}</span>
+				) : (
+					<Input
+						value={row.costPrice}
+						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+							handleCostPriceChange(row.id, e)
 						}
 					/>
 				),
@@ -75,7 +104,7 @@ export function ProductVariantListInBatchTableUI({
 			header: 'Trạng thái',
 			render: (row: BatchItemSerial): JSX.Element =>
 				isView ? (
-					<span>{getBatchItemStatusLabel(row.status)}</span>
+					<BatchItemStatusBadge status={row.status} />
 				) : (
 					<Select
 						value={row.status}
@@ -94,20 +123,24 @@ export function ProductVariantListInBatchTableUI({
 					</Select>
 				),
 		},
-		{
-			key: 'id',
-			header: '',
-			render: (row: BatchItemSerial): JSX.Element => (
-				<Button
-					variant='ghost'
-					size='icon'
-					className='text-red-500 hover:text-red-700'
-					onClick={(): void => onRemove(row.id)}
-				>
-					<Trash2 size={18} />
-				</Button>
-			),
-		},
+		...(!isView
+			? [
+					{
+						key: 'id',
+						header: 'Hành động',
+						render: (row: BatchItemSerial): JSX.Element => (
+							<Button
+								variant='ghost'
+								size='icon'
+								className='text-red-500 hover:text-red-700'
+								onClick={(): void => onRemove(row.id)}
+							>
+								<Trash2 size={18} />
+							</Button>
+						),
+					},
+				]
+			: []),
 	];
 
 	return (

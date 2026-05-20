@@ -4,7 +4,7 @@ import { ProductVariantDetail } from '@/types/products/admin/variant/ProductVari
 import ProductVariantDetailContainer from '@/components/products/variant/admin/product-variant-detail-container';
 
 export const metadata: Metadata = {
-	title: 'Thêm biến thể sản phẩm',
+	title: 'Thêm sản phẩm phân loại',
 };
 
 interface Props {

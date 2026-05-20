@@ -10,11 +10,8 @@ export interface GoodsReceiptBatch {
 
 	batchNumber: string;
 	quantity: number;
-	unitPrice: number;
 	totalPrice: number;
 
 	manufacturedAt?: string;
 	expiredAt: string;
-
-	isSerialInputted: boolean;
 }

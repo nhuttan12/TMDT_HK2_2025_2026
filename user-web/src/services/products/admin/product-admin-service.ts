@@ -105,7 +105,7 @@ export async function getProductDetailAdminByProductId(
 				createdAt: '2024-01-10T10:00:00Z',
 				updatedAt: '2024-02-01T15:30:00Z',
 
-				// Các biến thể dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
+				// Các phân loại dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
 				productVariants: [
 					{
 						id: 1,

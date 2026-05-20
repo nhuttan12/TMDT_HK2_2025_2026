@@ -62,7 +62,7 @@ export function CouponsUi(props: CouponsUiProps): JSX.Element {
 												{coupon.description}
 											</h2>
 											<p className='text-sm text-slate-500 mt-1'>
-												HSD: {coupon.expiredAt}
+												Hết hạn: {coupon.expiredAt}
 											</p>
 											<p className='text-sm font-mono text-slate-600 mt-2 bg-slate-100 inline-block px-2 py-1 rounded'>
 												Mã: {coupon.code}

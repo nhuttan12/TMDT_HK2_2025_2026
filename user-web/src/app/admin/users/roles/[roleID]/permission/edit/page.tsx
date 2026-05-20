@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
-import RolePermissionForm from '@/app/admin/users/roles/[roleId]/permission/_components/role-permission-form';
+import RolePermissionForm from '../_components/role-permission-form';
 
 const rolePermissions: RolePermission[] = [
 	{

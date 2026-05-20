@@ -10,6 +10,8 @@ export interface BatchItemSerial {
 
 	serialNumber: string;
 
+	costPrice: number
+
 	appearanceCondition: string;
 
 	status: BatchItemStatus;

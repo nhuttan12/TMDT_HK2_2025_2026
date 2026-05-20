@@ -3,11 +3,11 @@
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { JSX } from 'react';
-import { ProductDetailUi } from '@/app/(app)/products/[productId]/_components/product-detail-ui';
 import {
 	ProductDetailLogicReturn,
 	useProductDetailLogic,
 } from '@/hooks/products/user/use-product-detail-logic';
+import { ProductDetailUi } from './product-detail-ui';
 
 interface Props {
 	product: ProductDetail;

@@ -1,11 +1,10 @@
 'use client';
 
-import { CartItem } from '@/types/carts/CartItem';
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useCheckoutStore } from '@/stores/checkout.store';
 import { useCartStore } from '@/stores/cart.store';
+import { useCheckoutStore } from '@/stores/checkout.store';
+import { CartItem } from '@/types/carts/CartItem';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 export interface CartLogicReturn {
 	selectedIds: number[];
@@ -20,7 +19,7 @@ export interface CartLogicReturn {
 
 export function useCartLogic(cartItems: CartItem[]): CartLogicReturn {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems); // Thay any bằng kiểu thực tế của store
 	const updateQuantity = useCartStore((s) => s.updateQuantity);
