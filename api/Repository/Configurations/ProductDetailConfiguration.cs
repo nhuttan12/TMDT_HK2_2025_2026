@@ -1,4 +1,5 @@
 ﻿using api.model.Products;
+using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,15 +11,24 @@ namespace api.Repository.Configurations
         {
             builder.ToTable("ProductDetails");
 
-            // Cấu hình PK trùng với FK (Tối ưu chuẩn cho quan hệ 1-1)
+            // 1. Tối ưu I/O: Cấu hình Shared Primary Key
             builder.HasKey(d => d.ProductId);
+            builder.Property(d => d.ProductId).ValueGeneratedNever(); // Cấm tự sinh
 
+            // 2. Ràng buộc độ dài
             builder.Property(d => d.Summary)
-                .HasMaxLength(500);
+                   .HasMaxLength(500)
+                   .IsRequired(false); // Summary có thể cho phép null/empty
 
+            // 3. Cấu hình kiểu dữ liệu LOB (Large Object)
             builder.Property(d => d.DescriptionHtml)
-                // Cột chứa HTML thường lớn, nến sử dụng nvarchar(max)
-                .HasColumnType("nvarchar(max)");
+                   .HasColumnType("nvarchar(max)")
+                   .IsRequired(false);
+
+            builder.HasOne(d => d.Product)
+                   .WithOne(p => p.Detail)
+                   .HasForeignKey<ProductDetail>(d => d.ProductId)
+                   .OnDelete(DeleteBehavior.Cascade); // Xóa chi tiết khi xóa sản phẩm
         }
     }
 }

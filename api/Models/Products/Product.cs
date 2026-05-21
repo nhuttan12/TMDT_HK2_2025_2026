@@ -1,4 +1,7 @@
-﻿using api.Utilities;
+﻿using api.Models;
+using api.Models.Category;
+using api.Models.Products;
+using api.Utilities;
 
 namespace api.model.Products;
 
@@ -7,8 +10,10 @@ public class Product
     public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public decimal BasePrice { get; private set; }
-
-    // Xóa từ khóa 'virtual' để chống N+1 Queries (Lazy Loading)
+    public decimal Rating { get; private set; }
+    // Khóa ngoại lưu Id của Category
+    public Guid CategoryId { get; private set; }
+    public Guid ShopId { get; private set; }
     public ProductDetail? Detail { get; private set; }
 
     // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
@@ -18,6 +23,9 @@ public class Product
     // Ưu tiên DateTimeOffset cho các hệ thống phân tán và DB SQL Server
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
+
+   
+
 
     // Dành riêng cho EF Core khi query (không dùng để tạo mới)
     protected Product() { }
@@ -54,56 +62,37 @@ public class Product
         if (Detail?.Summary == summary && Detail?.DescriptionHtml == descriptionHtml)
             return;
 
-        Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml);
+        Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml).Value;
         UpdatedAt = updatedAt;
     }
 
-    public Result<bool> AddVariant(string name, decimal price, string imageUrl, DateTimeOffset updatedAt)
+    public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl, DateTimeOffset updatedAt)
     {
-        // Fail Fast validation
-        if (price < 0)
-            return Result<bool>.Failure(
-                new Error("Variant.InvalidPrice", "Giá biến thể không hợp lệ."),
-                ErrorType.Validation);
+        // 1. Fail Fast validation ở tầng Product
+        if (sellPrice < 0)
+            return Result<bool>.Failure(new Error("Variant.InvalidPrice", "Giá bán biến thể không hợp lệ."), ErrorType.Validation);
 
-        // OrdinalIgnoreCase tốt cho memory nhưng cần đảm bảo DB cũng có Unique Constraint
+        if (costPrice < 0)
+            return Result<bool>.Failure(new Error("Variant.InvalidCostPrice", "Giá vốn biến thể không hợp lệ."), ErrorType.Validation);
+
         if (_variants.Any(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-            return Result<bool>.Failure(
-                new Error("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại."),
-                ErrorType.Validation);
+            return Result<bool>.Failure(new Error("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại."), ErrorType.Validation);
 
-        _variants.Add(Variant.InternalCreate(this.Id, name, price, imageUrl));
+        // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
+        var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+
+        // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
+        if (variantResult.IsFailure)
+            return Result<bool>.Failure(variantResult.Error, variantResult.ErrorType);
+
+        // 4. Khi IsFailure = false, Value chắc chắn tồn tại (dấu ! báo cho trình biên dịch biết điều này)
+        _variants.Add(variantResult.Value!);
+
         UpdatedAt = updatedAt;
 
         return Result<bool>.Success(true);
     }
 }
 
-public class ProductDetail
-{
-    public Guid ProductId { get; private set; }
-    public string Summary { get; private set; } = string.Empty;
-    public string DescriptionHtml { get; private set; } = string.Empty;
 
-    // Xóa 'virtual'
-    public Product Product { get; private set; } = null!;
 
-    protected ProductDetail() { }
-
-    internal static ProductDetail InternalCreate(Guid productId, string summary, string html) =>
-        new() { ProductId = productId, Summary = summary, DescriptionHtml = html };
-}
-
-public class Variant
-{
-    public Guid Id { get; private set; }
-    public Guid ProductId { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public decimal Price { get; private set; }
-    public string ImageUrl { get; private set; } = string.Empty;
-
-    protected Variant() { }
-
-    internal static Variant InternalCreate(Guid productId, string name, decimal price, string imageUrl) =>
-        new() { Id = Guid.NewGuid(), ProductId = productId, Name = name, Price = price, ImageUrl = imageUrl };
-}

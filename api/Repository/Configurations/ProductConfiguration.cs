@@ -1,5 +1,7 @@
 ﻿using api.model.Products;
 using api.Models;
+using api.Models.Category;
+using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -52,6 +54,26 @@ namespace api.Repository.Configurations
                 .WithOne(d => d.Product)
                 .HasForeignKey<ProductDetail>(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<Category>()
+               .WithMany() // TRỐNG: Tham số bỏ trống chỉ định rằng Category không có collection Product
+               .HasForeignKey(p => p.CategoryId)
+               .HasConstraintName("FK_Products_Categories")
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict); // Defensive Programming: Không cho phép xóa Category nếu vẫn còn Product
+
+            builder.HasOne<User>()
+                 .WithMany()
+                 .HasForeignKey(p => p.ShopId)
+                 .HasConstraintName("FK_Products_Users_ShopId")
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(p => p.CategoryId)
+               .HasDatabaseName("IX_Products_CategoryId");
+
+            builder.HasIndex(p => p.ShopId)
+                   .HasDatabaseName("IX_Products_ShopId");
         }
     }
 }

@@ -20,6 +20,7 @@ namespace api.Controllers
         }
         public IActionResult GetById(int id)
         {
+
             return Ok($"Product with id {id}");
         }
         public IActionResult GetByName(string name) {
