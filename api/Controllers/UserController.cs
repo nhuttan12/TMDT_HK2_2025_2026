@@ -58,19 +58,45 @@ namespace api.Controllers
         [Authorize(Roles = "User, Admin, Shop")]
         public async Task<IActionResult> GetCurrent()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = AuthenticatedUserId;
             if (userId == null)
             {
-                throw new UnauthorizedException("You are not authorized.");
+                return HandleResult(Result<bool>.Failure(new Error("Unauthorized","You are not authorized."),ErrorType.BadRequest));
             }
-            var user = await UserService.GetByIdAsync(int.Parse(userId));
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+            var user = await UserService.GetByIdAsync(userId.Value);
             return HandleResult(user);
         }
+      
+
+        [HttpPut("me")]
+        [Authorize(Roles = "User, Admin, Shop")]
+        public async Task<IActionResult> UpdateCurrent(
+            [FromBody] UserUpdateDto req,
+            CancellationToken cancellationToken)
+        {
+            var userId = AuthenticatedUserId;
+            if (userId == null)
+            {
+                return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
+            }
+            var newUser = await UserService.UpdateAsync(userId.Value, req, cancellationToken);
+            return HandleResult(newUser);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPatch("me/change-password")]
+        public async Task<IActionResult> ChangeMyPassword([FromBody] ChangePasswordDto req, CancellationToken cancellationToken)
+        {
+            var userId = AuthenticatedUserId;
+            if (userId == null)
+            {
+                return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
+            }
+            var result = await UserService.ChangePasswordAsync(userId.Value, req, cancellationToken);
+            return HandleResult(result);
+        }
         // *********************************************************************
+
         [HttpPost("shop")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateShop([FromBody] UserCreateShopDto userCreateDto)
@@ -87,29 +113,6 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpPost("me")]
-        [Authorize(Roles = "User, Admin, Shop")]
-        public async Task<IActionResult> ChangeInfo([FromBody] UserUpdateInfo req)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
-            {
-                throw new UnauthorizedException("You are not authorized.");
-            }
-            var user = await UserService.GetByIdAsync(int.Parse(userId));
-            //TODO: implement method changeInfo 
-            return Ok(user);
-        }
-
-        [Authorize(Roles = "User")]
-        [HttpPost("me/change-password")]
-        public async Task<IActionResult> ChangeMypassword([FromBody] ChangePasswordDto req)
-        {
-            //TODO: implement method change my password
-            throw new NotImplementedException();
-        }
-
-
     }
     public record UserParameters(
         [Required]
@@ -119,10 +122,11 @@ namespace api.Controllers
         [Range(0, 10)]
         int PageSize
         );
-    public record UserUpdateInfo();
+  
+   
     public record UserCreateShopDto(string Name);
     public record ChangePasswordDto(string OldPassword, string NewPassword);
-
     public record LockInfoDto(string OldPassword, string NewPassword);
+
 
 }

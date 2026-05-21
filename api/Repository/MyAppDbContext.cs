@@ -3,6 +3,7 @@ using api.Models;
 using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using api.Models.Roles;
+using Api.Models.Users;
 namespace api.Repository
 {
     public class MyAppDbContext : DbContext

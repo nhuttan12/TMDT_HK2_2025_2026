@@ -38,7 +38,7 @@ namespace api.Repository.Configurations
             // quan hệ với Address
             builder.HasMany(u => u.Addresses)
                 .WithOne(ad => ad.User)
-                .HasForeignKey(ad => ad.User_id)
+                .HasForeignKey(ad => ad.UserId)
                 .OnDelete(DeleteBehavior.Cascade);// Xóa User thì xóa luôn Address
 
 

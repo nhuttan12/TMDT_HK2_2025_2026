@@ -1,6 +1,7 @@
 ﻿using api.Dtos.Common;
 using api.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -29,6 +30,14 @@ namespace api.Controllers
                 ErrorType.Conflict => Conflict(response),
                 _ => BadRequest(response) // Mặc định cho ErrorType.Failure
             };
+        }
+        protected int? AuthenticatedUserId
+        {
+            get
+            {
+                var claimValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return int.TryParse(claimValue, out var id) ? id : null;
+            }
         }
     }
 }

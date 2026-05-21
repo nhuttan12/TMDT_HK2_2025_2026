@@ -2,6 +2,7 @@
 using api.Exceptions;
 using api.Models.Roles;
 using System.ComponentModel.DataAnnotations;
+using Api.Models.Users;
 
 namespace api.Models
 {
@@ -47,6 +48,24 @@ namespace api.Models
         {
             if (string.IsNullOrEmpty(hash)) throw new InternalServerErrorException("user: mật khẩu bị null");
             this.PasswordHash = hash;
+        }
+
+        internal void Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, int userId)
+        {
+            if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
+            if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;
+            if (!string.IsNullOrEmpty(avatarUrl)) UserDetail!.AvatarUrl = avatarUrl;
+            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create( userId,a)));
+            UpdateAt = DateTime.UtcNow;
+        }
+
+        internal void UpdatePassword(string newHash)
+        {
+            if (string.IsNullOrWhiteSpace(newHash))
+                throw new ArgumentException("Password hash cannot be empty.");
+
+            PasswordHash = newHash;
+            UpdateAt = DateTime.UtcNow;
         }
     }
 }
