@@ -16,6 +16,8 @@ builder.Services.AddConfiguredOpenApi(builder.Configuration);
 
 // Build the app
 var app = builder.Build();
+// Global exception handling middleware
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.|
 // create user admin
@@ -45,8 +47,7 @@ if (app.Environment.IsDevelopment())
         options.DocumentTitle = " Documentation";
     });
 }
-// Global exception handling middleware
-app.UseExceptionHandler();
+
 // Chuyển hướng HTTP sang HTTPS
 app.UseHttpsRedirection();
 // CORS middleware

@@ -19,7 +19,7 @@ namespace api.Models
                 UserExternalLogin = ux,
             };
         }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public required string Email { get; set; }
@@ -50,7 +50,7 @@ namespace api.Models
             this.PasswordHash = hash;
         }
 
-        internal void Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, int userId)
+        internal void Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, Guid userId)
         {
             if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
             if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;

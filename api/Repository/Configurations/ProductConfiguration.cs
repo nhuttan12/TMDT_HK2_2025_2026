@@ -42,7 +42,9 @@ namespace api.Repository.Configurations
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
 
             // 4. Relationships (Quan hệ)
-
+            builder.Property(p => p.Rating)
+                   .HasPrecision(3, 2) // Tổng 3 chữ số, 2 chữ số thập phân (Ví dụ: 4.95)
+                   .HasDefaultValue(0m); // Điểm mặc định khi mới tạo sản phẩm
             // 1-N với Variant
             builder.HasMany(p => p.Variants)
                 .WithOne() // Variant không có navigation property ngược lại Product

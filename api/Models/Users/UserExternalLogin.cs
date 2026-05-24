@@ -9,7 +9,7 @@ namespace api.Models.Users
         {
             return new UserExternalLogin { Provider = Provider, ProviderKey = ProviderKey };
         }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public required string Provider { get; set; } = string.Empty;
         public string ProviderKey { get; set; } = string.Empty;
