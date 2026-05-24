@@ -33,10 +33,10 @@ namespace api.Services.Users
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
         private readonly IUserRepository _userRepo;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository, UnitOfWork unitOfWork)
+        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _context = context;
             _mapper = Mapper;
