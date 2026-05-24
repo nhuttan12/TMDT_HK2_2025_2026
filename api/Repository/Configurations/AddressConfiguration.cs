@@ -9,7 +9,7 @@ namespace api.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.ToTable("addresses");
+            builder.ToTable("Addresses");
             builder.HasKey(a => a.Id);
             builder.Property(a => a.Id).UseIdentityColumn();
         }

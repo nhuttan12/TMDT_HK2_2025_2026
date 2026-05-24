@@ -27,5 +27,6 @@
 
         // Implicit conversion: Giúp code gọn hơn khi return dữ liệu trực tiếp
         public static implicit operator Result<TValue>(TValue value) => Success(value);
+        public ErrorType ErrorType { get; }
     }
 }

@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { RolePermission } from '@/types/users/admin/RolePermission';
 import { Metadata } from 'next';
-import RolePermissionForm from './_components/role-permission-form';
+import RolePermissionForm from '@/app/admin/users/roles/[roleID]/permission/_components/role-permission-form';
 
 const rolePermissions: RolePermission[] = [
 	{
