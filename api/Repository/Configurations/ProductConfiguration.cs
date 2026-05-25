@@ -14,6 +14,7 @@ namespace api.Repository.Configurations
             // 1. Table Name & Primary Key
             builder.ToTable("Products");
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).HasDefaultValueSql("NEWSEQUENTIALID()"); // Tự động sinh GUID khi thêm mới
 
             // 2. Properties Configuration
             builder.Property(p => p.Name)

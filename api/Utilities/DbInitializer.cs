@@ -1,5 +1,6 @@
 ﻿using api.Models;
 using api.Models.Roles;
+using api.Models.Users;
 using api.Services.Auths;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,7 +49,7 @@ namespace api.Utilities
 
             // 4. Xử lý Admin Account
             var adminExists = await context.Set<User>().AnyAsync(u => u.Email == email, ct);
-            if (!adminExists)
+            //if (!adminExists)
             {
                 // Lấy Role Admin vừa tạo hoặc đã có
                 var adminRole = await context.Set<Role>()
@@ -60,14 +61,8 @@ namespace api.Utilities
                     return;
                 }
 
-                var adminUser = new User
-                {
-                    Email = email,
-                    PasswordHash = string.Empty, // Sẽ được hash ngay sau đây
-                    CreateAt = DateTime.UtcNow,
-                    RoleId = adminRole.Id // Senior Tip: Ưu tiên dùng FK Id thay vì Navigation Property khi Seed
-                };
-
+                var adminUser = User.Create(email, adminRole, "local", "local");
+               
                 adminUser.PasswordHash = authService.HashPassword(adminUser, password);
                 context.Set<User>().Add(adminUser);
                 

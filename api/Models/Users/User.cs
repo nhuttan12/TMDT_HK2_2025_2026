@@ -14,9 +14,11 @@ namespace api.Models
             UserDetail ud = UserDetail.Create();
             return new User
             {
+                Id = Guid.Empty, // Id sẽ được tự động sinh bởi database
                 Email = email.ToLower().Trim(),
                 Role = role,
                 UserExternalLogin = ux,
+                UserDetail = ud
             };
         }
         public Guid Id { get; set; }

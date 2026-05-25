@@ -1,4 +1,5 @@
 ﻿using api.Controllers;
+using api.Dtos.Products.Request;
 using api.model.Products;
 using api.Repository;
 using api.Repository.ProductRepo;

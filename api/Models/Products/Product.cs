@@ -32,7 +32,7 @@ public class Product
 
     private Product(string name, decimal basePrice, DateTimeOffset createdAt)
     {
-        Id = Guid.NewGuid();
+        Id = Guid.Empty;
         Name = name;
         BasePrice = basePrice;
         CreatedAt = createdAt;

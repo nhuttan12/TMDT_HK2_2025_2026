@@ -15,8 +15,7 @@ namespace api.Repository.Configurations
             // Primary key configuration. UseIdentityByDefaultColumn maps
             // to Postgres identity/serial semantics for auto-incrementing ids.
             builder.HasKey(e => e.Id);
-            builder.Property(e => e.Id).ValueGeneratedNever(); // Sử dụng Identity cho khóa chính
-
+            builder.Property(p => p.Id).HasDefaultValueSql("NEWSEQUENTIALID()"); // Tự động sinh GUID khi thêm mới
             // Email is essential for user accounts; enforce required and a
             // sensible maximum length to avoid overly large values.
             builder.Property(e => e.Email).IsRequired().HasMaxLength(150);

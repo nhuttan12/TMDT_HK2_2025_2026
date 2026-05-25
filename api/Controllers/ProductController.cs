@@ -1,4 +1,5 @@
-﻿using api.Repository;
+﻿using api.Dtos.Products.Request;
+using api.Repository;
 using api.Repository.ProductRepo;
 using api.Services.Products;
 using AutoMapper;
@@ -43,22 +44,6 @@ namespace api.Controllers
         {
             return Ok("");
         }
-
-       
     }
-    public record ProductCreateDto(
-        string Name, 
-        decimal BasePrice,
-        string ShopID,
-        string Summary,
-        string DescriptionHTML, 
-        VariantDto VariantDto,
-        string CategoryID);
-    public record VariantDto(
-        string Sku,
-        string Name,
-        decimal CostPrice,
-        decimal SellPrice,
-        string ImageUrl
-        );
+   
 }
