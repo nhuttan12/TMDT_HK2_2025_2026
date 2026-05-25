@@ -10,7 +10,7 @@ namespace api.Repository.UserRepo
         Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default);
         Task AddAsync(User user, CancellationToken ct = default);
 
-        Task<User?> GetByIdWithRoleAsync(int userId, CancellationToken ct = default);
+        Task<User?> GetByIdWithRoleAsync(Guid userId, CancellationToken ct = default);
     }
     public class AuthRepo(MyAppDbContext _context) : IAuthRepo
     {
@@ -24,7 +24,7 @@ namespace api.Repository.UserRepo
 
         public async Task AddAsync(User user, CancellationToken ct = default)
             => await _context.Users.AddAsync(user, ct); 
-        public async Task<User?> GetByIdWithRoleAsync(int userId, CancellationToken ct = default)
+        public async Task<User?> GetByIdWithRoleAsync(Guid userId, CancellationToken ct = default)
             => await _context.Users 
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == userId);

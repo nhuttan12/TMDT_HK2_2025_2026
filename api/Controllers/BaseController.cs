@@ -31,12 +31,12 @@ namespace api.Controllers
                 _ => BadRequest(response) // Mặc định cho ErrorType.Failure
             };
         }
-        protected int? AuthenticatedUserId
+        protected Guid? AuthenticatedUserId
         {
             get
             {
                 var claimValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                return int.TryParse(claimValue, out var id) ? id : null;
+                return Guid.TryParse(claimValue, out var id) ? id : null;
             }
         }
     }

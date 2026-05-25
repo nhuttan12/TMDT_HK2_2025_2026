@@ -7,7 +7,7 @@ namespace api.Repository.UserRepo
     public interface IUserRepository : IBaseRepository<User>
     {
         public Task AddNew(User user, CancellationToken ct = default);
-        public Task<User?> GetUserByIdAsync(int id, bool trackChanges = false, CancellationToken ct = default);
+        public Task<User?> GetUserByIdAsync(Guid id, bool trackChanges = false, CancellationToken ct = default);
         public Task<(IEnumerable<User> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default);
         
         public Task<User?> GetByEmailAsync(string email, bool trackChanges = false, CancellationToken ct = default);
@@ -19,7 +19,7 @@ namespace api.Repository.UserRepo
         {
             await _context.Users.AddAsync(user, ct);
         }
-        public async Task<User?> GetUserByIdAsync(int id, bool trackChanges = false, CancellationToken ct = default)
+        public async Task<User?> GetUserByIdAsync(Guid id, bool trackChanges = false, CancellationToken ct = default)
         {
             var query = FindAll(trackChanges); // Tái sử dụng FindAll để nhất quán logic
 
