@@ -3,6 +3,7 @@ using api.Exceptions;
 using api.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 using Api.Models.Users;
+using api.Models.Inventory;
 
 namespace api.Models
 {
@@ -43,6 +44,7 @@ namespace api.Models
         public virtual UserDetail? UserDetail { get; set; }
         public virtual UserExternalLogin?  UserExternalLogin{ get;  set; }
         public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+        public ICollection<GoodsIssue> GoodsIssues { get; set; } = new HashSet<GoodsIssue>();
 
         public void SetPassword(string hash)
         {

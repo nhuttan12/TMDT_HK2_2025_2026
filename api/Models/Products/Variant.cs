@@ -1,4 +1,5 @@
-﻿using api.Utilities;
+﻿using api.Models.Inventory;
+using api.Utilities;
 
 namespace api.Models.Products
 {
@@ -21,6 +22,9 @@ namespace api.Models.Products
 
         public VariantStatus Status { get; private set; }
 
+        public ICollection<GoodsReceiptBatchVariant> GoodsReceiptBatchVariants { get; private set; } = new HashSet<GoodsReceiptBatchVariant>();
+        public ICollection<GoodsIssueDetail> GoodsIssueDetails { get; private set; } = new HashSet<GoodsIssueDetail>();
+        public ICollection<InventoryBatchStock> InventoryBatchStocks { get; private set; } = new HashSet<InventoryBatchStock>();
 
         // Dùng Private Constructor thay vì Object Initializer để bảo vệ tính toàn vẹn
         private Variant(Guid productId, string sku, string name, decimal costPrice, decimal sellPrice, string imageUrl, VariantStatus status)
@@ -48,7 +52,7 @@ namespace api.Models.Products
             if (costPrice < 0 || sellPrice < 0)
                 return Result<Variant>.Failure(new Error("Variant.InvalidPrice", "Giá không được nhỏ hơn 0."), ErrorType.Validation);
 
-         
+
             return Result<Variant>.Success(new Variant(productId, sku, name, costPrice, sellPrice, imageUrl, VariantStatus.Active));
         }
     }

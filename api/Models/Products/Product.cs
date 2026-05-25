@@ -1,5 +1,6 @@
 ﻿using api.Models;
 using api.Models.Category;
+using api.Models.Inventory;
 using api.Models.Products;
 using api.Utilities;
 
@@ -24,7 +25,9 @@ public class Product
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
 
-   
+    public ICollection<InventoryBatchStock> InventoryBatchStocks { get; private set; } = new HashSet<InventoryBatchStock>();
+
+
 
 
     // Dành riêng cho EF Core khi query (không dùng để tạo mới)
