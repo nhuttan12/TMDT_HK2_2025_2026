@@ -4,6 +4,7 @@ using api.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 using Api.Models.Users;
 using api.Models.Inventory;
+using api.Models.Banners;
 
 namespace api.Models
 {
@@ -44,9 +45,12 @@ namespace api.Models
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
         public virtual UserDetail? UserDetail { get; set; }
+        public virtual Shop? Shop { get; set; }
         public virtual UserExternalLogin?  UserExternalLogin{ get;  set; }
         public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
         public ICollection<GoodsIssue> GoodsIssues { get; set; } = new HashSet<GoodsIssue>();
+        public ICollection<UserBanking> UserBankings { get; set; } = new HashSet<UserBanking>();
+        public ICollection<Banner> Banners { get; set; } = new HashSet<Banner>();
 
         public void SetPassword(string hash)
         {

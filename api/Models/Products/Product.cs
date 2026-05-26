@@ -2,6 +2,7 @@
 using api.Models.Category;
 using api.Models.Inventory;
 using api.Models.Products;
+using api.Models.Promotions;
 using api.Utilities;
 
 namespace api.model.Products;
@@ -26,7 +27,7 @@ public class Product
     public DateTimeOffset UpdatedAt { get; private set; }
 
     public ICollection<InventoryBatchStock> InventoryBatchStocks { get; private set; } = new HashSet<InventoryBatchStock>();
-
+    public ICollection<ProductPromotion> ProductPromotions { get; private set; } = new HashSet<ProductPromotion>();
 
 
 

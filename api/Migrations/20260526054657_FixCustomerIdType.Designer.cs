@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Repository;
 
@@ -11,9 +12,11 @@ using api.Repository;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260526054657_FixCustomerIdType")]
+    partial class FixCustomerIdType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,44 +51,6 @@ namespace api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Addresses", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Banners.Banner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit")
-                        .HasColumnName("status");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BANNERS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Category.Category", b =>
@@ -483,95 +448,6 @@ namespace api.Migrations
                     b.ToTable("Variants", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.Promotions.ProductPromotion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("Discount")
-                        .HasColumnType("int")
-                        .HasColumnName("discount");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("product_id");
-
-                    b.Property<Guid>("PromotionId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("promotion_id");
-
-                    b.Property<bool>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true)
-                        .HasColumnName("status");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("PromotionId");
-
-                    b.ToTable("PRODUCT_PROMOTIONS", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Promotions.Promotion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTimeOffset>("EndAt")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("end_at");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<DateTimeOffset>("StartAt")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("start_at");
-
-                    b.Property<bool>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true)
-                        .HasColumnName("status");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PROMOTIONS", (string)null);
-                });
-
             modelBuilder.Entity("api.Models.Roles.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -634,89 +510,6 @@ namespace api.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Users.Shop", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("TaxCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SHOPS", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Users.UserBanking", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<string>("AccountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("account_name");
-
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("account_number");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("bank_name");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("USER_BANKINGS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
@@ -814,17 +607,6 @@ namespace api.Migrations
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("api.Models.Banners.Banner", b =>
-                {
-                    b.HasOne("api.Models.User", "User")
-                        .WithMany("Banners")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -948,25 +730,6 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.Promotions.ProductPromotion", b =>
-                {
-                    b.HasOne("api.model.Products.Product", "Product")
-                        .WithMany("ProductPromotions")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.Promotions.Promotion", "Promotion")
-                        .WithMany("ProductPromotions")
-                        .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Promotion");
-                });
-
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.HasOne("api.Models.Roles.Role", "Role")
@@ -976,28 +739,6 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("api.Models.Users.Shop", b =>
-                {
-                    b.HasOne("api.Models.User", "User")
-                        .WithOne("Shop")
-                        .HasForeignKey("api.Models.Users.Shop", "Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("api.Models.Users.UserBanking", b =>
-                {
-                    b.HasOne("api.Models.User", "User")
-                        .WithMany("UserBankings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
@@ -1071,11 +812,6 @@ namespace api.Migrations
                     b.Navigation("InventoryBatchStocks");
                 });
 
-            modelBuilder.Entity("api.Models.Promotions.Promotion", b =>
-                {
-                    b.Navigation("ProductPromotions");
-                });
-
             modelBuilder.Entity("api.Models.Roles.Role", b =>
                 {
                     b.Navigation("Users");
@@ -1085,13 +821,7 @@ namespace api.Migrations
                 {
                     b.Navigation("Addresses");
 
-                    b.Navigation("Banners");
-
                     b.Navigation("GoodsIssues");
-
-                    b.Navigation("Shop");
-
-                    b.Navigation("UserBankings");
 
                     b.Navigation("UserDetail");
 
@@ -1103,8 +833,6 @@ namespace api.Migrations
                     b.Navigation("Detail");
 
                     b.Navigation("InventoryBatchStocks");
-
-                    b.Navigation("ProductPromotions");
 
                     b.Navigation("Variants");
                 });

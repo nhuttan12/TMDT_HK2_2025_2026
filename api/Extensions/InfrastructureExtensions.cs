@@ -16,6 +16,7 @@ namespace api.Extensions
 
             var dbPort = Environment.GetEnvironmentVariable("MSSQL_PORT") ?? "1433";
             var dbPass = Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD");
+            var dbPid = Environment.GetEnvironmentVariable("MSSQL_PID");
 
             var connectionString = $"Server=localhost,{dbPort};Database=tmdt_2026;User Id=sa;Password={dbPass};TrustServerCertificate=True;MultipleActiveResultSets=true";
 
