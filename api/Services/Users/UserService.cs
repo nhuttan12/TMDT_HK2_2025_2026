@@ -18,14 +18,14 @@ namespace api.Services.Users
     public interface IUserService
     {
         public Task<Result<UserInfoDTO>> CreateAsync(UserCreateDto userCreateDto, CancellationToken ct = default);
-        public Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
-        public Task<Result<UserInfoDTO>> GetByIdAsync(int id, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
+        public Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default);
         public ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default);
         public Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
-        Task<Result<object>> ChangePasswordAsync(int id, ChangePasswordDto request, CancellationToken ct = default);
+        Task<Result<object>> ChangePasswordAsync(Guid id, ChangePasswordDto request, CancellationToken ct = default);
     }
     public class UserService : IUserService
     {
@@ -84,7 +84,7 @@ namespace api.Services.Users
             return Result<Pagination<UserInfoDTO>>.Success(new Pagination<UserInfoDTO>(userDtos, totalCount, query.PageNumber, query.PageSize));
           
         }
-        public async Task<Result<UserInfoDTO>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
             var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
             if(user == null)
@@ -115,7 +115,7 @@ namespace api.Services.Users
             return await _context.Users.AnyAsync(u => u.Email == email, ct);
         }
         
-        public async Task<Result<UserInfoDTO>> UpdateAsync(int id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
+        public async Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
         {
             var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
@@ -127,7 +127,7 @@ namespace api.Services.Users
         }
 
         public async Task<Result<object>> ChangePasswordAsync(
-            int id,
+            Guid id,
             ChangePasswordDto request,
             CancellationToken ct = default)
         {

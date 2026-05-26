@@ -10,7 +10,7 @@ namespace api.Models.Users
         {
             this.AvatarUrl = avatarUrl;
         }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public DateTime LockTimeStart { get; set; }
         public DateTime LockTimeEnd { get; set; }
         public string? AvatarUrl { get; set; }

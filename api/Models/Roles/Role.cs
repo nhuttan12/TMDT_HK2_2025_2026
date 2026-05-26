@@ -5,7 +5,7 @@ namespace api.Models.Roles
     public class Role(string name)
     {
         public int Id { get; set; }
-
+        
         [Required]
         [StringLength(255)]
         public required string Name { get; set; } = name;

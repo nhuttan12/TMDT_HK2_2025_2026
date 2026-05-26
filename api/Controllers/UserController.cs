@@ -39,7 +39,7 @@ namespace api.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var user = await UserService.GetByIdAsync(id);
             return HandleResult(user);
@@ -107,7 +107,7 @@ namespace api.Controllers
 
         [HttpPost("{id}/lock")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> LockUser([FromRoute] int id, [FromBody] LockInfoDto req)
+        public async Task<IActionResult> LockUser([FromRoute] Guid id, [FromBody] LockInfoDto req)
         {
             //TODO: implement method lock user
             return Ok();
@@ -115,11 +115,7 @@ namespace api.Controllers
 
     }
     public record UserParameters(
-        [Required]
-        [Range(0, 10)]
         int PageNumber,
-        [Required]
-        [Range(0, 10)]
         int PageSize
         );
   

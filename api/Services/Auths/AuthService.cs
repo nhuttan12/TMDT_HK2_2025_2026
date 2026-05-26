@@ -157,14 +157,14 @@ namespace api.Services.Auths
         public async Task<Result<TokenResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
             var principal = _tokenService.ValidateToken(refreshToken,ct);
-
             var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var subId =  Guid.Parse(sub ?? Guid.Empty.ToString());
             if (sub == null)
             {
                 return Result<TokenResponse>.Failure(new Error("AUTH_001", "Invalid refresh token"), ErrorType.Unauthorized);
             }
                
-            var user = await _authRepo.GetByIdWithRoleAsync(int.Parse(sub), ct);
+            var user = await _authRepo.GetByIdWithRoleAsync(subId, ct);
 
             if (user == null)
             {
