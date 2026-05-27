@@ -6,6 +6,7 @@ using api.Models.Roles;
 using Api.Models.Users;
 using api.model.Products;
 using api.Models.Category;
+using api.Models.Orders;
 namespace api.Repository
 {
     public class MyAppDbContext : DbContext
@@ -25,6 +26,9 @@ namespace api.Repository
         public DbSet<Address> Address { get; set; } 
         public DbSet<UserExternalLogin> UserExternalLogins { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
