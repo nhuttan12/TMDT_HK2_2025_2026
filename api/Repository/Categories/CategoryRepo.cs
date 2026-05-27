@@ -1,4 +1,5 @@
-﻿using api.Models.Category;
+﻿using api.Database;
+using api.Models.Category;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Linq.Expressions;

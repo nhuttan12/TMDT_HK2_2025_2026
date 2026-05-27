@@ -1,4 +1,5 @@
 ﻿using api.Controllers;
+using api.Database;
 using api.Dtos.Products.Request;
 using api.model.Products;
 using api.Repository;
@@ -20,11 +21,10 @@ namespace api.Services.Products
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public ProductService(ILogger<ProductController> logger, IProductService productService, IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper, MyAppDbContext context)
+        public ProductService(ILogger<ProductController> logger, IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper, MyAppDbContext context)
         {
             _context = context;
             _logger = logger;
-            _productService = productService;
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;

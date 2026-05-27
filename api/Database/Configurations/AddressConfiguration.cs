@@ -3,7 +3,7 @@ using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace api.Repository.Configurations
+namespace api.Database.Configurations
 {
     public class AddressConfiguration : IEntityTypeConfiguration<Address>
     {

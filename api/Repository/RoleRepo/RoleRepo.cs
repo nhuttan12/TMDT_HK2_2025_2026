@@ -1,4 +1,5 @@
-﻿using api.Models.Roles;
+﻿using api.Database;
+using api.Models.Roles;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository.RoleRepo

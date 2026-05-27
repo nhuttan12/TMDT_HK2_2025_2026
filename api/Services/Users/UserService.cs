@@ -1,4 +1,5 @@
 ﻿using api.Controllers;
+using api.Database;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Exceptions;

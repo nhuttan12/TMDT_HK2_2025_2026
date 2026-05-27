@@ -2,7 +2,7 @@
 using api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Repository.Configurations
+namespace api.Database.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

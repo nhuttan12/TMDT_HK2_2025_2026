@@ -12,6 +12,7 @@ using api.Repository.Categories;
 using api.Services.Categorys;
 using api.Repository.ProductRepo;
 using api.Services.Products;
+using api.Database;
 
 namespace api.Extensions
 {

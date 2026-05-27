@@ -5,7 +5,7 @@ using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace api.Repository.Configurations
+namespace api.Database.Configurations
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

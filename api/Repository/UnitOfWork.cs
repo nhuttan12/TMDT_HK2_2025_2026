@@ -1,4 +1,6 @@
 ﻿
+using api.Database;
+
 namespace api.Repository
 {
     public interface IUnitOfWork

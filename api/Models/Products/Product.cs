@@ -30,17 +30,15 @@ public class Product
     // Dành riêng cho EF Core khi query (không dùng để tạo mới)
     protected Product() { }
 
-    private Product(string name, decimal basePrice, DateTimeOffset createdAt)
+    private Product(string name, decimal basePrice)
     {
         Id = Guid.Empty;
         Name = name;
         BasePrice = basePrice;
-        CreatedAt = createdAt;
-        UpdatedAt = createdAt;
     }
 
     // Pass thời gian từ Services vào để dễ dàng Mock/Unit Test
-    public static Result<Product> Create(string name, decimal basePrice, DateTimeOffset createdAt)
+    public static Result<Product> Create(string name, decimal basePrice)
     {
         // Fail Fast với các mã lỗi chuẩn (Constants)
         if (string.IsNullOrWhiteSpace(name))
@@ -53,20 +51,19 @@ public class Product
                 new Error("Product.InvalidPrice", "Giá sản phẩm không được nhỏ hơn 0."),
                 ErrorType.Validation);
 
-        return Result<Product>.Success(new Product(name, basePrice, createdAt));
+        return Result<Product>.Success(new Product(name, basePrice));
     }
 
-    public void SetDetail(string summary, string descriptionHtml, DateTimeOffset updatedAt)
+    public void SetDetail(string summary, string descriptionHtml)
     {
         // Tránh cấp phát mới nếu dữ liệu không đổi (Tối ưu CPU & GC)
         if (Detail?.Summary == summary && Detail?.DescriptionHtml == descriptionHtml)
             return;
 
         Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml).Value;
-        UpdatedAt = updatedAt;
     }
 
-    public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl, DateTimeOffset updatedAt)
+    public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl)
     {
         // 1. Fail Fast validation ở tầng Product
         if (sellPrice < 0)
@@ -87,8 +84,6 @@ public class Product
 
         // 4. Khi IsFailure = false, Value chắc chắn tồn tại (dấu ! báo cho trình biên dịch biết điều này)
         _variants.Add(variantResult.Value!);
-
-        UpdatedAt = updatedAt;
 
         return Result<bool>.Success(true);
     }

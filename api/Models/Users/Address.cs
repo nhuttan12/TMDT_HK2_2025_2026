@@ -8,7 +8,7 @@ public class Address
     public int Id { get; private set; }
     public Guid UserId { get; private set; }
     public string AddressUrl { get; private set; } = string.Empty;
-    public DateTime CreatedAt { get; private set; }
+    public DateTimeOffset CreatedAt { get; private set; }
     public bool IsUsed { get; private set; }
 
     // Navigation Propertydotnet ef database drop -f
@@ -33,7 +33,6 @@ public class Address
         {
             UserId = userId,
             AddressUrl = addressUrl.Trim(),
-            CreatedAt = DateTime.UtcNow,
             IsUsed = false
         };
     }

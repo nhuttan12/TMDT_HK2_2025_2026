@@ -1,4 +1,5 @@
-﻿using api.Exceptions;
+﻿using api.Database;
+using api.Exceptions;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 

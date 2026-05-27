@@ -21,13 +21,12 @@ namespace api.Models.Category
         protected Category() { }
 
         // Private constructor: Ép buộc mọi khởi tạo phải đi qua Factory Method
-        private Category(string name, string sku, string imageUrl, DateTimeOffset createdAt)
+        private Category(string name, string sku, string imageUrl)
         {
             Id = Guid.NewGuid();
             Name = name;
             Sku = sku;
             ImageUrl = imageUrl;
-            CreatedAt = createdAt;
         }
 
         // Pass tham số thời gian từ Services (DI IDateTimeProvider) để dễ dàng Mocking/Unit Test
@@ -44,9 +43,8 @@ namespace api.Models.Category
                     new Error("Category.SkuRequired", "Mã SKU không được để trống."),
                     ErrorType.Validation);
 
-            DateTimeOffset createdAt = DateTimeOffset.UtcNow;
 
-            return Result<Category>.Success(new Category(name, sku, imageUrl, createdAt));
+            return Result<Category>.Success(new Category(name, sku, imageUrl));
         }
 
         // Ví dụ về method thay đổi trạng thái (tránh dùng setter public)
@@ -69,7 +67,6 @@ namespace api.Models.Category
             Name = name;
             Sku = sku;
             ImageUrl = imageUrl;
-            UpdatedAt = updatedAt;
 
             return Result<bool>.Success(true);
         }

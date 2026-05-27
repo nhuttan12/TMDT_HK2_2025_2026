@@ -26,8 +26,6 @@ namespace api.Models.Orders
                 Status = OrderStatus.Pending, // Trạng thái mặc định an toàn
                 CouponId = couponId,
                 TotalAmount = 0, // Sẽ được cộng dồn khi thêm Item
-                CreatedAt = DateTimeOffset.UtcNow,
-                UpdatedAt = DateTimeOffset.UtcNow
             };
         }
 
@@ -42,7 +40,6 @@ namespace api.Models.Orders
 
             // Tự động tính toán lại tổng tiền để đảm bảo tính toàn vẹn (Không ai được phép set tay TotalAmount)
             TotalAmount += quantity * priceAtPurchase;
-            UpdatedAt = DateTimeOffset.UtcNow;
         }
 
 

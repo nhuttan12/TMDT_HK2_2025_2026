@@ -34,11 +34,11 @@ namespace api.Models
         //public bool isShop { get; set; }
         //public bool isActive { get; set; }
 
-        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreateAt { get; set; } 
 
-        public DateTime? UpdateAt { get; set; }
+        public DateTimeOffset? UpdateAt { get; set; }
 
-        public DateTime? DeleteAt { get; set; }
+        public DateTimeOffset? DeleteAt { get; set; }
 
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
@@ -58,7 +58,6 @@ namespace api.Models
             if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;
             if (!string.IsNullOrEmpty(avatarUrl)) UserDetail!.AvatarUrl = avatarUrl;
             if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create( userId,a)));
-            UpdateAt = DateTime.UtcNow;
         }
 
         internal void UpdatePassword(string newHash)
@@ -67,7 +66,6 @@ namespace api.Models
                 throw new ArgumentException("Password hash cannot be empty.");
 
             PasswordHash = newHash;
-            UpdateAt = DateTime.UtcNow;
         }
     }
 }
