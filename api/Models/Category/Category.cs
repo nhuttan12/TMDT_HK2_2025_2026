@@ -31,7 +31,7 @@ namespace api.Models.Category
         }
 
         // Pass tham số thời gian từ Services (DI IDateTimeProvider) để dễ dàng Mocking/Unit Test
-        public static Result<Category> Create(string name, string sku, string imageUrl, DateTimeOffset createdAt)
+        public static Result<Category> Create(string name, string sku, string imageUrl)
         {
             // Áp dụng Fail Fast để tối ưu CPU/Memory, tránh cấp phát Object nếu data không hợp lệ
             if (string.IsNullOrWhiteSpace(name))
@@ -44,22 +44,30 @@ namespace api.Models.Category
                     new Error("Category.SkuRequired", "Mã SKU không được để trống."),
                     ErrorType.Validation);
 
+            DateTimeOffset createdAt = DateTimeOffset.UtcNow;
+
             return Result<Category>.Success(new Category(name, sku, imageUrl, createdAt));
         }
 
         // Ví dụ về method thay đổi trạng thái (tránh dùng setter public)
-        public Result<bool> UpdateDetails(string name, string imageUrl, DateTimeOffset updatedAt)
+        public Result<bool> UpdateDetails(string name, string sku, string imageUrl, DateTimeOffset updatedAt)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return Result<bool>.Failure(
                     new Error("Category.NameRequired", "Tên danh mục không được để trống."),
                     ErrorType.Validation);
 
+            if (string.IsNullOrWhiteSpace(sku))
+                return Result<bool>.Failure(
+                    new Error("Category.SkuRequired", "Mã SKU không được để trống."),
+                    ErrorType.Validation);
+
             // Tối ưu CPU: Tránh Update Database nếu data không đổi
-            if (Name.Equals(name, StringComparison.Ordinal) && ImageUrl.Equals(imageUrl, StringComparison.Ordinal))
+            if (Name.Equals(name, StringComparison.Ordinal) && Sku.Equals(sku, StringComparison.Ordinal) && ImageUrl.Equals(imageUrl, StringComparison.Ordinal))
                 return Result<bool>.Success(true);
 
             Name = name;
+            Sku = sku;
             ImageUrl = imageUrl;
             UpdatedAt = updatedAt;
 

@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Repository.UserRepo;
 using api.Repository.RoleRepo;
+using api.Repository.Categories;
+using api.Services.Categorys;
+using api.Repository.ProductRepo;
+using api.Services.Products;
 
 namespace api.Extensions
 {
@@ -42,6 +46,8 @@ namespace api.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoleRepo, RoleRepo>();
             services.AddScoped<IAuthRepo, AuthRepo>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
 
 
             // Đăng ký các service
@@ -49,6 +55,8 @@ namespace api.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

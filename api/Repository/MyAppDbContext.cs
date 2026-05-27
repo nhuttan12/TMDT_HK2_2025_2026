@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using api.Models.Roles;
 using Api.Models.Users;
 using api.model.Products;
+using api.Models.Category;
 namespace api.Repository
 {
     public class MyAppDbContext : DbContext
@@ -23,6 +24,7 @@ namespace api.Repository
         public DbSet<UserDetail> UserDetails { get; set; }
         public DbSet<Address> Address { get; set; } 
         public DbSet<UserExternalLogin> UserExternalLogins { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

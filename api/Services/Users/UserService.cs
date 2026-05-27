@@ -58,7 +58,8 @@ namespace api.Services.Users
             }
             user.Role = role;
 
-            await _userRepo.CreateAsync(user, ct);   
+            await _userRepo.CreateAsync(user, ct);
+            await _unitOfWork.CommitAsync(ct);
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
         }
         public Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default)

@@ -2,6 +2,10 @@
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Models;
+using api.Controllers;
+using api.Models.Category;
+using api.Dtos.Products.Respones;
+using api.Dtos.Products.Request;
 
 namespace api.Utilities
 {
@@ -11,6 +15,7 @@ namespace api.Utilities
         public MappingProfile()
         {
             UserMapping();
+            CategoryMapping();
 
 
         }
@@ -26,6 +31,14 @@ namespace api.Utilities
             // user to dto
             CreateMap<User, UserInfoDTO>()
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
+        }
+        private void CategoryMapping()
+        {
+            // dto to category
+            CreateMap<CreateCategoryRequest, Category>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            // category to dto
+            CreateMap<Category, CategoryResponseDto>();
         }
     }
 }
