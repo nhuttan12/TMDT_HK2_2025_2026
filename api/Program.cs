@@ -27,10 +27,8 @@ using (var scope = app.Services.CreateScope())
     var config = services.GetRequiredService<IConfiguration>();
     var context = services.GetRequiredService<MyAppDbContext>();
     var authService = services.GetRequiredService<IAuthService>();
-    var logger = services.GetRequiredService<ILogger<DbInitializer>>();
-    // Truyền trực tiếp context vào để xử lý
 
-    await DbInitializer.SeedEverything(context, config, authService, logger);
+    await api.Database.Seeders.DatabaseSeeder.SeedAsync(app.Services);
 }
 
 // 2. Cấu hình Middleware

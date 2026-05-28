@@ -13,22 +13,13 @@ namespace api.Services.Products
     {
         Task<Result<Product>> CreateProduct(ProductCreateDto productDto);
     }
-    public class ProductService : IProductService
+    public class ProductService(
+        ILogger<ProductController> _logger, 
+        MyAppDbContext _context, 
+        IProductRepository _productRepository,
+        IUnitOfWork _unitOfWork,
+        IMapper _mapper) : IProductService
     {
-        private readonly ILogger<ProductController> _logger;
-        private readonly MyAppDbContext _context;
-        private readonly IProductService _productService;
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-        public ProductService(ILogger<ProductController> logger, IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper, MyAppDbContext context)
-        {
-            _context = context;
-            _logger = logger;
-            _productRepository = productRepository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
 
         public Task<Result<Product>> CreateProduct(ProductCreateDto productDto)
         {
