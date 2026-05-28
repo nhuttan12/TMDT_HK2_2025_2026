@@ -11,7 +11,6 @@ export async function getShopProfileByUserId(userId: number): Promise<ShopProfil
 		phone: '0909123456',
 		description: '<p>Chuyên cung cấp các mẫu bể kính tiểu cảnh nghệ thuật.</p>',
 		address: '123 Đường ABC, Phường 5, Quận 3, TP. Hồ Chí Minh',
-		facebookUrl: 'https://facebook.com/terrariumvn',
 
 		// Hình ảnh
 		logoUrl:

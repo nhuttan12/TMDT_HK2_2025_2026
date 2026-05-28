@@ -202,23 +202,6 @@ export default function ShopRegistrationUi({
 					</div>
 				</CardContent>
 			</Card>
-
-			{/* Section 3: Cấu hình SEO & Kênh ngoài */}
-			<Card>
-				<CardHeader>
-					<CardTitle>3. Tối ưu hiển thị</CardTitle>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					<Field label='Đường dẫn Fanpage (Facebook)'>
-						<Input
-							name='facebookUrl'
-							value={form.facebookUrl}
-							onChange={handleInputChange}
-							disabled={isView}
-						/>
-					</Field>
-				</CardContent>
-			</Card>
 		</AdminFormWrapper>
 	);
 }

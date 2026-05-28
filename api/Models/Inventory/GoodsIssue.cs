@@ -15,5 +15,15 @@ namespace api.Models.Inventory
         public DateTimeOffset CreatedAt { get; private set; }
 
         public ICollection<GoodsIssueDetail> GoodsIssueDetails { get; private set; } = new HashSet<GoodsIssueDetail>();
+
+        public GoodsIssue(Guid id, Guid customerId, string code, string note, GoodsIssueType goodsIssueType, DateTimeOffset createdAt)
+        {
+            Id = id;
+            CustomerId = customerId;
+            Code = code;
+            Note = note;
+            GoodsIssueType = goodsIssueType;
+            CreatedAt = createdAt;
+        }
     }
 }

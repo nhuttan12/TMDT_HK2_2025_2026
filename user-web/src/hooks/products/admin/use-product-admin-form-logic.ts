@@ -3,13 +3,13 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useRouter } from 'next/navigation';
 
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
-import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
+import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { ProductCreateDTO } from '@/types/products/admin/ProductCreateDTO';
 import { ProductUpdateDTO } from '@/types/products/admin/ProductUpdateDTO';
 
-import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/mappers/admin-product';
+import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/admin-product';
 import { generateSlug } from '@/utils/shared/mappers/slug';
 import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
@@ -68,7 +68,7 @@ export function useProductAdminFormLogic({
 	const [form, setForm] = useState<ProductDetailInfoAdmin>(productAdmin);
 
 	// 2. Table Selection State
-	const allKeys: number[] = form.productVariants?.map((p: ProductVariant): number => p.id) ?? [];
+	const allKeys: number[] = form.productVariants?.map((p: ProductVariantAdmin): number => p.id) ?? [];
 	const selection = useTableSelection<number>(allKeys);
 
 	// 3. Modal & Deletion State

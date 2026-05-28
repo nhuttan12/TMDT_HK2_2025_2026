@@ -65,8 +65,16 @@ namespace api.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("image_url");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_primary");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int")
+                        .HasColumnName("order");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit")
@@ -79,7 +87,8 @@ namespace api.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
@@ -152,7 +161,7 @@ namespace api.Migrations
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("NVARCHAR(MAX)");
 
                     b.HasKey("Id");
 
@@ -217,7 +226,7 @@ namespace api.Migrations
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("NVARCHAR(MAX)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -651,7 +660,7 @@ namespace api.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("description");
 
                     b.Property<string>("Name")

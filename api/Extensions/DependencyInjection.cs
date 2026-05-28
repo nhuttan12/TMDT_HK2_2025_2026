@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Repository.UserRepo;
 using api.Repository.RoleRepo;
+using api.Services.Banners;
 
 namespace api.Extensions
 {
@@ -49,6 +50,7 @@ namespace api.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IBannerService, BannerService>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

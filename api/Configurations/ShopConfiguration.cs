@@ -21,7 +21,7 @@ namespace api.Configurations
 
             builder.Property(shop => shop.Description)
                 .HasColumnName("description")
-                .HasColumnType("text");
+                .HasColumnType("NVARCHAR(MAX)");
 
             builder.Property(shop => shop.CreatedAt)
                 .HasColumnName("created_at")

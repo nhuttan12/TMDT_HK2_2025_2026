@@ -66,7 +66,6 @@ export const getShopRegistrationFormByApprovalId = async (
 		description:
 			'<p>Cửa hàng chuyên cung cấp các hệ sinh thái Terrarium thu nhỏ, rêu nhiệt đới và phụ kiện setup tiểu cảnh chuyên nghiệp.</p>',
 		address: '123 Nguyễn Văn Linh, Phường Tân Thuận Tây, Quận 7, TP.HCM',
-		facebookUrl: 'https://facebook.com/terrariumxanh.vn',
 		bankName: 'Vietcombank',
 		accountName: 'NGUYEN VAN A',
 		accountNumber: '10123456789',

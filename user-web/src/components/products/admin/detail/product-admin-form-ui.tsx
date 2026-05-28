@@ -1,4 +1,4 @@
-import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
+import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
 import React, { JSX } from 'react';
 import { Column } from '@/types/uis/Column';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
@@ -50,24 +50,24 @@ export default function ProductAdminFormUI({
 }: ProductAdminFormUIProps): JSX.Element {
 	const isFieldDisabledForShopOwner = !isView && isShopOwner;
 
-	let productVariantColumns: Column<ProductVariant>[] = [
+	let productVariantColumns: Column<ProductVariantAdmin>[] = [
 		{ key: 'name', header: 'Tên' },
 		{ key: 'sku', header: 'SKU' },
 		{ key: 'quantity', header: 'Tồn kho' },
 		{
 			key: 'costPrice',
 			header: 'Giá nhập',
-			render: (row: ProductVariant): string => row.costPrice.toLocaleString('vi-VN') + ' đ',
+			render: (row: ProductVariantAdmin): string => row.costPrice.toLocaleString('vi-VN') + ' đ',
 		},
 		{
 			key: 'salePrice',
 			header: 'Giá bán',
-			render: (row: ProductVariant): string => row.salePrice.toLocaleString('vi-VN') + ' đ',
+			render: (row: ProductVariantAdmin): string => row.salePrice.toLocaleString('vi-VN') + ' đ',
 		},
 		{
 			key: 'image',
 			header: 'Ảnh',
-			render: (row: ProductVariant): JSX.Element =>
+			render: (row: ProductVariantAdmin): JSX.Element =>
 				row.image ? (
 					<Image
 						src={row.image}
@@ -86,7 +86,7 @@ export default function ProductAdminFormUI({
 					{
 						key: 'action',
 						header: <span className='block px-4'>Thao tác</span>,
-						render: (row: ProductVariant): JSX.Element => (
+						render: (row: ProductVariantAdmin): JSX.Element => (
 							<AdminTableAction
 								id={row.id}
 								onDelete={handleTriggerDeleteVariant}
@@ -228,8 +228,8 @@ export default function ProductAdminFormUI({
 						data={form.productVariants}
 						columns={productVariantColumns}
 						stickyHeader={false}
-						getRowKey={(row: ProductVariant): number => row.id}
-						onRowClick={(row: ProductVariant): void =>
+						getRowKey={(row: ProductVariantAdmin): number => row.id}
+						onRowClick={(row: ProductVariantAdmin): void =>
 							handleRedirectToProductVariantDetail(row.id)
 						}
 						selectable={{

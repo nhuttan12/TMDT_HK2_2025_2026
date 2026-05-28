@@ -146,16 +146,6 @@ export default function ShopProfileFormUi({
 				/>
 			</Field>
 
-			<Field label='Đường dẫn Fanpage (Facebook)'>
-				<Input
-					name='facebookUrl'
-					placeholder='https://facebook.com/...'
-					value={form.facebookUrl}
-					onChange={onInputChange}
-					disabled={isDisabled}
-				/>
-			</Field>
-
 			<Field label='Tiêu đề SEO (Hiển thị trên Google)'>
 				<Input
 					name='seoTitle'

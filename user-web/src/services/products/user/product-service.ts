@@ -1,10 +1,14 @@
+import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
+import { ProductDetailRawUser } from '@/types/products/user/ProductDetailRawUser';
 import { ProductShop } from '@/types/products/user/ProductShop';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { Review } from '@/types/products/user/Review';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { convertRawUserToProductDetail } from '@/utils/products/product-adapter';
+import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
+
 	const reviews: Review[] = [
 		{
 			id: 'cmt-001',
@@ -116,25 +120,13 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 		shopSlug: 'greenspace-official',
 	};
 
-	const productDetail: ProductDetail = {
-		id: productId,
-		name: 'Bể Terrarium Kín Hệ Sinh Thái Nhiệt Đới (Tặng Kèm Đèn LED)',
-		brand: 'GreenSpace Nature',
-		rating: 4.8,
-		discount: 10,
+	const rawData: ProductDetailRawUser = {
+		id: 1,
+		name: 'Bonsai Tree Ecosystem',
+		slug: 'bonsai-tree-ecosystem',
 
-		shop: shop,
+		supplierName: 'Terrafulness',
 
-		// Cập nhật khoảng giá mới
-		minPrice: 350000,
-		maxPrice: 650000,
-
-		// Danh sách hình ảnh dùng cho Carousel (Slider)
-		images: [
-			'https://product.hstatic.net/200000968796/product/tf-050__1__e92a04f7e9f34d5b96d792a2bfd9e9a3.png',
-			'https://product.hstatic.net/200000968796/product/tf-050__2__76a0ba361de34342840587659c088bf3.png',
-			'https://product.hstatic.net/200000968796/product/tf-050_a7908d3ec6a84732a1c5524c9eda1ae1.png',
-		],
 		description:
 			'<p>\n' +
 			'  Terrarium Hệ Sinh Thái Nhiệt Đới Kín là sự kết hợp hoàn hảo giữa nghệ thuật sắp đặt\n' +
@@ -192,61 +184,104 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 			'  nguyên vẹn bố cục 100% khi vận chuyển đi xa.</em>\n' +
 			'</p>\n',
 
-		// THÊM MỚI: Tầng phân loại (Tier Variations)
-		tierVariations: [
+		discount: calculateDiscount(1500000, 1250000),
+
+		status: true,
+		categoryId: 1,
+
+		images: [
 			{
-				name: 'Kích thước',
-				options: ['Size S (15x15cm)', 'Size M (20x20cm)'],
-				images: [
-					'https://product.hstatic.net/200000968796/product/tf-015__10__68fd61d9f51f4a2e847776fe8e76d7e2.png',
-					'https://product.hstatic.net/200000968796/product/tf-015_310e9bd59abe4f549496e108f0fb909e.png',
-				],
+				localId: crypto.randomUUID(),
+				imageUrl:
+					'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
+				order: 0,
+				isPrimary: true,
+				status: 'done',
+				progress: 100,
 			},
 			{
-				name: 'Kiểu bình thủy tinh',
-				options: ['Trụ Tròn', 'Đa Giác'],
+				localId: crypto.randomUUID(),
+				imageUrl: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=800&q=80',
+				order: 1,
+				isPrimary: false,
+				status: 'done',
+				progress: 100,
 			},
 		],
 
-		// THÊM MỚI: Các phân loại vật lý (Variants / SKUs)
-		variants: [
+		createdAt: '2024-01-10T10:00:00Z',
+		updatedAt: '2024-02-01T15:30:00Z',
+
+		// Các phân loại dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
+		productVariants: [
 			{
-				id: 101,
-				sku: 'TER-S-TRON',
-				tierIndex: [0, 0], // Size S, Trụ Tròn
-				price: 350000,
-				stock: 12,
-				isActive: true,
+				id: 1,
+				productId: 1,
+				name: 'Size S - Nắp Bần',
+				sku: 'BON-S-CORK',
+				quantity: 12,
+				costPrice: 550000,
+				salePrice: 850000,
+				image: 'https://cdn.hstatic.net/products/200000968796/hh_1_37e2ef90ce974747b6e5157dfdbc9621.png',
 			},
 			{
-				id: 102,
-				sku: 'TER-S-DAGIAC',
-				tierIndex: [0, 1], // Size S, Đa Giác
-				price: 420000,
-				stock: 5,
-				isActive: true,
+				id: 2,
+				productId: 1,
+				name: 'Size S - Đế Đèn LED',
+				sku: 'BON-S-LED',
+				quantity: 8,
+				costPrice: 750000,
+				salePrice: 1150000,
+				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 			},
 			{
-				id: 103,
-				sku: 'TER-M-TRON',
-				tierIndex: [1, 0], // Size M, Trụ Tròn
-				price: 550000,
-				stock: 0, // Hết hàng để test UI
-				isActive: true,
+				id: 3,
+				productId: 1,
+				name: 'Size M - Nắp Bần',
+				sku: 'BON-M-CORK',
+				quantity: 10,
+				costPrice: 850000,
+				salePrice: 1250000,
+				image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
 			},
 			{
-				id: 104,
-				sku: 'TER-M-DAGIAC',
-				tierIndex: [1, 1], // Size M, Đa Giác
-				price: 650000,
-				stock: 8,
-				isActive: true,
+				id: 4,
+				productId: 1,
+				name: 'Size M - Đế Đèn LED',
+				sku: 'BON-M-LED',
+				quantity: 15,
+				costPrice: 1050000,
+				salePrice: 1550000,
+				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
+			},
+			{
+				id: 5,
+				productId: 1,
+				name: 'Size L - Nắp Bần',
+				sku: 'BON-L-CORK',
+				quantity: 6,
+				costPrice: 1200000,
+				salePrice: 1850000,
+				image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
+			},
+			{
+				id: 6,
+				productId: 1,
+				name: 'Size L - Đế Đèn LED',
+				sku: 'BON-L-LED',
+				quantity: 9,
+				costPrice: 1400000,
+				salePrice: 2150000,
+				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 			},
 		],
-		reviews: reviews,
+        shop: shop,
+        reviews: reviews,
+        rating: 4.8
 	};
 
-	return productDetail;
+
+	return convertRawUserToProductDetail(rawData);
 };
 
 export const getRelatedProducts = async (categoryName: string): Promise<ProductUserCard[]> => {
@@ -495,7 +530,7 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 				{
 					id: 101,
 					name: 'Bể Kính Đa Giác Basic 20x20',
-					image: 'https://caydeban.com.vn/image/cache/catalog/products/Terrariums/MS01/Terrarium-MS01_6634-600x600.JPG',
+					image: 'https://pos.nvncdn.com/524fc3-178700/ps/20240723_NI9uWMWxTX.jpeg?v=1721710205',
 					price: 350000,
 					discount: 22,
 					rating: 4.9,

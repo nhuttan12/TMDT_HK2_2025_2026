@@ -1,5 +1,5 @@
 // Ghi nhận các phân loại vật lý tồn tại trong kho (SKU)
-export interface ProductVariant {
+export interface ProductVariantUser {
 	id: number;
 	sku: string; // Mã lưu kho sản phẩm
 

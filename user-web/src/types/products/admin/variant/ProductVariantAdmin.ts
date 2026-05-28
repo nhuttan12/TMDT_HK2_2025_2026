@@ -1,4 +1,4 @@
-export interface ProductVariant {
+export interface ProductVariantAdmin {
 	id: number;
 	productId: number;
 

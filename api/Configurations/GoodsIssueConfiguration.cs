@@ -16,7 +16,7 @@ namespace api.Configurations
             builder.Property(goodsIssue => goodsIssue.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(goodsIssue => goodsIssue.Code).HasColumnType("varchar(50)");
-            builder.Property(goodsIssue => goodsIssue.Note).HasColumnType("text");
+            builder.Property(goodsIssue => goodsIssue.Note).HasColumnType("NVARCHAR(MAX)");
 
             var typeConverter = new ValueConverter<GoodsIssueType, string>(
                 type => type.ToString().ToLower(),

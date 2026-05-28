@@ -1,6 +1,6 @@
 import { Review } from '@/types/products/user/Review';
 import { ProductTierVariation } from './ProductTierVariation';
-import { ProductVariant } from './ProductVariant';
+import { ProductVariantUser } from './ProductVariantUser';
 import { ProductShop } from './ProductShop';
 
 export interface ProductDetail {
@@ -23,7 +23,7 @@ export interface ProductDetail {
 
 	// Nhúng hệ thống phân loại vào
 	tierVariations: ProductTierVariation[];
-	variants: ProductVariant[];
+	variants: ProductVariantUser[];
 
 	reviews: Review[];
 }

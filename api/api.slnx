@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="../Database_TMDT/Database_TMDT.sqlproj" Id="1c07df72-61aa-4c59-bf58-1e4cd9990241">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="api.csproj" />
 </Solution>

@@ -7,7 +7,6 @@ export interface ShopProfile {
 	phone: string;
 	description: string;
 	address: string;
-	facebookUrl: string;
 
 	// 2. Hình ảnh (THÊM VÀO ĐỂ ADMIN CÓ THỂ UPLOAD/EDIT)
 	logoUrl: string;

@@ -12,7 +12,6 @@ export interface ShopRegistrationForm extends Pick<
 	| 'phone'
 	| 'description'
 	| 'address'
-	| 'facebookUrl'
 	| 'bankName'
 	| 'accountName'
 	| 'accountNumber'

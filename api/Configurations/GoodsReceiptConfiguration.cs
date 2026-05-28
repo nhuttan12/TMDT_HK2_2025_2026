@@ -16,7 +16,7 @@ namespace api.Configurations
             builder.Property(goodsReceipt => goodsReceipt.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(goodsReceipt => goodsReceipt.Code).HasColumnType("varchar(50)");
-            builder.Property(goodsReceipt => goodsReceipt.Note).HasColumnType("text");
+            builder.Property(goodsReceipt => goodsReceipt.Note).HasColumnType("NVARCHAR(MAX)");
             builder.Property(goodsReceipt => goodsReceipt.CreatedAt).HasColumnType("datetimeoffset");
 
             var typeConverter = new ValueConverter<GoodsReceiptType, string>(

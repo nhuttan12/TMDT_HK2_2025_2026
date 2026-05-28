@@ -11,7 +11,7 @@ export const getProductsFromWishlist = async (
 					{
 						id: 101,
 						name: 'Bể Kính Đa Giác Basic 20x20',
-						image: 'https://caydeban.com.vn/image/cache/catalog/products/Terrariums/MS01/Terrarium-MS01_6634-600x600.JPG',
+						image: 'https://pos.nvncdn.com/524fc3-178700/ps/20240723_NI9uWMWxTX.jpeg?v=1721710205',
 						price: 350000,
 						discount: 22,
 						rating: 4.9,

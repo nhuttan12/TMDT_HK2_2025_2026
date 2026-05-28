@@ -25,7 +25,7 @@ export async function getUserCartByUserId(userId: number): Promise<CartItem[]> {
 					productId: 103,
 					name: 'Rêu Đầu Rìu tươi (Hộp 15x10cm)',
 					imageUrl:
-						'https://caydeban.com.vn/image/cache/catalog/products/Terrariums/MS01/Terrarium-MS01_6634-600x600.JPG',
+						'https://pos.nvncdn.com/524fc3-178700/ps/20240723_NI9uWMWxTX.jpeg?v=1721710205',
 					price: 85000,
 					quantity: 3,
 				},
