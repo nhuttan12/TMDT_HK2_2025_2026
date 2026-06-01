@@ -11,7 +11,7 @@ export interface UserInvoicesLogicReturn {
 	paginatedInvoices: UserInvoice[];
 	totalAmountAll: number;
 	handlePageChange: (page: number) => void;
-	handleRedirectInvoiceDetail: (invoiceId: number) => void;
+	handleRedirectInvoiceDetail: (invoiceId: string) => void;
 }
 
 export function useUserInvoicesLogic(invoices: UserInvoice[]): UserInvoicesLogicReturn {
@@ -38,7 +38,7 @@ export function useUserInvoicesLogic(invoices: UserInvoice[]): UserInvoicesLogic
 		setCurrentPage(page);
 	};
 
-	const handleRedirectInvoiceDetail = (invoiceId: number): void => {
+	const handleRedirectInvoiceDetail = (invoiceId: string): void => {
 		router.push(`invoices/${invoiceId}`);
 	};
 

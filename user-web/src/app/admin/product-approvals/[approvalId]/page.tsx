@@ -13,16 +13,15 @@ export const metadata: Metadata = {
 
 export default async function Index({ params }: Props): Promise<JSX.Element> {
 	const { approvalId } = await params;
-	const parsedId: number = parseInt(approvalId);
 
 	// Fetch dữ liệu ở phía server
-	const initialProductAdmin = await getProductDetailAdminByProductId(parsedId);
+	const initialProductAdmin = await getProductDetailAdminByProductId(approvalId);
 
 	return (
 		<ProductAdminFormContainer
 			key={'view'}
 			formType={'view'}
-			productId={parsedId}
+			productId={approvalId}
 			initialProductAdmin={initialProductAdmin}
 			role={'admin'}
             productApproval={true}

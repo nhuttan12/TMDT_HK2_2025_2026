@@ -1,8 +1,9 @@
 import { CouponType } from "@/types/marketing/coupons/user/CouponType";
 
 const COUPON_TYPE_LABEL: Record<CouponType, string> = {
-	sale: 'Giảm giá sản phẩm',
-	ship: 'Vận chuyển'
+    percentage: 'Giảm theo phần trăm',
+    fixed_amount: 'Giảm theo số tiền cố định',
+    free_shipping: 'Freeship',
 }
 
 /**

@@ -13,10 +13,10 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps): Promise<JSX.Element> {
-	const receiptId = 1; // Tạm thời hardcode id = 1, thực tế bạn sẽ lấy: Number(params.receiptId)
+    const receiptId = await params.receiptId;
 
 	// Gọi trực tiếp hàm Service trên Server để lấy initial data
-	const initialReceiptDetail: GoodsReceiptDetail = await getGoodsReceiptById(receiptId);
+	const initialReceiptDetail = await getGoodsReceiptById(receiptId);
 
 	return (
 		<GoodsReceiptDetailContainer

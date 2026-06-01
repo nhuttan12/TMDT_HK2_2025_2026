@@ -8,6 +8,7 @@
     -- Thông tin Shop (Bảng SHOPS)
     @ShopName NVARCHAR(255),
     @Description NVARCHAR(MAX),
+    @ShopStatus NVARCHAR(50),
 
     -- Thông tin Address (Bảng Addresses)
     @AddressUrl NVARCHAR(MAX),
@@ -49,8 +50,8 @@ BEGIN
             @CurrentTimeUtc);
 
         -- B. TẠO SHOP
-        INSERT INTO SHOPS (Id, name, description, created_at, updated_at)
-        VALUES (@OutUserId, @ShopName, @Description, @CurrentTime, @CurrentTime);
+        INSERT INTO SHOPS (Id, name, description, status, created_at, updated_at)
+        VALUES (@OutUserId, @ShopName, @Description, @ShopStatus, @CurrentTime, @CurrentTime);
 
         -- C. TẠO ADDRESS
         INSERT INTO Addresses (UserId, AddressUrl, CreatedAt, IsUsed)

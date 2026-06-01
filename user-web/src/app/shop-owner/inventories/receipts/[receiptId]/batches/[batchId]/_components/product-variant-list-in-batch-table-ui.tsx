@@ -22,8 +22,8 @@ interface Props {
 	data: BatchItemSerial[];
 	isView: boolean;
 	mode: ProductBatchReceiptFormType;
-	onUpdate: (id: number, fields: Partial<BatchItemSerial>) => void;
-	onRemove: (id: number) => void;
+	onUpdate: (id: string, fields: Partial<BatchItemSerial>) => void;
+	onRemove: (id: string) => void;
 	onRedirect: (row: BatchItemSerial) => void;
 }
 
@@ -34,7 +34,7 @@ export function ProductVariantListInBatchTableUI({
 	onRemove,
 	onRedirect,
 }: Props): React.JSX.Element {
-	const handleCostPriceChange = (id: number, e: ChangeEvent<HTMLInputElement>): void => {
+	const handleCostPriceChange = (id: string, e: ChangeEvent<HTMLInputElement>): void => {
 		const rawValue: string = e.target.value;
 
 		if (rawValue === '') {
@@ -147,7 +147,7 @@ export function ProductVariantListInBatchTableUI({
 		<DataTable<BatchItemSerial>
 			data={data}
 			columns={columns}
-			getRowKey={(row: BatchItemSerial): number => {
+			getRowKey={(row: BatchItemSerial): string => {
 				return row.id;
 			}}
 			tableHeight={400}

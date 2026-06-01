@@ -5,7 +5,7 @@ import {
 } from '@/services/marketing/shop-promotions/shop-product-promotion-service';
 
 export function useShopProductPromotionQuery(
-	promotionId: number,
+	promotionId: string,
 	initialData: ShopProductPromotion[],
 ): UseQueryResult<ShopProductPromotion[]> {
 	return useQuery({

@@ -17,19 +17,11 @@ interface Props {
 export default async function Page({ params }: Props): Promise<JSX.Element> {
 	const { batchId } = await params;
 
-	const id: number = Number(batchId);
-
-	if (!id || Number.isNaN(id)) {
-		console.error('Invalid batch ID', id);
-
-		notFound();
-	}
-
 	const batchItems = await getProductListInBatch();
 
 	return (
 		<ProductVariantListInBatchContainer
-			batchId={id}
+			batchId={batchId}
 			productVariants={batchItems}
 			mode={'view'}
 		/>

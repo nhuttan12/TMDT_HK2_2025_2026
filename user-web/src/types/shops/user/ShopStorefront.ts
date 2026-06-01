@@ -1,5 +1,5 @@
 export interface ShopStorefront {
-	id: number; // Dùng để gọi API lấy sản phẩm
+	id: string; // Dùng để gọi API lấy sản phẩm
 	slug: string; // Dùng cho định tuyến URL (VD: /shop/ten-shop)
 
 	// Thông tin hiển thị công khai (Lấy từ ShopProfile của Admin)

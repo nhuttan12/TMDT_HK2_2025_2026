@@ -7,7 +7,7 @@ export interface UseProductAdminTableLogicProps {
 	products: ProductListInfoAdmin[];
 }
 
-export interface UseProductAdminTableLogicReturn extends UseTableSelectionReturn<number> {
+export interface UseProductAdminTableLogicReturn extends UseTableSelectionReturn<string> {
 	modal: UseStatusModalReturn;
 	handleTriggerDelete: (product: ProductListInfoAdmin) => void;
 	handleConfirmDelete: () => void;
@@ -18,12 +18,12 @@ export function useProductAdminTableLogic(
 	props: UseProductAdminTableLogicProps,
 ): UseProductAdminTableLogicReturn {
 	// Logic: Lấy toàn bộ ID làm keys cho table selection
-	const allKeys: number[] = props.products.map((p: ProductListInfoAdmin): number => p.id);
-	const selection = useTableSelection<number>(allKeys);
+	const allKeys: string[] = props.products.map((p: ProductListInfoAdmin): string => p.id);
+	const selection = useTableSelection<string>(allKeys);
 
 	// Logic: Quản lý modal xoá sản phẩm
 	const modal: UseStatusModalReturn = useStatusModal();
-	const [deletingId, setDeletingId] = useState<number | null>(null);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
 
 	const handleTriggerDelete = (product: ProductListInfoAdmin): void => {
 		setDeletingId(product.id);

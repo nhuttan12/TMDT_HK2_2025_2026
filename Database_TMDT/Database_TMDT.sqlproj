@@ -62,8 +62,9 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="dbo\StoredProcedures\Banners" />
-    <Folder Include="dbo\StoredProcedures\Users" />
+    <Folder Include="dbo\StoredProcedures\Shops" />
     <Folder Include="dbo\UserDefinedTypes" />
+    <Folder Include="dbo\StoredProcedures\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCH_VARIANTS.sql" />
@@ -88,7 +89,7 @@
     <Build Include="dbo\Tables\GOODS_ISSUE_DETAILS.sql" />
     <Build Include="dbo\Tables\GOODS_RECEIPTS.sql" />
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCHES.sql" />
-    <Build Include="dbo\StoredProcedures\Users\usp_RegisterShop.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_RegisterShop.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_BulkUpdateBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetBannersPaging.sql" />
   </ItemGroup>

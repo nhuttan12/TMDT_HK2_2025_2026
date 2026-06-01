@@ -1,7 +1,7 @@
 import { GoodsReceiptStatus } from './GoodsReceiptStatus';
 
 export interface GoodsReceiptList {
-	id: number;
+	id: string;
 	code: string;
 	supplierName: string;
 	importDate: string;

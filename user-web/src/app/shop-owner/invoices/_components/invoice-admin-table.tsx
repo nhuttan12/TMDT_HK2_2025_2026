@@ -13,16 +13,16 @@ import { InvoiceStatusBadge } from '@/components/invoices/invoice-status-badge';
 
 interface Props {
 	invoices: UserInvoice[];
-	onRedirectToDetail: (invoiceId: number) => void;
+	onRedirectToDetail: (invoiceId: string) => void;
 }
 
 export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Props): JSX.Element {
-	const allKeys: number[] = invoices.map((p: UserInvoice): number => p.id);
+	const allKeys: string[] = invoices.map((p: UserInvoice): string => p.id);
 
 	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
-		useTableSelection<number>(allKeys);
+		useTableSelection<string>(allKeys);
 
-	const changeStatus = (id: number, status: InvoiceStatus): void => {
+	const changeStatus = (id: string, status: InvoiceStatus): void => {
 		console.log('Update status', id, status);
 
 		// call API here
@@ -78,7 +78,7 @@ export default function InvoiceAdminTable({ invoices, onRedirectToDetail }: Prop
 			data={invoices}
 			columns={columns}
 			onRowClick={(row: UserInvoice): void => onRedirectToDetail(row.id)}
-			getRowKey={(row: UserInvoice): number => row.id}
+			getRowKey={(row: UserInvoice): string => row.id}
 			selectable={{
 				selected: selected,
 				onToggle: onToggle,

@@ -1,7 +1,8 @@
-﻿using api.Models.Inventory;
-using api.Models.Users;
+﻿using api.Models.Shops;
+using api.Models.Shops.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace api.Configurations
 {
@@ -18,6 +19,19 @@ namespace api.Configurations
                 .IsRequired()
                 .HasColumnName("name")
                 .HasColumnType("nvarchar(255)");
+
+            var StatusConverter = new ValueConverter<EShopStatus, string>(
+                status => status.ToString().ToLower(),
+                status => (EShopStatus)Enum.Parse(typeof(EShopStatus), status, true)
+            );
+            builder.Property(shop => shop.Status)
+                .HasConversion(StatusConverter)
+                .HasColumnName("status")
+                .HasColumnType("varchar(50)");
+
+            builder.Property(shop => shop.TaxCode)
+                .HasColumnName("tax_code")
+                .HasColumnType("nvarchar(50)");
 
             builder.Property(shop => shop.Description)
                 .HasColumnName("description")

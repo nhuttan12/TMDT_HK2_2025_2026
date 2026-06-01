@@ -6,17 +6,17 @@ import {
 	claimCoupon,
 	getCouponsByUserId,
 	getPlatformCoupons,
-} from '@/services/marketing/coupon/user/coupons-user-service';
+} from '@/services/marketing/coupon/user/user-coupon-service';
 
 export function useCouponUserQuery(
-	userId: number,
+	userId: string,
 	initialData?: UserCoupon[],
 ): UseQueryResult<UserCoupon[], Error> {
 	return useQuery({
 		queryKey: ['user-coupons', userId],
 		queryFn: (): Promise<UserCoupon[]> => getCouponsByUserId(userId),
 		initialData: initialData, // Đón dữ liệu mồi từ Server
-		enabled: userId > 0,
+		enabled: userId !== '',
 		staleTime: 1000 * 60 * 5, // Cache trong 5 phút để tránh gọi API dư thừa
 	});
 }

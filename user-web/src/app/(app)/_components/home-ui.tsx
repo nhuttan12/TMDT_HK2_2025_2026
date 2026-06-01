@@ -8,7 +8,7 @@ import { Spinner } from '@/components/ui/spinner';
 import CategoryListUi from '@/components/categories/user/category-list-ui';
 import { CategoryItem } from '@/types/categories/user/CategoryItem';
 import { Flame } from 'lucide-react';
-import { CouponList } from '@/components/marketing/coupons/user/coupon-list';
+import { CouponListUi } from '@/components/marketing/coupons/user/coupon-list-ui';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 
 interface HomeUiProps extends HomeBannerLogicReturn {
@@ -69,7 +69,7 @@ export function HomeUi({
 						<Spinner className='size-6 text-slate-400' />
 					</div>
 				) : (
-					<CouponList
+					<CouponListUi
 						coupons={coupons}
 						onClaimClick={handleClaimCoupon}
 						label={'Mã giảm giá toàn nghành'}

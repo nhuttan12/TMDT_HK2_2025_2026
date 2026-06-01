@@ -10,13 +10,14 @@ import {
 import { UserInvoicesUi } from '@/app/(app)/(protected)/profile/invoices/_components/user-invoices-ui';
 
 interface UserInvoicesContainerProps {
-	userId: number;
+	userId: string;
 	initialInvoices: UserInvoice[];
 }
 
-export default function UserInvoicesContainer(props: UserInvoicesContainerProps): JSX.Element {
-	const { userId, initialInvoices } = props;
-
+export default function UserInvoicesContainer({
+	userId,
+	initialInvoices,
+}: UserInvoicesContainerProps): JSX.Element {
 	// Truyền userId vào Query
 	const { data: invoices = [], isLoading } = useUserInvoicesQuery(userId, initialInvoices);
 

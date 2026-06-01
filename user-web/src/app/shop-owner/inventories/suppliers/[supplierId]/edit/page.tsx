@@ -20,7 +20,7 @@ export default async function SupplierProductsPage({
 	params,
 }: SupplierProductsPageProps): Promise<JSX.Element> {
 	// 1. Lấy ID từ URL và chuyển sang dạng số
-	const supplierId: number = Number(params.supplierId);
+	const supplierId = params.supplierId;
 
 	// 2. Fetch dữ liệu từ Server
 	const supplierName = 'Công ty TNHH Nhập khẩu Vina'; // Ví dụ: await fetchSupplierName(supplierId);

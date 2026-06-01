@@ -109,7 +109,7 @@ export default function ShopPromotionUi({
 				<DataTable
 					data={promotions}
 					columns={columns}
-					getRowKey={(row: ShopPromotion): number => row.id}
+					getRowKey={(row: ShopPromotion): string => row.id}
 					onRowClick={(row: ShopPromotion): void => handleViewPromotion(row.id)}
 					selectable={{
 						selected,

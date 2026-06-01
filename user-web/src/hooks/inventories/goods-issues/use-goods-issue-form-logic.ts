@@ -22,8 +22,8 @@ export interface GoodsIssueLogicReturn {
 	products: ProductForGoodsIssue[];
 	statusModal: UseStatusModalReturn; // Gom toàn bộ trạng thái Modal vào đây
 	updateField: <K extends keyof GoodsIssueDetail>(key: K, value: GoodsIssueDetail[K]) => void;
-	handleUpdateItem: (id: number, fields: Partial<GoodsIssueItem>) => void;
-	handleRemoveItem: (itemId: number) => void;
+	handleUpdateItem: (id: string, fields: Partial<GoodsIssueItem>) => void;
+	handleRemoveItem: (itemId: string) => void;
 	handleAddProductToForm: (selectedProduct: ProductForGoodsIssue) => void;
 	onFormSubmit: (e: SyntheticEvent) => Promise<void>;
 	handleBack: () => void;
@@ -40,7 +40,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 	const statusModal: UseStatusModalReturn = useStatusModal();
 
 	// Lấy supplierId từ form
-	const currentSupplierId: number = form.partner?.id || 1;
+	const currentSupplierId = form.partner?.id || '';
 
 	// Gọi hook và truyền ID vào
 	const { supplierAndProductQuery, submitMutation } = useGoodsIssueMutation(currentSupplierId);
@@ -55,7 +55,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 		setForm((prev) => ({ ...prev, [key]: value }));
 	};
 
-	const handleUpdateItem = (id: number, fields: Partial<GoodsIssueItem>): void => {
+	const handleUpdateItem = (id: string, fields: Partial<GoodsIssueItem>): void => {
 		const updatedItems = form.items.map((item) => {
 			if (item.id === id) {
 				const newItem = { ...item, ...fields };
@@ -67,7 +67,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 		updateField('items', updatedItems);
 	};
 
-	const handleRemoveItem = (itemId: number): void => {
+	const handleRemoveItem = (itemId: string): void => {
 		updateField(
 			'items',
 			form.items.filter((item) => item.id !== itemId),
@@ -82,7 +82,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 		}
 
 		const newItem: GoodsIssueItem = {
-			id: Date.now(),
+			id: Date.now().toString(),
 			productId: selectedProduct.id,
 			productName: selectedProduct.name,
 			sku: selectedProduct.sku,

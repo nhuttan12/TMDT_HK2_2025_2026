@@ -5,9 +5,9 @@ import { persist } from 'zustand/middleware';
 interface CartStore {
 	items: CartItem[];
 	addToCart: (item: CartItem) => void;
-	removeItem: (id: number) => void;
+	removeItem: (id: string) => void;
 	clearItems: () => void;
-	updateQuantity: (productId: number, quantity: number) => void;
+	updateQuantity: (productId: string, quantity: number) => void;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -36,13 +36,13 @@ export const useCartStore = create<CartStore>()(
 					};
 				});
 			},
-			removeItem: (productId: number): void => {
+			removeItem: (productId: string): void => {
 				set((state: CartStore) => ({
 					items: state.items.filter((i: CartItem): boolean => i.productId !== productId),
 				}));
 			},
 			clearItems: (): void => set({ items: [] }),
-			updateQuantity: (productId: number, quantity: number): void =>
+			updateQuantity: (productId: string, quantity: number): void =>
 				set((state: CartStore) => {
 					if (quantity < 1) {
 						return {

@@ -1,6 +1,6 @@
 // Ghi nhận các phân loại vật lý tồn tại trong kho (SKU)
 export interface ProductVariantUser {
-	id: number;
+	id: string;
 	sku: string; // Mã lưu kho sản phẩm
 
 	// Mảng index trỏ tới các option trong ProductTierVariation.

@@ -7,7 +7,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 			() =>
 				resolve([
 					{
-						id: 1,
+						id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // Đã chuyển sang GUID string
 						productVariantName: 'Bàn phím cơ RK84',
 						salePrice: 950000,
 						discountPrice: 800000,
@@ -16,7 +16,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						systemStatus: 'rejected',
 					},
 					{
-						id: 2,
+						id: '2b3c4d5e-2222-4aaa-8bbb-222222222222', // Đã chuyển sang GUID string
 						productVariantName: 'Chuột Logitech G Pro X',
 						salePrice: 2100000,
 						discountPrice: 190000,
@@ -25,7 +25,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						systemStatus: 'approved',
 					},
 					{
-						id: 3,
+						id: '3c4d5e6f-3333-4aaa-8bbb-333333333333', // Đã chuyển sang GUID string
 						productVariantName: 'Tai nghe HyperX Cloud II',
 						salePrice: 1850000,
 						discountPrice: 1550000,
@@ -34,7 +34,7 @@ export async function getAvailableProductsForPromotion(): Promise<ProductPromoti
 						systemStatus: 'banned',
 					},
 					{
-						id: 4,
+						id: '4d5e6f7a-4444-4aaa-8bbb-444444444444', // Đã chuyển sang GUID string
 						productVariantName: 'Màn hình LG 24MP60G',
 						salePrice: 3200000,
 						discountPrice: 2900000,

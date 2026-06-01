@@ -6,7 +6,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 
 	return [
 		{
-			id: 1,
+			id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // Đã chuyển sang GUID string
 			code: 'PNK-20260321-001',
 			supplierName: 'Công ty TNHH ABC',
 			importDate: new Date('2026-03-21T09:00:00Z').toISOString(),
@@ -17,7 +17,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			createdAt: new Date('2026-03-21T08:30:00Z').toISOString(),
 		},
 		{
-			id: 2,
+			id: '2b3c4d5e-2222-4aaa-8bbb-222222222222', // Đã chuyển sang GUID string
 			code: 'PNK-20260324-002',
 			supplierName: 'Nhà phân phối XYZ',
 			importDate: new Date('2026-03-24T14:00:00Z').toISOString(),
@@ -28,7 +28,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			createdAt: new Date('2026-03-24T10:15:00Z').toISOString(),
 		},
 		{
-			id: 3,
+			id: '3c4d5e6f-3333-4aaa-8bbb-333333333333', // Đã chuyển sang GUID string
 			code: 'PNK-20260325-003',
 			supplierName: 'Apple Vietnam',
 			importDate: new Date('2026-03-25T16:30:00Z').toISOString(),

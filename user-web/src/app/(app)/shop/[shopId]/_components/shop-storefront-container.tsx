@@ -7,7 +7,7 @@ import { useShopStorefrontLogic } from '@/hooks/shops/user/use-shop-storefront-l
 import { useShopCouponsQuery, useShopProductsQuery } from '@/queries/shops/user/use-shop-storefront-query';
 
 interface ShopStorefrontContainerProps {
-	shopId: number;
+	shopId: string;
 	initialShopInfo: ShopStorefront;
 }
 

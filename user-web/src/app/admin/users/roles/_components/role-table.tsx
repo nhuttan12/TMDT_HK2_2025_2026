@@ -67,7 +67,7 @@ export default function RoleTable({ roles, onView, onEdit }: Props): JSX.Element
 			data={roles}
 			columns={columns}
 			onRowClick={(row: Role): void => onView(row.name)}
-			getRowKey={(row: Role): number => row.id}
+			getRowKey={(row: Role) => row.id.toString()}
 		/>
 	);
 }

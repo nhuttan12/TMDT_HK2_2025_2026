@@ -4,11 +4,13 @@ import { CouponScope } from '../CouponScope';
 import { CouponStatus } from '../CouponStatus';
 
 export interface AdminCoupon {
-	id: number;
+	id: string;
 	code: string; // Ví dụ: FREESHIP50K, TET2026
 	name: string; // Tên hiển thị cho user
 	scope: CouponScope; // Phân biệt loại voucher
-	shopId: string | null; // Nếu scope là platform, trường này là null
+	
+    createdByType: 'admin' | 'shop';
+    shopId: string | null; // Nếu scope là platform, trường này là null
 
 	// Logic giảm giá
 	discountType: DiscountType;
@@ -19,6 +21,7 @@ export interface AdminCoupon {
 	// Quản lý số lượng và thời gian
 	totalQuantity: number;
 	usedQuantity: number;
+    maxUsagePerUser: number;
 
 	validTime: TimeArrange; // ISO 8601 DateTime
 

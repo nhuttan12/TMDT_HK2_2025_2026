@@ -1,7 +1,7 @@
 export interface ShopProductPromotion {
-	id: number;
-	productId: number;
-	productVariantId: number;
+	id: string;
+	productId: string;
+	productVariantId: string;
 	productName: string;
 	createdAt: string;
 	updatedAt: string;

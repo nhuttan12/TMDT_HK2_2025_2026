@@ -8,7 +8,6 @@ import { convertRawUserToProductDetail } from '@/utils/products/product-adapter'
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
-
 	const reviews: Review[] = [
 		{
 			id: 'cmt-001',
@@ -215,8 +214,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 		// Các phân loại dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
 		productVariants: [
 			{
-				id: 1,
-				productId: 1,
+				id: 'c8e1467a-1234-4f01-a12b-d32109876543', // Đổi thành GUID
+				productId: '550e8400-e29b-41d4-a716-446655440000', // Đã ánh xạ đúng GUID của 'Bonsai Tree Ecosystem'
 				name: 'Size S - Nắp Bần',
 				sku: 'BON-S-CORK',
 				quantity: 12,
@@ -225,8 +224,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://cdn.hstatic.net/products/200000968796/hh_1_37e2ef90ce974747b6e5157dfdbc9621.png',
 			},
 			{
-				id: 2,
-				productId: 1,
+				id: 'a9b2345c-6789-4e21-b34c-f98765432109',
+				productId: '550e8400-e29b-41d4-a716-446655440000',
 				name: 'Size S - Đế Đèn LED',
 				sku: 'BON-S-LED',
 				quantity: 8,
@@ -235,8 +234,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 			},
 			{
-				id: 3,
-				productId: 1,
+				id: '7b233a01-5242-4f3b-8531-180a3a7800ab',
+				productId: '550e8400-e29b-41d4-a716-446655440000',
 				name: 'Size M - Nắp Bần',
 				sku: 'BON-M-CORK',
 				quantity: 10,
@@ -245,8 +244,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
 			},
 			{
-				id: 4,
-				productId: 1,
+				id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+				productId: '550e8400-e29b-41d4-a716-446655440000',
 				name: 'Size M - Đế Đèn LED',
 				sku: 'BON-M-LED',
 				quantity: 15,
@@ -255,8 +254,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 			},
 			{
-				id: 5,
-				productId: 1,
+				id: 'e58ed763-928c-4155-bee9-fdbaaadc15f3',
+				productId: '550e8400-e29b-41d4-a716-446655440000',
 				name: 'Size L - Nắp Bần',
 				sku: 'BON-L-CORK',
 				quantity: 6,
@@ -265,8 +264,8 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
 			},
 			{
-				id: 6,
-				productId: 1,
+				id: 'bc7b2671-5085-40b9-a9a2-944a86f7df21',
+				productId: '550e8400-e29b-41d4-a716-446655440000',
 				name: 'Size L - Đế Đèn LED',
 				sku: 'BON-L-LED',
 				quantity: 9,
@@ -275,11 +274,10 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 				image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 			},
 		],
-        shop: shop,
-        reviews: reviews,
-        rating: 4.8
+		shop: shop,
+		reviews: reviews,
+		rating: 4.8,
 	};
-
 
 	return convertRawUserToProductDetail(rawData);
 };

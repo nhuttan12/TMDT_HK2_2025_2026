@@ -1,10 +1,4 @@
-import { CouponType } from './CouponType';
+import { PlatformCoupon } from "./PlatformCoupon";
+import { ShopCoupon } from "./ShopCoupon";
 
-export interface UserCoupon {
-	id: number;
-	title: string;
-	couponType: CouponType;
-	description: string;
-	expiredAt: string;
-	code: string;
-}
+export type UserCoupon = PlatformCoupon | ShopCoupon;

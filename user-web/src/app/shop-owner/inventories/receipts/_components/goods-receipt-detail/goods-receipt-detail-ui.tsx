@@ -158,7 +158,7 @@ export function GoodsReceiptDetailUi({
 				<DataTable<GoodsReceiptBatch>
 					data={batches}
 					columns={itemColumns}
-					getRowKey={(item: GoodsReceiptBatch): number => item.id}
+					getRowKey={(item: GoodsReceiptBatch): string => item.id}
 					onRowClick={(row: GoodsReceiptBatch): void => {
 						handleRedirectToBatchDetail(row.id, row.isNew ? 'create' : 'view');
 					}}

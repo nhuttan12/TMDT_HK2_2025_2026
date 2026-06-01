@@ -14,9 +14,9 @@ export interface CouponManagementLogicReturn {
 	coupons: AdminCoupon[];
 	searchTerm: string;
 	onSearchChange: (value: string) => void;
-	onDeleteCoupon: (id: number) => void;
-	onEditCoupon: (id: number) => void;
-	onViewCoupon: (id: number) => void;
+	onDeleteCoupon: (id: string) => void;
+	onEditCoupon: (id: string) => void;
+	onViewCoupon: (id: string) => void;
 	onAddCoupon: () => void;
 	pagination: UsePaginationReturn & { totalPages: number };
 	sortConfig: UseTableSortReturn<CouponSortField>;
@@ -69,15 +69,15 @@ export const useCouponManagementLogic = ({
 		applyFilters({ search: value || undefined });
 	};
 
-	const handleDeleteCoupon = (couponId: number): void => {
+	const handleDeleteCoupon = (couponId: string): void => {
 		console.log(`Tiến hành xóa coupon id: ${couponId}`);
 	};
 
-	const handleEditCoupon = (couponId: number): void => {
+	const handleEditCoupon = (couponId: string): void => {
 		router.push(`/${route}}/marketing/coupons/${couponId}/edit`);
 	};
 
-	const handleViewCoupon = (couponId: number): void => {
+	const handleViewCoupon = (couponId: string): void => {
 		router.push(`/${route}/marketing/coupons/${couponId}`);
 	};
 

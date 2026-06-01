@@ -2,7 +2,7 @@ import { ProductSystemStatus } from '@/types/products/admin/variant/ProductSyste
 import { ProductVariantStatus } from '@/types/products/admin/variant/ProductVariantStatus';
 
 export interface ProductPromotionForSelection {
-	id: number;
+	id: string;
 	productVariantName: string;
 	salePrice: number;
 	status: ProductVariantStatus;

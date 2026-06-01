@@ -1,4 +1,4 @@
-import { getCouponDetailById } from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getCouponDetailById } from '@/services/marketing/coupon/admin/admin-coupon-service';
 import { JSX } from 'react';
 import { Metadata } from 'next';
 import { CouponFormContainer } from '@/components/marketing/coupons/admin/coupon-form-container';
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function ViewCouponPage({ params }: Props): Promise<JSX.Element> {
 	const resolvedParams = await params;
-	const couponId: number = parseInt(resolvedParams.couponId, 10);
+    const couponId = resolvedParams.couponId;
 
 	// Fetch dữ liệu ngay trên Server
 	const initialCoupon = await getCouponDetailById(couponId);

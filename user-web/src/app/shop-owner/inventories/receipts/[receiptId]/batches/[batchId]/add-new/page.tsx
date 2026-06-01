@@ -1,7 +1,6 @@
-import { JSX } from 'react';
 import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { JSX } from 'react';
 import ProductVariantListInBatchContainer from '../_components/product-variant-list-in-batch-container';
 
 export const metadata: Metadata = {
@@ -19,15 +18,9 @@ interface Props {
 export default async function Page({ params }: Props): Promise<JSX.Element> {
 	const { batchId } = await params;
 
-	const id: number = Number(batchId);
-
-	if (!id || Number.isNaN(id)) {
-		notFound();
-	}
-
 	return (
 		<ProductVariantListInBatchContainer
-			batchId={id}
+			batchId={batchId}
 			productVariants={mockBatchItemSerials}
 			mode={'create'}
 		/>

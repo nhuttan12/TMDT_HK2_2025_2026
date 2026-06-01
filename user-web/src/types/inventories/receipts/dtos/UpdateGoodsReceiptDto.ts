@@ -1,10 +1,10 @@
 import { UpdateGoodsReceiptBatchDto } from '@/types/inventories/receipts/dtos/UpdateGoodsReceiptBatchDto';
 
 export interface UpdateGoodsReceiptDto {
-	id: number;
+	id: string;
 	code: string;
 
-	supplierID?: number;
+	supplierID?: string;
 
 	importDate?: string;
 	note?: string;

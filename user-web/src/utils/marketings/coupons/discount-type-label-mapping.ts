@@ -1,7 +1,7 @@
 import { DiscountType } from "@/types/marketing/coupons/DiscountType";
 
 export const DISCOUNT_TYPE_LABEL: Record<DiscountType, string> = {
-	percentage: 'Phần trăm',
+	percentage: 'Giảm theo %',
 	fixed_amount: 'Số tiền cố định',
 } as const;
 

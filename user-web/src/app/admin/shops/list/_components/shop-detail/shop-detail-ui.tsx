@@ -1,11 +1,10 @@
 'use client';
 
-import React, { JSX } from 'react';
-import { ShopAdminDetail } from '@/types/shops/admin/ShopAdminDetail';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ShopAdminDetail } from '@/types/shops/admin/ShopAdminDetail';
 import { ArrowLeft, ShieldAlert, ShieldCheck } from 'lucide-react';
-import Image from 'next/image';
+import { JSX } from 'react';
 import { ShopStatusBadge } from '../shop-status-badge';
 
 interface ShopDetailUiProps {

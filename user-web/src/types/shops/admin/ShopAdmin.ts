@@ -1,7 +1,7 @@
 import { ShopStatus } from "./ShopStatus";
 
 export interface ShopAdmin {
-	id: number;
+	id: string;
 	name: string;
 	email: string;
 	phone: string;

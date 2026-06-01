@@ -228,7 +228,7 @@ export default function ProductAdminFormUI({
 						data={form.productVariants}
 						columns={productVariantColumns}
 						stickyHeader={false}
-						getRowKey={(row: ProductVariantAdmin): number => row.id}
+						getRowKey={(row: ProductVariantAdmin): string => row.id}
 						onRowClick={(row: ProductVariantAdmin): void =>
 							handleRedirectToProductVariantDetail(row.id)
 						}

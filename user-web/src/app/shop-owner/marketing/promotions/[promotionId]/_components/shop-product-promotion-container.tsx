@@ -11,7 +11,7 @@ import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import ShopProductPromotionUi from './shop-product-promotion-ui';
 
 interface Props {
-	promotionId: number;
+	promotionId: string;
 	initialPromotions: ShopProductPromotion[];
 	mode: AdminFormType;
 }

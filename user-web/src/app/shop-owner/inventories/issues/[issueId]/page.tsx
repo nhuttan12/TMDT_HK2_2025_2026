@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 
 // Định nghĩa Props để nhận params từ URL
 interface Props {
-	params: { id: string };
+	params: { issueId: string };
 }
 
 export default async function GoodsIssuePage({ params }: Props): Promise<JSX.Element> {
 	// 1. Lấy ID từ URL
-	const issueId: number = Number(params.id);
+	const resolvedIssueId = params.issueId;
 
 	// 2. Gọi Server-Side Fetching
-	const goodsIssueDetail = await getGoodsIssueById(issueId);
+	const goodsIssueDetail = await getGoodsIssueById(resolvedIssueId);
 
 	// 3. Truyền dữ liệu xuống Container
 	return (

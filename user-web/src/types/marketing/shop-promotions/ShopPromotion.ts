@@ -1,7 +1,7 @@
 import { TimeArrange } from '@/types/shared/TimeArrange';
 
 export interface ShopPromotion {
-	id: number;
+	id: string;
 	name: string;
 	status: boolean;
 	arrange: TimeArrange;

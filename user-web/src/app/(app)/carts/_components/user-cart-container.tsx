@@ -8,7 +8,7 @@ import { UserCartUi } from '@/app/(app)/carts/_components/user-cart-ui';
 
 interface Props {
 	carts: CartItem[];
-    userId: number
+    userId: string
 }
 
 export default function UserCartContainer({ carts, userId }: Props): JSX.Element {

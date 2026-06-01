@@ -5,7 +5,7 @@ import { getUserInvoicesByUserId } from '@/services/invoices/user/invoice-servic
 
 export default async function InvoicesPage(): Promise<JSX.Element> {
 	// TODO: Lấy userId thực tế từ Session/Token. Tạm thời hardcode là 1.
-	const userId: number = 1;
+	const userId = '1a2b3c4d-1111-4aaa-8bbb-111111111111';
 
 	// Server-Side Fetching (RSC) với tham số userId
 	const initialInvoices = await getUserInvoicesByUserId(userId);

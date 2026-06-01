@@ -128,8 +128,8 @@ export default function GoodsStockTableUi({
 		},
 	];
 
-	const getRowKey = (row: ProductInStock): number => {
-		return row.id || 0;
+	const getRowKey = (row: ProductInStock): string => {
+		return row.id || '';
 	};
 
 	return (

@@ -6,7 +6,7 @@ export async function getShopPromotions(): Promise<ShopPromotion[]> {
 			() =>
 				resolve([
 					{
-						id: 1,
+						id: '4b3d712f-98c5-4a7e-b6a1-3f8d9e2c4b5a', // Chuyển sang GUID string
 						name: 'Siêu Sale Sinh Nhật 4.4',
 						status: true,
 						arrange: {
@@ -17,7 +17,7 @@ export async function getShopPromotions(): Promise<ShopPromotion[]> {
 						updatedAt: '2024-03-25T15:30:00Z',
 					},
 					{
-						id: 2,
+						id: '8a7b6c5d-4e3f-2a1b-9c8d-7e6f5a4b3c2d', // Chuyển sang GUID string
 						name: 'Mã Giảm Giá Tân Binh',
 						status: false,
 						arrange: {

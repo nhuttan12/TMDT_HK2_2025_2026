@@ -123,7 +123,7 @@ export default function ShopProductPromotionUi({
 				<DataTable
 					data={promotions}
 					columns={columns}
-					getRowKey={(row: ShopProductPromotion): number => row.id}
+					getRowKey={(row: ShopProductPromotion): string => row.id}
 					onRowClick={(row: ShopProductPromotion): void => {
 						handleViewProductVariant(row.productId, row.productVariantId);
 					}}

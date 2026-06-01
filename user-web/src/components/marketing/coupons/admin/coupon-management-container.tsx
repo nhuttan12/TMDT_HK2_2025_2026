@@ -13,7 +13,7 @@ interface CouponManagementContainerProps {
 	scope: CouponScope;
 	role: AppRole;
 	initialCoupons?: PaginationResponse<AdminCoupon>;
-	shopId?: number;
+	shopId?: string;
 }
 
 export const CouponManagementContainer = ({

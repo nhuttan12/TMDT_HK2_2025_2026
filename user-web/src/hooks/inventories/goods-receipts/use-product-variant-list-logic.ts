@@ -10,7 +10,7 @@ import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVaria
 
 // 1. Khai báo Interface đầu vào
 export interface UseProductVariantListLogicProps {
-	batchId: number;
+	batchId: string;
 	initialProductVariants?: BatchItemSerial[];
 	totalPagesFromApi?: number;
 }
@@ -24,8 +24,8 @@ export interface UseProductVariantListLogicReturn extends UsePaginationReturn {
 	totalPages: number;
 	setIsModalOpen: (open: boolean) => void;
 	handleSelectVariants: (variants: ProductVariantRow[]) => void;
-	handleUpdateItem: (itemId: number, fields: Partial<BatchItemSerial>) => void;
-	handleRemoveItem: (itemId: number) => void;
+	handleUpdateItem: (itemId: string, fields: Partial<BatchItemSerial>) => void;
+	handleRemoveItem: (itemId: string) => void;
 	handleRedirectToDetail: (row: BatchItemSerial) => void;
 	handleRedirectToCreateBatchReceipt: () => void;
 }
@@ -47,15 +47,15 @@ export const useProductVariantListLogic = ({
 		return s.batchItemsByBatchId[batchId] ?? [];
 	});
 
-	const generateId = useBatchReceiptStore((s): (() => number) => s.generateId);
+	const generateId = useBatchReceiptStore((s): (() => string) => s.generateId);
 	const addBatchItems = useBatchReceiptStore(
-		(s): ((batchId: number, items: BatchItemSerial[]) => void) => s.addBatchItems,
+		(s): ((batchId: string, items: BatchItemSerial[]) => void) => s.addBatchItems,
 	);
 	const removeBatchItem = useBatchReceiptStore(
-		(s): ((batchId: number, itemId: number) => void) => s.removeBatchItem,
+		(s): ((batchId: string, itemId: string) => void) => s.removeBatchItem,
 	);
 	const updateBatchItem = useBatchReceiptStore(
-		(s): ((batchId: number, itemId: number, fields: Partial<BatchItemSerial>) => void) =>
+		(s): ((batchId: string, itemId: string, fields: Partial<BatchItemSerial>) => void) =>
 			s.updateBatchItem,
 	);
 
@@ -88,7 +88,7 @@ export const useProductVariantListLogic = ({
 			(v: ProductVariantRow): BatchItemSerial => {
 				return {
 					id: generateId(),
-					productId: 0, // Lưu ý: Chỗ này productId có thể cần map nếu variant có chứa productId
+					productId: '', // Lưu ý: Chỗ này productId có thể cần map nếu variant có chứa productId
 					batchId: batchId,
 					productVariantId: v.id,
 					productVariantName: v.name,
@@ -105,11 +105,11 @@ export const useProductVariantListLogic = ({
 		setIsModalOpen(false);
 	};
 
-	const handleUpdateItem = (itemId: number, fields: Partial<BatchItemSerial>): void => {
+	const handleUpdateItem = (itemId: string, fields: Partial<BatchItemSerial>): void => {
 		updateBatchItem(batchId, itemId, fields);
 	};
 
-	const handleRemoveItem = (itemId: number): void => {
+	const handleRemoveItem = (itemId: string): void => {
 		removeBatchItem(batchId, itemId);
 	};
 

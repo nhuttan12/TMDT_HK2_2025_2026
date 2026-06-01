@@ -1,6 +1,6 @@
 export interface ProductVariantAdmin {
-	id: number;
-	productId: number;
+	id: string;
+	productId: string;
 
 	name: string; // optional, fallback display
 	sku: string;

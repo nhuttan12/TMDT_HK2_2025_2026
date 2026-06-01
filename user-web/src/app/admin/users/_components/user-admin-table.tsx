@@ -23,8 +23,8 @@ interface Props {
 	handleSort: (field: UserAdminSortField) => void;
 	renderSortIcon: (field: UserAdminSortField) => JSX.Element | null;
 
-	onView: (id: number) => void;
-	onEdit: (id: number) => void;
+	onView: (id: string) => void;
+	onEdit: (id: string) => void;
 }
 
 export default function UserAdminTable({
@@ -34,10 +34,10 @@ export default function UserAdminTable({
 	onView,
 	onEdit,
 }: Props): JSX.Element {
-	const allKeys: number[] = users.map((p: CustomerListAdmin): number => p.id);
+	const allKeys: string[] = users.map((p: CustomerListAdmin): string => p.id);
 
 	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
-		useTableSelection<number>(allKeys);
+		useTableSelection<string>(allKeys);
 
 	const columns: Column<CustomerListAdmin>[] = [
 		{
@@ -175,7 +175,7 @@ export default function UserAdminTable({
 			data={users}
 			columns={columns}
 			onRowClick={(row: CustomerListAdmin): void => onView(row.id)}
-			getRowKey={(row: CustomerListAdmin): number => row.id}
+			getRowKey={(row: CustomerListAdmin): string => row.id}
 			selectable={{
 				selected: selected,
 				onToggle: onToggle,

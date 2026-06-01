@@ -16,7 +16,7 @@ interface ProductSelectionModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	availableProducts: ProductPromotionForSelection[];
-	selection: UseTableSelectionReturn<number>;
+	selection: UseTableSelectionReturn<string>;
 	onConfirm: () => void;
 }
 
@@ -65,7 +65,7 @@ export function ProductSelectionModal({
 					<DataTable
 						data={availableProducts}
 						columns={columns}
-						getRowKey={(row: ProductPromotionForSelection): number => row.id}
+						getRowKey={(row: ProductPromotionForSelection): string => row.id}
 						selectable={{
 							selected: selection.selected,
 							onToggle: selection.onToggle,

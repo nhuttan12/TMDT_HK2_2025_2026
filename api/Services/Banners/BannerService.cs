@@ -1,6 +1,7 @@
 ﻿using api.Dtos.Banners.Request;
 using api.Dtos.Common;
 using api.Repository;
+using api.Utilities;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -15,7 +16,7 @@ namespace api.Services.Banners
             _spRepository = spRepository;
         }
 
-        public async Task<int> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners)
+        public async Result<Task<int>> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners)
         {
             if (banners == null || !banners.Any()) return 0;
 
@@ -44,7 +45,7 @@ namespace api.Services.Banners
                 "[dbo].[usp_BulkUpdateBanners]", userIdParam, bannersParam
                 );
 
-            return result.FirstOrDefault()?.RowsAffected ?? 0;
+            return Result.Success(result.FirstOrDefault()?.RowsAffected ?? 0);
         }
     }
 }

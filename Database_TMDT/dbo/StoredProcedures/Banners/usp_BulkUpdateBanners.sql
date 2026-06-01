@@ -27,7 +27,7 @@ BEGIN
 				[is_primary],
 				[status],
 				[user_id]
-			) 
+			)  
 			VALUES (
 				source.[ImageUrl],
 				source.[Order],

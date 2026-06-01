@@ -15,9 +15,9 @@ export interface UseProductAdminLogicReturn {
 	handleSort: (field: ProductAdminSortField) => void;
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
 	handleRedirectToAddNewProduct: () => void;
-	handleRedirectToProductViewMode: (productId: number) => void;
-	handleRedirectToEditProductEditMode: (productId: number) => void;
-	handleDeleteProduct: (productId: number) => void;
+	handleRedirectToProductViewMode: (productId: string) => void;
+	handleRedirectToEditProductEditMode: (productId: string) => void;
+	handleDeleteProduct: (productId: string) => void;
 	productFilterSchema: FilterField<ProductAdminFilterValues>[];
 }
 
@@ -43,7 +43,7 @@ export function useProductAdminLogic({
 		}
 	};
 
-	const handleRedirectToProductViewMode = (productId: number): void => {
+	const handleRedirectToProductViewMode = (productId: string): void => {
 		if (role == 'admin' && productApproval) {
 			router.push(`/admin/product-approvals/${productId}`);
 		} else {
@@ -51,11 +51,11 @@ export function useProductAdminLogic({
 		}
 	};
 
-	const handleRedirectToEditProductEditMode = (productId: number): void => {
+	const handleRedirectToEditProductEditMode = (productId: string): void => {
 		router.push(`/shop-owner/products/update/${productId}`);
 	};
 
-	const handleDeleteProduct = (productId: number): void => {};
+	const handleDeleteProduct = (productId: string): void => {};
 
 	const productFilterSchema: FilterField<ProductAdminFilterValues>[] = [
 		{

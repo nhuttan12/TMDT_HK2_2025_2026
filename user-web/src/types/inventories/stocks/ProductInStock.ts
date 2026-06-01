@@ -1,9 +1,9 @@
 import { ReplenishmentLevel } from '@/types/inventories/stocks/ReplenishmentLevel';
 
 export interface ProductInStock {
-	id: number;
-	productId: number;
-	productVariantId: number;
+	id: string;
+	productId: string;
+	productVariantId: string;
 	image: string;
 	name: string;
 	variantSku: string;

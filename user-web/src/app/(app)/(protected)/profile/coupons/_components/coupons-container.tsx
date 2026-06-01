@@ -6,7 +6,7 @@ import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 import { CouponsUi } from './coupon-ui';
 
 interface CouponsContainerProps {
-	userId: number;
+	userId: string;
 	initialCoupons: UserCoupon[];
 }
 

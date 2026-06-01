@@ -22,7 +22,7 @@ export function useInvoiceDetailQuery(
 }
 
 export function useUserInvoicesQuery(
-	userId: number,
+	userId: string,
 	initialData?: UserInvoice[],
 ): UseQueryResult<UserInvoice[], Error> {
 	return useQuery({
@@ -35,7 +35,7 @@ export function useUserInvoicesQuery(
 		initialData: initialData,
 
 		// Chỉ gọi API khi userId hợp lệ
-		enabled: userId > 0,
+		enabled: !!userId,
 
 		staleTime: 1000 * 60 * 5, // Cache trong 5 phút
 	});

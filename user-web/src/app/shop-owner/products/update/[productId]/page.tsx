@@ -14,17 +14,16 @@ interface Props {
 
 export default async function AddNewProductPage({ params }: Props): Promise<JSX.Element> {
 	const { productId } = await params;
-	const parsedId: number = parseInt(productId);
 
 	// Fetch dữ liệu ở phía server
 	const initialProductAdmin: ProductDetailInfoAdmin =
-		await getProductDetailAdminByProductId(parsedId);
+		await getProductDetailAdminByProductId(productId);
 
 	return (
 		<ProductAdminFormContainer
 			key={'update'}
 			formType={'update'}
-			productId={parsedId}
+			productId={productId}
 			initialProductAdmin={initialProductAdmin}
 			role={'shop-owner'}
 		/>

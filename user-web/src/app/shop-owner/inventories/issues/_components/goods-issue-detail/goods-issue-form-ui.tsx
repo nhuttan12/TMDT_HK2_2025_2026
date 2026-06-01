@@ -189,7 +189,7 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 					<DataTable<GoodsIssueItem>
 						data={form.items}
 						columns={itemColumns}
-						getRowKey={function (item: GoodsIssueItem): number {
+						getRowKey={function (item: GoodsIssueItem): string {
 							return item.id;
 						}}
 					/>

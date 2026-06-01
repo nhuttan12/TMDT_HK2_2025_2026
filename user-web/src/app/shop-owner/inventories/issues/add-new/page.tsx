@@ -8,18 +8,18 @@ export const metadata: Metadata = {
 };
 
 const mockGoodsIssueItems: GoodsIssueDetail = {
-	id: 0,
+	id: '',
 	code: '',
 	type: 'retail',
 	partner: {
-		id: 0,
+		id: '',
 		name: '',
 		type: 'customer',
 		phoneNumber: '',
 		address: '',
 	},
-	warehouseID: 0,
-	createdBy: 0,
+	warehouseID: '',
+	createdBy: '',
 	createdByName: '',
 	exportDate: '',
 	status: 'draft',

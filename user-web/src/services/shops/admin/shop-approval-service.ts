@@ -24,7 +24,7 @@ export const getApprovalShops = async (
 		if (i % 5 === 0) currentStatus = 'approved';
 
 		return {
-			id: 1000 + i,
+			id: `550e8400-e29b-41d4-a716-${(1000 + i).toString().padStart(12, '0')}`,
 			name: `Cửa hàng đăng ký mới ${i + 1}`,
 			email: `newshop${i + 1}@example.com`,
 			phone: `0909000${i.toString().padStart(3, '0')}`,

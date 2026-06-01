@@ -1,1 +1,1 @@
-export type ShopStatus = 'active' | 'inactive' | 'banned';
+export type ShopStatus = 'active' | 'closed' | 'banned';

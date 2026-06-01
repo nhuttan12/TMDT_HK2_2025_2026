@@ -5,24 +5,24 @@ import { useRouter } from 'next/navigation';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 export interface UseGoodsReceiptNavigationLogicReturn {
-	handleRedirectToBatchDetail: (receiptID: number, batchID: number, mode: AdminFormType) => void;
+	handleRedirectToBatchDetail: (receiptId: string, batchId: string, mode: AdminFormType) => void;
 	handleRedirectToAddNewReceiptDetail: () => void;
-	handleRedirectToEditReceiptDetail: (receiptID: number) => void;
-	handleRedirectToReceiptDetail: (receiptID: number) => void;
+	handleRedirectToEditReceiptDetail: (receiptId: string) => void;
+	handleRedirectToReceiptDetail: (receiptId: string) => void;
 }
 
 export const useGoodsReceiptNavigationLogic = (): UseGoodsReceiptNavigationLogicReturn => {
 	const router: AppRouterInstance = useRouter();
 
 	const handleRedirectToBatchDetail = (
-		receiptID: number,
-		batchID: number,
+		receiptId: string,
+		batchId: string,
 		mode: AdminFormType,
 	): void => {
 		const path: string =
 			mode === 'view'
-				? `/shop-owner/inventories/receipts/${receiptID}/batches/${batchID}`
-				: `/shop-owner/inventories/receipts/${receiptID}/batches/${batchID}/add-new`;
+				? `/shop-owner/inventories/receipts/${receiptId}/batches/${batchId}`
+				: `/shop-owner/inventories/receipts/${receiptId}/batches/${batchId}/add-new`;
 		router.push(path);
 	};
 
@@ -30,12 +30,12 @@ export const useGoodsReceiptNavigationLogic = (): UseGoodsReceiptNavigationLogic
 		router.push(`/shop-owner/inventories/receipts/add-new`);
 	};
 
-	const handleRedirectToEditReceiptDetail = (receiptID: number): void => {
-		router.push(`/shop-owner/inventories/receipts/${receiptID}/edit`);
+	const handleRedirectToEditReceiptDetail = (receiptId: string): void => {
+		router.push(`/shop-owner/inventories/receipts/${receiptId}/edit`);
 	};
 
-	const handleRedirectToReceiptDetail = (receiptID: number): void => {
-		router.push(`/shop-owner/inventories/receipts/${receiptID}`);
+	const handleRedirectToReceiptDetail = (receiptId: string): void => {
+		router.push(`/shop-owner/inventories/receipts/${receiptId}`);
 	};
 
 	return {

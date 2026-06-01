@@ -1,4 +1,6 @@
-﻿namespace api.Models.Users
+﻿using api.Models.Shops.Enums;
+
+namespace api.Models.Shops
 {
     public class Shop
     {
@@ -6,6 +8,7 @@
 
         public User User { get; private set; }
 
+        public EShopStatus Status { get; private set; }
         public string Name { get; private set; }
         public string TaxCode { get; private set; }
         public string Description { get; private set; }

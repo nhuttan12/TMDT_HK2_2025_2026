@@ -10,7 +10,7 @@ import { JSX } from 'react';
 export interface GoodsIssueAdminLogicReturn {
 	// Routing Actions
 	handleRedirectToAddNew: () => void;
-	handleRedirectToView: (id: number) => void;
+	handleRedirectToView: (id: string) => void;
 
 	// Sorting
 	handleSort: (field: GoodsIssueSortField) => void;
@@ -32,7 +32,7 @@ export function useGoodsIssueAdminLogic(): GoodsIssueAdminLogicReturn {
 
 	const handleRedirectToAddNew = (): void =>
 		router.push(`/shop-owner/inventories/issues/add-new`);
-	const handleRedirectToView = (id: number): void =>
+	const handleRedirectToView = (id: string): void =>
 		router.push(`/shop-owner/inventories/issues/${id}`);
 
 	const handleExecuteDelete = (): void => {

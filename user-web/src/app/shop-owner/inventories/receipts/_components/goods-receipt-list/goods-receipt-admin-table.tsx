@@ -11,8 +11,8 @@ interface Props {
 	handleSort: (field: GoodsReceiptSortField) => void;
 	renderSortIcon: (field: GoodsReceiptSortField) => JSX.Element | null;
 
-	onView: (id: number) => void;
-	onEdit: (id: number) => void;
+	onView: (id: string) => void;
+	onEdit: (id: string) => void;
 }
 
 export default function GoodsReceiptAdminTable({
@@ -130,7 +130,7 @@ export default function GoodsReceiptAdminTable({
 		<DataTable<GoodsReceiptList>
 			data={receipts}
 			columns={goodsReceiptColumns}
-			getRowKey={(row: GoodsReceiptList): number => row.id}
+			getRowKey={(row: GoodsReceiptList): string => row.id}
 			onRowClick={(row: GoodsReceiptList): void => onView(row.id)}
 		/>
 	);

@@ -10,7 +10,7 @@ import { JSX } from 'react';
 import ProductVariantListInBatchUi from './product-variant-list-in-batch-ui';
 
 interface Props {
-	batchId: number;
+	batchId: string;
 	productVariants: BatchItemSerial[];
 	mode: ProductBatchReceiptFormType;
 }

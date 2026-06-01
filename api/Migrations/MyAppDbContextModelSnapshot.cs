@@ -603,6 +603,50 @@ namespace api.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("api.Models.Shops.Shop", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TaxCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("tax_code");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SHOPS", (string)null);
+                });
+
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -643,44 +687,6 @@ namespace api.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Users.Shop", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(MAX)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("TaxCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SHOPS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserBanking", b =>
@@ -976,6 +982,17 @@ namespace api.Migrations
                     b.Navigation("Promotion");
                 });
 
+            modelBuilder.Entity("api.Models.Shops.Shop", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithOne("Shop")
+                        .HasForeignKey("api.Models.Shops.Shop", "Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.HasOne("api.Models.Roles.Role", "Role")
@@ -985,17 +1002,6 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("api.Models.Users.Shop", b =>
-                {
-                    b.HasOne("api.Models.User", "User")
-                        .WithOne("Shop")
-                        .HasForeignKey("api.Models.Users.Shop", "Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("api.Models.Users.UserBanking", b =>

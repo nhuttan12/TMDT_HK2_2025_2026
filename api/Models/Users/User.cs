@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Api.Models.Users;
 using api.Models.Inventory;
 using api.Models.Banners;
+using api.Models.Shops;
 
 namespace api.Models
 {

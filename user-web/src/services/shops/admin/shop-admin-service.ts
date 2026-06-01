@@ -41,11 +41,11 @@ export const getAdminShops = async (
 
 	// Mock Data
 	let mockData: ShopAdmin[] = Array.from({ length: 45 }).map((_, i) => ({
-		id: i + 1,
+		id: `550e8400-e29b-41d4-a716-${(1000 + i).toString().padStart(12, '0')}`,
 		name: `Cửa hàng ${i + 1} ${i % 2 === 0 ? 'Official' : 'Store'}`,
 		email: `shop${i + 1}@example.com`,
 		phone: `0909000${i.toString().padStart(3, '0')}`,
-		status: i % 5 === 0 ? 'banned' : i % 3 === 0 ? 'inactive' : 'active',
+		status: i % 5 === 0 ? 'banned' : i % 3 === 0 ? 'closed' : 'active',
 		rating: Number((Math.random() * 2 + 3).toFixed(1)), // 3.0 -> 5.0
 		createdAt: new Date(Date.now() - i * 86400000).toISOString(),
 	}));
