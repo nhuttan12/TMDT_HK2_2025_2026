@@ -28,3 +28,7 @@
 *.ssmssqlproj
 
 .vscode/
+
+*.jfm
+*.dbmdl
+*.sqlproj.user
