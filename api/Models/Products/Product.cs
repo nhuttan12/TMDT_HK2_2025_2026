@@ -1,93 +1,102 @@
-﻿using api.Models;
-using api.Models.Category;
-using api.Models.Products;
+﻿using api.Models.Products;
 using api.Utilities;
 
-namespace api.model.Products;
-
-public class Product
+namespace api.model.Products
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public decimal BasePrice { get; private set; }
-    public decimal Rating { get; private set; }
-    // Khóa ngoại lưu Id của Category
-    public Guid CategoryId { get; private set; }
-    public Guid ShopId { get; private set; }
-    public ProductDetail? Detail { get; private set; }
-
-    // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
-    private readonly HashSet<Variant> _variants = [];
-    public IReadOnlyCollection<Variant> Variants => _variants;
-
-    // Ưu tiên DateTimeOffset cho các hệ thống phân tán và DB SQL Server
-    public DateTimeOffset CreatedAt { get; private set; }
-    public DateTimeOffset UpdatedAt { get; private set; }
-
-   
-
-
-    // Dành riêng cho EF Core khi query (không dùng để tạo mới)
-    protected Product() { }
-
-    private Product(string name, decimal basePrice)
+    public enum ProductStatus 
     {
-        Id = Guid.Empty;
-        Name = name;
-        BasePrice = basePrice;
+        PendingApproval = 0,
+        Approved = 1,
+        Rejected = 2,
+        Banned = 3
     }
-
-    // Pass thời gian từ Services vào để dễ dàng Mock/Unit Test
-    public static Result<Product> Create(string name, decimal basePrice)
+    public class Product
     {
-        // Fail Fast với các mã lỗi chuẩn (Constants)
-        if (string.IsNullOrWhiteSpace(name))
-            return Result<Product>.Failure(
-                new Error("Product.NameRequired", "Tên sản phẩm không được để trống."),
-                ErrorType.Validation);
+        public Guid Id { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+        public decimal BasePrice { get; private set; }
+        public decimal Rating { get; private set; } 
+        public string ImageUrl { get; private set; } = string.Empty;
+        public ProductStatus Status { get; private set; } = ProductStatus.Approved;
+        public Guid CategoryId { get; private set; }
+        public Guid ShopId { get; private set; }
+        public ProductDetail? Detail { get; private set; }
 
-        if (basePrice < 0)
-            return Result<Product>.Failure(
-                new Error("Product.InvalidPrice", "Giá sản phẩm không được nhỏ hơn 0."),
-                ErrorType.Validation);
+        // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
+        private readonly HashSet<Variant> _variants = [];
+        public IReadOnlyCollection<Variant> Variants => _variants;
 
-        return Result<Product>.Success(new Product(name, basePrice));
-    }
+        // Ưu tiên DateTimeOffset cho các hệ thống phân tán và DB SQL Server
+        public DateTimeOffset CreatedAt { get; private set; }
+        public DateTimeOffset UpdatedAt { get; private set; }
 
-    public void SetDetail(string summary, string descriptionHtml)
-    {
-        // Tránh cấp phát mới nếu dữ liệu không đổi (Tối ưu CPU & GC)
-        if (Detail?.Summary == summary && Detail?.DescriptionHtml == descriptionHtml)
-            return;
+        // Dành riêng cho EF Core khi query (không dùng để tạo mới)
+        protected Product() { }
 
-        Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml).Value;
-    }
+        private Product(string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId)
+        {
+            Id = Guid.Empty;
+            Name = name;
+            BasePrice = basePrice;
+            ImageUrl = imageUrl;
+            CategoryId = categoryId;
+            ShopId = shopId;
+            Detail =  ProductDetail.Create();
 
-    public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl)
-    {
-        // 1. Fail Fast validation ở tầng Product
-        if (sellPrice < 0)
-            return Result<bool>.Failure(new Error("Variant.InvalidPrice", "Giá bán biến thể không hợp lệ."), ErrorType.Validation);
+        }
 
-        if (costPrice < 0)
-            return Result<bool>.Failure(new Error("Variant.InvalidCostPrice", "Giá vốn biến thể không hợp lệ."), ErrorType.Validation);
+        // Pass thời gian từ Services vào để dễ dàng Mock/Unit Test
+        public static Result<Product> Create(string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId)
+        {
+            // Fail Fast với các mã lỗi chuẩn (Constants)
+            if (string.IsNullOrWhiteSpace(name))
+                return Result<Product>.Failure(
+                    new Error("Product.NameRequired", "Tên sản phẩm không được để trống."),
+                    ErrorType.Validation);
 
-        if (_variants.Any(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-            return Result<bool>.Failure(new Error("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại."), ErrorType.Validation);
+            if (basePrice < 0)
+                return Result<Product>.Failure(
+                    new Error("Product.InvalidPrice", "Giá sản phẩm không được nhỏ hơn 0."),
+                    ErrorType.Validation);
+            if (categoryId == Guid.Empty)
+                return Result<Product>.Failure(new Error("Product.CategoryRequired", "CategoryId không hợp lệ."), ErrorType.Validation);
+            if (string.IsNullOrWhiteSpace(imageUrl))
+                return Result<Product>.Failure(new Error("Product.ImageUrlRequired", "ImageUrl không được để trống."), ErrorType.Validation);
+            return Result<Product>.Success(new Product(name, basePrice, imageUrl, categoryId, shopId));
+        }
 
-        // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
-        var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+        public void SetDetail(string summary, string descriptionHtml)
+        {
+            // Tránh cấp phát mới nếu dữ liệu không đổi (Tối ưu CPU & GC)
+            if (Detail?.Summary == summary && Detail?.DescriptionHtml == descriptionHtml)
+                return;
 
-        // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
-        if (variantResult.IsFailure)
-            return Result<bool>.Failure(variantResult.Error, variantResult.ErrorType);
+            Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml).Value;
+        }
 
-        // 4. Khi IsFailure = false, Value chắc chắn tồn tại (dấu ! báo cho trình biên dịch biết điều này)
-        _variants.Add(variantResult.Value!);
+        public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl)
+        {
+            // 1. Fail Fast validation ở tầng Product
+            if (sellPrice < 0)
+                return Result<bool>.Failure(new Error("Variant.InvalidPrice", "Giá bán biến thể không hợp lệ."), ErrorType.Validation);
 
-        return Result<bool>.Success(true);
+            if (costPrice < 0)
+                return Result<bool>.Failure(new Error("Variant.InvalidCostPrice", "Giá vốn biến thể không hợp lệ."), ErrorType.Validation);
+
+            if (_variants.Any(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                return Result<bool>.Failure(new Error("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại."), ErrorType.Validation);
+
+            // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
+            var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+
+            // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
+            if (variantResult.IsFailure)
+                return Result<bool>.Failure(variantResult.Error, variantResult.ErrorType);
+
+            // 4. Khi IsFailure = false, Value chắc chắn tồn tại (dấu ! báo cho trình biên dịch biết điều này)
+            _variants.Add(variantResult.Value!);
+
+            return Result<bool>.Success(true);
+        }
     }
 }
-
-
-

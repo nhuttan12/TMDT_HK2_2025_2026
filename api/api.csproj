@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Database\Seeders\SeedData\Categories.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Database\Seeders\SeedData\Categories.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />

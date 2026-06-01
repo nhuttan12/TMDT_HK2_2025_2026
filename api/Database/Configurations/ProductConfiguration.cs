@@ -12,7 +12,7 @@ namespace api.Database.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             // 1. Table Name & Primary Key
-            builder.ToTable("Products");
+            builder.ToTable("PRODUCTS");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).HasDefaultValueSql("NEWSEQUENTIALID()"); // Tự động sinh GUID khi thêm mới
 
@@ -28,12 +28,21 @@ namespace api.Database.Configurations
             builder.Property(p => p.BasePrice)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
+            
+            builder.Property(p => p.ImageUrl)
+                .IsRequired()
+                .HasMaxLength(2048);
 
             builder.Property(p => p.CreatedAt)
                 .IsRequired();
 
             builder.Property(p => p.UpdatedAt)
                 .IsRequired();
+
+            builder.Property(p => p.Status)
+                .IsRequired()
+                .HasConversion<string>() // Lưu dưới dạng string để dễ đọc và tránh lỗi khi thay đổi enum
+                .HasMaxLength(50);
 
             // 3. Cấu hình Backing Field (Cực kỳ quan trọng)
             // Báo cho EF Core biết hãy map trực tiếp dữ liệu vào field '_variants' 

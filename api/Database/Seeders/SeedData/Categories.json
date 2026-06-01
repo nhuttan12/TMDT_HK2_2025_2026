@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "quà tặng sinh nhật",
+    "Sku": "DM001",
+    "ImageUrl": "https://example.com/image1.jpg"
+  },
+  {
+    "Name": "quà tặng sếp, đối tác",
+    "Sku": "DM002",
+    "ImageUrl": "https://example.com/image2.jpg"
+  },
+  {
+    "Name": "quà tặng tân gia",
+    "Sku": "DM003",
+    "ImageUrl": "https://example.com/image3.jpg"
+  }
+]

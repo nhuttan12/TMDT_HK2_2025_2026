@@ -12,6 +12,10 @@ namespace api.Models.Products
         public Product Product { get; private set; } = null!;
 
         protected ProductDetail() { }
+        internal static ProductDetail Create()
+        {
+            return new ProductDetail();
+        }
 
         // Áp dụng Result Pattern để bắt lỗi cấp phát dữ liệu rác vào RAM
         internal static Result<ProductDetail> InternalCreate(Guid productId, string summary, string html)
@@ -27,6 +31,11 @@ namespace api.Models.Products
                 Summary = summary ?? string.Empty,
                 DescriptionHtml = html ?? string.Empty
             });
+        }
+
+        internal static ProductDetail? Create(Guid empty1, string empty2, string empty3)
+        {
+            throw new NotImplementedException();
         }
     }
 

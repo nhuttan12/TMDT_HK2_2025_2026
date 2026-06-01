@@ -14,10 +14,10 @@ namespace api.Models.Products
         public Guid ProductId { get; private set; }
         public string Sku { get; private set; } = string.Empty; // Sửa SKU thành Sku
         public string Name { get; private set; } = string.Empty;
-
         public decimal CostPrice { get; private set; }
         public decimal SellPrice { get; private set; }
-        public string ImageUrl { get; private set; } = string.Empty;
+        // ảnh đại diên cho sản phẩm
+        public string ImageUrl { get; private set; } = string.Empty; 
 
         public VariantStatus Status { get; private set; }
 

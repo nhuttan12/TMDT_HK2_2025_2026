@@ -13,6 +13,7 @@ using api.Services.Categorys;
 using api.Repository.ProductRepo;
 using api.Services.Products;
 using api.Database;
+using api.Utilities.Seeders;
 
 namespace api.Extensions
 {
@@ -62,6 +63,10 @@ namespace api.Extensions
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+
+            // Đăng ký các seed data
+            services.AddScoped<IDataSeeder, CategorySeeder>();
+            services.AddScoped<IDataSeeder, ProductSeeder>();
             // Đăng ký global exception handler
             return services;
         }
