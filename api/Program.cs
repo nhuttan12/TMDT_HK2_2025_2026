@@ -1,7 +1,6 @@
 using api.Database;
 using api.Extensions;
 using api.Services.Auths;
-using api.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +30,7 @@ using (var scope = app.Services.CreateScope())
     await api.Database.Seeders.DatabaseSeeder.SeedAsync(app.Services);
 }
 
- await app.SeedSmartDataAsync(app.Lifetime.ApplicationStopped);
+await app.SeedSmartDataAsync(app.Lifetime.ApplicationStopped);
 
 // 2. Cấu hình Middleware
 if (app.Environment.IsDevelopment())

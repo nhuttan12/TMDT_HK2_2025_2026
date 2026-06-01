@@ -1,5 +1,4 @@
-﻿using api.model.Products;
-using api.Utilities;
+﻿using api.Utilities;
 
 namespace api.Models.Category
 {
@@ -35,13 +34,11 @@ namespace api.Models.Category
             // Áp dụng Fail Fast để tối ưu CPU/Memory, tránh cấp phát Object nếu data không hợp lệ
             if (string.IsNullOrWhiteSpace(name))
                 return Result<Category>.Failure(
-                    new Error("Category.NameRequired", "Tên danh mục không được để trống."),
-                    ErrorType.Validation);
+                    Error.Create("Category.NameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
 
             if (string.IsNullOrWhiteSpace(sku))
                 return Result<Category>.Failure(
-                    new Error("Category.SkuRequired", "Mã SKU không được để trống."),
-                    ErrorType.Validation);
+                    Error.Create("Category.SkuRequired", "Mã SKU không được để trống.", ErrorType.Validation));
 
 
             return Result<Category>.Success(new Category(name, sku, imageUrl));
@@ -52,13 +49,11 @@ namespace api.Models.Category
         {
             if (string.IsNullOrWhiteSpace(name))
                 return Result<bool>.Failure(
-                    new Error("Category.NameRequired", "Tên danh mục không được để trống."),
-                    ErrorType.Validation);
+                    Error.Create("Category.NameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
 
             if (string.IsNullOrWhiteSpace(sku))
                 return Result<bool>.Failure(
-                    new Error("Category.SkuRequired", "Mã SKU không được để trống."),
-                    ErrorType.Validation);
+                    Error.Create("Category.SkuRequired", "Mã SKU không được để trống.", ErrorType.Validation));
 
             // Tối ưu CPU: Tránh Update Database nếu data không đổi
             if (Name.Equals(name, StringComparison.Ordinal) && Sku.Equals(sku, StringComparison.Ordinal) && ImageUrl.Equals(imageUrl, StringComparison.Ordinal))

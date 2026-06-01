@@ -10,7 +10,7 @@ namespace api.Repository.RoleRepo
     }
     public class RoleRepo : IRoleRepo
     {
-                private readonly MyAppDbContext _context;
+        private readonly MyAppDbContext _context;
 
         public RoleRepo(MyAppDbContext context)
         {

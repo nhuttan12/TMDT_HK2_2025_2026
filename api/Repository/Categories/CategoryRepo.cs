@@ -1,7 +1,6 @@
 ﻿using api.Database;
 using api.Models.Category;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Linq.Expressions;
 
 namespace api.Repository.Categories
@@ -14,9 +13,9 @@ namespace api.Repository.Categories
     }
     public class CategoryRepo(MyAppDbContext _context) : ICategoryRepo
     {
-        public async Task CreateAsync(Category entity, CancellationToken ct = default)
+        public async Task CreateAsync(Category entity, CancellationToken cancellationToken = default)
         {
-           await _context.Categories.AddAsync(entity, ct);
+            await _context.Categories.AddAsync(entity, cancellationToken);
         }
 
         public void Delete(Category entity)
@@ -69,6 +68,6 @@ namespace api.Repository.Categories
                 _context.Categories.Update(entity);
             }
         }
-      
+
     }
 }

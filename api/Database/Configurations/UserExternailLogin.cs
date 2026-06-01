@@ -1,5 +1,4 @@
 ﻿using api.Models.Users;
-using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,7 +15,7 @@ namespace api.Database.Configurations
                    .ValueGeneratedNever();
 
             builder.HasOne(uel => uel.User)
-                .WithOne( u => u.UserExternalLogin)
+                .WithOne(u => u.UserExternalLogin)
                 .HasForeignKey<UserExternalLogin>(uel => uel.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 

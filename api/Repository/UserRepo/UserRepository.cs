@@ -10,7 +10,7 @@ namespace api.Repository.UserRepo
         public Task AddNew(User user, CancellationToken ct = default);
         public Task<User?> GetUserByIdAsync(Guid id, bool trackChanges = false, CancellationToken ct = default);
         public Task<(IEnumerable<User> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default);
-        
+
         public Task<User?> GetByEmailAsync(string email, bool trackChanges = false, CancellationToken ct = default);
         Task UpdateAsync(User user, CancellationToken ct);
     }
@@ -88,9 +88,9 @@ namespace api.Repository.UserRepo
             return !trackChanges ? _context.Users.Where(expression).AsNoTracking() : _context.Users.Where(expression);
         }
 
-        public async Task CreateAsync(User entity, CancellationToken ct = default)
+        public async Task CreateAsync(User entity, CancellationToken cancellationToken = default)
         {
-            await _context.Users.AddAsync(entity, ct);
+            await _context.Users.AddAsync(entity, cancellationToken);
         }
 
         public void Update(User entity)
@@ -103,6 +103,6 @@ namespace api.Repository.UserRepo
             _context.Users.Remove(entity);
         }
 
-      
+
     }
 }

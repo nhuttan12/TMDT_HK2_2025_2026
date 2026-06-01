@@ -1,14 +1,14 @@
-﻿using api.Models.Users;
-using api.Exceptions;
+﻿using api.Exceptions;
 using api.Models.Roles;
-using System.ComponentModel.DataAnnotations;
+using api.Models.Users;
 using Api.Models.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace api.Models
 {
     public class User
     {
-       public static User Create(string email, Role role,string provider,String providerKey)
+        public static User Create(string email, Role role, string provider, String providerKey)
         {
             UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
             UserDetail ud = UserDetail.Create();
@@ -34,7 +34,7 @@ namespace api.Models
         //public bool isShop { get; set; }
         //public bool isActive { get; set; }
 
-        public DateTimeOffset CreateAt { get; set; } 
+        public DateTimeOffset CreateAt { get; set; }
 
         public DateTimeOffset? UpdateAt { get; set; }
 
@@ -43,7 +43,7 @@ namespace api.Models
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
         public virtual UserDetail? UserDetail { get; set; }
-        public virtual UserExternalLogin?  UserExternalLogin{ get;  set; }
+        public virtual UserExternalLogin? UserExternalLogin { get; set; }
         public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
 
         public void SetPassword(string hash)
@@ -57,7 +57,7 @@ namespace api.Models
             if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
             if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;
             if (!string.IsNullOrEmpty(avatarUrl)) UserDetail!.AvatarUrl = avatarUrl;
-            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create( userId,a)));
+            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create(userId, a)));
         }
 
         internal void UpdatePassword(string newHash)

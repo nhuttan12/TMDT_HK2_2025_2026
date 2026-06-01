@@ -13,7 +13,7 @@ namespace api.Models.Roles
         [MaxLength(100)]
         public required string Code { get; set; }
 
-        public string Description { get; set; } =  string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         public ICollection<RolePermission> RolePermissions { get; set; } = new HashSet<RolePermission>();
     }

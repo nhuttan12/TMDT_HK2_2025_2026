@@ -1,5 +1,4 @@
 ﻿using api.Database;
-using api.Exceptions;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,17 +15,17 @@ namespace api.Repository.UserRepo
     public class AuthRepo(MyAppDbContext _context) : IAuthRepo
     {
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken ct = default)
-            =>  await _context.Users
+            => await _context.Users
                 .Include(u => u.Role)
                 .SingleOrDefaultAsync(u => u.Email == email, ct);
-        
+
         public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default)
             => await _context.Users.AnyAsync(u => u.Email == email, ct);
 
         public async Task AddAsync(User user, CancellationToken ct = default)
-            => await _context.Users.AddAsync(user, ct); 
+            => await _context.Users.AddAsync(user, ct);
         public async Task<User?> GetByIdWithRoleAsync(Guid userId, CancellationToken ct = default)
-            => await _context.Users 
+            => await _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == userId);
     }

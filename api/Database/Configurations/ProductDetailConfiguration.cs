@@ -1,5 +1,4 @@
-﻿using api.model.Products;
-using api.Models.Products;
+﻿using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

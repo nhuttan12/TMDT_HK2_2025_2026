@@ -1,5 +1,4 @@
-﻿using api.Controllers;
-using api.Dtos.Common;
+﻿using api.Dtos.Common;
 using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
 using api.Models.Category;
@@ -7,9 +6,6 @@ using api.Repository;
 using api.Repository.Categories;
 using api.Utilities;
 using AutoMapper;
-using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using static api.Controllers.CategoryController;
 
 namespace api.Services.Categorys
 {
@@ -28,30 +24,30 @@ namespace api.Services.Categorys
             // Validate request
             if (string.IsNullOrEmpty(request.Name))
             {
-                return Result<Category>.Failure(new Error("CategoryNameRequired", "Tên danh mục không được để trống.",ErrorType.Validation));
+                return Result<Category>.Failure(Error.Create("CategoryNameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
             }
-            if(request.Name.Length > 100)
+            if (request.Name.Length > 100)
             {
-                return Result<Category>.Failure(new Error("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.",ErrorType.Validation));
+                return Result<Category>.Failure(Error.Create("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.", ErrorType.Validation));
             }
 
-            if(string.IsNullOrEmpty(request.ImageName))
+            if (string.IsNullOrEmpty(request.ImageName))
             {
-                return Result<Category>.Failure(new Error("CategoryImageRequired", "hình ảnh danh mục không được để trống.", ErrorType.Validation));
+                return Result<Category>.Failure(Error.Create("CategoryImageRequired", "hình ảnh danh mục không được để trống.", ErrorType.Validation));
             }
 
             // validate data in DB
             var existingCategory = await _categoryRepo.GetByName(request.Name, cancellationToken);
             if (existingCategory != null)
             {
-                return Result<Category>.Failure(new Error("CategoryNameExists", "Tên danh mục đã tồn tại.", ErrorType.Conflict));
+                return Result<Category>.Failure(Error.Create("CategoryNameExists", "Tên danh mục đã tồn tại.", ErrorType.Conflict));
             }
             // Create category
-            var category = Category.Create(request.Name,request.Sku, request.ImageName);
-            
+            var category = Category.Create(request.Name, request.Sku, request.ImageName);
+
             await _categoryRepo.CreateAsync(category.Value!, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);
-            
+
             return Result<Category>.Success(category.Value!);
         }
 
@@ -60,22 +56,22 @@ namespace api.Services.Categorys
             // Validate request
             if (string.IsNullOrEmpty(request.Name))
             {
-                return Result<bool>.Failure(new Error("CategoryNameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
+                return Result<bool>.Failure(Error.Create("CategoryNameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
             }
             if (request.Name.Length > 100)
             {
-                return Result<bool>.Failure(new Error("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.", ErrorType.Validation));
+                return Result<bool>.Failure(Error.Create("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.", ErrorType.Validation));
             }
 
             if (string.IsNullOrEmpty(request.ImageName))
             {
-                return Result<bool>.Failure(new Error("CategoryImageRequired", "hình ảnh danh mục không được để trống.", ErrorType.Validation));
+                return Result<bool>.Failure(Error.Create("CategoryImageRequired", "hình ảnh danh mục không được để trống.", ErrorType.Validation));
             }
             // logic
             var category = await _categoryRepo.GetByIdAsync(id, cancellationToken);
-            if( category == null)
+            if (category == null)
             {
-                return Result<bool>.Failure(new Error("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
+                return Result<bool>.Failure(Error.Create("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
             }
             category.UpdateDetails(request.Name, request.Sku, request.ImageName, DateTimeOffset.UtcNow);
             _categoryRepo.Update(category);
@@ -88,7 +84,7 @@ namespace api.Services.Categorys
 
             if (category == null)
             {
-                return Result<bool>.Failure(new Error("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
+                return Result<bool>.Failure(Error.Create("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
             }
             _categoryRepo.Delete(category);
 
@@ -113,20 +109,22 @@ namespace api.Services.Categorys
         public async Task<Result<CategoryResponseDto>> GetByName(string name, CancellationToken cancellationToken)
         {
             // Validate input
-            if (string.IsNullOrEmpty(name)) {
-                return Result<CategoryResponseDto>.Failure(new Error("CategoryNameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
-            } if (name.Length > 100)
+            if (string.IsNullOrEmpty(name))
             {
-                return Result<CategoryResponseDto>.Failure(new Error("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.", ErrorType.Validation));
+                return Result<CategoryResponseDto>.Failure(Error.Create("CategoryNameRequired", "Tên danh mục không được để trống.", ErrorType.Validation));
+            }
+            if (name.Length > 100)
+            {
+                return Result<CategoryResponseDto>.Failure(Error.Create("CategoryNameTooLong", "Tên danh mục không được vượt quá 100 ký tự.", ErrorType.Validation));
             }
             // validate logic
             var category = await _categoryRepo.GetByName(name, cancellationToken);
             if (category == null)
             {
-                return Result<CategoryResponseDto>.Failure(new Error("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
+                return Result<CategoryResponseDto>.Failure(Error.Create("CategoryNotFound", "Danh mục không tồn tại.", ErrorType.NotFound));
             }
             return Result<CategoryResponseDto>.Success(_mapper.Map<CategoryResponseDto>(category));
         }
-     
+
     }
 }

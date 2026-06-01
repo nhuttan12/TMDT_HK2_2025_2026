@@ -14,7 +14,7 @@ namespace api.Database.Configurations
             // 2. Khóa chính (Primary Key)
             builder.HasKey(o => o.Id);
             builder.Property(o => o.Id)
-                .HasDefaultValueSql("NEWSEQUENTIALID()"); 
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             // 3. Cấu hình các thuộc tính cơ bản
             // Kiểu tiền tệ bắt buộc phải khai báo precision (độ chính xác), không để EF tự suy luận gây mất mát dữ liệu

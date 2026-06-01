@@ -17,7 +17,7 @@ namespace api.Models.Products
         public decimal CostPrice { get; private set; }
         public decimal SellPrice { get; private set; }
         // ảnh đại diên cho sản phẩm
-        public string ImageUrl { get; private set; } = string.Empty; 
+        public string ImageUrl { get; private set; } = string.Empty;
 
         public VariantStatus Status { get; private set; }
 
@@ -40,15 +40,15 @@ namespace api.Models.Products
         {
             // 1. Fail Fast Validation (Chặn lỗi ngay trên RAM)
             if (string.IsNullOrWhiteSpace(sku))
-                return Result<Variant>.Failure(new Error("Variant.SkuRequired", "Mã SKU không được trống."), ErrorType.Validation);
+                return Result<Variant>.Failure(Error.Create("Variant.SkuRequired", "Mã SKU không được trống.", ErrorType.Validation));
 
             if (string.IsNullOrWhiteSpace(name))
-                return Result<Variant>.Failure(new Error("Variant.NameRequired", "Tên biến thể không được trống."), ErrorType.Validation);
+                return Result<Variant>.Failure(Error.Create("Variant.NameRequired", "Tên biến thể không được trống.", ErrorType.Validation));
 
             if (costPrice < 0 || sellPrice < 0)
-                return Result<Variant>.Failure(new Error("Variant.InvalidPrice", "Giá không được nhỏ hơn 0."), ErrorType.Validation);
+                return Result<Variant>.Failure(Error.Create("Variant.InvalidPrice", "Giá không được nhỏ hơn 0.", ErrorType.Validation));
 
-         
+
             return Result<Variant>.Success(new Variant(productId, sku, name, costPrice, sellPrice, imageUrl, VariantStatus.Active));
         }
     }

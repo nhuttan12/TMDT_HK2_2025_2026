@@ -28,7 +28,7 @@ namespace api.Database.Configurations
             builder.Property(p => p.BasePrice)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
-            
+
             builder.Property(p => p.ImageUrl)
                 .IsRequired()
                 .HasMaxLength(2048);

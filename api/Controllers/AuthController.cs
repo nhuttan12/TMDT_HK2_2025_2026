@@ -1,5 +1,4 @@
-﻿using api.Dtos.Common;
-using api.Dtos.Users.Responses;
+﻿using api.Dtos.Users.Responses;
 using api.Services.Auths;
 using api.Utilities;
 using Microsoft.AspNetCore.Authentication;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace api.Controllers
@@ -36,7 +34,7 @@ namespace api.Controllers
             var token = result.Value;
             if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
             {
-                return HandleResult(Result<string>.Failure(new Error("InvalidCredentials", "Email hoặc mật khẩu không đúng", ErrorType.Unauthorized)));
+                return HandleResult(Result<string>.Failure(Error.Create("InvalidCredentials", "Email hoặc mật khẩu không đúng", ErrorType.Unauthorized)));
             }
             SetTokenCookie(token);
             return HandleResult(result);
@@ -60,16 +58,15 @@ namespace api.Controllers
         {
             var refreshToken = Request.Cookies["X-Access-Token"];
             if (string.IsNullOrEmpty(refreshToken))
-                return HandleResult(Result<bool>.Failure(new Error("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
+                return HandleResult(Result<bool>.Failure(Error.Create("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
             var refreshToken2 = Request.Cookies["X-Refresh-Token"];
             if (string.IsNullOrEmpty(refreshToken2))
-                return HandleResult(Result<bool>.Failure(new Error("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
+                return HandleResult(Result<bool>.Failure(Error.Create("NoRefreshToken", "No refresh token provided", ErrorType.BadRequest)));
 
             var token = await _authService.RefreshTokenAsync(refreshToken);
             if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.RefreshToken) || string.IsNullOrEmpty(token.Value.AccessToken))
-                return HandleResult(Result<bool>.Failure(new Error("InvalidRefreshToken", "Invalid refresh token", ErrorType.BadRequest)));
+                return HandleResult(Result<bool>.Failure(Error.Create("InvalidRefreshToken", "Invalid refresh token", ErrorType.BadRequest)));
             SetTokenCookie(token.Value);
-
             return HandleResult(Result<TokenResponse>.Success(token.Value));
 
         }
@@ -99,7 +96,7 @@ namespace api.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sub) || string.IsNullOrEmpty(avatarUrl))
                 return BadRequest("Thông tin Google không đầy đủ");
 
-            var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl );
+            var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl);
             var token = await _authService.HandleGoogleLogin(googleInfo);
             if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.AccessToken) || string.IsNullOrEmpty(token.Value.RefreshToken))
                 return BadRequest("Failed to generate tokens from Google info");
@@ -123,7 +120,7 @@ namespace api.Controllers
 
         private void SetTokenCookie(TokenResponse token)
         {
-            if(token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.RefreshToken))
+            if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken) || string.IsNullOrEmpty(token.RefreshToken))
                 return;
             Response.Cookies.Append("X-Access-Token", token.AccessToken!, new CookieOptions
             {

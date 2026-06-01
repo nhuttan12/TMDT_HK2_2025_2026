@@ -1,6 +1,4 @@
-﻿using api.Models.Roles;
-
-namespace api.Models.Jwts
+﻿namespace api.Models.Jwts
 {
     public class AccessToken(string userId, DateTime expirationTime, string roleName) : JwtToken(userId, expirationTime)
     {

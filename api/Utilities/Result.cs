@@ -23,7 +23,7 @@
 
         public static Result<TValue> Success(TValue value) => new(value, true, Error.None);
 
-        public static Result<TValue> Failure(Error error, ErrorType errorType = ErrorType.Failure) => new(default, false, error with { Type = errorType });
+        public static Result<TValue> Failure(Error error) => new(default, false, error);
 
         // Implicit conversion: Giúp code gọn hơn khi return dữ liệu trực tiếp
         public static implicit operator Result<TValue>(TValue value) => Success(value);

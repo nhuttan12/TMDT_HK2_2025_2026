@@ -21,7 +21,7 @@ namespace api.Models.Products
         internal static Result<ProductDetail> InternalCreate(Guid productId, string summary, string html)
         {
             if (productId == Guid.Empty)
-                return Result<ProductDetail>.Failure(new Error("ProductDetail.ProductIdRequired", "ProductId không hợp lệ."), ErrorType.Validation);
+                return Result<ProductDetail>.Failure(Error.Create("ProductDetail.ProductIdRequired", "ProductId không hợp lệ.", ErrorType.Validation));
 
             // Có thể bổ sung kiểm tra dung lượng HTML nếu cần để tránh tấn công cạn kiệt bộ nhớ (OOM)
 

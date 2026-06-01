@@ -1,9 +1,10 @@
-﻿using api.Models.Products;
+﻿using api.Dtos.Products.Request;
+using api.Models.Products;
 using api.Utilities;
 
 namespace api.model.Products
 {
-    public enum ProductStatus 
+    public enum ProductStatus
     {
         PendingApproval = 0,
         Approved = 1,
@@ -15,7 +16,7 @@ namespace api.model.Products
         public Guid Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public decimal BasePrice { get; private set; }
-        public decimal Rating { get; private set; } 
+        public decimal Rating { get; private set; }
         public string ImageUrl { get; private set; } = string.Empty;
         public ProductStatus Status { get; private set; } = ProductStatus.Approved;
         public Guid CategoryId { get; private set; }
@@ -41,7 +42,7 @@ namespace api.model.Products
             ImageUrl = imageUrl;
             CategoryId = categoryId;
             ShopId = shopId;
-            Detail =  ProductDetail.Create();
+            Detail = ProductDetail.Create();
 
         }
 
@@ -51,17 +52,15 @@ namespace api.model.Products
             // Fail Fast với các mã lỗi chuẩn (Constants)
             if (string.IsNullOrWhiteSpace(name))
                 return Result<Product>.Failure(
-                    new Error("Product.NameRequired", "Tên sản phẩm không được để trống."),
-                    ErrorType.Validation);
+                    Error.Create("Product.NameRequired", "Tên sản phẩm không được để trống.", ErrorType.Validation));
 
             if (basePrice < 0)
                 return Result<Product>.Failure(
-                    new Error("Product.InvalidPrice", "Giá sản phẩm không được nhỏ hơn 0."),
-                    ErrorType.Validation);
+                    Error.Create("Product.InvalidPrice", "Giá sản phẩm không được nhỏ hơn 0.", ErrorType.Validation));
             if (categoryId == Guid.Empty)
-                return Result<Product>.Failure(new Error("Product.CategoryRequired", "CategoryId không hợp lệ."), ErrorType.Validation);
+                return Result<Product>.Failure(Error.Create("Product.CategoryRequired", "CategoryId không hợp lệ.", ErrorType.Validation));
             if (string.IsNullOrWhiteSpace(imageUrl))
-                return Result<Product>.Failure(new Error("Product.ImageUrlRequired", "ImageUrl không được để trống."), ErrorType.Validation);
+                return Result<Product>.Failure(Error.Create("Product.ImageUrlRequired", "ImageUrl không được để trống.", ErrorType.Validation));
             return Result<Product>.Success(new Product(name, basePrice, imageUrl, categoryId, shopId));
         }
 
@@ -78,25 +77,38 @@ namespace api.model.Products
         {
             // 1. Fail Fast validation ở tầng Product
             if (sellPrice < 0)
-                return Result<bool>.Failure(new Error("Variant.InvalidPrice", "Giá bán biến thể không hợp lệ."), ErrorType.Validation);
+                return Result<bool>.Failure(Error.Create("Variant.InvalidPrice", "Giá bán biến thể không hợp lệ.", ErrorType.Validation));
 
             if (costPrice < 0)
-                return Result<bool>.Failure(new Error("Variant.InvalidCostPrice", "Giá vốn biến thể không hợp lệ."), ErrorType.Validation);
+                return Result<bool>.Failure(Error.Create("Variant.InvalidCostPrice", "Giá vốn biến thể không hợp lệ.", ErrorType.Validation));
 
             if (_variants.Any(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-                return Result<bool>.Failure(new Error("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại."), ErrorType.Validation);
+                return Result<bool>.Failure(Error.Create("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại.", ErrorType.Validation));
 
             // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
             var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
 
             // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
             if (variantResult.IsFailure)
-                return Result<bool>.Failure(variantResult.Error, variantResult.ErrorType);
+                return Result<bool>.Failure(variantResult.Error);
 
             // 4. Khi IsFailure = false, Value chắc chắn tồn tại (dấu ! báo cho trình biên dịch biết điều này)
             _variants.Add(variantResult.Value!);
 
             return Result<bool>.Success(true);
+        }
+
+        internal void Update(ProductUpdateDto productDto)
+        {
+            Name = productDto.Name;
+            BasePrice = productDto.BasePrice;
+            ImageUrl = productDto.ImageUrl;
+            Status = productDto.Status;
+        }
+
+        internal void Lock()
+        {
+            Status = ProductStatus.Banned; // Soft delete: Cập nhật trạng thái thay vì xóa vật lý
         }
     }
 }

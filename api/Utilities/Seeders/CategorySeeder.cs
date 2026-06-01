@@ -12,7 +12,7 @@ namespace api.Utilities.Seeders
 
         public async Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, CancellationToken cancellationToken)
         {
-            var filePath = Path.Combine(contentRootPath, "Database","Seeders", "SeedData", "Categories.json");
+            var filePath = Path.Combine(contentRootPath, "Database", "Seeders", "SeedData", "Categories.json");
             if (!File.Exists(filePath)) return;
 
             var jsonString = await File.ReadAllTextAsync(filePath, cancellationToken);
@@ -33,7 +33,7 @@ namespace api.Utilities.Seeders
                 Result<Category> res = Category.Create(item.Name.Trim(), item.Sku.Trim(), item.ImageUrl.Trim());
                 if (!res.IsSuccess! || res.Value == null)
                 {
-                    LoggerExtensions.LogWarning(logger,$"data: {item.Name}, {item.Sku}");
+                    LoggerExtensions.LogWarning(logger, $"data: {item.Name}, {item.Sku}");
                     LoggerExtensions.LogError(logger, $"[CategorySeeder] Lỗi tạo entity Category từ seed data: {item.Name}. Lỗi: {res.Error.Message}");
                     continue;
                 }

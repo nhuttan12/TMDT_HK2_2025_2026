@@ -1,5 +1,4 @@
-﻿using api.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.Users
 {

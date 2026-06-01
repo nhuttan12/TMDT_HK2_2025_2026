@@ -29,7 +29,7 @@ namespace api.Controllers
         }
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(
-            [FromRoute] Guid id, 
+            [FromRoute] Guid id,
             [FromBody] UpdateCategoryRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -46,6 +46,6 @@ namespace api.Controllers
             return HandleResult(result);
         }
     }
-   
+
 
 }

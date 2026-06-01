@@ -1,12 +1,11 @@
-﻿using api.Models.Users;
+﻿using api.model.Products;
 using api.Models;
-using api.Models.Products;
-using Microsoft.EntityFrameworkCore;
-using api.Models.Roles;
-using Api.Models.Users;
-using api.model.Products;
 using api.Models.Category;
 using api.Models.Orders;
+using api.Models.Roles;
+using api.Models.Users;
+using Api.Models.Users;
+using Microsoft.EntityFrameworkCore;
 namespace api.Database
 {
     public class MyAppDbContext : DbContext
@@ -16,14 +15,14 @@ namespace api.Database
         {
         }
         // Treat these as the entry points for LINQ queries against the DB.
-        
+
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
         //public DbSet<Permission> Permissions { get; set; }
         //public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
-        public DbSet<Address> Address { get; set; } 
+        public DbSet<Address> Address { get; set; }
         public DbSet<UserExternalLogin> UserExternalLogins { get; set; }
         public DbSet<Category> Categories { get; set; }
 

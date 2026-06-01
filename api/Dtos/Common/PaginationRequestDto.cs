@@ -1,4 +1,6 @@
-﻿namespace api.Dtos.Common
+﻿using api.Utilities;
+
+namespace api.Dtos.Common
 {
     public record PaginationRequestDto
     {
@@ -11,6 +13,33 @@
         {
             get => _pageSize;
             init => _pageSize = (value > MaxPageSize) ? MaxPageSize : (value < 1 ? 10 : value);
+        }
+
+        internal Result<PaginationRequestDto> ValidData()
+        {
+            // 1. Kiểm tra PageNumber hợp lệ
+            if (PageNumber < 1)
+            {
+                return Result<PaginationRequestDto>.Failure(
+                    new Error(
+                        "Pagination.PageNumber.Invalid",
+                        "Page number must be greater than or equal to 1.",
+                        ErrorType.Validation)
+                );
+            }
+
+            // 2. Kiểm tra PageSize hợp lệ (Fail Fast thay vì âm thầm ép kiểu)
+            if (PageSize < 1 || PageSize > MaxPageSize)
+            {
+                return Result<PaginationRequestDto>.Failure(
+                    new Error(
+                        "Pagination.PageSize.Invalid",
+                        $"Page size must be between 1 and {MaxPageSize}.",
+                        ErrorType.Validation)
+                );
+            }
+
+            return Result<PaginationRequestDto>.Success(this);
         }
     }
 }

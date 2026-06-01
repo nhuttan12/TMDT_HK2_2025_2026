@@ -1,6 +1,5 @@
 ﻿using api.Dtos.Common;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 
 namespace api.Exceptions
 {

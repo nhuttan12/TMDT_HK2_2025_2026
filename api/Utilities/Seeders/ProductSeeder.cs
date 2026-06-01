@@ -55,10 +55,10 @@ namespace api.Utilities.Seeders
                 }
 
                 // Dùng Guid.Empty cho ShopId tạm thời (nếu hệ thống bạn chưa làm Multi-tenant)
-                Guid shopId =Guid.Parse("0DBF433E-F36B-1410-8DC2-0031A65E736E");
+                Guid shopId = Guid.Parse("0DBF433E-F36B-1410-8DC2-0031A65E736E");
 
                 // 3. Khởi tạo Product qua Factory Method an toàn
-                var productResult = Product.Create(item.Name, item.Price, categoryId, shopId);
+                var productResult = Product.Create(item.Name, item.Price, item.Images[0], categoryId, shopId);
 
                 if (productResult.IsFailure)
                 {

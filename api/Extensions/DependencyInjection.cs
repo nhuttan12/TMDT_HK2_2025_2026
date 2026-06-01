@@ -1,19 +1,19 @@
-﻿using api.Repository;
+﻿using api.Database;
 using api.Exceptions;
 using api.Models;
 using api.Models.Jwts;
+using api.Repository;
+using api.Repository.Categories;
+using api.Repository.ProductRepo;
+using api.Repository.RoleRepo;
+using api.Repository.UserRepo;
 using api.Services.Auths;
+using api.Services.Categorys;
+using api.Services.Products;
 using api.Services.Users;
+using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using api.Repository.UserRepo;
-using api.Repository.RoleRepo;
-using api.Repository.Categories;
-using api.Services.Categorys;
-using api.Repository.ProductRepo;
-using api.Services.Products;
-using api.Database;
-using api.Utilities.Seeders;
 
 namespace api.Extensions
 {
