@@ -32,3 +32,5 @@
 *.jfm
 *.dbmdl
 *.sqlproj.user
+
+*.scmp
