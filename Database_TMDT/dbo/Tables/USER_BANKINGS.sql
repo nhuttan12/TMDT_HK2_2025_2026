@@ -6,9 +6,12 @@
     [account_number] VARCHAR (20)       NOT NULL,
     [created_at]     DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     [updated_at]     DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
+    [status]         BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
     CONSTRAINT [PK_USER_BANKINGS] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_USER_BANKINGS_Users_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[Users] ([Id])
 );
+
+
 
 
 GO

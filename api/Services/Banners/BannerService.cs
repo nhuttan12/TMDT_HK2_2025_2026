@@ -16,7 +16,7 @@ namespace api.Services.Banners
             _spRepository = spRepository;
         }
 
-        public async Result<Task<int>> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners)
+        public async Task<Result<int>> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners)
         {
             if (banners == null || !banners.Any()) return 0;
 
@@ -45,7 +45,9 @@ namespace api.Services.Banners
                 "[dbo].[usp_BulkUpdateBanners]", userIdParam, bannersParam
                 );
 
-            return Result.Success(result.FirstOrDefault()?.RowsAffected ?? 0);
+            var rowsAffected = result.Sum(row => row.RowsAffected);
+
+            return Result<int>.Success(rowsAffected);
         }
     }
 }

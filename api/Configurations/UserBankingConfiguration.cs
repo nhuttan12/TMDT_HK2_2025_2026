@@ -30,6 +30,10 @@ namespace api.Configurations
                 .HasColumnName("account_number")
                 .HasColumnType("varchar(20)");
 
+            builder.Property(userBanking => userBanking.Status)
+                .IsRequired()
+                .HasColumnName("status");
+
             builder.Property(userBanking => userBanking.CreatedAt)
                 .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset")

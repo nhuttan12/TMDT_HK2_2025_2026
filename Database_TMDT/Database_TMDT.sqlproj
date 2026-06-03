@@ -64,7 +64,10 @@
     <Folder Include="dbo\StoredProcedures\Banners" />
     <Folder Include="dbo\StoredProcedures\Shops" />
     <Folder Include="dbo\UserDefinedTypes" />
-    <Folder Include="dbo\StoredProcedures\NewFolder1\" />
+    <Folder Include="dbo\StoredProcedures\Promotions" />
+    <Folder Include="dbo\UserDefinedTypes\Banners" />
+    <Folder Include="dbo\UserDefinedTypes\Promotions" />
+    <Folder Include="dbo\StoredProcedures\User" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCH_VARIANTS.sql" />
@@ -92,15 +95,19 @@
     <Build Include="dbo\StoredProcedures\Shops\usp_RegisterShop.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_BulkUpdateBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetBannersPaging.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="dbo\UserDefinedTypes\BannerInsertType.sql" />
+    <Build Include="dbo\StoredProcedures\Promotions\usp_CreatePromotion.sql" />
+    <Build Include="dbo\UserDefinedTypes\Banners\BannerInsertType.sql" />
+    <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
+    <Build Include="dbo\StoredProcedures\User\usp_AddUserBanking.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
       <Version>1.0.0</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\UserDefinedTypes\Promotions\ProductPromotionType.sql" />
   </ItemGroup>
   <Import Project="$(NETCoreTargetsPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="'$(NetCoreBuild)' == 'true'" />
   <Target Name="BeforeBuild">

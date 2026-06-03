@@ -11,6 +11,8 @@
         public string AccountName { get; private set; }
         public string AccountNumber { get; private set; }
 
+        public bool Status { get; private set; }
+
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
 
