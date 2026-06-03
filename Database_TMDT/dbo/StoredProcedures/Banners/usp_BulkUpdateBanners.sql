@@ -5,42 +5,56 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+    DECLARE @TotalRowsAffected INT = 0;
+
 	BEGIN TRY
 		BEGIN TRANSACTION;
-		
-		-- Sử dụng lệnh MERGE để xử lý đồng thời Insert, Update và Bỏ qua
-		MERGE INTO [dbo].[BANNERS] AS target
-		USING @Banners AS source
-		-- Tiêu chí ghép nối (Matching): Cùng của 1 User và có chung đường dẫn hình ảnh
-		ON target.[user_id] = @UserId AND target.[image_url] = source.[ImageUrl]
-		-- Lưu ý: Nếu dữ liệu giống nhau y hệt, điều kiện này sai -> Lệnh MERGE sẽ bỏ qua (Không làm gì cả)
-		WHEN MATCHED AND (target.[order] <> source.[Order] OR target.[is_primary] <> source.[IsPrimary]) THEN 
-			UPDATE SET
-				target.[order] = source.[Order],
-				target.[is_primary] = source.[IsPrimary],
-				target.[updated_at] = GETUTCDATE()
 
-		WHEN NOT MATCHED BY TARGET THEN
-			INSERT (
-				[image_url],
-				[order],
-				[is_primary],
-				[status],
-				[user_id]
-			)  
-			VALUES (
-				source.[ImageUrl],
-				source.[Order],
-				source.[IsPrimary],
-				1, -- Mặc định status là 1 (active)
-				@UserId
-			);
+        -- BƯỚC 1: DELETE (Xóa những banner cũ dưới DB không có trong mảng mới gửi lên)
+        UPDATE BANNERS
+        SET status = 0,
+            updated_at = GETUTCDATE() 
+        WHERE [user_id] = @UserId
+            AND status != 0
+            AND [image_url] NOT IN (SELECT [ImageUrl] FROM @Banners);
 
-		DECLARE @RowsAffected INT = @@ROWCOUNT;
+        SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 
-		COMMIT TRANSACTION;
 
-		SELECT @RowsAffected AS RowsAffected;
+        -- BƯỚC 2: UPDATE (Cập nhật những banner có ở cả 2 nơi nhưng bị thay đổi dữ liệu)
+        UPDATE target
+        SET target.[order] = source.[Order],
+            target.[is_primary] = source.[IsPrimary],
+            target.[status] = 1, 
+            target.[updated_at] = GETUTCDATE()
+        FROM [dbo].[BANNERS] AS target
+        INNER JOIN @Banners AS source 
+            ON target.[user_id] = @UserId 
+           AND target.[image_url] = source.[ImageUrl]
+        WHERE target.[order] <> source.[Order] 
+           OR target.[is_primary] <> source.[IsPrimary]
+           OR target.[status] <> 1;
+
+        SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
+
+
+        -- BƯỚC 3: INSERT (Thêm những banner mới tinh, chưa có dưới DB)
+        INSERT INTO [dbo].[BANNERS] ([image_url], [order], [is_primary], [status], [user_id])
+        SELECT source.[ImageUrl], source.[Order], source.[IsPrimary], 1, @UserId
+        FROM @Banners AS source
+        WHERE NOT EXISTS (
+            SELECT 1 FROM [dbo].[BANNERS] AS target
+            WHERE target.[user_id] = @UserId 
+              AND target.[image_url] = source.[ImageUrl]
+        );
+
+        SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
+
+
+        COMMIT TRANSACTION;
+
+        -- Trả về tổng số dòng bị tác động (Xóa + Sửa + Thêm) để map vào C# DTO
+        SELECT @TotalRowsAffected AS RowsAffected;
 
 	END TRY
 	BEGIN CATCH

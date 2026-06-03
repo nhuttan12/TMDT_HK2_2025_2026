@@ -8,7 +8,7 @@
     -- Thông tin Shop (Bảng SHOPS)
     @ShopName NVARCHAR(255),
     @Description NVARCHAR(MAX),
-    @ShopStatus NVARCHAR(50),
+    @SystemStatus NVARCHAR(50),
 
     -- Thông tin Address (Bảng Addresses)
     @AddressUrl NVARCHAR(MAX),
@@ -39,7 +39,15 @@ BEGIN
         DECLARE @CurrentTimeUtc DATETIME = GETUTCDATE();
 
         -- A. TẠO USER
-        INSERT INTO Users (Id, Email, Phone, PasswordHash, RoleId, CreateAt, UpdateAt)
+        INSERT INTO Users (
+            Id, 
+            Email, 
+            Phone, 
+            PasswordHash, 
+            RoleId, 
+            CreateAt, 
+            UpdateAt
+        )
         VALUES (
             @OutUserId, 
             LOWER(LTRIM(RTRIM(@Email))), 
@@ -50,17 +58,60 @@ BEGIN
             @CurrentTimeUtc);
 
         -- B. TẠO SHOP
-        INSERT INTO SHOPS (Id, name, description, status, created_at, updated_at)
-        VALUES (@OutUserId, @ShopName, @Description, @ShopStatus, @CurrentTime, @CurrentTime);
+        INSERT INTO SHOPS (
+            Id, 
+            name, 
+            description, 
+            status, 
+            system_status, 
+            created_at, 
+            updated_at
+        )
+        VALUES (
+            @OutUserId, 
+            @ShopName, 
+            @Description, 
+            'closed', 
+            @SystemStatus, 
+            @CurrentTime, 
+            @CurrentTime
+        );
 
         -- C. TẠO ADDRESS
-        INSERT INTO Addresses (UserId, AddressUrl, CreatedAt, IsUsed)
-        VALUES (@OutUserId, @AddressUrl, @CurrentTimeUtc, 0);
+        INSERT INTO Addresses (
+            UserId, 
+            AddressUrl, 
+            CreatedAt, 
+            IsUsed
+        )
+        VALUES (
+            @OutUserId, 
+            @AddressUrl, 
+            @CurrentTimeUtc, 
+            0
+        );
 
         -- D. TẠO THÔNG TIN NGÂN HÀNG
         DECLARE @NewBankingId UNIQUEIDENTIFIER = NEWID();
-        INSERT INTO USER_BANKINGS(Id, user_id, bank_name, account_name, account_number, created_at, updated_at)
-        VALUES (@NewBankingId, @OutUserId, @BankName, @AccountName, @AccountNumber, @CurrentTime, @CurrentTime);
+
+        INSERT INTO USER_BANKINGS(
+            Id, 
+            user_id, 
+            bank_name, 
+            account_name, 
+            account_number, 
+            created_at, 
+            updated_at
+        )
+        VALUES (
+            @NewBankingId, 
+            @OutUserId, 
+            @BankName, 
+            @AccountName, 
+            @AccountNumber, 
+            @CurrentTime, 
+            @CurrentTime
+        );
 
         COMMIT TRANSACTION;
 

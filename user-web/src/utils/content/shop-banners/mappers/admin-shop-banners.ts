@@ -1,4 +1,4 @@
-import { ShopBanner } from '@/types/shops/admin/ShopBanner';
+import { ShopBanner } from '@/types/contents/banners/ShopBanner';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 
 export function mapShopBannersToSortableForm(raw: ShopBanner): SortableImageForm {

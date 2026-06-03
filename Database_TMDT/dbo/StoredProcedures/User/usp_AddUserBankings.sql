@@ -1,8 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[usp_AddUserBanking]
 	@UserId UNIQUEIDENTIFIER,
-	@BankName NVARCHAR(255),
-	@AccountNumber NVARCHAR(255),
-	@AccountName NVARCHAR(255)
+	@UserBankings dbo.[UserBankingInsertType] READONLY
 AS
 BEGIN
 	BEGIN TRY
@@ -13,13 +11,14 @@ BEGIN
 		BEGIN TRANSACTION;
 
 		INSERT INTO USER_BANKINGS (user_id, bank_name, account_number, account_name, status)
-		SELECT @UserId, @BankName, @AccountNumber, @AccountName, 1 
+		SELECT source.UserId, source.BankName, source.AccountNumber, source.AccountName, 1 
+		FROM @UserBankings AS source
 		WHERE NOT EXISTS (
 			SELECT 1
 			FROM USER_BANKINGS WITH (UPDLOCK, HOLDLOCK)
 			WHERE user_id = @UserId
-				AND bank_name = @BankName
-				AND account_number = @AccountNumber
+				AND bank_name = source.BankName
+				AND account_number = source.AccountNumber
 		);
 
 		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;

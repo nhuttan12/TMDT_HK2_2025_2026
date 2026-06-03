@@ -68,6 +68,8 @@
     <Folder Include="dbo\UserDefinedTypes\Banners" />
     <Folder Include="dbo\UserDefinedTypes\Promotions" />
     <Folder Include="dbo\StoredProcedures\User" />
+    <Folder Include="dbo\UserDefinedTypes\Users" />
+    <Folder Include="dbo\StoredProcedures\Coupons" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCH_VARIANTS.sql" />
@@ -98,7 +100,14 @@
     <Build Include="dbo\StoredProcedures\Promotions\usp_CreatePromotion.sql" />
     <Build Include="dbo\UserDefinedTypes\Banners\BannerInsertType.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
-    <Build Include="dbo\StoredProcedures\User\usp_AddUserBanking.sql" />
+    <Build Include="dbo\StoredProcedures\User\usp_AddUserBankings.sql" />
+    <Build Include="dbo\StoredProcedures\User\usp_UpdateUserBanking.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopInfo.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopList.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopApprovals.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_ApproveShop.sql" />
+    <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionList.sql" />
+    <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionDetail.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
@@ -108,6 +117,9 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\UserDefinedTypes\Promotions\ProductPromotionType.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\UserDefinedTypes\Users\UserBankingInsertType.sql" />
   </ItemGroup>
   <Import Project="$(NETCoreTargetsPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="'$(NetCoreBuild)' == 'true'" />
   <Target Name="BeforeBuild">

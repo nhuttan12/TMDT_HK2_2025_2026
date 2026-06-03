@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Repository;
 
@@ -11,9 +12,11 @@ using api.Repository;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260603163249_AddSystemStatusToShop")]
+    partial class AddSystemStatusToShop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -625,10 +628,6 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("name");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int")
-                        .HasColumnName("rating");
 
                     b.Property<string>("Status")
                         .IsRequired()

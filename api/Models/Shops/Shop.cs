@@ -9,6 +9,9 @@ namespace api.Models.Shops
         public User User { get; private set; }
 
         public EShopStatus Status { get; private set; }
+        public EShopSystemStatus SystemStatus { get; private set; }
+
+        public int Rating { get; private set; }
         public string Name { get; private set; }
         public string TaxCode { get; private set; }
         public string Description { get; private set; }

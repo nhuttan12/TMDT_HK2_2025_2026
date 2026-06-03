@@ -19,6 +19,10 @@ namespace api.Configurations
                 .IsRequired()
                 .HasColumnName("name")
                 .HasColumnType("nvarchar(255)");
+            
+            builder.Property(shop => shop.Rating)
+                .HasColumnName("rating")
+                .HasColumnType("int");
 
             var StatusConverter = new ValueConverter<EShopStatus, string>(
                 status => status.ToString().ToLower(),
@@ -27,6 +31,15 @@ namespace api.Configurations
             builder.Property(shop => shop.Status)
                 .HasConversion(StatusConverter)
                 .HasColumnName("status")
+                .HasColumnType("varchar(50)");
+
+            var SystemStatusConverter = new ValueConverter<EShopSystemStatus, string>(
+                status => status.ToString().ToLower(),
+                status => (EShopSystemStatus)Enum.Parse(typeof(EShopSystemStatus), status, true)
+            );
+            builder.Property(shop => shop.SystemStatus)
+                .HasConversion(SystemStatusConverter)
+                .HasColumnName("system_status")
                 .HasColumnType("varchar(50)");
 
             builder.Property(shop => shop.TaxCode)
