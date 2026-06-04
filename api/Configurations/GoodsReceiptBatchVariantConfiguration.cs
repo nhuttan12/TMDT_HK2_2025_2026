@@ -11,12 +11,16 @@ namespace api.Configurations
             builder.ToTable("GOODS_RECEIPT_BATCH_VARIANTS");
 
             builder.HasKey(goodsReceiptBatchVariant => goodsReceiptBatchVariant.Id);
-            builder.Property(goodsReceiptBatchVariant => goodsReceiptBatchVariant.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(goodsReceiptBatchVariant => goodsReceiptBatchVariant.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(goodsReceiptBatchVariant => goodsReceiptBatchVariant.Quantity)
+                .HasColumnName("quantity")
                 .IsRequired();
 
             builder.Property(goodsReceiptBatchVariant => goodsReceiptBatchVariant.CostPrice)
+                .HasColumnName("cost_price")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 

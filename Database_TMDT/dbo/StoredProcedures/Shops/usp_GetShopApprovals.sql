@@ -13,7 +13,7 @@ BEGIN
 		AND s.system_status = 'pending-approval';
 
 	SELECT 
-		s.Id, 
+		s.id, 
 		s.name AS Name, 
 		u.Email AS Email, 
 		u.Phone AS Phone, 
@@ -23,7 +23,7 @@ BEGIN
 		@TotalItems AS TotalItems
 	FROM SHOPS s
 	INNER JOIN Users u 
-		ON s.Id = u.Id
+		ON s.id = u.Id
 	WHERE s.status = 'closed'
 		AND s.system_status = 'pending-approval'
 	ORDER BY s.created_at DESC

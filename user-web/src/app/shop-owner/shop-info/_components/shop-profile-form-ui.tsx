@@ -146,26 +146,6 @@ export default function ShopProfileFormUi({
 				/>
 			</Field>
 
-			<Field label='Tiêu đề SEO (Hiển thị trên Google)'>
-				<Input
-					name='seoTitle'
-					placeholder='VD: Terrarium VN - Rừng cây trong bể kính'
-					value={form.seoTitle}
-					onChange={onInputChange}
-					disabled={isDisabled}
-				/>
-			</Field>
-
-			<Field label='Mô tả SEO (Meta Description)'>
-				<Input
-					name='metaDescription'
-					placeholder='Nhập mô tả ngắn gọn giúp tối ưu tìm kiếm...'
-					value={form.metaDescription}
-					onChange={onInputChange}
-					disabled={isDisabled}
-				/>
-			</Field>
-
 			<div className='grid grid-cols-2 gap-4'>
 				<Field label='Tên Ngân hàng'>
 					<Input

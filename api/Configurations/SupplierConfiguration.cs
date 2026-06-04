@@ -11,7 +11,9 @@ namespace api.Configurations
             builder.ToTable("SUPPLIERS");
 
             builder.HasKey(supplier => supplier.Id);
-            builder.Property(supplier => supplier.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(supplier => supplier.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(supplier => supplier.Name).HasColumnType("varchar(100)");
             builder.Property(supplier => supplier.TaxCode)
@@ -27,7 +29,9 @@ namespace api.Configurations
                 .HasColumnName("contact_name")
                 .HasColumnType("varchar(100)");
 
-            builder.Property(supplier => supplier.Address).HasColumnType("varchar(100)");
+            builder.Property(supplier => supplier.Address)
+                .HasColumnName("address")
+                .HasColumnType("varchar(100)");
 
             builder.Property(s=>s.CreatedAt)
                 .HasColumnName("created_at")

@@ -10,8 +10,9 @@ BEGIN
 		BEGIN TRANSACTION;
 
 		UPDATE SHOPS
-		SET system_status = 'approved', updated_at = GETUTCDATE()
-		WHERE Id = @ShopId
+		SET system_status = 'approved', 
+			updated_at = GETUTCDATE()
+		WHERE id = @ShopId
 
 		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 		

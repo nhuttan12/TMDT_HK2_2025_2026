@@ -1,12 +1,12 @@
 ﻿CREATE TABLE [dbo].[GOODS_ISSUE_DETAILS] (
-    [Id]            UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
+    [id]            UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [issue_id]      UNIQUEIDENTIFIER   NOT NULL,
     [variant_id]    UNIQUEIDENTIFIER   NOT NULL,
     [Quantity]      INT                NOT NULL,
     [selling_price] DECIMAL (18, 2)    NOT NULL,
     [created_at]    DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
-    CONSTRAINT [PK_GOODS_ISSUE_DETAILS] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_GOODS_ISSUE_DETAILS_GOODS_ISSUES_issue_id] FOREIGN KEY ([issue_id]) REFERENCES [dbo].[GOODS_ISSUES] ([Id]),
+    CONSTRAINT [PK_GOODS_ISSUE_DETAILS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_GOODS_ISSUE_DETAILS_GOODS_ISSUES_issue_id] FOREIGN KEY ([issue_id]) REFERENCES [dbo].[GOODS_ISSUES] ([id]),
     CONSTRAINT [FK_GOODS_ISSUE_DETAILS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[Variants] ([Id])
 );
 

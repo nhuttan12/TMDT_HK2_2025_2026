@@ -102,12 +102,14 @@
     <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
     <Build Include="dbo\StoredProcedures\User\usp_AddUserBankings.sql" />
     <Build Include="dbo\StoredProcedures\User\usp_UpdateUserBanking.sql" />
-    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopInfo.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopProfile.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopList.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopApprovals.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_ApproveShop.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionList.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionDetail.sql" />
+    <Build Include="dbo\Tables\SHOP_LOGOS.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopDetailInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

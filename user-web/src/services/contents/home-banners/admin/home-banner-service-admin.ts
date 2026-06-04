@@ -1,5 +1,5 @@
+import { HomeBanner } from '@/types/contents/banners/HomeBanner';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
 import { UpdateHomeBannerPayload } from '@/types/shops/admin/UpdateHomeBannerPayload';
 import { mapRawBannerToSortableForm } from '@/utils/content/home-banners/mappers/admin-banner';
 

@@ -1,4 +1,4 @@
-import { HomeBanner } from "@/types/contents/home-banners/HomeBanner";
+import { HomeBanner } from "@/types/contents/banners/HomeBanner";
 
 export async function getHomeBanners(): Promise<HomeBanner[]> {
 	return new Promise((resolve) => {

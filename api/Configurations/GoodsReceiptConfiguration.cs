@@ -13,11 +13,21 @@ namespace api.Configurations
             builder.ToTable("GOODS_RECEIPTS");
 
             builder.HasKey(goodsReceipt => goodsReceipt.Id);
-            builder.Property(goodsReceipt => goodsReceipt.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(goodsReceipt => goodsReceipt.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(goodsReceipt => goodsReceipt.Code).HasColumnType("varchar(50)");
-            builder.Property(goodsReceipt => goodsReceipt.Note).HasColumnType("NVARCHAR(MAX)");
-            builder.Property(goodsReceipt => goodsReceipt.CreatedAt).HasColumnType("datetimeoffset");
+            builder.Property(goodsReceipt => goodsReceipt.Code)
+                .HasColumnName("code")
+                .HasColumnType("varchar(50)");
+
+            builder.Property(goodsReceipt => goodsReceipt.Note)
+                .HasColumnName("note")
+                .HasColumnType("NVARCHAR(MAX)");
+
+            builder.Property(goodsReceipt => goodsReceipt.CreatedAt)
+                .HasColumnName("created_at")
+                .HasColumnType("datetimeoffset");
 
             var typeConverter = new ValueConverter<GoodsReceiptType, string>(
                 v => v.ToString().ToLower(),

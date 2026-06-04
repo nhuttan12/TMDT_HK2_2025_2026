@@ -11,9 +11,13 @@ namespace api.Configurations
             builder.ToTable("GOODS_ISSUE_DETAILS");
 
             builder.HasKey(goodsIssueDetail => goodsIssueDetail.Id);
-            builder.Property(goodsIssueDetail => goodsIssueDetail.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(goodsIssueDetail => goodsIssueDetail.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(goodsIssueDetail => goodsIssueDetail.Quantity).IsRequired();
+            builder.Property(goodsIssueDetail => goodsIssueDetail.Quantity)
+                .HasColumnName("quantity")
+                .IsRequired();
 
             builder.Property(goodsIssueDetail => goodsIssueDetail.SellingPrice)
                 .HasColumnName("selling_price")

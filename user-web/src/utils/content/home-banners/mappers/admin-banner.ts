@@ -1,4 +1,4 @@
-import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
+import { HomeBanner } from '@/types/contents/banners/HomeBanner';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 
 /**

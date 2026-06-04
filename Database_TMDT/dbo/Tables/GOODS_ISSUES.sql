@@ -1,11 +1,11 @@
 ﻿CREATE TABLE [dbo].[GOODS_ISSUES] (
-    [Id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
+    [id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [customer_id] UNIQUEIDENTIFIER   NOT NULL,
     [Code]        VARCHAR (50)       NOT NULL,
     [Note]        NVARCHAR(MAX)               NOT NULL,
     [type]        VARCHAR (20)       NOT NULL,
     [created_at]  DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
-    CONSTRAINT [PK_GOODS_ISSUES] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [PK_GOODS_ISSUES] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_GOODS_ISSUES_Users_customer_id] FOREIGN KEY ([customer_id]) REFERENCES [dbo].[Users] ([Id])
 );
 

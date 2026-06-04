@@ -18,6 +18,8 @@ namespace api.Models.Shops
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
 
+        public ICollection<ShopLogo> ShopLogos { get; private set; } = new HashSet<ShopLogo>();
+
         public Shop()
         {
         }

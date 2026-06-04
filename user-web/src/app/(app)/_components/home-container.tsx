@@ -6,12 +6,12 @@ import { useHomeBannersQuery } from '@/queries/content/home-banners/user/use-hom
 import { useProductsHomeQuery } from '@/queries/products/user/use-product-query';
 import { useTopSellingProductsQuery } from '@/queries/products/user/use-top-selling-products-query';
 import { CategoryItem } from '@/types/categories/user/CategoryItem';
-import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { JSX } from 'react';
 import { HomeUi } from './home-ui';
 import { useClaimCouponMutation, usePlatformCouponsQuery } from '@/queries/marketing/coupons/user/use-coupon-user-query';
+import { HomeBanner } from '@/types/contents/banners/HomeBanner';
 
 interface HomeContainerProps {
 	initialBanners: HomeBanner[];

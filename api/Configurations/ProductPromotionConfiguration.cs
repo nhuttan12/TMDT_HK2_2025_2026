@@ -11,7 +11,9 @@ namespace api.Configurations
             builder.ToTable("PRODUCT_PROMOTIONS");
 
             builder.HasKey(pp => pp.Id);
-            builder.Property(pp => pp.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(pp => pp.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(pp => pp.Discount)
                 .IsRequired()

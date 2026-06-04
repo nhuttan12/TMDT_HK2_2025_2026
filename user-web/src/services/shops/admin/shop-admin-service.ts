@@ -2,10 +2,10 @@ import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopAdmin } from '@/types/shops/admin/ShopAdmin';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
-export async function getShopProfileByUserId(userId: number): Promise<ShopProfile> {
+export async function getShopProfileByUserId(userId: string): Promise<ShopProfile> {
 	await new Promise((resolve) => setTimeout(resolve, 500)); // Giả lập độ trễ API
 	return {
-		id: 88,
+		id: 'bc2477e8-4d3d-4c09-b9d2-7045ed120453',
 		name: 'Terrarium VN - Rừng trong kính',
 		email: 'contact@terrarium.vn',
 		phone: '0909123456',
@@ -16,8 +16,6 @@ export async function getShopProfileByUserId(userId: number): Promise<ShopProfil
 		logoUrl:
 			'https://www.shutterstock.com/image-vector/logo-terrarium-succulents-mini-garden-260nw-694576459.jpg',
 
-		seoTitle: 'Terrarium VN | Nghệ thuật bể kính tiểu cảnh',
-		metaDescription: 'Shop bán Terrarium uy tín hàng đầu Việt Nam.',
 		bankName: 'Vietcombank',
 		accountName: 'PHAM NHUT TAN',
 		accountNumber: '1234567890',

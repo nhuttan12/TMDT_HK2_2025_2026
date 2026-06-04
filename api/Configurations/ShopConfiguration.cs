@@ -13,7 +13,9 @@ namespace api.Configurations
             builder.ToTable("SHOPS");
 
             builder.HasKey(shop => shop.Id);
-            builder.Property(shop => shop.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(shop => shop.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(shop => shop.Name)
                 .IsRequired()

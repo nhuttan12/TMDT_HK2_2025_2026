@@ -12,7 +12,7 @@ BEGIN
 	WHERE s.system_status = 'approved';
 
 	SELECT 
-		s.Id, 
+		s.id, 
 		s.name AS Name, 
 		u.Email AS Email, 
 		u.Phone AS Phone, 
@@ -22,7 +22,7 @@ BEGIN
 		@TotalItems AS TotalItems
 	FROM SHOPS s
 	INNER JOIN Users u 
-		ON s.Id = u.Id
+		ON s.id = u.Id
 	WHERE s.system_status = 'approved'
 	ORDER BY s.created_at DESC
 	OFFSET (@PageNumber - 1) * @PageSize ROWS

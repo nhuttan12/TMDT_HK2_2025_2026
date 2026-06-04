@@ -8,7 +8,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @InsertedIds TABLE (Id UNIQUEIDENTIFIER);
+	DECLARE @InsertedIds TABLE (id UNIQUEIDENTIFIER);
 	DECLARE @NewPromotionId UNIQUEIDENTIFIER;
 
 	DECLARE @TotalRowsAffected INT = 0;
@@ -16,15 +16,31 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		INSERT INTO PROMOTIONS(name, start_at, end_at, status)
-		OUTPUT inserted.Id INTO @InsertedIds
-		VALUES (@Name, @StartAt, @EndAt, @Status);
+		INSERT INTO PROMOTIONS(
+			name, 
+			start_at, 
+			end_at, 
+			status
+		)
+		OUTPUT inserted.id 
+		INTO @InsertedIds
+		VALUES (
+			@Name, 
+			@StartAt, 
+			@EndAt, 
+			@Status
+		);
 
 		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 
-		SELECT TOP 1 @NewPromotionId = Id FROM @InsertedIds
+		SELECT TOP 1 @NewPromotionId = id 
+		FROM @InsertedIds
 
-		INSERT INTO PRODUCT_PROMOTIONS(product_id, promotion_id, discount)
+		INSERT INTO PRODUCT_PROMOTIONS(
+			product_id, 
+			promotion_id, 
+			discount
+		)
 		SELECT ProductId, @NewPromotionId, Discount 
 		FROM @Products
 		

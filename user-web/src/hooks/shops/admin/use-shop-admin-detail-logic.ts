@@ -4,7 +4,7 @@ import { useShopAdminDetailQuery } from '@/queries/shops/admin/use-shop-admin-de
 import { ShopAdminDetail } from '@/types/shops/admin/ShopAdminDetail';
 import { useRouter } from 'next/navigation';
 
-export function useShopAdminDetailLogic(id: number, initialData?: ShopAdminDetail) {
+export function useShopAdminDetailLogic(id: string, initialData?: ShopAdminDetail) {
 	const router = useRouter();
 	const { data, isLoading } = useShopAdminDetailQuery(id, initialData);
 

@@ -11,7 +11,9 @@ namespace api.Configurations
             builder.ToTable("BANNERS");
 
             builder.HasKey(banner => banner.Id);
-            builder.Property(banner => banner.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(banner => banner.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(banner => banner.ImageUrl)
                 .IsRequired()

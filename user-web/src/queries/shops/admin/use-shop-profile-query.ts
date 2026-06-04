@@ -16,7 +16,7 @@ import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
 // Hook lấy dữ liệu
 export function useShopProfile(
-	userId: number,
+	userId: string,
 	initialData?: ShopProfile,
 ): UseQueryResult<ShopProfile, Error> {
 	return useQuery({

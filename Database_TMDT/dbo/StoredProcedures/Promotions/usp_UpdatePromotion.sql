@@ -19,29 +19,55 @@ BEGIN
                 status = @Status,
                 start_at = @StartAt,
                 end_at = @EndAt
-        WHERE  Id = @PromotionId
+        WHERE  id = @PromotionId
         AND (name <> @Name
-            OR STATUS <> @Status
+            OR status <> @Status
             OR start_at <> @StartAt
             OR end_at <> @EndAt);
 
         SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 
-        MERGE INTO PRODUCT_PROMOTIONS AS target
-        USING @Products AS source 
-        ON (target.promotion_id = source.PromotionId
-            AND target.product_id = source.ProductId)
-        WHEN MATCHED 
-            AND (target.discount <> source.Discount
-            OR target.STATUS = 0) THEN UPDATE 
+        -- Những sản phẩm đang có trong bảng nhưng Client không gửi lên nữa
+        UPDATE [PRODUCT_PROMOTIONS]
+        SET [status] = 0
+        WHERE promotion_id = @PromotionId
+            AND [status] != 0
+            AND product_id NOT IN (SELECT ProductId FROM @Products);
+
+        SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
+
+        -- Cập nhật discount mới hoặc mở lại những sản phẩm từng bị xóa mềm
+        UPDATE target
         SET target.discount = source.Discount,
-            target.STATUS = 1
-        WHEN NOT MATCHED BY TARGET 
-            THEN INSERT (product_id, promotion_id, discount, STATUS) 
-            VALUES (source.ProductId, source.PromotionId, source.Discount, 1)
-        WHEN NOT MATCHED BY SOURCE 
-            AND target.promotion_id = @PromotionId THEN 
-                UPDATE SET target.STATUS = 0;
+            target.status = 1
+        FROM [PRODUCT_PROMOTIONS] AS target
+        INNER JOIN @Products AS source 
+            ON target.promotion_id = source.PromotionId
+            AND target.product_id = source.ProductId
+        WHERE target.discount <> source.Discount
+            OR target.status = 0;
+
+        SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
+
+        -- Những sản phẩm hoàn toàn mới chưa từng có trong đợt khuyến mãi này
+        INSERT INTO [PRODUCT_PROMOTIONS] (
+            product_id, 
+            promotion_id, 
+            discount, 
+            status
+        )
+        SELECT 
+            source.ProductId, 
+            source.PromotionId, 
+            source.Discount, 
+            1
+        FROM @Products AS source
+        WHERE NOT EXISTS (
+            SELECT 1 
+            FROM [PRODUCT_PROMOTIONS] AS target
+            WHERE target.promotion_id = source.PromotionId
+                AND target.product_id = source.ProductId
+        );
 
         SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 

@@ -11,8 +11,10 @@ namespace api.Configurations
             builder.ToTable("PROMOTIONS");
 
             builder.HasKey(promotion => promotion.Id);
-            builder.Property(promotion => promotion.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
-            
+            builder.Property(promotion => promotion.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+
             builder.Property(promotion => promotion.Name)
                 .IsRequired()
                 .HasColumnName("name")

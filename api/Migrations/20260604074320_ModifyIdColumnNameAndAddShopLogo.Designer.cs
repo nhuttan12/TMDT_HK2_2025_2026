@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Repository;
 
@@ -11,9 +12,11 @@ using api.Repository;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604074320_ModifyIdColumnNameAndAddShopLogo")]
+    partial class ModifyIdColumnNameAndAddShopLogo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,8 +147,7 @@ namespace api.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("code");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -164,8 +166,7 @@ namespace api.Migrations
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(MAX)")
-                        .HasColumnName("note");
+                        .HasColumnType("NVARCHAR(MAX)");
 
                     b.HasKey("Id");
 
@@ -193,8 +194,7 @@ namespace api.Migrations
                         .HasColumnName("issue_id");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("decimal(18,2)")
@@ -223,8 +223,7 @@ namespace api.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("code");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -234,8 +233,7 @@ namespace api.Migrations
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(MAX)")
-                        .HasColumnName("note");
+                        .HasColumnType("NVARCHAR(MAX)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -266,8 +264,7 @@ namespace api.Migrations
 
                     b.Property<string>("BatchCode")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("batch_code");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -280,12 +277,10 @@ namespace api.Migrations
                         .HasColumnName("goods_receipt_id");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalCostPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_cost_price");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -297,7 +292,10 @@ namespace api.Migrations
 
                     b.HasIndex("GoodsReceiptId");
 
-                    b.ToTable("GOODS_RECEIPT_BATCHES", (string)null);
+                    b.ToTable("GOODS_RECEIPT_BATCHES", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_GoodsReceiptBatch_Quantity", "[Quantity] > 0");
+                        });
                 });
 
             modelBuilder.Entity("api.Models.Inventory.GoodsReceiptBatchVariant", b =>
@@ -309,8 +307,7 @@ namespace api.Migrations
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<decimal>("CostPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("cost_price");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -323,8 +320,7 @@ namespace api.Migrations
                         .HasColumnName("batch_id");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("VariantId")
                         .HasColumnType("uniqueidentifier")
@@ -402,8 +398,7 @@ namespace api.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("address");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("ContactName")
                         .IsRequired()

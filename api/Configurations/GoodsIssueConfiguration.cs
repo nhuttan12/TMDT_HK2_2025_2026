@@ -13,10 +13,17 @@ namespace api.Configurations
             builder.ToTable("GOODS_ISSUES");
 
             builder.HasKey(goodsIssue => goodsIssue.Id);
-            builder.Property(goodsIssue => goodsIssue.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(goodsIssue => goodsIssue.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(goodsIssue => goodsIssue.Code).HasColumnType("varchar(50)");
-            builder.Property(goodsIssue => goodsIssue.Note).HasColumnType("NVARCHAR(MAX)");
+            builder.Property(goodsIssue => goodsIssue.Code)
+                .HasColumnName("code")
+                .HasColumnType("varchar(50)");
+
+            builder.Property(goodsIssue => goodsIssue.Note)
+                .HasColumnName("note")
+                .HasColumnType("NVARCHAR(MAX)");
 
             var typeConverter = new ValueConverter<GoodsIssueType, string>(
                 type => type.ToString().ToLower(),

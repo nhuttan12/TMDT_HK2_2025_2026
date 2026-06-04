@@ -4,7 +4,7 @@ import { JSX, useRef } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
-import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
+import { HomeBanner } from '@/types/contents/banners/HomeBanner';
 
 interface BannerProps {
 	banners: HomeBanner[];

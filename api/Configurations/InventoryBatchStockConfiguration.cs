@@ -13,7 +13,9 @@ namespace api.Configurations
             builder.ToTable("INVENTORY_BATCH_STOCKS");
 
             builder.HasKey(inventoryBatchStock => inventoryBatchStock.Id);
-            builder.Property(inventoryBatchStock => inventoryBatchStock.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(inventoryBatchStock => inventoryBatchStock.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(InventoryBatchStock => InventoryBatchStock.RemainingQuantity)
                 .IsRequired()

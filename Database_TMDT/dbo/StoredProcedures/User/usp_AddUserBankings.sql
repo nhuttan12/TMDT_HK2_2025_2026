@@ -10,8 +10,19 @@ BEGIN
 
 		BEGIN TRANSACTION;
 
-		INSERT INTO USER_BANKINGS (user_id, bank_name, account_number, account_name, status)
-		SELECT source.UserId, source.BankName, source.AccountNumber, source.AccountName, 1 
+		INSERT INTO USER_BANKINGS (
+			user_id, 
+			bank_name, 
+			account_number, 
+			account_name, 
+			status
+		)
+		SELECT 
+			@UserId, 
+			source.BankName, 
+			source.AccountNumber, 
+			source.AccountName, 
+			1 
 		FROM @UserBankings AS source
 		WHERE NOT EXISTS (
 			SELECT 1

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[SHOPS] (
-    [Id]            UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
+    [id]            UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [name]          NVARCHAR (255)     NOT NULL,
     [tax_code]      NVARCHAR (50)      NOT NULL,
     [description]   TEXT               NOT NULL,
@@ -8,7 +8,7 @@
     [status]        VARCHAR (50)       DEFAULT ('') NOT NULL,
     [system_status] VARCHAR (50)       DEFAULT ('') NOT NULL,
     [rating]        INT                DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_SHOPS] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_SHOPS_Users_Id] FOREIGN KEY ([Id]) REFERENCES [dbo].[Users] ([Id])
+    CONSTRAINT [PK_SHOPS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_SHOPS_Users_Id] FOREIGN KEY ([id]) REFERENCES [dbo].[Users] ([Id])
 );
 

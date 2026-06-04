@@ -8,7 +8,6 @@
     -- Thông tin Shop (Bảng SHOPS)
     @ShopName NVARCHAR(255),
     @Description NVARCHAR(MAX),
-    @SystemStatus NVARCHAR(50),
 
     -- Thông tin Address (Bảng Addresses)
     @AddressUrl NVARCHAR(MAX),
@@ -59,7 +58,7 @@ BEGIN
 
         -- B. TẠO SHOP
         INSERT INTO SHOPS (
-            Id, 
+            id, 
             name, 
             description, 
             status, 
@@ -72,7 +71,7 @@ BEGIN
             @ShopName, 
             @Description, 
             'closed', 
-            @SystemStatus, 
+            'pending_approval',
             @CurrentTime, 
             @CurrentTime
         );
@@ -95,7 +94,7 @@ BEGIN
         DECLARE @NewBankingId UNIQUEIDENTIFIER = NEWID();
 
         INSERT INTO USER_BANKINGS(
-            Id, 
+            id, 
             user_id, 
             bank_name, 
             account_name, 

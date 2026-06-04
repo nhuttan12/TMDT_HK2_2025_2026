@@ -12,8 +12,9 @@ namespace api.Configurations
 
             builder.HasKey(userBanking => userBanking.Id);
             builder.Property(userBanking => userBanking.Id)
+                .HasColumnName("id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
-            
+
             builder.Property(userBanking => userBanking.BankName)
                 .IsRequired()
                 .HasColumnName("bank_name")

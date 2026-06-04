@@ -11,19 +11,23 @@ namespace api.Configurations
             builder.ToTable("GOODS_RECEIPT_BATCHES");
 
             builder.HasKey(goodsReceiptBatch => goodsReceiptBatch.Id);
-            builder.Property(goodsReceiptBatch => goodsReceiptBatch.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(goodsReceiptBatch => goodsReceiptBatch.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(goodsReceiptBatch => goodsReceiptBatch.BatchCode)
+                .HasColumnName("batch_code")
                 .HasColumnType("varchar(50)")
                 .IsRequired();
 
             builder.Property(goodsReceiptBatch => goodsReceiptBatch.Quantity)
-                   .IsRequired();
-            builder.ToTable(t => t.HasCheckConstraint("CK_GoodsReceiptBatch_Quantity", "[Quantity] > 0"));
+                .HasColumnName("quantity")
+                .IsRequired();
 
             builder.Property(goodsReceiptBatch => goodsReceiptBatch.TotalCostPrice)
-                   .HasColumnType("decimal(18,2)")
-                   .IsRequired();
+                .HasColumnName("total_cost_price")
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
 
             builder.Property(goodsReceiptBatch => goodsReceiptBatch.CreatedAt)
                 .HasColumnName("created_at")
