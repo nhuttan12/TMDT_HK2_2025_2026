@@ -1,7 +1,6 @@
+using api.Database;
 using api.Extensions;
-using api.Repository;
 using api.Services.Auths;
-using api.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,11 +26,11 @@ using (var scope = app.Services.CreateScope())
     var config = services.GetRequiredService<IConfiguration>();
     var context = services.GetRequiredService<MyAppDbContext>();
     var authService = services.GetRequiredService<IAuthService>();
-    var logger = services.GetRequiredService<ILogger<DbInitializer>>();
-    // Truyền trực tiếp context vào để xử lý
 
-    await DbInitializer.SeedEverything(context, config, authService, logger);
+    await api.Database.Seeders.DatabaseSeeder.SeedAsync(app.Services);
 }
+
+await app.SeedSmartDataAsync(app.Lifetime.ApplicationStopped);
 
 // 2. Cấu hình Middleware
 if (app.Environment.IsDevelopment())

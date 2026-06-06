@@ -1,13 +1,19 @@
-﻿using api.Repository;
+﻿using api.Database;
 using api.Exceptions;
 using api.Models;
 using api.Models.Jwts;
+using api.Repository;
+using api.Repository.Categories;
+using api.Repository.ProductRepo;
+using api.Repository.RoleRepo;
+using api.Repository.UserRepo;
 using api.Services.Auths;
+using api.Services.Categorys;
+using api.Services.Products;
 using api.Services.Users;
+using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using api.Repository.UserRepo;
-using api.Repository.RoleRepo;
 
 namespace api.Extensions
 {
@@ -42,6 +48,8 @@ namespace api.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoleRepo, RoleRepo>();
             services.AddScoped<IAuthRepo, AuthRepo>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
 
 
             // Đăng ký các service
@@ -49,10 +57,16 @@ namespace api.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+
+            // Đăng ký các seed data
+            services.AddScoped<IDataSeeder, CategorySeeder>();
+            services.AddScoped<IDataSeeder, ProductSeeder>();
             // Đăng ký global exception handler
             return services;
         }
