@@ -1,15 +1,8 @@
-﻿using api.Dtos;
-using api.Dtos.Common;
-using api.Dtos.Users.Requests;
-using api.Dtos.Users.Responses;
-using api.Exceptions;
-using api.Models.Utilities;
+﻿using api.Dtos.Users.Requests;
 using api.Services.Users;
 using api.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -61,12 +54,12 @@ namespace api.Controllers
             var userId = AuthenticatedUserId;
             if (userId == null)
             {
-                return HandleResult(Result<bool>.Failure(new Error("Unauthorized","You are not authorized."),ErrorType.BadRequest));
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
             }
             var user = await UserService.GetByIdAsync(userId.Value);
             return HandleResult(user);
         }
-      
+
 
         [HttpPut("me")]
         [Authorize(Roles = "User, Admin, Shop")]
@@ -77,7 +70,7 @@ namespace api.Controllers
             var userId = AuthenticatedUserId;
             if (userId == null)
             {
-                return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
             }
             var newUser = await UserService.UpdateAsync(userId.Value, req, cancellationToken);
             return HandleResult(newUser);
@@ -90,7 +83,7 @@ namespace api.Controllers
             var userId = AuthenticatedUserId;
             if (userId == null)
             {
-                return HandleResult(Result<bool>.Failure(new Error("Unauthorized", "You are not authorized."), ErrorType.BadRequest));
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
             }
             var result = await UserService.ChangePasswordAsync(userId.Value, req, cancellationToken);
             return HandleResult(result);
@@ -118,8 +111,8 @@ namespace api.Controllers
         int PageNumber,
         int PageSize
         );
-  
-   
+
+
     public record UserCreateShopDto(string Name);
     public record ChangePasswordDto(string OldPassword, string NewPassword);
     public record LockInfoDto(string OldPassword, string NewPassword);

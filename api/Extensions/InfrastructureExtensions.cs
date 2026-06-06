@@ -1,4 +1,5 @@
-﻿using api.Repository;
+﻿using api.Utilities;
+using api.Repository;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,6 @@ namespace api.Extensions
             {
                 cfg.AddMaps(typeof(Program).Assembly);
             });
-
             // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API) 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
             services.AddCors(options =>
@@ -40,6 +40,8 @@ namespace api.Extensions
                          .AllowCredentials()); // BẮT BUỘC: Cho phép nhận Cookie/Credentials
 
             });
+            // Đăng ký Exception Handler Middleware: tự động sinh id
+            services.AddSingleton<IIdGenerator, SqlServerSequentialIdGenerator>();
             return services;
         }
     }

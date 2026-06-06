@@ -1,4 +1,6 @@
 ﻿
+using api.Database;
+
 namespace api.Repository
 {
     public interface IUnitOfWork
@@ -12,7 +14,7 @@ namespace api.Repository
         {
             _context = context;
         }
-        public async Task CommitAsync(CancellationToken ct = default) 
+        public async Task CommitAsync(CancellationToken ct = default)
         {
             await _context.SaveChangesAsync(ct);
         }

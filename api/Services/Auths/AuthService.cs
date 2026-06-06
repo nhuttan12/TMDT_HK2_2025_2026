@@ -1,17 +1,17 @@
-﻿using api.Models.Users;
-using api.Repository;
-using AutoMapper;
-using api.Controllers;
+﻿using api.Controllers;
 using api.Dtos.Users.Responses;
 using api.Exceptions;
 using api.Models;
+using api.Models.Users;
+using api.Repository;
+using api.Repository.RoleRepo;
+using api.Repository.UserRepo;
+using api.Utilities;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using api.Repository.UserRepo;
-using api.Repository.RoleRepo;
-using api.Utilities;
 
-namespace api.Services.Auths        
+namespace api.Services.Auths
 {
     public interface IAuthService
     {
@@ -55,7 +55,7 @@ namespace api.Services.Auths
             // 1. Fail Fast - Kiểm tra đầu vào cực kỳ khắt khe
             if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
             {
-                return Result<TokenResponse>.Failure(new Error("AUTH_001", "Email và mật khẩu không được để trống"), ErrorType.Validation);
+                return Result<TokenResponse>.Failure(Error.Create("AUTH_001", "Email và mật khẩu không được để trống", ErrorType.Validation));
             }
 
             // 2. Truy vấn dữ liệu với CancellationToken
@@ -65,7 +65,7 @@ namespace api.Services.Auths
             if (user == null || !VerifyPassword(user, req.Password, user.PasswordHash))
             {
                 _logger.LogWarning("Đăng nhập thất bại: {Email}", req.Email);
-                return Result<TokenResponse>.Failure(new Error("AUTH_002", "Email hoặc mật khẩu không chính xác"), ErrorType.Unauthorized);
+                return Result<TokenResponse>.Failure(Error.Create("AUTH_002", "Email hoặc mật khẩu không chính xác", ErrorType.Unauthorized));
             }
 
             // 4. Sinh Token
@@ -75,18 +75,18 @@ namespace api.Services.Auths
         public async Task<Result<UserInfoDTO>> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
-                return Result<UserInfoDTO>.Failure(new Error("AUTH_001", "Email và mật khẩu không được để trống"), ErrorType.Validation);
+                return Result<UserInfoDTO>.Failure(Error.Create("AUTH_001", "Email và mật khẩu không được để trống", ErrorType.Validation));
             // 1. Validation Logic
             if (await _authRepo.ExistsByEmailAsync(request.Email, ct))
             {
-                return Result<UserInfoDTO>.Failure(new Error("AUTH_002", "Tài khoản đã tồn tại", ErrorType.Conflict));
+                return Result<UserInfoDTO>.Failure(Error.Create("AUTH_002", "Tài khoản đã tồn tại", ErrorType.Conflict));
             }
 
             // 2. Business Rule: Mỗi User mới phải có Role mặc định
             var role = await _roleRepository.GetByNameAsync("User");
             if (role == null)
             {
-                 return Result<UserInfoDTO>.Failure(new Error("AUTH_003", "Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'", ErrorType.Failure));
+                return Result<UserInfoDTO>.Failure(Error.Create("AUTH_003", "Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'", ErrorType.Failure));
             }
 
             // 3. Domain Logic: Khởi tạo Entity thông qua Factory Method (Rich Domain Model)
@@ -98,11 +98,11 @@ namespace api.Services.Auths
 
             // 5. Persistence
             await _authRepo.AddAsync(newUser);
-            await _unitOfWork.CommitAsync(); 
+            await _unitOfWork.CommitAsync();
 
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(newUser));
         }
-     
+
         public async Task<Result<TokenResponse>> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
             // 1. Tìm user hiện có
@@ -152,23 +152,23 @@ namespace api.Services.Auths
             };
             return Result<TokenResponse>.Success(res);
         }
-       
+
 
         public async Task<Result<TokenResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
-            var principal = _tokenService.ValidateToken(refreshToken,ct);
+            var principal = _tokenService.ValidateToken(refreshToken, ct);
             var sub = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var subId =  Guid.Parse(sub ?? Guid.Empty.ToString());
+            var subId = Guid.Parse(sub ?? Guid.Empty.ToString());
             if (sub == null)
             {
-                return Result<TokenResponse>.Failure(new Error("AUTH_001", "Invalid refresh token"), ErrorType.Unauthorized);
+                return Result<TokenResponse>.Failure(Error.Create("AUTH_001", "Invalid refresh token", ErrorType.Unauthorized));
             }
-               
+
             var user = await _authRepo.GetByIdWithRoleAsync(subId, ct);
 
             if (user == null)
             {
-               return Result<TokenResponse>.Failure(new Error("AUTH_002", "User not found"),ErrorType.BadRequest);
+                return Result<TokenResponse>.Failure(Error.Create("AUTH_002", "User not found", ErrorType.BadRequest));
             }
 
             // TODO: 3. Kiểm tra các logic bổ sung (Ví dụ: User có bị khóa không?)

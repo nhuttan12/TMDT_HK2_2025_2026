@@ -1,8 +1,8 @@
-﻿using api.Models.Users;
-using api.Exceptions;
+﻿using api.Exceptions;
 using api.Models.Roles;
-using System.ComponentModel.DataAnnotations;
+using api.Models.Users;
 using Api.Models.Users;
+using System.ComponentModel.DataAnnotations;
 using api.Models.Inventory;
 using api.Models.Banners;
 using api.Models.Shops;
@@ -11,7 +11,7 @@ namespace api.Models
 {
     public class User
     {
-       public static User Create(string email, Role role,string provider,String providerKey)
+        public static User Create(string email, Role role, string provider, String providerKey)
         {
             UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
             UserDetail ud = UserDetail.Create();
@@ -37,11 +37,11 @@ namespace api.Models
         //public bool isShop { get; set; }
         //public bool isActive { get; set; }
 
-        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreateAt { get; set; }
 
-        public DateTime? UpdateAt { get; set; }
+        public DateTimeOffset? UpdateAt { get; set; }
 
-        public DateTime? DeleteAt { get; set; }
+        public DateTimeOffset? DeleteAt { get; set; }
 
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
@@ -64,8 +64,7 @@ namespace api.Models
             if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
             if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;
             if (!string.IsNullOrEmpty(avatarUrl)) UserDetail!.AvatarUrl = avatarUrl;
-            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create( userId,a)));
-            UpdateAt = DateTime.UtcNow;
+            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create(userId, a)));
         }
 
         internal void UpdatePassword(string newHash)
@@ -74,7 +73,6 @@ namespace api.Models
                 throw new ArgumentException("Password hash cannot be empty.");
 
             PasswordHash = newHash;
-            UpdateAt = DateTime.UtcNow;
         }
     }
 }

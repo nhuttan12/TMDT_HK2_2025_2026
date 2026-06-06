@@ -17,5 +17,5 @@ namespace api.Dtos.Users.Requests
     // Chuyển sang List để dễ dàng thao tác LINQ ở tầng Service
     List<string>? Addresses
     );
-   
+
 }

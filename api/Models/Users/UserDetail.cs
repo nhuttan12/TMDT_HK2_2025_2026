@@ -1,6 +1,4 @@
-﻿using api.Models;
-
-namespace api.Models.Users
+﻿namespace api.Models.Users
 {
     public class UserDetail
     {
