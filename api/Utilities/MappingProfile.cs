@@ -5,6 +5,7 @@ using api.Dtos.Users.Responses;
 using api.model.Products;
 using api.Models;
 using api.Models.Category;
+using api.Models.Products;
 using AutoMapper;
 
 namespace api.Utilities
@@ -17,6 +18,7 @@ namespace api.Utilities
             UserMapping();
             CategoryMapping();
             ProductMapping();
+            VariantMapping();
 
 
         }
@@ -58,6 +60,18 @@ namespace api.Utilities
                 .ForMember(dest => dest.CategoryId, opt => opt.Ignore());
             // product to dto
             CreateMap<Product, ProductResponseDto>();
+        }
+
+        private void VariantMapping()
+        {
+            // dto to variant
+            CreateMap<VariantCreateDto, Variant>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<VariantUpdateDto, Variant>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductId, opt => opt.Ignore());
+            // variant to dto
+            CreateMap<Variant, VariantResponseDto>();
         }
     }
 }

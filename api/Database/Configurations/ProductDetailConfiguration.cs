@@ -12,7 +12,6 @@ namespace api.Database.Configurations
 
             // 1. Tối ưu I/O: Cấu hình Shared Primary Key
             builder.HasKey(d => d.ProductId);
-            builder.Property(d => d.ProductId).ValueGeneratedNever(); // Cấm tự sinh
 
             // 2. Ràng buộc độ dài
             builder.Property(d => d.Summary)

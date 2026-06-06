@@ -23,7 +23,8 @@ namespace api.Services.Products
         ILogger<ProductController> _logger,
         IProductRepository _repo,
         IUnitOfWork _unitOfWork,
-        IMapper _mapper) : IProductService
+        IMapper _mapper,
+        IIdGenerator _idGenerator) : IProductService
     {
         public async Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default)
         {
@@ -36,12 +37,18 @@ namespace api.Services.Products
             {
                 return Result<Product>.Failure(ValidInput.Error);
             }
+            var productId =_idGenerator.NewId();   
             var res = Product.Create(
+                productId,
                 productDto.Name,
                 productDto.BasePrice,
                 productDto.ImageUrl,
                 productDto.CategoryID,
-                productDto.ShopID
+                productDto.ShopID,
+                productDto.CostPrice,
+                productDto.Sku,
+                productDto.DescriptionHTML,
+                productDto.Summary
             );
             if (!res.IsSuccess)
             {
@@ -107,6 +114,7 @@ namespace api.Services.Products
                 Status: product.Status.ToString() ,         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
                 Variants: product.Variants.Select(v => new VariantResponseDto
                 (
+                 Id : v.Id,
                  Sku: v.Sku,
                  Name: v.Name,
                  CostPrice: v.CostPrice,

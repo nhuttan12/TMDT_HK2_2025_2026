@@ -2,6 +2,7 @@
 {
     public record VariantResponseDto
     (
+        Guid Id,
         string Sku,
         string Name,
         decimal CostPrice,

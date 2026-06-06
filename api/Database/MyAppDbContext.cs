@@ -2,6 +2,7 @@
 using api.Models;
 using api.Models.Category;
 using api.Models.Orders;
+using api.Models.Products;
 using api.Models.Roles;
 using api.Models.Users;
 using Api.Models.Users;
@@ -18,6 +19,8 @@ namespace api.Database
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductDetail> ProductDetails { get; set; }
+        public DbSet<Variant> Variants { get; set; }
         public DbSet<Role> Roles { get; set; }
         //public DbSet<Permission> Permissions { get; set; }
         //public DbSet<RolePermission> RolePermissions { get; set; }

@@ -12,22 +12,24 @@ namespace api.Models.Products
         public Product Product { get; private set; } = null!;
 
         protected ProductDetail() { }
+        protected ProductDetail(string summary, string html)
+        {
+            Summary = summary;
+            DescriptionHtml = html;
+        }
         internal static ProductDetail Create()
         {
             return new ProductDetail();
         }
 
         // Áp dụng Result Pattern để bắt lỗi cấp phát dữ liệu rác vào RAM
-        internal static Result<ProductDetail> InternalCreate(Guid productId, string summary, string html)
+        internal static Result<ProductDetail> InternalCreate(Guid idProduct, string summary, string html)
         {
-            if (productId == Guid.Empty)
-                return Result<ProductDetail>.Failure(Error.Create("ProductDetail.ProductIdRequired", "ProductId không hợp lệ.", ErrorType.Validation));
-
             // Có thể bổ sung kiểm tra dung lượng HTML nếu cần để tránh tấn công cạn kiệt bộ nhớ (OOM)
 
             return Result<ProductDetail>.Success(new ProductDetail
             {
-                ProductId = productId,
+                ProductId = idProduct,
                 Summary = summary ?? string.Empty,
                 DescriptionHtml = html ?? string.Empty
             });

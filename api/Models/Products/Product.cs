@@ -34,20 +34,18 @@ namespace api.model.Products
         // Dành riêng cho EF Core khi query (không dùng để tạo mới)
         protected Product() { }
 
-        private Product(string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId)
+        private Product(Guid id, string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId)
         {
-            Id = Guid.Empty;
+            Id = id;
             Name = name;
             BasePrice = basePrice;
             ImageUrl = imageUrl;
             CategoryId = categoryId;
             ShopId = shopId;
-            Detail = ProductDetail.Create();
-
         }
 
         // Pass thời gian từ Services vào để dễ dàng Mock/Unit Test
-        public static Result<Product> Create(string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId)
+        public static Result<Product> Create(Guid id, string name, decimal basePrice, string imageUrl, Guid categoryId, Guid shopId, decimal costPrice, string Sku, string description, string summary)
         {
             // Fail Fast với các mã lỗi chuẩn (Constants)
             if (string.IsNullOrWhiteSpace(name))
@@ -61,16 +59,26 @@ namespace api.model.Products
                 return Result<Product>.Failure(Error.Create("Product.CategoryRequired", "CategoryId không hợp lệ.", ErrorType.Validation));
             if (string.IsNullOrWhiteSpace(imageUrl))
                 return Result<Product>.Failure(Error.Create("Product.ImageUrlRequired", "ImageUrl không được để trống.", ErrorType.Validation));
-            return Result<Product>.Success(new Product(name, basePrice, imageUrl, categoryId, shopId));
+            if (string.IsNullOrWhiteSpace(Sku))
+                return Result<Product>.Failure(Error.Create("Product.SkuRequired", "Sku không được để trống.", ErrorType.Validation));
+            if (string.IsNullOrWhiteSpace(description))
+                return Result<Product>.Failure(Error.Create("Product.DescriptionRequired", "Mô tả sản phẩm không được để trống.", ErrorType.Validation));
+            if (string.IsNullOrWhiteSpace(summary))
+                return Result<Product>.Failure(Error.Create("Product.SummaryRequired", "Tóm tắt sản phẩm không được để trống.", ErrorType.Validation));
+
+            var product = new Product(id, name, basePrice, imageUrl, categoryId, shopId);
+            product.SetDetail(id, summary, description);
+            product.AddVariant(name, Sku, basePrice, costPrice, imageUrl);
+            return Result<Product>.Success(product);
         }
 
-        public void SetDetail(string summary, string descriptionHtml)
+        public void SetDetail(Guid idProduct,string summary, string descriptionHtml)
         {
             // Tránh cấp phát mới nếu dữ liệu không đổi (Tối ưu CPU & GC)
             if (Detail?.Summary == summary && Detail?.DescriptionHtml == descriptionHtml)
                 return;
 
-            Detail = ProductDetail.InternalCreate(this.Id, summary, descriptionHtml).Value;
+            Detail = ProductDetail.InternalCreate( idProduct, summary, descriptionHtml).Value;
         }
 
         public Result<bool> AddVariant(string name, string sku, decimal sellPrice, decimal costPrice, string imageUrl)

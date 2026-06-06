@@ -1,4 +1,6 @@
-﻿namespace api.Extensions
+﻿using api.Utilities;
+
+namespace api.Extensions
 {
     /// <summary>
     /// Đăng ký CORS, Exception Handler, AutoMapper.
@@ -12,7 +14,6 @@
             {
                 cfg.AddMaps(typeof(Program).Assembly);
             });
-
             // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API) 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
             services.AddCors(options =>
@@ -25,6 +26,8 @@
                          .AllowCredentials()); // BẮT BUỘC: Cho phép nhận Cookie/Credentials
 
             });
+            // Đăng ký Exception Handler Middleware: tự động sinh id
+            services.AddSingleton<IIdGenerator, SqlServerSequentialIdGenerator>();
             return services;
         }
     }

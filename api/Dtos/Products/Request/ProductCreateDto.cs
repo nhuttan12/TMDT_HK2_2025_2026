@@ -8,6 +8,8 @@ public record ProductCreateDto(
     string ImageUrl,
     string Summary,
     string DescriptionHTML,
+    decimal CostPrice,
+    string Sku,
     Guid ShopID,
     Guid CategoryID)
 {

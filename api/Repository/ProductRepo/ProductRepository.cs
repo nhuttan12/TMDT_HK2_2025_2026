@@ -9,6 +9,7 @@ namespace api.Repository.ProductRepo
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
+        Task<bool> ExistsAsync(Guid productId, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto filterDto, CancellationToken cancellationToken);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
@@ -107,6 +108,9 @@ namespace api.Repository.ProductRepo
             throw new NotImplementedException();
         }
 
-
+        public Task<bool> ExistsAsync(Guid productId, CancellationToken cancellationToken)
+        {
+            return _context.Products.AnyAsync(p => p.Id == productId, cancellationToken);
+        }
     }
 }
