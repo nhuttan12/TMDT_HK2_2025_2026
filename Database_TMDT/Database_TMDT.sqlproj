@@ -104,7 +104,7 @@
     <Build Include="dbo\StoredProcedures\User\usp_UpdateUserBanking.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopProfile.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopList.sql" />
-    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopApprovals.sql" />
+    <Build Include="dbo\StoredProcedures\Shops\usp_GetShopApprovalList.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_ApproveShop.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionList.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionDetail.sql" />

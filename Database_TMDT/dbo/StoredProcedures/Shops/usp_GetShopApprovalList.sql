@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[usp_GetShopApprovals]
+﻿CREATE PROCEDURE [dbo].[usp_GetShopApprovalList]
     @PageNumber INT = 1,
     @PageSize INT = 10
 AS
