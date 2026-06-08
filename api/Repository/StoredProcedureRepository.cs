@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using api.Database;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository

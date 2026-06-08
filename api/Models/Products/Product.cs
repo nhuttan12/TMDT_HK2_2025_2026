@@ -1,7 +1,10 @@
-﻿using api.Models;
+﻿using api.Dtos.Products.Request;
+using api.Models;
 using api.Models.Category;
+using api.Models.Inventory;
 using api.Models.Products;
 using api.Models.Promotions;
+using api.Models.Shops;
 using api.Utilities;
 
 namespace api.model.Products
@@ -22,7 +25,10 @@ namespace api.model.Products
         public string ImageUrl { get; private set; } = string.Empty;
         public ProductStatus Status { get; private set; } = ProductStatus.Approved;
         public Guid CategoryId { get; private set; }
+
         public Guid ShopId { get; private set; }
+        public Shop Shop { get; private set; }
+
         public ProductDetail? Detail { get; private set; }
 
         // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
@@ -101,7 +107,8 @@ namespace api.model.Products
                 return Result<bool>.Failure(Error.Create("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại.", ErrorType.Validation));
 
             // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
-            var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+            //var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+            var variantResult = Variant.InternalCreate(Guid.NewGuid(), this.Id, name, sku, sellPrice, costPrice, imageUrl);
 
             // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
             if (variantResult.IsFailure)

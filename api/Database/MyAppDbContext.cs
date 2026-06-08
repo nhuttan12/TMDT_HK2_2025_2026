@@ -7,6 +7,7 @@ using api.Models.Roles;
 using api.Models.Users;
 using api.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
+using Api.Models.Users;
 namespace api.Database
 {
     public class MyAppDbContext : DbContext

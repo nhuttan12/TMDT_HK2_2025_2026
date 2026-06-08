@@ -1,4 +1,5 @@
-﻿using DotNetEnv;
+﻿using api.Database;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 

@@ -2,6 +2,7 @@
 using api.Repository;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using api.Database;
 
 namespace api.Extensions
 {

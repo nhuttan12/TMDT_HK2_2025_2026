@@ -1,4 +1,6 @@
-﻿using api.Utilities;
+﻿using api.Dtos.Products.Request;
+using api.Models.Inventory;
+using api.Utilities;
 using System;
 
 namespace api.Models.Products;

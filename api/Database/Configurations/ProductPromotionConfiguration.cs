@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace api.Configurations
+namespace api.Database.Configurations
 {
     public class ProductPromotionConfiguration : IEntityTypeConfiguration<ProductPromotion>
     {

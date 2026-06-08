@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace api.Configurations
+namespace api.Database.Configurations
 {
     public class InventoryBatchStockConfiguration : IEntityTypeConfiguration<InventoryBatchStock>
     {

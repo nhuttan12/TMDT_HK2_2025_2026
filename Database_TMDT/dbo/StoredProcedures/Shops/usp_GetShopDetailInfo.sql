@@ -1,7 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[usp_GetShopDetailInfo]
 	@param1 int = 0,
 	@param2 int
+AS
 BEGIN
+	SET NOCOUNT ON;
+
 	BEGIN TRY
 		SELECT 
 			s.id, 
@@ -15,8 +18,8 @@ BEGIN
 			ub.account_name AS AccountName,
 			ub.account_number AS AccountNumber,
 			s.status AS [Status],
-			s.rating AS Rating,
-			COUNT(p.Id) AS TotalProducts,
+			s.rating AS Rating
+			--COUNT(p.Id) AS TotalProducts
 
 		FROM SHOPS s
 		INNER JOIN Users u 
@@ -27,8 +30,8 @@ BEGIN
 			ON sl.shop_id = s.id
 		INNER JOIN USER_BANKINGS ub
 			ON ub.user_id = u.Id
-		INNER JOIN Products p
-			ON p.shop_id = s.id
+		--INNER JOIN Products p
+		--	ON p.shop_id = s.id
 
 		WHERE s.system_status = 'approved'
 

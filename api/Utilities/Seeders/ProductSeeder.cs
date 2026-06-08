@@ -57,8 +57,23 @@ namespace api.Utilities.Seeders
                 // Dùng Guid.Empty cho ShopId tạm thời (nếu hệ thống bạn chưa làm Multi-tenant)
                 Guid shopId = Guid.Parse("0DBF433E-F36B-1410-8DC2-0031A65E736E");
 
+                // Product id tạm, để có j fix sau
+                var productId = Guid.NewGuid();
+
                 // 3. Khởi tạo Product qua Factory Method an toàn
-                var productResult = Product.Create(item.Name, item.Price, item.Images[0], categoryId, shopId);
+                var productResult = Product.Create(
+                    productId,
+                    item.Name,
+                    item.Price,
+                    item.Images[0],
+                    categoryId,
+                    shopId,
+                    // Fix tạm thời, có j mốt chỉnh sau
+                    item.Price * 0.6m,
+                    $"SKU-{Guid.NewGuid().ToString()[..8].ToUpper()}",
+                    "Mô tả sản phẩm đang được cập nhật.",
+                    "Tóm tắt sản phẩm đang được cập nhật."
+                );
 
                 if (productResult.IsFailure)
                 {
@@ -69,7 +84,7 @@ namespace api.Utilities.Seeders
                 var product = productResult.Value!;
 
                 // 4. Set chi tiết sản phẩm
-                product.SetDetail(item.Summary, item.DescriptionHTML);
+                product.SetDetail(productId, item.Summary, item.DescriptionHTML);
 
                 // 5. XỬ LÝ LOGIC BIẾN THỂ (VARIANTS)
                 var firstImage = item.Images.FirstOrDefault() ?? string.Empty;
