@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Database;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608164121_UpdateUserField")]
+    partial class UpdateUserField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,28 +29,37 @@ namespace api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AddressUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("address_url");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_used");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("ADDRESSES", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Banners.Banner", b =>
@@ -101,27 +113,32 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Category.Category", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset(7)");
+                        .HasColumnType("datetimeoffset(7)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("image_url");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("name");
 
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("sku");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -131,7 +148,160 @@ namespace api.Migrations
                     b.HasIndex("Sku")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("CATEGORIES", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("category");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("discount_value");
+
+                    b.Property<DateTimeOffset>("EndAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("end_at");
+
+                    b.Property<decimal>("MaxDiscountAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("max_discount_amount");
+
+                    b.Property<decimal>("MinOrderValue")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("min_order_value");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("scope");
+
+                    b.Property<DateTimeOffset>("StartAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("start_at");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit")
+                        .HasColumnName("status");
+
+                    b.Property<int>("TotalQuantity")
+                        .HasColumnType("int")
+                        .HasColumnName("total_quantity");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("type");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("UsedQuantity")
+                        .HasColumnType("int")
+                        .HasColumnName("used_quantity");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("COUPONS", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.InvoiceAppliedCoupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<DateTimeOffset>("AppliedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("applied_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<Guid>("CouponId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("coupon_id");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("discount_amount");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("invoice_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CouponId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("INVOICE_APPLIED_COUPONS", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.UserSavedCoupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<Guid>("CouponId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("coupon_id");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_used");
+
+                    b.Property<DateTimeOffset>("LastUsedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("last_used_at");
+
+                    b.Property<DateTimeOffset>("SavedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("saved_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CouponId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("USER_SAVED_COUPONS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Inventory.GoodsIssue", b =>
@@ -445,18 +615,27 @@ namespace api.Migrations
                     b.ToTable("SUPPLIERS", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.Orders.Order", b =>
+            modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid?>("CouponId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("coupon_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<Guid?>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -465,23 +644,34 @@ namespace api.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShopId");
+
+                    b.HasIndex("UserId");
+
                     b.HasIndex("Status", "CreatedAt");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("INVOICES", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.Orders.OrderItem", b =>
+            modelBuilder.Entity("api.Models.Orders.InvoiceItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("InvoiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("PriceAtPurchase")
@@ -498,13 +688,13 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("InvoiceId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("VariantId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("INVOICE_ITEMS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Products.ProductDetail", b =>
@@ -513,50 +703,59 @@ namespace api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DescriptionHtml")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description_html");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("summary");
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("ProductDetails", (string)null);
+                    b.ToTable("PRODUCT_DETAILS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
 
                     b.Property<decimal>("CostPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("cost_price");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("image_url");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("name");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("SellPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("sell_price");
 
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("sku");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("status");
 
                     b.HasKey("Id");
 
@@ -567,7 +766,7 @@ namespace api.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Variants_Sku");
 
-                    b.ToTable("Variants", (string)null);
+                    b.ToTable("VARIANTS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Promotions.ProductPromotion", b =>
@@ -772,6 +971,7 @@ namespace api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreateAt")
@@ -783,7 +983,8 @@ namespace api.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -794,7 +995,8 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("phone");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -806,7 +1008,7 @@ namespace api.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("USERS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserBanking", b =>
@@ -862,7 +1064,8 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("AddressId")
                         .HasColumnType("nvarchar(max)");
@@ -878,7 +1081,7 @@ namespace api.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserDetails", (string)null);
+                    b.ToTable("USER_DETAILS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
@@ -907,46 +1110,53 @@ namespace api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<decimal>("BasePrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("base_price");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasColumnType("nvarchar(2048)")
+                        .HasColumnName("image_url");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("name");
 
                     b.Property<decimal>("Rating")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(3, 2)
                         .HasColumnType("decimal(3,2)")
-                        .HasDefaultValue(0m);
+                        .HasDefaultValue(0m)
+                        .HasColumnName("rating");
 
                     b.Property<Guid>("ShopId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShopId1")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("status");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -957,8 +1167,6 @@ namespace api.Migrations
 
                     b.HasIndex("ShopId")
                         .HasDatabaseName("IX_Products_ShopId");
-
-                    b.HasIndex("ShopId1");
 
                     b.ToTable("PRODUCTS", (string)null);
                 });
@@ -981,6 +1189,44 @@ namespace api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.InvoiceAppliedCoupon", b =>
+                {
+                    b.HasOne("api.Models.Coupons.Coupon", "Coupon")
+                        .WithMany("AppliedInvoices")
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Orders.Invoice", "Invoice")
+                        .WithMany("AppliedCoupons")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coupon");
+
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.UserSavedCoupon", b =>
+                {
+                    b.HasOne("api.Models.Coupons.Coupon", "Coupon")
+                        .WithMany("UserSavedCoupons")
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("UserSavedCoupons")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coupon");
 
                     b.Navigation("User");
                 });
@@ -1083,11 +1329,29 @@ namespace api.Migrations
                     b.Navigation("Variant");
                 });
 
-            modelBuilder.Entity("api.Models.Orders.OrderItem", b =>
+            modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
-                    b.HasOne("api.Models.Orders.Order", null)
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("Invoices")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Invoices")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Shop");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Models.Orders.InvoiceItem", b =>
+                {
+                    b.HasOne("api.Models.Orders.Invoice", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1206,6 +1470,13 @@ namespace api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Products_Categories");
 
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("Products")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Products_Shops_ShopId");
+
                     b.HasOne("api.Models.User", null)
                         .WithMany()
                         .HasForeignKey("ShopId")
@@ -1213,13 +1484,14 @@ namespace api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Products_Users_ShopId");
 
-                    b.HasOne("api.Models.Shops.Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
+                {
+                    b.Navigation("AppliedInvoices");
+
+                    b.Navigation("UserSavedCoupons");
                 });
 
             modelBuilder.Entity("api.Models.Inventory.GoodsIssue", b =>
@@ -1245,8 +1517,10 @@ namespace api.Migrations
                     b.Navigation("GoodsReceipts");
                 });
 
-            modelBuilder.Entity("api.Models.Orders.Order", b =>
+            modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
+                    b.Navigation("AppliedCoupons");
+
                     b.Navigation("Items");
                 });
 
@@ -1271,6 +1545,10 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
                 {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("Products");
+
                     b.Navigation("ShopLogos");
                 });
 
@@ -1282,6 +1560,8 @@ namespace api.Migrations
 
                     b.Navigation("GoodsIssues");
 
+                    b.Navigation("Invoices");
+
                     b.Navigation("Shop");
 
                     b.Navigation("UserBankings");
@@ -1289,6 +1569,8 @@ namespace api.Migrations
                     b.Navigation("UserDetail");
 
                     b.Navigation("UserExternalLogin");
+
+                    b.Navigation("UserSavedCoupons");
                 });
 
             modelBuilder.Entity("api.model.Products.Product", b =>

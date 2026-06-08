@@ -1,6 +1,6 @@
 ﻿namespace api.Models.Enums
 {
-    public enum OrderStatus : byte
+    public enum InvoiceStatus : byte
     {
         /// <summary>
         /// Chờ thanh toán (Unpaid). 

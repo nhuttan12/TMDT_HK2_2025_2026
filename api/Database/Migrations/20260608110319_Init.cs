@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -12,23 +12,23 @@ namespace api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "CATEGORIES",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Sku = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    ImageUrl = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    sku = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    image_url = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_CATEGORIES", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "INVOICES",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -40,7 +40,7 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_INVOICES", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,11 +94,11 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "INVOICE_ITEMS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -106,21 +106,21 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.PrimaryKey("PK_INVOICE_ITEMS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
+                        name: "FK_INVOICE_ITEMS_INVOICES_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "INVOICES",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "USERS",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -131,9 +131,9 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_USERS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
+                        name: "FK_USERS_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -164,7 +164,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "ADDRESSES",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -176,12 +176,12 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_ADDRESSES", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Addresses_Users_UserId",
+                        name: "FK_ADDRESSES_USERS_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -202,10 +202,10 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_BANNERS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_BANNERS_Users_user_id",
+                        name: "FK_BANNERS_USERS_user_id",
                         column: x => x.user_id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -224,10 +224,10 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_GOODS_ISSUES", x => x.id);
                     table.ForeignKey(
-                        name: "FK_GOODS_ISSUES_Users_customer_id",
+                        name: "FK_GOODS_ISSUES_USERS_customer_id",
                         column: x => x.customer_id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -249,10 +249,10 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_SHOPS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_SHOPS_Users_id",
+                        name: "FK_SHOPS_USERS_id",
                         column: x => x.id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -273,18 +273,18 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_USER_BANKINGS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_USER_BANKINGS_Users_user_id",
+                        name: "FK_USER_BANKINGS_USERS_user_id",
                         column: x => x.user_id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserDetails",
+                name: "USER_DETAILS",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LockTimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LockTimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -292,12 +292,12 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserDetails", x => x.UserId);
+                    table.PrimaryKey("PK_USER_DETAILS", x => x.user_id);
                     table.ForeignKey(
-                        name: "FK_UserDetails_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        name: "FK_USER_DETAILS_USERS_user_id",
+                        column: x => x.user_id,
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -313,10 +313,10 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_UserExternalLogins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserExternalLogins_Users_Id",
+                        name: "FK_UserExternalLogins_USERS_Id",
                         column: x => x.Id,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -347,21 +347,21 @@ namespace api.Migrations
                 name: "PRODUCTS",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    BasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Rating = table.Column<decimal>(type: "decimal(3,2)", precision: 3, scale: 2, nullable: false, defaultValue: 0m),
-                    ImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShopId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    base_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    rating = table.Column<decimal>(type: "decimal(3,2)", precision: 3, scale: 2, nullable: false, defaultValue: 0m),
+                    image_url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    category_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShopId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PRODUCTS", x => x.Id);
+                    table.PrimaryKey("PK_PRODUCTS", x => x.id);
                     table.ForeignKey(
                         name: "FK_PRODUCTS_SHOPS_ShopId1",
                         column: x => x.ShopId1,
@@ -370,15 +370,15 @@ namespace api.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_Categories",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
+                        column: x => x.category_id,
+                        principalTable: "CATEGORIES",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Users_ShopId",
-                        column: x => x.ShopId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        column: x => x.shop_id,
+                        principalTable: "USERS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -403,6 +403,25 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PRODUCT_DETAILS",
+                columns: table => new
+                {
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    summary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    description_html = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PRODUCT_DETAILS", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_PRODUCT_DETAILS_PRODUCTS_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCTS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PRODUCT_PROMOTIONS",
                 columns: table => new
                 {
@@ -421,7 +440,7 @@ namespace api.Migrations
                         name: "FK_PRODUCT_PROMOTIONS_PRODUCTS_product_id",
                         column: x => x.product_id,
                         principalTable: "PRODUCTS",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PRODUCT_PROMOTIONS_PROMOTIONS_promotion_id",
@@ -432,45 +451,26 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductDetails",
+                name: "VARIANTS",
                 columns: table => new
                 {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    DescriptionHtml = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    sku = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    sell_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    image_url = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductDetails", x => x.ProductId);
+                    table.PrimaryKey("PK_VARIANTS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ProductDetails_PRODUCTS_ProductId",
+                        name: "FK_VARIANTS_PRODUCTS_ProductId",
                         column: x => x.ProductId,
                         principalTable: "PRODUCTS",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Variants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Sku = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SellPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Variants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Variants_PRODUCTS_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCTS",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -495,10 +495,10 @@ namespace api.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GOODS_ISSUE_DETAILS_Variants_variant_id",
+                        name: "FK_GOODS_ISSUE_DETAILS_VARIANTS_variant_id",
                         column: x => x.variant_id,
-                        principalTable: "Variants",
-                        principalColumn: "Id",
+                        principalTable: "VARIANTS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -523,10 +523,10 @@ namespace api.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GOODS_RECEIPT_BATCH_VARIANTS_Variants_variant_id",
+                        name: "FK_GOODS_RECEIPT_BATCH_VARIANTS_VARIANTS_variant_id",
                         column: x => x.variant_id,
-                        principalTable: "Variants",
-                        principalColumn: "Id",
+                        principalTable: "VARIANTS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -556,19 +556,19 @@ namespace api.Migrations
                         name: "FK_INVENTORY_BATCH_STOCKS_PRODUCTS_product_id",
                         column: x => x.product_id,
                         principalTable: "PRODUCTS",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_INVENTORY_BATCH_STOCKS_Variants_variant_id",
+                        name: "FK_INVENTORY_BATCH_STOCKS_VARIANTS_variant_id",
                         column: x => x.variant_id,
-                        principalTable: "Variants",
-                        principalColumn: "Id",
+                        principalTable: "VARIANTS",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_UserId",
-                table: "Addresses",
+                name: "IX_ADDRESSES_UserId",
+                table: "ADDRESSES",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -577,9 +577,9 @@ namespace api.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_Sku",
-                table: "Categories",
-                column: "Sku",
+                name: "IX_CATEGORIES_sku",
+                table: "CATEGORIES",
+                column: "sku",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -634,23 +634,23 @@ namespace api.Migrations
                 column: "variant_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
+                name: "IX_INVOICE_ITEMS_InvoiceId",
+                table: "INVOICE_ITEMS",
+                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
+                name: "IX_INVOICE_ITEMS_ProductId",
+                table: "INVOICE_ITEMS",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_VariantId",
-                table: "OrderItems",
+                name: "IX_INVOICE_ITEMS_VariantId",
+                table: "INVOICE_ITEMS",
                 column: "VariantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_Status_CreatedAt",
-                table: "Orders",
+                name: "IX_INVOICES_Status_CreatedAt",
+                table: "INVOICES",
                 columns: new[] { "Status", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
@@ -666,17 +666,17 @@ namespace api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "PRODUCTS",
-                column: "CategoryId");
+                column: "category_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PRODUCTS_Name",
+                name: "IX_PRODUCTS_name",
                 table: "PRODUCTS",
-                column: "Name");
+                column: "name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ShopId",
                 table: "PRODUCTS",
-                column: "ShopId");
+                column: "shop_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PRODUCTS_ShopId1",
@@ -700,19 +700,19 @@ namespace api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
+                name: "IX_USERS_RoleId",
+                table: "USERS",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_ProductId",
-                table: "Variants",
+                table: "VARIANTS",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_Sku",
-                table: "Variants",
-                column: "Sku",
+                table: "VARIANTS",
+                column: "sku",
                 unique: true);
         }
 
@@ -720,7 +720,7 @@ namespace api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Addresses");
+                name: "ADDRESSES");
 
             migrationBuilder.DropTable(
                 name: "BANNERS");
@@ -735,13 +735,13 @@ namespace api.Migrations
                 name: "INVENTORY_BATCH_STOCKS");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "INVOICE_ITEMS");
+
+            migrationBuilder.DropTable(
+                name: "PRODUCT_DETAILS");
 
             migrationBuilder.DropTable(
                 name: "PRODUCT_PROMOTIONS");
-
-            migrationBuilder.DropTable(
-                name: "ProductDetails");
 
             migrationBuilder.DropTable(
                 name: "SHOP_LOGOS");
@@ -750,7 +750,7 @@ namespace api.Migrations
                 name: "USER_BANKINGS");
 
             migrationBuilder.DropTable(
-                name: "UserDetails");
+                name: "USER_DETAILS");
 
             migrationBuilder.DropTable(
                 name: "UserExternalLogins");
@@ -762,10 +762,10 @@ namespace api.Migrations
                 name: "GOODS_RECEIPT_BATCHES");
 
             migrationBuilder.DropTable(
-                name: "Variants");
+                name: "VARIANTS");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "INVOICES");
 
             migrationBuilder.DropTable(
                 name: "PROMOTIONS");
@@ -783,10 +783,10 @@ namespace api.Migrations
                 name: "SHOPS");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "CATEGORIES");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "USERS");
 
             migrationBuilder.DropTable(
                 name: "Roles");

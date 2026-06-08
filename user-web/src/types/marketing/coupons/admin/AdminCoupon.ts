@@ -1,30 +1,10 @@
-import { TimeArrange } from '@/types/shared/TimeArrange';
-import { DiscountType } from '../DiscountType';
-import { CouponScope } from '../CouponScope';
-import { CouponStatus } from '../CouponStatus';
+import { BaseCoupon } from "../BaseCoupon";
 
-export interface AdminCoupon {
-	id: string;
-	code: string; // Ví dụ: FREESHIP50K, TET2026
-	name: string; // Tên hiển thị cho user
-	scope: CouponScope; // Phân biệt loại voucher
-	
-    createdByType: 'admin' | 'shop';
-    shopId: string | null; // Nếu scope là platform, trường này là null
-
-	// Logic giảm giá
-	discountType: DiscountType;
-	discountValue: number; // Ví dụ: 10 (nếu là %), hoặc 50000 (nếu là tiền mặt)
-	maxDiscountAmount: number | null; // Mức giảm tối đa (Ví dụ: Giảm 10% nhưng tối đa 30k)
-	minOrderValue: number; // Đơn tối thiểu để áp dụng (Ví dụ: Đơn từ 100k)
-
-	// Quản lý số lượng và thời gian
-	totalQuantity: number;
-	usedQuantity: number;
+export interface AdminCoupon extends BaseCoupon {
+    createdByType: 'admin' | 'shop'; 
+    
+    // Quản lý số lượng (Chỉ Admin/Shop mới thấy)
+    totalQuantity: number;
+    usedQuantity: number;
     maxUsagePerUser: number;
-
-	validTime: TimeArrange; // ISO 8601 DateTime
-
-	// Trạng thái (để UI dễ dàng render badge mà không cần tự tính toán lại ngày tháng)
-	status: CouponStatus;
 }

@@ -1,9 +1,9 @@
 ﻿namespace api.Models.Orders
 {
-    public class OrderItem
+    public class InvoiceItem
     {
         public Guid Id { get; private set; }
-        public Guid OrderId { get; private set; }
+        public Guid InvoiceId { get; private set; }
 
         public Guid ProductId { get; private set; }
         public Guid VariantId { get; private set; }
@@ -12,13 +12,13 @@
         public decimal PriceAtPurchase { get; private set; }
 
         // EF Core Constructor
-        private OrderItem() { }
+        private InvoiceItem() { }
 
-        // Chỉ Order mới có quyền tạo ra OrderItem (thông qua constructor internal hoặc private)
-        internal OrderItem(Guid orderId, Guid productId, Guid variantId, int quantity, decimal priceAtPurchase)
+        // Chỉ Invoice mới có quyền tạo ra InvoiceItem (thông qua constructor internal hoặc private)
+        internal InvoiceItem(Guid invoiceId, Guid productId, Guid variantId, int quantity, decimal priceAtPurchase)
         {
             Id = Guid.Empty;
-            OrderId = orderId;
+            InvoiceId = invoiceId;
             ProductId = productId;
             VariantId = variantId;
             Quantity = quantity;

@@ -1,7 +1,7 @@
 import { TimeArrange } from "@/types/shared/TimeArrange";
 import { CouponCategory } from "../CouponCategory";
 import { DiscountType } from "../DiscountType";
-import { UserSavedStatus } from "./UserSavedStatus";
+import { UserSavedStatus } from "../UserSavedStatus";
 
 export interface BaseUserCoupon {
     id: string;

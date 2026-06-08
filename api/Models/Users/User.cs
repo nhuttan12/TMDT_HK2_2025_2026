@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using api.Models.Inventory;
 using api.Models.Banners;
 using api.Models.Shops;
+using api.Models.Orders;
+using api.Models.Coupons;
 
 namespace api.Models
 {
@@ -52,6 +54,8 @@ namespace api.Models
         public ICollection<GoodsIssue> GoodsIssues { get; set; } = new HashSet<GoodsIssue>();
         public ICollection<UserBanking> UserBankings { get; set; } = new HashSet<UserBanking>();
         public ICollection<Banner> Banners { get; set; } = new HashSet<Banner>();
+        public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
+        public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
 
         public void SetPassword(string hash)
         {

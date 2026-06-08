@@ -8,18 +8,20 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductDetail> builder)
         {
-            builder.ToTable("ProductDetails");
+            builder.ToTable("PRODUCT_DETAILS");
 
             // 1. Tối ưu I/O: Cấu hình Shared Primary Key
             builder.HasKey(d => d.ProductId);
 
             // 2. Ràng buộc độ dài
             builder.Property(d => d.Summary)
-                   .HasMaxLength(500)
-                   .IsRequired(false); // Summary có thể cho phép null/empty
+                .HasColumnName("summary")
+                .HasMaxLength(500)
+                .IsRequired(false); // Summary có thể cho phép null/empty
 
             // 3. Cấu hình kiểu dữ liệu LOB (Large Object)
             builder.Property(d => d.DescriptionHtml)
+                   .HasColumnName("description_html")
                    .HasColumnType("nvarchar(max)")
                    .IsRequired(false);
 

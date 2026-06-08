@@ -3,7 +3,6 @@
     @Email NVARCHAR(255),
     @Phone VARCHAR(20),
     @PasswordHash NVARCHAR(MAX),
-    @RoleId INT,
 
     -- Thông tin Shop (Bảng SHOPS)
     @ShopName NVARCHAR(255),
@@ -37,22 +36,25 @@ BEGIN
         DECLARE @CurrentTime DATETIMEOFFSET = SYSDATETIMEOFFSET();
         DECLARE @CurrentTimeUtc DATETIME = GETUTCDATE();
 
+        DECLARE @RoleId UNIQUEIDENTIFIER;
+        SELECT @RoleId = id FROM ROLES WHERE Name = 'shop-owner';
+
         -- A. TẠO USER
-        INSERT INTO Users (
-            Id, 
-            Email, 
-            Phone, 
-            PasswordHash, 
-            RoleId, 
-            CreateAt, 
-            UpdateAt
+        INSERT INTO USERS(
+            id, 
+            email, 
+            phone, 
+            password_hash, 
+            role_id, 
+            create_at, 
+            update_at
         )
         VALUES (
             @OutUserId, 
             LOWER(LTRIM(RTRIM(@Email))), 
             @Phone, 
             @PasswordHash, 
-            @RoleId, 
+            @RoleId,
             @CurrentTimeUtc, 
             @CurrentTimeUtc);
 
@@ -77,11 +79,11 @@ BEGIN
         );
 
         -- C. TẠO ADDRESS
-        INSERT INTO Addresses (
-            UserId, 
-            AddressUrl, 
-            CreatedAt, 
-            IsUsed
+        INSERT INTO ADDRESSES(
+            user_id, 
+            address_url, 
+            created_at, 
+            is_used
         )
         VALUES (
             @OutUserId, 

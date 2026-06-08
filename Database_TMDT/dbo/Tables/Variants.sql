@@ -1,15 +1,17 @@
-﻿CREATE TABLE [dbo].[Variants] (
-    [Id]        UNIQUEIDENTIFIER NOT NULL,
-    [ProductId] UNIQUEIDENTIFIER NOT NULL,
-    [Sku]       VARCHAR (100)    NOT NULL,
-    [Name]      NVARCHAR (100)   NOT NULL,
-    [CostPrice] DECIMAL (18, 2)  NOT NULL,
-    [SellPrice] DECIMAL (18, 2)  NOT NULL,
-    [ImageUrl]  VARCHAR (500)    NOT NULL,
-    [Status]    INT              NOT NULL,
-    CONSTRAINT [PK_Variants] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Variants_Products_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[Products] ([Id]) ON DELETE CASCADE
+﻿CREATE TABLE [dbo].[VARIANTS] (
+    [id]         UNIQUEIDENTIFIER NOT NULL,
+    [ProductId]  UNIQUEIDENTIFIER NOT NULL,
+    [sku]        VARCHAR (100)    NOT NULL,
+    [name]       NVARCHAR (100)   NOT NULL,
+    [cost_price] DECIMAL (18, 2)  NOT NULL,
+    [sell_price] DECIMAL (18, 2)  NOT NULL,
+    [image_url]  VARCHAR (500)    NOT NULL,
+    [status]     INT              NOT NULL,
+    CONSTRAINT [PK_VARIANTS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_VARIANTS_PRODUCTS_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[PRODUCTS] ([id]) ON DELETE CASCADE
 );
+
+
 
 
 GO

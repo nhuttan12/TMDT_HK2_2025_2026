@@ -1,4 +1,6 @@
-﻿using api.Models.Shops.Enums;
+﻿using api.model.Products;
+using api.Models.Orders;
+using api.Models.Shops.Enums;
 
 namespace api.Models.Shops
 {
@@ -19,6 +21,8 @@ namespace api.Models.Shops
         public DateTimeOffset UpdatedAt { get; private set; }
 
         public ICollection<ShopLogo> ShopLogos { get; private set; } = new HashSet<ShopLogo>();
+        public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
+        public ICollection<Invoice> Invoices { get; private set; } = new HashSet<Invoice>();
 
         public Shop()
         {

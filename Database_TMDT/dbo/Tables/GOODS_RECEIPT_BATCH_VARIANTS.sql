@@ -2,13 +2,15 @@
     [id]         UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [batch_id]   UNIQUEIDENTIFIER   NOT NULL,
     [variant_id] UNIQUEIDENTIFIER   NOT NULL,
-    [Quantity]   INT                NOT NULL,
-    [CostPrice]  DECIMAL (18, 2)    NOT NULL,
+    [quantity]   INT                NOT NULL,
+    [cost_price] DECIMAL (18, 2)    NOT NULL,
     [created_at] DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_GOODS_RECEIPT_BATCH_VARIANTS] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_GOODS_RECEIPT_BATCH_VARIANTS_GOODS_RECEIPT_BATCHES_batch_id] FOREIGN KEY ([batch_id]) REFERENCES [dbo].[GOODS_RECEIPT_BATCHES] ([id]),
-    CONSTRAINT [FK_GOODS_RECEIPT_BATCH_VARIANTS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[Variants] ([Id])
+    CONSTRAINT [FK_GOODS_RECEIPT_BATCH_VARIANTS_VARIANTS_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[VARIANTS] ([id])
 );
+
+
 
 
 GO

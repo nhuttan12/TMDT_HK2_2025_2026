@@ -17,6 +17,7 @@ export default async function ViewCouponPage(): Promise<JSX.Element> {
 		createdByType: 'admin', // Đã bổ sung
 		shopId: null,
 		discountType: 'fixed_amount',
+        category: 'discount', // Mặc định
 		discountValue: 0,
 		maxDiscountAmount: null,
 		minOrderValue: 0,

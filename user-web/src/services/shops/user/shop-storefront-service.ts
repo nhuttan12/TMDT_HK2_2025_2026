@@ -254,6 +254,7 @@ export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]
 					name: 'Giảm 100K',
 					scope: 'shop',
 					shopId: shopId,
+                    status: 'active',
 					category: 'discount',
 					discountType: 'fixed_amount',
 					discountValue: 100000,
@@ -271,6 +272,7 @@ export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]
 					name: 'Miễn phí vận chuyển',
 					scope: 'shop',
 					shopId: shopId,
+                    status: 'expired',
 					category: 'shipping', // Định danh đúng nhóm vận chuyển
 					discountType: 'fixed_amount',
 					discountValue: 30000,

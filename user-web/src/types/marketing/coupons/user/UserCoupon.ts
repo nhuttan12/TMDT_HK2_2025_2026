@@ -1,4 +1,7 @@
-import { PlatformCoupon } from "./PlatformCoupon";
-import { ShopCoupon } from "./ShopCoupon";
+import { BaseCoupon } from "../BaseCoupon";
+import { UserSavedStatus } from "../UserSavedStatus";
 
-export type UserCoupon = PlatformCoupon | ShopCoupon;
+export interface UserCoupon extends BaseCoupon {
+    // Trạng thái cá nhân hóa của user đang đăng nhập
+    userSavedStatus: UserSavedStatus;
+}

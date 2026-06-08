@@ -22,7 +22,7 @@ namespace api.Services.Banners
 
             var bannerTable = new DataTable();
             bannerTable.Columns.Add("ImageUrl", typeof(string));
-            bannerTable.Columns.Add("Order", typeof(int));
+            bannerTable.Columns.Add("Invoice", typeof(int));
             bannerTable.Columns.Add("IsPrimary", typeof(bool));
 
             foreach (var banner in banners)

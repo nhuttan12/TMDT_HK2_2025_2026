@@ -1,15 +1,17 @@
-CREATE TABLE [dbo].[BANNERS] (
+﻿CREATE TABLE [dbo].[BANNERS] (
     [id]         UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [user_id]    UNIQUEIDENTIFIER   NOT NULL,
     [image_url]  NVARCHAR (MAX)     NOT NULL,
+    [order]      INT                NOT NULL,
+    [is_primary] BIT                NOT NULL,
     [status]     BIT                NOT NULL,
     [created_at] DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     [updated_at] DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
-    [is_primary] BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
-    [order]      INT                DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_BANNERS] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_BANNERS_Users_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[Users] ([Id])
+    CONSTRAINT [FK_BANNERS_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 

@@ -30,8 +30,8 @@ namespace api.Database
         public DbSet<UserExternalLogin> UserExternalLogins { get; set; }
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Invoice> Orders { get; set; }
+        public DbSet<InvoiceItem> OrderItems { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
 

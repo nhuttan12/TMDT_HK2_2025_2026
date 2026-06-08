@@ -4,12 +4,14 @@
     [bank_name]      NVARCHAR (255)     NOT NULL,
     [account_name]   NVARCHAR (255)     NOT NULL,
     [account_number] VARCHAR (20)       NOT NULL,
+    [status]         BIT                NOT NULL,
     [created_at]     DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     [updated_at]     DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
-    [status]         BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
     CONSTRAINT [PK_USER_BANKINGS] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_USER_BANKINGS_Users_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[Users] ([Id])
+    CONSTRAINT [FK_USER_BANKINGS_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 

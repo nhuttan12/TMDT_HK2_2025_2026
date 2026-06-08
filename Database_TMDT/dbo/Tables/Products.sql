@@ -1,21 +1,30 @@
-﻿CREATE TABLE [dbo].[Products] (
-    [Id]         UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
-    [Name]       NVARCHAR (255)     NOT NULL,
-    [BasePrice]  DECIMAL (18, 2)    NOT NULL,
-    [Rating]     DECIMAL (3, 2)     DEFAULT ((0.0)) NOT NULL,
-    [CategoryId] UNIQUEIDENTIFIER   NOT NULL,
-    [ShopId]     UNIQUEIDENTIFIER   NOT NULL,
-    [CreatedAt]  DATETIMEOFFSET (7) NOT NULL,
-    [UpdatedAt]  DATETIMEOFFSET (7) NOT NULL,
-    CONSTRAINT [PK_Products] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Products_Categories] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Categories] ([Id]),
-    CONSTRAINT [FK_Products_Users_ShopId] FOREIGN KEY ([ShopId]) REFERENCES [dbo].[Users] ([Id])
+﻿CREATE TABLE [dbo].[PRODUCTS] (
+    [id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
+    [name]        NVARCHAR (255)     NOT NULL,
+    [base_price]  DECIMAL (18, 2)    NOT NULL,
+    [rating]      DECIMAL (3, 2)     DEFAULT ((0.0)) NOT NULL,
+    [image_url]   NVARCHAR (2048)    NOT NULL,
+    [status]      NVARCHAR (50)      NOT NULL,
+    [category_id] UNIQUEIDENTIFIER   NOT NULL,
+    [shop_id]     UNIQUEIDENTIFIER   NOT NULL,
+    [created_at]  DATETIMEOFFSET (7) NOT NULL,
+    [updated_at]  DATETIMEOFFSET (7) NOT NULL,
+    CONSTRAINT [PK_PRODUCTS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_Products_Categories] FOREIGN KEY ([category_id]) REFERENCES [dbo].[CATEGORIES] ([id]),
+    CONSTRAINT [FK_Products_Shops_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]),
+    CONSTRAINT [FK_Products_Users_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
+
+
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Products_CategoryId]
-    ON [dbo].[Products]([CategoryId] ASC);
+    ON [dbo].[PRODUCTS]([category_id] ASC);
+
+
 
 
 GO
@@ -25,5 +34,9 @@ CREATE NONCLUSTERED INDEX [IX_Products_Name]
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Products_ShopId]
-    ON [dbo].[Products]([ShopId] ASC);
+    ON [dbo].[PRODUCTS]([shop_id] ASC);
 
+
+
+
+GO

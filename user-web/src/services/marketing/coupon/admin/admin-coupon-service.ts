@@ -15,6 +15,7 @@ export const getShopCouponsByShopId = async (
 						scope: 'shop',
 						createdByType: 'shop',
 						shopId: shopId,
+                        category: 'shipping',
 						discountType: 'fixed_amount',
 						discountValue: 50000,
 						maxDiscountAmount: null,
@@ -35,6 +36,7 @@ export const getShopCouponsByShopId = async (
 						scope: 'shop',
 						createdByType: 'shop',
 						shopId: shopId,
+                        category: 'discount',
 						discountType: 'percentage',
 						discountValue: 10,
 						maxDiscountAmount: 30000,
@@ -82,6 +84,7 @@ export const getPlatformCoupons = async (): Promise<PaginationResponse<AdminCoup
 						createdByType: 'admin', // Bổ sung để khớp interface
 						shopId: null,
 						discountType: 'fixed_amount',
+                        category: 'shipping',
 						discountValue: 50000,
 						maxDiscountAmount: null,
 						minOrderValue: 150000,
@@ -101,6 +104,7 @@ export const getPlatformCoupons = async (): Promise<PaginationResponse<AdminCoup
 						scope: 'platform',
 						createdByType: 'admin', // Bổ sung để khớp interface
 						shopId: null,
+                        category: 'discount',
 						discountType: 'percentage',
 						discountValue: 10,
 						maxDiscountAmount: 30000,
@@ -130,6 +134,7 @@ export const getCouponDetailById = async (couponId: string): Promise<AdminCoupon
 				scope: 'platform',
 				createdByType: 'admin', // Bổ sung để khớp interface
 				shopId: null,
+                category: 'shipping',
 				discountType: 'fixed_amount',
 				discountValue: 50000,
 				maxDiscountAmount: null,

@@ -15,15 +15,15 @@ BEGIN
 	SELECT 
 		s.id, 
 		s.name AS Name, 
-		u.Email AS Email, 
-		u.Phone AS Phone, 
+		u.email AS Email, 
+		u.phone AS Phone, 
 		s.rating AS Rating, 
 		s.created_at AS CreatedAt,
 		s.system_status AS [Status],
 		@TotalItems AS TotalItems
 	FROM SHOPS s
-	INNER JOIN Users u 
-		ON s.id = u.Id
+	INNER JOIN USERS u 
+		ON s.id = u.id
 	WHERE s.status = 'closed'
 		AND s.system_status = 'pending-approval'
 	ORDER BY s.created_at DESC
