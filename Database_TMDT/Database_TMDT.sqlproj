@@ -115,6 +115,7 @@
     <Build Include="dbo\Tables\USER_SAVED_COUPONS.sql" />
     <Build Include="dbo\Tables\INVOICE_APPLIED_COUPONS.sql" />
     <Build Include="dbo\Tables\COUPONS.sql" />
+    <Build Include="dbo\Tables\USER_EXTERNAL_LOGINS.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

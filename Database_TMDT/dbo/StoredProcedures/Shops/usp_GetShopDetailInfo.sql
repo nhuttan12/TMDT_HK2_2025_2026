@@ -18,8 +18,12 @@ BEGIN
 			ub.account_number AS AccountNumber,
 			s.status AS [Status],
 			s.rating AS Rating,
-			COUNT(p.id) AS TotalProducts,
-			COUNT(i.id) AS TotalInvoices
+			(SELECT COUNT(1) 
+				FROM PRODUCTS p 
+				WHERE p.shop_id = s.id) AS TotalProducts,
+			(SELECT COUNT(1) 
+				FROM INVOICES i 
+				WHERE i.shop_id = s.id) AS TotalInvoices
 		FROM SHOPS s
 		INNER JOIN USERS u 
 			ON s.id = u.Id

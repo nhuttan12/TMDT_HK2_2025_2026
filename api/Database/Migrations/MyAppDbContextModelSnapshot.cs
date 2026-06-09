@@ -8,7 +8,7 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
     partial class MyAppDbContextModelSnapshot : ModelSnapshot
@@ -1139,9 +1139,8 @@ namespace api.Migrations
 
                     b.PrimitiveCollection<string>("ImageUrls")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)")
-                        .HasColumnName("image_url");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("image_urls");
 
                     b.Property<string>("Name")
                         .IsRequired()

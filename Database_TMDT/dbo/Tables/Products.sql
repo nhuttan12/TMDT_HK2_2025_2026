@@ -3,7 +3,7 @@
     [name]        NVARCHAR (255)     NOT NULL,
     [base_price]  DECIMAL (18, 2)    NOT NULL,
     [rating]      DECIMAL (3, 2)     DEFAULT ((0.0)) NOT NULL,
-    [image_url]   NVARCHAR (2048)    NOT NULL,
+    [image_urls]  NVARCHAR (MAX)     NOT NULL,
     [status]      NVARCHAR (50)      NOT NULL,
     [category_id] UNIQUEIDENTIFIER   NOT NULL,
     [shop_id]     UNIQUEIDENTIFIER   NOT NULL,
@@ -14,6 +14,8 @@
     CONSTRAINT [FK_Products_Shops_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]),
     CONSTRAINT [FK_Products_Users_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 
