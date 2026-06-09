@@ -36,7 +36,7 @@ BEGIN
         DECLARE @CurrentTime DATETIMEOFFSET = SYSDATETIMEOFFSET();
         DECLARE @CurrentTimeUtc DATETIME = GETUTCDATE();
 
-        DECLARE @RoleId UNIQUEIDENTIFIER;
+        DECLARE @RoleId INT;
         SELECT @RoleId = id FROM ROLES WHERE Name = 'shop-owner';
 
         -- A. TẠO USER

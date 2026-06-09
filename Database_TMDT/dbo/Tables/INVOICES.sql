@@ -1,16 +1,18 @@
-CREATE TABLE [dbo].[INVOICES] (
+﻿CREATE TABLE [dbo].[INVOICES] (
     [id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [TotalAmount] DECIMAL (18, 2)    NOT NULL,
     [Status]      TINYINT            NOT NULL,
+    [user_id]     UNIQUEIDENTIFIER   NOT NULL,
+    [shop_id]     UNIQUEIDENTIFIER   NULL,
     [coupon_id]   UNIQUEIDENTIFIER   NULL,
     [created_at]  DATETIMEOFFSET (7) DEFAULT (sysutcdatetime()) NOT NULL,
     [updated_at]  DATETIMEOFFSET (7) DEFAULT (sysutcdatetime()) NOT NULL,
-    [shop_id]     UNIQUEIDENTIFIER   NULL,
-    [user_id]     UNIQUEIDENTIFIER   DEFAULT ('00000000-0000-0000-0000-000000000000') NOT NULL,
     CONSTRAINT [PK_INVOICES] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_INVOICES_SHOPS_shop_id] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]) ON DELETE SET NULL,
     CONSTRAINT [FK_INVOICES_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 

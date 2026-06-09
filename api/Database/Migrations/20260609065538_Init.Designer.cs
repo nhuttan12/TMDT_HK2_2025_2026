@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Database.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260608164121_UpdateUserField")]
-    partial class UpdateUserField
+    [Migration("20260609065538_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -855,7 +855,13 @@ namespace api.Database.Migrations
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PROMOTIONS", (string)null);
                 });
@@ -864,22 +870,25 @@ namespace api.Database.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("ROLES", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
@@ -975,10 +984,12 @@ namespace api.Database.Migrations
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreateAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("create_at");
 
                     b.Property<DateTimeOffset?>("DeleteAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("delete_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -988,21 +999,25 @@ namespace api.Database.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("full_name");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("password_hash");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("role_id");
 
                     b.Property<DateTimeOffset?>("UpdateAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("update_at");
 
                     b.HasKey("Id");
 
@@ -1102,7 +1117,7 @@ namespace api.Database.Migrations
                     b.HasIndex("Provider", "Id")
                         .IsUnique();
 
-                    b.ToTable("UserExternalLogins", (string)null);
+                    b.ToTable("USER_EXTERNAL_LOGINS", (string)null);
                 });
 
             modelBuilder.Entity("api.model.Products.Product", b =>
@@ -1125,11 +1140,10 @@ namespace api.Database.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("ImageUrl")
+                    b.PrimitiveCollection<string>("ImageUrls")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)")
-                        .HasColumnName("image_url");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("image_urls");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1395,6 +1409,17 @@ namespace api.Database.Migrations
                     b.Navigation("Promotion");
                 });
 
+            modelBuilder.Entity("api.Models.Promotions.Promotion", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Promotions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
                 {
                     b.HasOne("api.Models.User", "User")
@@ -1561,6 +1586,8 @@ namespace api.Database.Migrations
                     b.Navigation("GoodsIssues");
 
                     b.Navigation("Invoices");
+
+                    b.Navigation("Promotions");
 
                     b.Navigation("Shop");
 
