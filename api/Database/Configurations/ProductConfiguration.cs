@@ -29,9 +29,10 @@ namespace api.Database.Configurations
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
-            builder.Property(p => p.ImageUrl)
-                .IsRequired()
-                .HasMaxLength(2048);
+            builder.Property(p => p.ImageUrls)
+                .HasField("_imageUrls") // BẮT BUỘC: Báo cho EF Core biết phải map trực tiếp vào private field này
+                .UsePropertyAccessMode(PropertyAccessMode.Field) // Ép EF Core đọc/ghi qua field, bảo toàn Encapsulation
+                .IsRequired();
 
             builder.Property(p => p.CreatedAt)
                 .IsRequired();

@@ -1,17 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class inital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "CATEGORIES",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -23,11 +24,11 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_CATEGORIES", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "INVOICES",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -39,7 +40,7 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_INVOICES", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,7 +58,7 @@ namespace api.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "ORDER_ITEMS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -69,17 +70,17 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.PrimaryKey("PK_ORDER_ITEMS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
+                        name: "FK_ORDER_ITEMS_INVOICES_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Orders",
+                        principalTable: "INVOICES",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "USERS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -94,9 +95,9 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_USERS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
+                        name: "FK_USERS_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -104,7 +105,7 @@ namespace api.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "ADDRESSES",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -116,23 +117,25 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_ADDRESSES", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Addresses_Users_UserId",
+                        name: "FK_ADDRESSES_USERS_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "USERS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "PRODUCTS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     BasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(3,2)", precision: 3, scale: 2, nullable: false, defaultValue: 0m),
+                    ImageUrls = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShopId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -140,23 +143,23 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_PRODUCTS", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Products_Categories",
                         column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        principalTable: "CATEGORIES",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Users_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Users",
+                        principalTable: "USERS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserDetails",
+                name: "USER_DETAILS",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -167,17 +170,17 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserDetails", x => x.UserId);
+                    table.PrimaryKey("PK_USER_DETAILS", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_UserDetails_Users_UserId",
+                        name: "FK_USER_DETAILS_USERS_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "USERS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserExternalLogins",
+                name: "USER_EXTERNAL_LOGINS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -186,17 +189,17 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserExternalLogins", x => x.Id);
+                    table.PrimaryKey("PK_USER_EXTERNAL_LOGINS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserExternalLogins_Users_Id",
+                        name: "FK_USER_EXTERNAL_LOGINS_USERS_Id",
                         column: x => x.Id,
-                        principalTable: "Users",
+                        principalTable: "USERS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductDetails",
+                name: "PRODUCT_DETAILS",
                 columns: table => new
                 {
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -205,17 +208,17 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductDetails", x => x.ProductId);
+                    table.PrimaryKey("PK_PRODUCT_DETAILS", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_ProductDetails_Products_ProductId",
+                        name: "FK_PRODUCT_DETAILS_PRODUCTS_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
+                        principalTable: "PRODUCTS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Variants",
+                name: "VARIANTS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -229,80 +232,80 @@ namespace api.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Variants", x => x.Id);
+                    table.PrimaryKey("PK_VARIANTS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Variants_Products_ProductId",
+                        name: "FK_VARIANTS_PRODUCTS_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
+                        principalTable: "PRODUCTS",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_UserId",
-                table: "Addresses",
+                name: "IX_ADDRESSES_UserId",
+                table: "ADDRESSES",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_Sku",
-                table: "Categories",
+                name: "IX_CATEGORIES_Sku",
+                table: "CATEGORIES",
                 column: "Sku",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_VariantId",
-                table: "OrderItems",
-                column: "VariantId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_Status_CreatedAt",
-                table: "Orders",
+                name: "IX_INVOICES_Status_CreatedAt",
+                table: "INVOICES",
                 columns: new[] { "Status", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ORDER_ITEMS_OrderId",
+                table: "ORDER_ITEMS",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ORDER_ITEMS_ProductId",
+                table: "ORDER_ITEMS",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ORDER_ITEMS_VariantId",
+                table: "ORDER_ITEMS",
+                column: "VariantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
-                table: "Products",
+                table: "PRODUCTS",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_Name",
-                table: "Products",
+                name: "IX_PRODUCTS_Name",
+                table: "PRODUCTS",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ShopId",
-                table: "Products",
+                table: "PRODUCTS",
                 column: "ShopId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserExternalLogins_Provider_Id",
-                table: "UserExternalLogins",
+                name: "IX_USER_EXTERNAL_LOGINS_Provider_Id",
+                table: "USER_EXTERNAL_LOGINS",
                 columns: new[] { "Provider", "Id" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
+                name: "IX_USERS_RoleId",
+                table: "USERS",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_ProductId",
-                table: "Variants",
+                table: "VARIANTS",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_Sku",
-                table: "Variants",
+                table: "VARIANTS",
                 column: "Sku",
                 unique: true);
         }
@@ -311,34 +314,34 @@ namespace api.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Addresses");
+                name: "ADDRESSES");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "ORDER_ITEMS");
 
             migrationBuilder.DropTable(
-                name: "ProductDetails");
+                name: "PRODUCT_DETAILS");
 
             migrationBuilder.DropTable(
-                name: "UserDetails");
+                name: "USER_DETAILS");
 
             migrationBuilder.DropTable(
-                name: "UserExternalLogins");
+                name: "USER_EXTERNAL_LOGINS");
 
             migrationBuilder.DropTable(
-                name: "Variants");
+                name: "VARIANTS");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "INVOICES");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "PRODUCTS");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "CATEGORIES");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "USERS");
 
             migrationBuilder.DropTable(
                 name: "Roles");

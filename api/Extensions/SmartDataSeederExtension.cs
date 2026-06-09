@@ -1,4 +1,5 @@
 ﻿using api.Database;
+using api.Utilities;
 using api.Utilities.Seeders;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace api.Extensions
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
             var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("SeederEngine");
+            var idgenaration = services.GetRequiredService<IIdGenerator>();
             var env = services.GetRequiredService<IWebHostEnvironment>();
 
             if (!env.IsDevelopment()) return;
@@ -38,7 +40,7 @@ namespace api.Extensions
                     var seederName = seeder.GetType().Name;
                     logger.LogInformation($"Đang chạy {seederName}...");
 
-                    await seeder.SeedAsync(dbContext, env.ContentRootPath, logger, cancellationToken);
+                    await seeder.SeedAsync(dbContext, env.ContentRootPath, logger, idgenaration, cancellationToken);
                 }
 
                 logger.LogInformation("Hoàn tất quá trình nạp dữ liệu.");

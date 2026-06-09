@@ -16,8 +16,10 @@ namespace api.model.Products
         public Guid Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public decimal BasePrice { get; private set; }
+        // TỐI ƯU ENCAPSULATION CHO DANH SÁCH ẢNH
         public decimal Rating { get; private set; }
-        public string ImageUrl { get; private set; } = string.Empty;
+        private readonly List<string> _imageUrls = [];
+        public IReadOnlyCollection<string> ImageUrls => _imageUrls;
         public ProductStatus Status { get; private set; } = ProductStatus.Approved;
         public Guid CategoryId { get; private set; }
         public Guid ShopId { get; private set; }
@@ -39,9 +41,9 @@ namespace api.model.Products
             Id = id;
             Name = name;
             BasePrice = basePrice;
-            ImageUrl = imageUrl;
             CategoryId = categoryId;
             ShopId = shopId;
+            _imageUrls.Add(imageUrl); // Thêm URL đầu tiên vào danh sách ảnh
         }
 
         // Pass thời gian từ Services vào để dễ dàng Mock/Unit Test
@@ -58,7 +60,7 @@ namespace api.model.Products
             if (categoryId == Guid.Empty)
                 return Result<Product>.Failure(Error.Create("Product.CategoryRequired", "CategoryId không hợp lệ.", ErrorType.Validation));
             if (string.IsNullOrWhiteSpace(imageUrl))
-                return Result<Product>.Failure(Error.Create("Product.ImageUrlRequired", "ImageUrl không được để trống.", ErrorType.Validation));
+                return Result<Product>.Failure(Error.Create("Product.ImageRequired", "Phải có ít nhất 1 hình ảnh khi tạo sản phẩm.", ErrorType.Validation));
             if (string.IsNullOrWhiteSpace(Sku))
                 return Result<Product>.Failure(Error.Create("Product.SkuRequired", "Sku không được để trống.", ErrorType.Validation));
             if (string.IsNullOrWhiteSpace(description))
@@ -68,10 +70,29 @@ namespace api.model.Products
 
             var product = new Product(id, name, basePrice, imageUrl, categoryId, shopId);
             product.SetDetail(id, summary, description);
-            product.AddVariant(name, Sku, basePrice, costPrice, imageUrl);
+            product.AddVariant("default", Sku, basePrice, costPrice, imageUrl);
             return Result<Product>.Success(product);
         }
+        // 2. CÁC HÀM QUẢN LÝ ẢNH (Result Pattern)
+        public Result<bool> AddImage(string imageUrl)
+        {
+            if (string.IsNullOrWhiteSpace(imageUrl))
+                return Result<bool>.Failure(Error.Create("Image.Empty", "URL không hợp lệ.", ErrorType.Validation));
 
+            if (_imageUrls.Contains(imageUrl))
+                return Result<bool>.Failure(Error.Create("Image.Duplicate", "Hình ảnh đã tồn tại.", ErrorType.Validation));
+
+            if (_imageUrls.Count >= 10) // Ví dụ: Giới hạn 10 ảnh
+                return Result<bool>.Failure(Error.Create("Image.LimitExceeded", "Tối đa 10 hình ảnh.", ErrorType.Validation));
+
+            _imageUrls.Add(imageUrl);
+            return Result<bool>.Success(true);
+        }
+
+        public void RemoveImage(string imageUrl)
+        {
+            _imageUrls.Remove(imageUrl);
+        }
         public void SetDetail(Guid idProduct,string summary, string descriptionHtml)
         {
             // Tránh cấp phát mới nếu dữ liệu không đổi (Tối ưu CPU & GC)
@@ -93,8 +114,8 @@ namespace api.model.Products
             if (_variants.Any(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 return Result<bool>.Failure(Error.Create("Variant.DuplicateName", $"Biến thể '{name}' đã tồn tại.", ErrorType.Validation));
 
-            // 2. KHẮC PHỤC LỖI CS8604: Gọi Factory Method của Variant và hứng kết quả
-            var variantResult = Variant.InternalCreate(this.Id, name, sku, sellPrice, costPrice, imageUrl);
+            Guid variantId = Guid.CreateVersion7(); 
+            var variantResult = Variant.InternalCreate(variantId, this.Id, name, sku, sellPrice, costPrice, imageUrl);
 
             // 3. Nếu Variant từ chối khởi tạo (vd: mã SKU bị rỗng), Product lập tức trả lỗi về cho Controller
             if (variantResult.IsFailure)
@@ -106,17 +127,28 @@ namespace api.model.Products
             return Result<bool>.Success(true);
         }
 
-        internal void Update(ProductUpdateDto productDto)
-        {
-            Name = productDto.Name;
-            BasePrice = productDto.BasePrice;
-            ImageUrl = productDto.ImageUrl;
-            Status = productDto.Status;
-        }
+       
 
         internal void Lock()
         {
             Status = ProductStatus.Banned; // Soft delete: Cập nhật trạng thái thay vì xóa vật lý
+        }
+
+        internal void Update(string name, decimal basePrice, List<string> imageUrls, ProductStatus status)
+        {
+            Name = name;
+            BasePrice = basePrice;
+            Status = status;
+            if(imageUrls != null)
+            {
+                foreach (var url in imageUrls)
+                {
+                    if (!_imageUrls.Contains(url))
+                    {
+                        _imageUrls.Add(url);
+                    }
+                }
+            }
         }
     }
 }

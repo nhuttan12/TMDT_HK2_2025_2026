@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.ToTable("Addresses");
+            builder.ToTable("ADDRESSES");
             builder.HasKey(a => a.Id);
             builder.Property(a => a.Id).UseIdentityColumn();
         }

@@ -10,7 +10,7 @@ namespace api.Database.Configurations
         {
             // Map to explicit table name using lower case to align with
             // typical Postgres naming conventions.
-            builder.ToTable("Users");
+            builder.ToTable("USERS");
 
             // Primary key configuration. UseIdentityByDefaultColumn maps
             // to Postgres identity/serial semantics for auto-incrementing ids.

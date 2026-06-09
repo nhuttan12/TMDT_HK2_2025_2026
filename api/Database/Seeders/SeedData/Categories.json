@@ -13,5 +13,35 @@
     "Name": "quà tặng tân gia",
     "Sku": "DM003",
     "ImageUrl": "https://example.com/image3.jpg"
-  }
+  },
+  {
+    "Name": "zen terrarium",
+    "Sku": "DM004",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "moss terrarium",
+    "Sku": "DM005",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "tropical terrarium",
+    "Sku": "DM006",
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo2_90cd97089ecc451ca20779c42bdaa1c3.png"
+  },
+  {
+    "Name": "rain forest terrarium",
+    "Sku": "DM007",
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png"
+  },
+  {
+    "Name": "trang rêu",
+    "Sku": "tranh-reu",
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png"
+  },
+	{
+		"Name": "binh-terrarium",
+		"Sku": "binh-terrarium",
+		"ImageUrl": "https://file.hstatic.net/200000968796/file/binh-terrarium.jpg"
+	}
 ]

@@ -9,7 +9,7 @@ namespace api.Dtos.Products.Request
     public record ProductUpdateDto(
         string Name,
         decimal BasePrice,
-        string ImageUrl,
+        List<string> ImageUrls,
         ProductStatus Status
     )
     {
@@ -33,10 +33,15 @@ namespace api.Dtos.Products.Request
                 return Result<bool>.Failure(Error.Create("Product.InvalidPrice", "Giá sản phẩm không được âm.", ErrorType.Validation));
             }
 
-            // Tùy chọn: Validate định dạng URL bằng Uri.TryCreate nếu cần thiết
-            if (!string.IsNullOrWhiteSpace(ImageUrl) && !Uri.IsWellFormedUriString(ImageUrl, UriKind.Absolute))
+            if (ImageUrls.Count > 0)
             {
-                return Result<bool>.Failure(Error.Create("Product.InvalidImageUrl", "Định dạng hình ảnh không hợp lệ.", ErrorType.Validation));
+                foreach (var url in ImageUrls)
+                {
+                    if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                    {
+                        return Result<bool>.Failure(Error.Create("Product.InvalidImageUrl", $"Định dạng URL hình ảnh không hợp lệ: {url}", ErrorType.Validation));
+                    }
+                }
             }
 
             return Result<bool>.Success(true);

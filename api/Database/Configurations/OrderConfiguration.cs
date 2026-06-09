@@ -9,7 +9,7 @@ namespace api.Database.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             // 1. Tên bảng chuẩn
-            builder.ToTable("Orders");
+            builder.ToTable("INVOICES");
 
             // 2. Khóa chính (Primary Key)
             builder.HasKey(o => o.Id);

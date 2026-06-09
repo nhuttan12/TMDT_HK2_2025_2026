@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.ToTable("OrderItems");
+            builder.ToTable("ORDER_ITEMS");
 
             builder.HasKey(oi => oi.Id);
             builder.Property(oi => oi.Id)
