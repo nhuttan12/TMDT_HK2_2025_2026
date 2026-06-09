@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AdminCoupon } from '@/types/marketing/coupons/admin/AdminCoupon';
-import { getCouponDetailById } from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getCouponDetailById } from '@/services/marketing/coupon/admin/admin-coupon-service';
 
 export const useCouponDetailByCouponIdQuery = (
-	couponId?: number,
+	couponId?: string,
 	initialData?: AdminCoupon,
 ): UseQueryResult<AdminCoupon, Error> => {
 	return useQuery<AdminCoupon, Error>({

@@ -2,23 +2,20 @@ import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopAdmin } from '@/types/shops/admin/ShopAdmin';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 
-export async function getShopProfileByUserId(userId: number): Promise<ShopProfile> {
+export async function getShopProfileByUserId(userId: string): Promise<ShopProfile> {
 	await new Promise((resolve) => setTimeout(resolve, 500)); // Giả lập độ trễ API
 	return {
-		id: 88,
+		id: 'bc2477e8-4d3d-4c09-b9d2-7045ed120453',
 		name: 'Terrarium VN - Rừng trong kính',
 		email: 'contact@terrarium.vn',
 		phone: '0909123456',
 		description: '<p>Chuyên cung cấp các mẫu bể kính tiểu cảnh nghệ thuật.</p>',
 		address: '123 Đường ABC, Phường 5, Quận 3, TP. Hồ Chí Minh',
-		facebookUrl: 'https://facebook.com/terrariumvn',
 
 		// Hình ảnh
 		logoUrl:
 			'https://www.shutterstock.com/image-vector/logo-terrarium-succulents-mini-garden-260nw-694576459.jpg',
 
-		seoTitle: 'Terrarium VN | Nghệ thuật bể kính tiểu cảnh',
-		metaDescription: 'Shop bán Terrarium uy tín hàng đầu Việt Nam.',
 		bankName: 'Vietcombank',
 		accountName: 'PHAM NHUT TAN',
 		accountNumber: '1234567890',
@@ -42,11 +39,11 @@ export const getAdminShops = async (
 
 	// Mock Data
 	let mockData: ShopAdmin[] = Array.from({ length: 45 }).map((_, i) => ({
-		id: i + 1,
+		id: `550e8400-e29b-41d4-a716-${(1000 + i).toString().padStart(12, '0')}`,
 		name: `Cửa hàng ${i + 1} ${i % 2 === 0 ? 'Official' : 'Store'}`,
 		email: `shop${i + 1}@example.com`,
 		phone: `0909000${i.toString().padStart(3, '0')}`,
-		status: i % 5 === 0 ? 'banned' : i % 3 === 0 ? 'inactive' : 'active',
+		status: i % 5 === 0 ? 'banned' : i % 3 === 0 ? 'closed' : 'active',
 		rating: Number((Math.random() * 2 + 3).toFixed(1)), // 3.0 -> 5.0
 		createdAt: new Date(Date.now() - i * 86400000).toISOString(),
 	}));

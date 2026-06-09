@@ -45,12 +45,11 @@ export const exportExcelFile = async (
 		expiredAt: '',
 	});
 
-	// Sheet 3: Danh sách Serial (Điền sẵn các biến thể đã chọn)
+	// Sheet 3: Danh sách Serial (Điền sẵn các phân loại đã chọn)
 	const serialSheet: Worksheet = workbook.addWorksheet('3. Danh sách Serial chi tiết');
 	serialSheet.columns = [
 		{ header: 'Mã lô (Khớp với Sheet 2)', key: 'batchNumber', width: 25 },
-		{ header: 'Tên biến thể', key: 'productVariantName', width: 35 },
-		{ header: 'Số Serial/IMEI *', key: 'serialNumber', width: 25 },
+		{ header: 'Tên phân loại', key: 'productVariantName', width: 35 },
 		{ header: 'Tình trạng ngoại quan', key: 'appearanceCondition', width: 25 },
 		{ header: 'Trạng thái (in_stock/defective)', key: 'status', width: 20 },
 		{ header: 'Ngày nhập', key: 'importDate', width: 20 },
@@ -58,7 +57,7 @@ export const exportExcelFile = async (
 	];
 	serialSheet.getRow(1).font = { bold: true };
 
-	// Map các biến thể đã chọn vào hàng
+	// Map các phân loại đã chọn vào hàng
 	variants.forEach((v: ProductVariantRow): void => {
 		serialSheet.addRow({
 			batchNumber: 'LO-001',

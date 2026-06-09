@@ -10,8 +10,8 @@ import { JSX } from 'react';
 export interface CategoryAdminLogicReturn {
 	// Routing Actions
 	handleRedirectToAddNew: () => void;
-	handleRedirectToView: (categoryId: number) => void;
-	handleRedirectToEdit: (categoryId: number) => void;
+	handleRedirectToView: (id: string) => void;
+	handleRedirectToEdit: (id: string) => void;
 
 	// Sorting
 	handleSort: (field: CategoryAdminSortField) => void;
@@ -21,7 +21,7 @@ export interface CategoryAdminLogicReturn {
 	pagination: UsePaginationReturn;
 
 	// Selection
-	selection: ReturnType<typeof useTableSelection<number>>;
+	selection: ReturnType<typeof useTableSelection<string>>;
 }
 
 export function useCategoryAdminLogic(
@@ -36,15 +36,15 @@ export function useCategoryAdminLogic(
 	const pagination = usePagination();
 
 	// 3. Table Selection (Tính toán keys từ mảng categories hiện tại)
-	const allKeys: number[] = categories.map((c) => c.id);
-	const selection = useTableSelection<number>(allKeys);
+	const allKeys: string[] = categories.map((c) => c.id);
+	const selection = useTableSelection<string>(allKeys);
 
 	// 4. Routing Actions
 	const handleRedirectToAddNew = (): void => router.push('/admin/categories/add-new');
-	const handleRedirectToView = (categoryId: number): void =>
-		router.push(`/admin/categories/${categoryId}`);
-	const handleRedirectToEdit = (categoryId: number): void =>
-		router.push(`/admin/categories/update/${categoryId}`);
+	const handleRedirectToView = (id: string): void =>
+		router.push(`/admin/categories/${id}`);
+	const handleRedirectToEdit = (id: string): void =>
+		router.push(`/admin/categories/update/${id}`);
 
 	return {
 		handleRedirectToAddNew: handleRedirectToAddNew,

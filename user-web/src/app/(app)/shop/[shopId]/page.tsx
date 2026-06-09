@@ -12,12 +12,7 @@ interface Props {
 // 1. TẠO META DATA ĐỘNG CHO SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const resolvedParams = await params;
-	const shopId: number = parseInt(resolvedParams.shopId, 10);
-
-	// Xử lý an toàn nếu ID không hợp lệ
-	if (isNaN(shopId)) {
-		return { title: 'Cửa hàng không tồn tại' };
-	}
+	const shopId = resolvedParams.shopId;
 
 	try {
 		const shopInfo = await getShopPublicInfoById(shopId);
@@ -32,31 +27,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 			},
 		};
 	} catch (error) {
-		return { title: 'Lỗi tải cửa hàng' };
+		console.error(error);
+		notFound();
 	}
 }
 
 // 2. RENDER TRANG CHÍNH (SERVER COMPONENT)
 export default async function ShopStorefrontPage({ params }: Props): Promise<JSX.Element> {
 	const resolvedParams = await params;
-	const shopId: number = parseInt(resolvedParams.shopId, 10);
+	const shopId = resolvedParams.shopId;
 
-	if (isNaN(shopId)) {
-		notFound(); // Tự động đẩy sang trang 404 của Next.js
-	}
+	const shopInfo = await getShopPublicInfoById(shopId);
 
-	try {
-		// Fetch dữ liệu trên Server để mồi (hydrate) cho giao diện
-		const shopInfo = await getShopPublicInfoById(shopId);
-
-		return (
-			<ShopStorefrontContainer
-				shopId={shopId}
-				initialShopInfo={shopInfo}
-			/>
-		);
-	} catch (error) {
-		// Nếu API ném lỗi (ví dụ shop bị khóa hoặc không tìm thấy ID)
-		notFound();
-	}
+	return (
+		<ShopStorefrontContainer
+			shopId={shopId}
+			initialShopInfo={shopInfo}
+		/>
+	);
 }

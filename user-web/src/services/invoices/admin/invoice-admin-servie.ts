@@ -8,7 +8,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 			() =>
 				resolve([
 					{
-						id: 1001,
+						id: 'a1b2c3d4-e5f6-4a5b-8c7d-9e0f1a2b3c4d', // Đã chuyển sang GUID string
 						createdAt: '2026-03-10T10:12:00',
 						status: 'pending_approval',
 						paymentMethod: 'COD',
@@ -16,7 +16,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 2,
 					},
 					{
-						id: 1002,
+						id: 'b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e',
 						createdAt: '2026-03-10T12:40:00',
 						status: 'paid',
 						paymentMethod: 'VNPAY',
@@ -24,7 +24,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 3,
 					},
 					{
-						id: 1003,
+						id: 'c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f',
 						createdAt: '2026-03-11T09:20:00',
 						status: 'completed',
 						paymentMethod: 'MoMo',
@@ -32,7 +32,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 5,
 					},
 					{
-						id: 1004,
+						id: 'd4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a',
 						createdAt: '2026-03-11T13:15:00',
 						status: 'paid',
 						paymentMethod: 'credit_card',
@@ -40,7 +40,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 2,
 					},
 					{
-						id: 1005,
+						id: 'e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b',
 						createdAt: '2026-03-12T08:00:00',
 						status: 'cancelled',
 						paymentMethod: 'COD',
@@ -48,7 +48,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 1,
 					},
 					{
-						id: 1006,
+						id: 'f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c',
 						createdAt: '2026-03-12T10:30:00',
 						status: 'pending',
 						paymentMethod: 'bank_transfer',
@@ -56,7 +56,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 4,
 					},
 					{
-						id: 1007,
+						id: '07b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d',
 						createdAt: '2026-03-12T16:45:00',
 						status: 'completed',
 						paymentMethod: 'MoMo',
@@ -64,7 +64,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 6,
 					},
 					{
-						id: 1008,
+						id: '18c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e',
 						createdAt: '2026-03-13T09:10:00',
 						status: 'paid',
 						paymentMethod: 'VNPAY',
@@ -72,7 +72,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 2,
 					},
 					{
-						id: 1009,
+						id: '29d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f',
 						createdAt: '2026-03-13T14:22:00',
 						status: 'pending',
 						paymentMethod: 'COD',
@@ -80,7 +80,7 @@ export async function getUserInvoiceList(): Promise<UserInvoice[]> {
 						totalItems: 1,
 					},
 					{
-						id: 1010,
+						id: '3a4b5c6d-7e8f-4a9b-0c1d-2e3f4a5b6c7d',
 						createdAt: '2026-03-14T11:05:00',
 						status: 'completed',
 						paymentMethod: 'credit_card',

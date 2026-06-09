@@ -4,7 +4,7 @@ import { GoodsIssuePartner } from '@/types/inventories/issues/uis/GoodsIssuePart
 import { GoodsIssueType } from './GoodsIssueType';
 
 export interface GoodsIssueDetail {
-	id: number;
+	id: string;
 
 	code: string; // PXK-20260319-001
 
@@ -12,9 +12,9 @@ export interface GoodsIssueDetail {
 
 	type: GoodsIssueType;
 
-	warehouseID: number;
+	warehouseID: string;
 
-	createdBy: number; // userId
+	createdBy: string; // userId
 	createdByName?: string;
 
 	exportDate: string;

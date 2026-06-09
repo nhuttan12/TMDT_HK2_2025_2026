@@ -11,18 +11,20 @@ export interface DashboardChartsContainerProps {
 	initialData: DashboardStatsResponse;
 }
 
-export const DashboardChartsContainer = ({ initialData }: DashboardChartsContainerProps): React.ReactElement => {
+export const DashboardChartsContainer = ({
+	initialData,
+}: DashboardChartsContainerProps): React.ReactElement => {
 	// Gọi logic xử lý UI (bộ lọc thời gian)
-	const { timeRange, handleTimeRangeChange } = useDashboardLogic();
+	const dashboardLogic = useDashboardLogic();
 
 	// Gọi Query Hook với initialData lấy từ Server Component
-	const { data, isLoading, isFetching, refetch } = useDashboardStatsQuery(initialData);
+	const { data, isLoading, isFetching, refetch } = useDashboardStatsQuery(
+		dashboardLogic.timeRange,
+		dashboardLogic.startDate,
+		dashboardLogic.endDate,
+		initialData,
+	);
 
-	// Hàm xử lý khi user bấm nút "Làm mới"
-	const handleRefresh = (): void => {
-		refetch();
-	};
-    
 	// Trường hợp fallback nếu initialData lỗi và query đang fetch
 	if (isLoading || !data) {
 		return <GlobalLoading />;
@@ -31,11 +33,12 @@ export const DashboardChartsContainer = ({ initialData }: DashboardChartsContain
 	// Truyền toàn bộ logic và data xuống Dumb UI Component
 	return (
 		<DashboardChartsUi
+			{...dashboardLogic}
 			data={data}
-			timeRange={timeRange}
 			isFetching={isFetching}
-			onTimeRangeChange={handleTimeRangeChange}
-			onRefresh={handleRefresh}
+			onRefresh={(): void => {
+				refetch();
+			}}
 		/>
 	);
-};;
+};

@@ -1,4 +1,4 @@
-import { getPlatformCoupons, getShopCouponsByShopId } from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getPlatformCoupons, getShopCouponsByShopId } from '@/services/marketing/coupon/admin/admin-coupon-service';
 import { AdminCoupon } from '@/types/marketing/coupons/admin/AdminCoupon';
 import { CouponScope } from '@/types/marketing/coupons/CouponScope';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
@@ -6,7 +6,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export const useCouponQuery = (
 	scope: CouponScope,
-	shopId?: number,
+	shopId?: string,
 	initialData?: PaginationResponse<AdminCoupon>,
 ): UseQueryResult<PaginationResponse<AdminCoupon>, Error> => {
 	return useQuery<PaginationResponse<AdminCoupon>, Error>({

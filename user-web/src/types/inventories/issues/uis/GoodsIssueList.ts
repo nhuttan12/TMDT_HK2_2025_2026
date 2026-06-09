@@ -3,7 +3,7 @@ import { GoodsIssueStatus } from '@/types/inventories/issues/uis/GoodsIssueStatu
 import { GoodsIssuePartner } from '@/types/inventories/issues/uis/GoodsIssuePartner';
 
 export interface GoodsIssueList {
-	id: number;
+	id: string;
 	code: string;
 
 	partner?: GoodsIssuePartner;

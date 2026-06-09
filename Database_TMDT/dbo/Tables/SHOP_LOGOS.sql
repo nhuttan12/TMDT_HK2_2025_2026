@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[SHOP_LOGOS] (
+    [id]         UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
+    [shop_id]    UNIQUEIDENTIFIER   NOT NULL,
+    [logo_url]   NVARCHAR (255)     NOT NULL,
+    [created_at] DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
+    CONSTRAINT [PK_SHOP_LOGOS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_SHOP_LOGOS_SHOPS_shop_id] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]) ON DELETE CASCADE
+);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SHOP_LOGOS_shop_id]
+    ON [dbo].[SHOP_LOGOS]([shop_id] ASC);
+

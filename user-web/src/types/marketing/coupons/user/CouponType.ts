@@ -1,1 +1,1 @@
-export type CouponType = 'sale' | 'ship';
+export type CouponType = 'percentage' | 'fixed_amount' | 'free_shipping';

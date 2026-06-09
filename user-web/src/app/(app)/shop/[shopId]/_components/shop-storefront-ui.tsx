@@ -16,7 +16,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel';
-import { CouponList } from '@/components/marketing/coupons/user/coupon-list';
+import { CouponListUi } from '@/components/marketing/coupons/user/coupon-list-ui';
 
 interface ShopStorefrontUiProps extends ShopStorefrontLogicReturn {
 	shopInfo: ShopStorefront;
@@ -116,7 +116,7 @@ export const ShopStorefrontUi = ({
 
 				{/* COUPON ZONE */}
 				{safeCoupons.length > 0 && (
-					<CouponList
+					<CouponListUi
 						coupons={safeCoupons}
 						onClaimClick={handleClaimCoupon}
 						label={'Mã Giảm Giá Của Shop'}

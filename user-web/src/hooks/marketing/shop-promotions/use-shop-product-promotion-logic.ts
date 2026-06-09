@@ -16,12 +16,12 @@ interface ShopProductPromotionFilterValues {
 	createdAtTo?: string;
 }
 
-export interface UseShopProductPromotionLogicReturn extends UseTableSelectionReturn<number> {
+export interface UseShopProductPromotionLogicReturn extends UseTableSelectionReturn<string> {
 	currentPage: number;
 	changePage: (page: number) => void;
 	filterSchema: FilterField<ShopProductPromotionFilterValues>[];
-	handleAddNewProductVariant: (promotionId: number) => void;
-	handleViewProductVariant: (productId: number, productVariantId: number) => void;
+	handleAddNewProductVariant: (promotionId: string) => void;
+	handleViewProductVariant: (productId: string, productVariantId: string) => void;
 
 	modal: UseStatusModalReturn;
 	handleTriggerToggleStatus: (promotion: ShopProductPromotion) => void;
@@ -35,8 +35,8 @@ export function useShopProductPromotionLogic(
 	const router: AppRouterInstance = useRouter();
 
 	// 1. Logic Table Selection
-	const allKeys: number[] = promotions.map((p) => p.id);
-	const selection = useTableSelection<number>(allKeys);
+	const allKeys: string[] = promotions.map((p) => p.id);
+	const selection = useTableSelection<string>(allKeys);
 
 	// 2. Logic Pagination
 	const { currentPage, changePage } = usePagination();
@@ -66,11 +66,11 @@ export function useShopProductPromotionLogic(
 	const [togglingPromotion, setTogglingPromotion] = useState<ShopProductPromotion | null>(null);
 
 	// 4. Các Event Handlers
-	const handleAddNewProductVariant = (promotionId: number): void => {
+	const handleAddNewProductVariant = (promotionId: string): void => {
 		router.push(`/admin/marketing/shop-promotions/${promotionId}/products/add-new`);
 	};
 
-	const handleViewProductVariant = (productId: number, productVariantId: number): void => {
+	const handleViewProductVariant = (productId: string, productVariantId: string): void => {
 		router.push(`/admin/products/${productId}/variant/${productVariantId}`);
 	};
 
@@ -106,8 +106,8 @@ export function useShopProductPromotionLogic(
 		currentPage: currentPage,
 		changePage: changePage,
 		filterSchema: filterSchema,
-		handleAddNewProductVariant: handleAddNewProductVariant,
-		handleViewProductVariant: handleViewProductVariant,
+		handleAddNewProductVariant,
+		handleViewProductVariant,
 
 		modal: modal,
 		handleTriggerToggleStatus: handleTriggerToggleStatus,

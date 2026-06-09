@@ -1,5 +1,5 @@
 export interface ProductVariantRow {
-	id: number;
+	id: string;
 	name: string;
 	sku?: string;
 }

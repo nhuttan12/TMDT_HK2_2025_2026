@@ -1,11 +1,6 @@
+import { ShopAdminBase } from "./ShopAdminBase";
 import { ShopStatus } from "./ShopStatus";
 
-export interface ShopAdmin {
-	id: number;
-	name: string;
-	email: string;
-	phone: string;
+export interface ShopAdmin extends ShopAdminBase {
 	status: ShopStatus;
-	rating: number;
-	createdAt: string;
 }

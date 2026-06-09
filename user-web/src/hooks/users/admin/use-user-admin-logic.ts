@@ -11,8 +11,8 @@ export interface UseUserAdminLogicReturn {
 	changePage: (page: number) => void;
 	handleSort: (field: UserAdminSortField) => void;
 	renderSortIcon: (field: UserAdminSortField) => JSX.Element | null;
-	handleRedirectToCustomerInfoViewMode: (userId: number) => void;
-	handleRedirectToEditCustomerEditMode: (userId: number) => void;
+	handleRedirectToCustomerInfoViewMode: (userId: string) => void;
+	handleRedirectToEditCustomerEditMode: (userId: string) => void;
 }
 
 export function useUserAdminLogic(): UseUserAdminLogicReturn {
@@ -21,11 +21,11 @@ export function useUserAdminLogic(): UseUserAdminLogicReturn {
 	const { handleSort, renderSortIcon } = useTableSort<UserAdminSortField>();
 	const { currentPage, changePage } = usePagination();
 
-	const handleRedirectToCustomerInfoViewMode = (userId: number): void => {
+	const handleRedirectToCustomerInfoViewMode = (userId: string): void => {
 		router.push(`/admin/users/customers/${userId}`);
 	};
 
-	const handleRedirectToEditCustomerEditMode = (userId: number): void => {
+	const handleRedirectToEditCustomerEditMode = (userId: string): void => {
 		router.push(`/admin/users/customers/update/${userId}`);
 	};
 

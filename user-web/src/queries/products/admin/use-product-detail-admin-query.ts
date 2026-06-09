@@ -3,7 +3,7 @@ import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfo
 import { getProductDetailAdminByProductId } from '@/services/products/admin/product-admin-service';
 
 export function useProductDetailAdminQuery(
-	productId: number,
+	productId: string,
 	initialData: ProductDetailInfoAdmin,
 ): UseQueryResult<ProductDetailInfoAdmin> {
 	return useQuery({

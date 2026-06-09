@@ -3,13 +3,13 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useRouter } from 'next/navigation';
 
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
-import { ProductVariant } from '@/types/products/admin/variant/ProductVariant';
+import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { ProductCreateDTO } from '@/types/products/admin/ProductCreateDTO';
 import { ProductUpdateDTO } from '@/types/products/admin/ProductUpdateDTO';
 
-import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/mappers/admin-product';
+import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/admin-product';
 import { generateSlug } from '@/utils/shared/mappers/slug';
 import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
@@ -22,7 +22,7 @@ export interface UseProductAdminFormLogicProps {
 	productApproval?: boolean;
 }
 
-export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<number> {
+export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<string> {
 	form: ProductDetailInfoAdmin;
 	isCreate: boolean;
 	isView: boolean;
@@ -37,11 +37,11 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 	handleImagesChange: (updater: SetStateAction<SortableImageForm[]>) => void;
 	handleDescriptionChange: (val: string) => void;
 
-	handleRedirectToProductVariantDetail: (variantId: number) => void;
+	handleRedirectToProductVariantDetail: (variantId: string) => void;
 	handleAddNewVariant: () => void;
-	handleEditVariant: (variantId: number) => void;
+	handleEditVariant: (variantId: string) => void;
 
-	handleTriggerDeleteVariant: (variantId: number) => void;
+	handleTriggerDeleteVariant: (variantId: string) => void;
 	handleConfirmDelete: () => void;
 	handleCancelDelete: () => void;
 
@@ -68,12 +68,12 @@ export function useProductAdminFormLogic({
 	const [form, setForm] = useState<ProductDetailInfoAdmin>(productAdmin);
 
 	// 2. Table Selection State
-	const allKeys: number[] = form.productVariants?.map((p: ProductVariant): number => p.id) ?? [];
-	const selection = useTableSelection<number>(allKeys);
+	const allKeys: string[] = form.productVariants?.map((p: ProductVariantAdmin): string => p.id) ?? [];
+	const selection = useTableSelection<string>(allKeys);
 
 	// 3. Modal & Deletion State
 	const modal: UseStatusModalReturn = useStatusModal();
-	const [deletingId, setDeletingId] = useState<number | null>(null);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;
@@ -124,7 +124,7 @@ export function useProductAdminFormLogic({
 		);
 	};
 
-	const handleRedirectToProductVariantDetail = (variantId: number): void => {
+	const handleRedirectToProductVariantDetail = (variantId: string): void => {
 		router.push(`/admin/products/${form.id}/variant/${variantId}`);
 	};
 
@@ -132,13 +132,13 @@ export function useProductAdminFormLogic({
 		router.push(`/admin/products/${form.id}/variant/add-new`);
 	};
 
-	const handleEditVariant = (variantId: number): void => {
+	const handleEditVariant = (variantId: string): void => {
 		router.push(`/admin/products/${form.id}/variant/edit/${variantId}`);
 	};
 
-	const handleTriggerDeleteVariant = (variantId: number): void => {
+	const handleTriggerDeleteVariant = (variantId: string): void => {
 		setDeletingId(variantId);
-		modal.showWarning(`Bạn có chắc chắn muốn xoá biến thể "${variantId}" không?`);
+		modal.showWarning(`Bạn có chắc chắn muốn xoá phân loại "${variantId}" không?`);
 	};
 
 	const handleConfirmDelete = (): void => {

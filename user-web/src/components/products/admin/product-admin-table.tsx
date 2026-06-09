@@ -20,9 +20,9 @@ interface ProductAdminTableProps {
 	products: ProductListInfoAdmin[];
 	handleSort: (field: ProductAdminSortField) => void;
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
-	onView: (id: number) => void;
-	onEdit: (id: number) => void;
-	onDelete: (id: number) => void;
+	onView: (id: string) => void;
+	onEdit: (id: string) => void;
+	onDelete: (id: string) => void;
 	productApproval?: boolean;
 }
 
@@ -145,7 +145,7 @@ export default function ProductAdminTable({
 				data={products}
 				columns={columns}
 				onRowClick={(row: ProductListInfoAdmin): void => onView(row.id)}
-				getRowKey={(row: ProductListInfoAdmin): number => row.id}
+				getRowKey={(row: ProductListInfoAdmin): string => row.id}
 				selectable={{
 					selected: logic.selected,
 					onToggle: logic.onToggle,

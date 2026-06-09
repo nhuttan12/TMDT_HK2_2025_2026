@@ -8,9 +8,9 @@ export const metadata: Metadata = {
 };
 
 const emptyGoodsReceiptDetail: GoodsReceiptDetail = {
-	id: 0,
+	id: '',
 	code: '',
-	supplierID: 0,
+	supplierID: '',
 	supplierName: '',
 	importDate: '',
 	importStatus: 'draft',

@@ -4,7 +4,7 @@ import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopPublicFilter } from '@/types/shops/user/ShopPublicFilter';
 import { ShopStorefront } from '@/types/shops/user/ShopStorefront';
 
-export const getShopPublicInfoById = async (shopId: number): Promise<ShopStorefront> => {
+export const getShopPublicInfoById = async (shopId: string): Promise<ShopStorefront> => {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			if (!shopId) return reject(new Error('Shop ID is required'));
@@ -41,7 +41,7 @@ export const getShopPublicInfoById = async (shopId: number): Promise<ShopStorefr
  * Lấy danh sách sản phẩm của cửa hàng
  */
 export const getShopPublicProducts = async (
-	shopId: number,
+	shopId: string,
 	filter: ShopPublicFilter,
 ): Promise<PaginationResponse<ProductUserCard>> => {
 	return new Promise((resolve) => {
@@ -244,25 +244,45 @@ export const getShopPublicProducts = async (
 /**
  * Lấy danh sách coupon của cửa hàng (Khách hàng có thể lưu)
  */
-export const getShopPublicCoupons = async (shopId: number): Promise<UserCoupon[]> => {
+export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve([
 				{
-					id: 1,
-					title: 'Giảm 100K',
-					couponType: 'sale',
-					description: 'Áp dụng cho đơn hàng từ 500K. Số lượng có hạn.',
-					expiredAt: '2026-06-30T23:59:59Z',
+					id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
 					code: 'TECH100',
+					name: 'Giảm 100K',
+					scope: 'shop',
+					shopId: shopId,
+                    status: 'active',
+					category: 'discount',
+					discountType: 'fixed_amount',
+					discountValue: 100000,
+					maxDiscountAmount: 100000,
+					minOrderValue: 500000,
+					validTime: {
+						fromDate: '2026-05-01T00:00:00Z',
+						toDate: '2026-06-30T23:59:59Z',
+					},
+					userSavedStatus: 'not_saved',
 				},
 				{
-					id: 2,
-					title: 'Miễn phí vận chuyển',
-					couponType: 'ship',
-					description: 'Giảm tối đa 30K phí vận chuyển cho đơn từ 150K.',
-					expiredAt: '2026-05-15T23:59:59Z',
+					id: 'e58ed763-928c-4155-bee9-fdbaaadc15f3', // Cập nhật thành GUID string
 					code: 'FREESHIP30',
+					name: 'Miễn phí vận chuyển',
+					scope: 'shop',
+					shopId: shopId,
+                    status: 'expired',
+					category: 'shipping', // Định danh đúng nhóm vận chuyển
+					discountType: 'fixed_amount',
+					discountValue: 30000,
+					maxDiscountAmount: 30000,
+					minOrderValue: 150000,
+					validTime: {
+						fromDate: '2026-05-01T00:00:00Z',
+						toDate: '2026-05-15T23:59:59Z',
+					},
+					userSavedStatus: 'not_saved',
 				},
 			]);
 		}, 600);

@@ -1,4 +1,4 @@
-import { HomeBanner } from "@/types/contents/home-banners/HomeBanner";
+import { HomeBanner } from "@/types/contents/banners/HomeBanner";
 
 export async function getHomeBanners(): Promise<HomeBanner[]> {
 	return new Promise((resolve) => {
@@ -12,7 +12,7 @@ export async function getHomeBanners(): Promise<HomeBanner[]> {
 				},
 				{
 					id: 2,
-					url: 'https://www.ambius.com/dam/jcr:2b5629bf-192e-4228-8dfd-d4b63bc222e0/1200-image-banner-stock-ecosystem-forest-in-jar--modern-interior-decor-1188187608.2023-05-24-12-54-27.webp',
+					url: 'https://pos.nvncdn.com/524fc3-178700/bn/20250220_wP2Q5MyX.gif?v=1740046435',
 					order: 2,
 					isPrimary: false,
 				},

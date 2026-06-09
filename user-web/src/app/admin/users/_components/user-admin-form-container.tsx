@@ -9,7 +9,7 @@ import { useUserAdminFormLogic } from '@/hooks/users/admin/use-user-admin-form-l
 import UserAdminFormUi from './user-admin-form-ui';
 
 interface Props {
-	userId?: number;
+	userId?: string;
 	formType: AdminFormType;
 	initialData: UserDetailInfoAdmin;
 }
@@ -19,7 +19,7 @@ export default function UserAdminFormContainer({
 	formType,
 	initialData,
 }: Props): JSX.Element {
-	const queryId: number = userId || 0;
+	const queryId = userId || '';
 
 	// 1. Data Query (Sẽ skip API nếu queryId = 0)
 	const { data: userData } = useUserDetailAdminQuery(queryId, initialData);

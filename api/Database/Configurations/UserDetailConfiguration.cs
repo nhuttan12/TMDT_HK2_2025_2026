@@ -9,7 +9,9 @@ namespace api.Database.Configurations
         public void Configure(EntityTypeBuilder<UserDetail> builder)
         {
             builder.ToTable("USER_DETAILS");
+
             builder.HasKey(ud => ud.UserId);
+            builder.Property(ud => ud.UserId).HasColumnName("user_id");
             builder.HasOne(ud => ud.User)
                .WithOne(u => u.UserDetail)
                .HasForeignKey<UserDetail>(ud => ud.UserId)

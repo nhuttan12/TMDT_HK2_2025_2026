@@ -27,7 +27,7 @@ export function useSupplierListLogic(): UseSupplierListLogicReturn {
 	const { handleSort, renderSortIcon } = useTableSort<SupplierSortField>();
 
 	const modal: UseStatusModalReturn = useStatusModal();
-	const [deletingId, setDeletingId] = useState<number | null>(null);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
 
 	const handleViewSupplier = (row: Supplier): void => {
 		router.push(`/shop-owner/inventories/suppliers/${row.id}/products`);

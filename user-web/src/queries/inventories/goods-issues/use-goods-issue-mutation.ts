@@ -6,7 +6,7 @@ import {
 } from '@/services/inventories/goods-issues/goods-issue-detail-service';
 import { getGoodsSupplier } from '@/services/inventories/suppliers/goods-supplier-service';
 
-export function useGoodsIssueMutation(currentSupplierId: number = 1) {
+export function useGoodsIssueMutation(currentSupplierId: string) {
 	// Gọi song song 2 hàm lấy dữ liệu phụ trợ cho Form (Nhà cung cấp & Sản phẩm)
 	const supplierAndProductQuery = useQuery({
 		// Đưa currentSupplierId vào queryKey để khi đổi nhà cung cấp, nó sẽ tự gọi lại API lấy sản phẩm tương ứng

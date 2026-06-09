@@ -14,14 +14,13 @@ interface Props {
 
 export default async function Page({ params }: Props): Promise<JSX.Element> {
 	const { userId } = await params;
-	const id: number = parseInt(userId);
 
 	// Fetch data tại Server
-	const initialData: UserDetailInfoAdmin = await getUserDetailAdminById(id);
+	const initialData: UserDetailInfoAdmin = await getUserDetailAdminById(userId);
 
 	return (
 		<UserAdminFormContainer
-			userId={id}
+			userId={userId}
 			formType='view'
 			initialData={initialData}
 		/>

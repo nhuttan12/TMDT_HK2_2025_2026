@@ -15,11 +15,13 @@ namespace api.Database.Configurations
 
             // 2. Ràng buộc độ dài
             builder.Property(d => d.Summary)
-                   .HasMaxLength(500)
-                   .IsRequired(false); // Summary có thể cho phép null/empty
+                .HasColumnName("summary")
+                .HasMaxLength(500)
+                .IsRequired(false); // Summary có thể cho phép null/empty
 
             // 3. Cấu hình kiểu dữ liệu LOB (Large Object)
             builder.Property(d => d.DescriptionHtml)
+                   .HasColumnName("description_html")
                    .HasColumnType("nvarchar(max)")
                    .IsRequired(false);
 

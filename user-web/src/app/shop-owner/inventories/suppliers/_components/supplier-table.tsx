@@ -126,7 +126,7 @@ export default function SupplierTable({
 		},
 	];
 
-	const getRowKey = (row: Supplier): number => {
+	const getRowKey = (row: Supplier): string => {
 		return row.id;
 	};
 

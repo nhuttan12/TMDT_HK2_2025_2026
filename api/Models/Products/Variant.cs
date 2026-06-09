@@ -1,4 +1,5 @@
 ﻿using api.Dtos.Products.Request;
+using api.Models.Inventory;
 using api.Utilities;
 using System;
 
@@ -21,6 +22,10 @@ public class Variant
     public decimal SellPrice { get; private set; }
     public string ImageUrl { get; private set; } = string.Empty;
     public VariantStatus Status { get; private set; }
+
+    public ICollection<GoodsReceiptBatchVariant> GoodsReceiptBatchVariants { get; private set; } = new HashSet<GoodsReceiptBatchVariant>();
+    public ICollection<GoodsIssueDetail> GoodsIssueDetails { get; private set; } = new HashSet<GoodsIssueDetail>();
+    public ICollection<InventoryBatchStock> InventoryBatchStocks { get; private set; } = new HashSet<InventoryBatchStock>();
 
     // 1. Constructor bắt buộc dành riêng cho EF Core (Không dùng để khởi tạo mới)
     protected Variant() { }

@@ -14,13 +14,13 @@ interface DataTableProps<T> {
 	data: T[];
 	columns: Column<T>[];
 	onRowClick?: (row: T) => void;
-	getRowKey: (row: T) => number;
+	getRowKey: (row: T) => string;
 	tableHeight?: number;
 	stickyHeader?: boolean;
 
 	selectable?: {
-		selected: number[];
-		onToggle: (id: number) => void;
+		selected: string[];
+		onToggle: (id: string) => void;
 		onToggleAll: () => void;
 		isAllSelected?: boolean;
 		isIndeterminate?: boolean;
@@ -63,7 +63,7 @@ export function DataTable<T extends object>({
 				/>
 			),
 			render: (row: T): JSX.Element => {
-				const id: number = getRowKey(row);
+				const id = getRowKey(row);
 
 				return (
 					<Checkbox

@@ -1,9 +1,9 @@
-import { CouponScope } from "@/types/marketing/coupons/CouponScope";
+import { CouponScope } from '@/types/marketing/coupons/CouponScope';
 
 export const COUPON_SCOPE_LABEL: Record<CouponScope, string> = {
 	platform: 'Toàn sàn',
 	shop: 'Của Shop',
-} as const;
+};
 
 /**
  * Lấy nhãn tiếng Việt cho phạm vi áp dụng Coupon.

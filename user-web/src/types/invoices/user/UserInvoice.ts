@@ -2,7 +2,7 @@ import { InvoiceStatus } from './InvoiceStatus';
 import { PaymentMethod } from './PaymentMethod';
 
 export interface UserInvoice {
-	id: number;
+	id: string;
 	createdAt: string;
 
 	status: InvoiceStatus;

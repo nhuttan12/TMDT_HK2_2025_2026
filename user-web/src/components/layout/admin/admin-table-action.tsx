@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button';
 import React, { JSX } from 'react';
 
 interface Props {
-	id: number;
-	onEdit: (id: number) => void;
-	onDelete: (id: number) => void;
+	id: string;
+	onEdit: (id: string) => void;
+	onDelete: (id: string) => void;
 }
 
 export default function AdminTableAction({ id, onEdit, onDelete }: Props): JSX.Element {

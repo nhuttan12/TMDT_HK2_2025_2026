@@ -16,7 +16,7 @@ export interface ShopStorefrontLogicReturn {
 	handleClaimCoupon: (couponCode: string) => void;
 }
 
-export const useShopStorefrontLogic = (shopId: number): ShopStorefrontLogicReturn => {
+export const useShopStorefrontLogic = (shopId: string): ShopStorefrontLogicReturn => {
 	// 1. Khởi tạo Phân trang
 	const [totalPages, setTotalPages] = useState<number>(0);
 	const { currentPage, changePage } = usePagination(totalPages);

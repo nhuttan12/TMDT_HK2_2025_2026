@@ -1,9 +1,8 @@
 export interface CreateGoodsReceiptBatchDto {
-	productId: number;
+	productId: string;
 
 	batchNumber: string;
 	quantity: number;
-	unitPrice: number;
 
 	manufacturedAt?: string;
 	expiredAt?: string;

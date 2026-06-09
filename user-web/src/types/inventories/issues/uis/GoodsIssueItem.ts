@@ -1,7 +1,7 @@
 export interface GoodsIssueItem {
-	id: number;
+	id: string;
 
-	productId: number;
+	productId: string;
 	productName: string;
 	sku: string;
 

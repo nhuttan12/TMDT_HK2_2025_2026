@@ -12,7 +12,7 @@ export interface UseInvoiceAdminLogicReturn {
 	changePage: (page: number) => void;
 	currentStatus: InvoiceStatus | null;
 	handleStatusChange: (status: InvoiceStatus) => void;
-	handleRedirectToInvoiceDetail: (invoiceId: number) => void;
+	handleRedirectToInvoiceDetail: (invoiceId: string) => void;
 	filterSchema: FilterField<InvoiceAdminFilterValues>[];
 }
 
@@ -29,7 +29,7 @@ export function useInvoiceAdminLogic(): UseInvoiceAdminLogicReturn {
 		router.push(`/shop-owner/invoices?${params.toString()}`);
 	};
 
-	const handleRedirectToInvoiceDetail = (invoiceId: number): void => {
+	const handleRedirectToInvoiceDetail = (invoiceId: string): void => {
 		router.push(`/shop-owner/invoices/${invoiceId}`);
 	};
 
@@ -78,11 +78,11 @@ export function useInvoiceAdminLogic(): UseInvoiceAdminLogicReturn {
 	];
 
 	return {
-		currentPage: currentPage,
-		changePage: changePage,
-		currentStatus: currentStatus,
-		handleStatusChange: handleStatusChange,
-		handleRedirectToInvoiceDetail: handleRedirectToInvoiceDetail,
+		currentPage,
+		changePage,
+		currentStatus,
+		handleStatusChange,
+		handleRedirectToInvoiceDetail,
 		filterSchema: filterSchema,
 	};
 }

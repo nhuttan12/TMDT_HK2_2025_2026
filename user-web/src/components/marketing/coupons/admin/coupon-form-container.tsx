@@ -8,7 +8,7 @@ import { useCouponDetailByCouponIdQuery } from '@/queries/marketing/coupons/admi
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 interface CouponFormContainerProps {
-	couponId?: number;
+	couponId?: string;
 	initialCoupon: AdminCoupon;
 	mode: AdminFormType;
 }

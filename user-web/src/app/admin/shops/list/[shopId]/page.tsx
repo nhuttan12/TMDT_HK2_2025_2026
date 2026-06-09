@@ -14,11 +14,7 @@ interface PageProps {
 
 export default async function AdminShopDetailPage({ params }: PageProps) {
 	const resolvedParams = await params;
-	const shopId = Number(resolvedParams.shopId);
-
-	if (isNaN(shopId)) {
-		return notFound(); // Trả về trang 404 của Next.js
-	}
+	const shopId = resolvedParams.shopId;
 
 	// SSR Fetching
 	const initialData = await getShopAdminDetail(shopId);

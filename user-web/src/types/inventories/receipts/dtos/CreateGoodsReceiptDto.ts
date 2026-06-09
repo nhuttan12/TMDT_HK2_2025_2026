@@ -3,7 +3,7 @@ import { CreateGoodsReceiptBatchDto } from '@/types/inventories/receipts/dtos/Cr
 export interface CreateGoodsReceiptDto {
 	code?: string;
 
-	supplierID: number;
+	supplierID: string;
 
 	importDate: string;
 	note?: string;

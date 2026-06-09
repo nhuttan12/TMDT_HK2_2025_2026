@@ -3,7 +3,7 @@ import { getHomeBanners } from '@/services/contents/home-banners/user/home-banne
 import { getProductsHome, getTopSellingProducts } from '@/services/products/user/product-service';
 import HomeContainer from '@/app/(app)/_components/home-container';
 import { getCategories } from '@/services/categories/user/category-service';
-import { getPlatformCoupons } from '@/services/marketing/coupon/user/coupons-user-service';
+import { getPlatformCoupons } from '@/services/marketing/coupon/user/user-coupon-service';
 
 export default async function HomePage(): Promise<JSX.Element> {
 	const [initialBanners, initialProducts, initialCategories, initialTopSelling, initialCoupons] =

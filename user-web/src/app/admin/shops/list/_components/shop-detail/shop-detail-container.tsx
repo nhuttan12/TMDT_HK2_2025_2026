@@ -6,7 +6,7 @@ import { JSX } from 'react';
 import { ShopDetailUi } from './shop-detail-ui';
 
 interface ShopDetailContainerProps {
-	id: number;
+	id: string;
 	initialData?: ShopAdminDetail;
 }
 

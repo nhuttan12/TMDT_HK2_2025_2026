@@ -1,0 +1,36 @@
+## ==========================================
+## SQL Project Build Outputs
+## ==========================================
+[Bb]in/
+[Oo]bj/
+*.dacpac
+*.dll
+
+## ==========================================
+## Visual Studio Cache and User Settings
+## ==========================================
+.vs/
+*.user
+*.suo
+*.vshost.*
+*.dtbcache.json
+
+## ==========================================
+## Database Publish Settings (Bảo mật Connection String)
+## ==========================================
+# Bật dòng dưới nếu file publish của bạn có lưu mật khẩu DB
+# *.publish.xml 
+
+## ==========================================
+## SQL Server Management Studio (SSMS) outputs
+## ==========================================
+*.ssmssln
+*.ssmssqlproj
+
+.vscode/
+
+*.jfm
+*.dbmdl
+*.sqlproj.user
+
+*.scmp

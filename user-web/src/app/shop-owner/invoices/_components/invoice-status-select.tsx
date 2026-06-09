@@ -9,9 +9,9 @@ import {
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 
 export interface InvoiceStatusSelectProps {
-	invoiceId: number;
+	invoiceId: string;
 	status: InvoiceStatus;
-	onChangeStatus: (id: number, status: InvoiceStatus) => void;
+	onChangeStatus: (id: string, status: InvoiceStatus) => void;
 }
 
 export function InvoiceStatusSelect({

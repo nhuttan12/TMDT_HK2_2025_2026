@@ -5,7 +5,7 @@ import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]> => {
 	const mockProducts: ProductListInfoAdmin[] = [
 		{
-			id: 1,
+			id: '550e8400-e29b-41d4-a716-446655440000', // Đổi thành GUID
 			name: 'Bonsai Tree Ecosystem',
 			slug: 'bonsai-tree-ecosystem',
 			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
@@ -15,7 +15,7 @@ export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]>
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 2,
+			id: '123e4567-e89b-12d3-a456-426614174000', // Đổi thành GUID
 			name: 'Rainforest Moss Bowl',
 			slug: 'rainforest-moss-bowl',
 			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
@@ -25,7 +25,7 @@ export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]>
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 3,
+			id: '987e6543-e21b-34d3-b456-426614174111', // Đổi thành GUID
 			name: 'Desert Succulent Oasis',
 			slug: 'desert-succulent-oasis',
 			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
@@ -35,7 +35,7 @@ export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]>
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 4,
+			id: '111e2222-e33b-44d3-c456-426614174222', // Đổi thành GUID
 			name: 'Geometric Glass Terrarium',
 			slug: 'geometric-glass-terrarium',
 			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
@@ -45,7 +45,7 @@ export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]>
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 5,
+			id: '333e4444-e55b-66d3-d456-426614174333', // Đổi thành GUID
 			name: 'Fittonia Closed Bottle',
 			slug: 'fittonia-closed-bottle',
 			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
@@ -60,7 +60,7 @@ export const getProductListInfoAdmin = async (): Promise<ProductListInfoAdmin[]>
 };
 
 export async function getProductDetailAdminByProductId(
-	productId: number,
+	productId: string,
 ): Promise<ProductDetailInfoAdmin> {
 	return new Promise<ProductDetailInfoAdmin>((resolve) => {
 		setTimeout((): void => {
@@ -78,7 +78,7 @@ export async function getProductDetailAdminByProductId(
 				discount: calculateDiscount(1500000, 1250000),
 
 				status: true,
-                systemStatus: 'approved',
+				systemStatus: 'approved',
 				categoryId: 1,
 
 				images: [
@@ -105,11 +105,11 @@ export async function getProductDetailAdminByProductId(
 				createdAt: '2024-01-10T10:00:00Z',
 				updatedAt: '2024-02-01T15:30:00Z',
 
-				// Các biến thể dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
+				// Các phân loại dựa trên: Kích thước bình (Size) & Loại nắp (Lid)
 				productVariants: [
 					{
-						id: 1,
-						productId: 1,
+						id: 'c8e1467a-1234-4f01-a12b-d32109876543', // Đổi thành GUID
+						productId: '550e8400-e29b-41d4-a716-446655440000', // Đã ánh xạ đúng GUID của 'Bonsai Tree Ecosystem'
 						name: 'Size S - Nắp Bần',
 						sku: 'BON-S-CORK',
 						quantity: 12,
@@ -118,8 +118,8 @@ export async function getProductDetailAdminByProductId(
 						image: 'https://cdn.hstatic.net/products/200000968796/hh_1_37e2ef90ce974747b6e5157dfdbc9621.png',
 					},
 					{
-						id: 2,
-						productId: 1,
+						id: 'a9b2345c-6789-4e21-b34c-f98765432109',
+						productId: '550e8400-e29b-41d4-a716-446655440000',
 						name: 'Size S - Đế Đèn LED',
 						sku: 'BON-S-LED',
 						quantity: 8,
@@ -128,8 +128,8 @@ export async function getProductDetailAdminByProductId(
 						image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 					},
 					{
-						id: 3,
-						productId: 1,
+						id: '7b233a01-5242-4f3b-8531-180a3a7800ab',
+						productId: '550e8400-e29b-41d4-a716-446655440000',
 						name: 'Size M - Nắp Bần',
 						sku: 'BON-M-CORK',
 						quantity: 10,
@@ -138,8 +138,8 @@ export async function getProductDetailAdminByProductId(
 						image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
 					},
 					{
-						id: 4,
-						productId: 1,
+						id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+						productId: '550e8400-e29b-41d4-a716-446655440000',
 						name: 'Size M - Đế Đèn LED',
 						sku: 'BON-M-LED',
 						quantity: 15,
@@ -148,8 +148,8 @@ export async function getProductDetailAdminByProductId(
 						image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=300&q=80',
 					},
 					{
-						id: 5,
-						productId: 1,
+						id: 'e58ed763-928c-4155-bee9-fdbaaadc15f3',
+						productId: '550e8400-e29b-41d4-a716-446655440000',
 						name: 'Size L - Nắp Bần',
 						sku: 'BON-L-CORK',
 						quantity: 6,
@@ -158,8 +158,8 @@ export async function getProductDetailAdminByProductId(
 						image: 'https://cdn.hstatic.net/products/200000968796/hh_2_665d74d1905d47a09301ec753244dc0c.png',
 					},
 					{
-						id: 6,
-						productId: 1,
+						id: 'bc7b2671-5085-40b9-a9a2-944a86f7df21',
+						productId: '550e8400-e29b-41d4-a716-446655440000',
 						name: 'Size L - Đế Đèn LED',
 						sku: 'BON-L-LED',
 						quantity: 9,
@@ -178,7 +178,7 @@ export const getProductListInfoByShopId = async (
 ): Promise<ProductListInfoAdmin[]> => {
 	const mockProducts: ProductListInfoAdmin[] = [
 		{
-			id: 1,
+			id: '550e8400-e29b-41d4-a716-446655440000', // Đã chuyển sang GUID
 			name: 'Bonsai Tree Ecosystem',
 			slug: 'bonsai-tree-ecosystem',
 			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
@@ -188,7 +188,7 @@ export const getProductListInfoByShopId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 2,
+			id: '123e4567-e89b-12d3-a456-426614174000', // Đã chuyển sang GUID
 			name: 'Rainforest Moss Bowl',
 			slug: 'rainforest-moss-bowl',
 			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
@@ -198,7 +198,7 @@ export const getProductListInfoByShopId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 3,
+			id: '987e6543-e21b-34d3-b456-426614174111', // Đã chuyển sang GUID
 			name: 'Desert Succulent Oasis',
 			slug: 'desert-succulent-oasis',
 			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
@@ -208,7 +208,7 @@ export const getProductListInfoByShopId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 4,
+			id: '111e2222-e33b-44d3-c456-426614174222', // Đã chuyển sang GUID
 			name: 'Geometric Glass Terrarium',
 			slug: 'geometric-glass-terrarium',
 			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
@@ -218,7 +218,7 @@ export const getProductListInfoByShopId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 5,
+			id: '333e4444-e55b-66d3-d456-426614174333', // Đã chuyển sang GUID
 			name: 'Fittonia Closed Bottle',
 			slug: 'fittonia-closed-bottle',
 			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
@@ -237,7 +237,7 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 > => {
 	const mockProducts: ProductListInfoAdmin[] = [
 		{
-			id: 1,
+			id: '550e8400-e29b-41d4-a716-446655440000', // Đã chuyển sang GUID
 			name: 'Bonsai Tree Ecosystem',
 			slug: 'bonsai-tree-ecosystem',
 			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
@@ -247,7 +247,7 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 2,
+			id: '123e4567-e89b-12d3-a456-426614174000', // Đã chuyển sang GUID
 			name: 'Rainforest Moss Bowl',
 			slug: 'rainforest-moss-bowl',
 			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
@@ -257,32 +257,32 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 3,
+			id: '987e6543-e21b-34d3-b456-426614174111', // Đã chuyển sang GUID
 			name: 'Desert Succulent Oasis',
 			slug: 'desert-succulent-oasis',
 			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
 			status: false,
-            systemStatus: 'rejected',
+			systemStatus: 'rejected',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 4,
+			id: '111e2222-e33b-44d3-c456-426614174222', // Đã chuyển sang GUID
 			name: 'Geometric Glass Terrarium',
 			slug: 'geometric-glass-terrarium',
 			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
 			status: true,
-            systemStatus: 'banned',
+			systemStatus: 'banned',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 5,
+			id: '333e4444-e55b-66d3-d456-426614174333', // Đã chuyển sang GUID
 			name: 'Fittonia Closed Bottle',
 			slug: 'fittonia-closed-bottle',
 			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
 			status: false,
-            systemStatus: 'approved',
+			systemStatus: 'approved',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
 		},

@@ -16,13 +16,12 @@ interface Props {
 
 export default async function StoreProductPromotionPage({ params }: Props): Promise<JSX.Element> {
 	const { shopPromotionId } = await params;
-	const id: number = parseInt(shopPromotionId);
 
-	const initialPromotions: ShopProductPromotion[] = await getStoreProductPromotions(id);
+	const initialPromotions: ShopProductPromotion[] = await getStoreProductPromotions(shopPromotionId);
 
 	return (
 		<ShopProductPromotionContainer
-			promotionId={id}
+			promotionId={shopPromotionId}
 			initialPromotions={initialPromotions}
 			mode={'update'}
 		/>

@@ -1,5 +1,5 @@
 import { CouponManagementContainer } from '@/components/marketing/coupons/admin/coupon-management-container';
-import { getPlatformCoupons } from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getPlatformCoupons } from '@/services/marketing/coupon/admin/admin-coupon-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 

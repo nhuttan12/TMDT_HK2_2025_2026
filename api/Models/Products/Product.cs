@@ -1,5 +1,10 @@
 ﻿using api.Dtos.Products.Request;
+using api.Models;
+using api.Models.Category;
+using api.Models.Inventory;
 using api.Models.Products;
+using api.Models.Promotions;
+using api.Models.Shops;
 using api.Utilities;
 
 namespace api.model.Products
@@ -22,7 +27,10 @@ namespace api.model.Products
         public IReadOnlyCollection<string> ImageUrls => _imageUrls;
         public ProductStatus Status { get; private set; } = ProductStatus.Approved;
         public Guid CategoryId { get; private set; }
+
         public Guid ShopId { get; private set; }
+        public Shop Shop { get; private set; }
+
         public ProductDetail? Detail { get; private set; }
 
         // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
@@ -32,6 +40,11 @@ namespace api.model.Products
         // Ưu tiên DateTimeOffset cho các hệ thống phân tán và DB SQL Server
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
+
+        public ICollection<InventoryBatchStock> InventoryBatchStocks { get; private set; } = new HashSet<InventoryBatchStock>();
+        public ICollection<ProductPromotion> ProductPromotions { get; private set; } = new HashSet<ProductPromotion>();
+
+
 
         // Dành riêng cho EF Core khi query (không dùng để tạo mới)
         protected Product() { }

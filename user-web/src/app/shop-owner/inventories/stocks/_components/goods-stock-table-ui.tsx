@@ -52,7 +52,7 @@ export default function GoodsStockTableUi({
 					<div className='max-w-75'>
 						<p className='font-medium text-slate-900 truncate'>{row.name}</p>
 						<p className='text-[13px] text-slate-500 font-mono leading-tight'>
-							SKU biến thể sản phẩm: {row.variantSku}
+							SKU sản phẩm phân loại: {row.variantSku}
 						</p>
 					</div>
 				</div>
@@ -128,8 +128,8 @@ export default function GoodsStockTableUi({
 		},
 	];
 
-	const getRowKey = (row: ProductInStock): number => {
-		return row.id || 0;
+	const getRowKey = (row: ProductInStock): string => {
+		return row.id || '';
 	};
 
 	return (

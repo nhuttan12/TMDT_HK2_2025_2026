@@ -1,7 +1,7 @@
 import { PartnerType } from '@/types/inventories/issues/uis/PartnerType';
 
 export interface GoodsIssuePartner {
-	id: number;
+	id: string;
 	name: string;
 	type: PartnerType;
 	phoneNumber?: string;

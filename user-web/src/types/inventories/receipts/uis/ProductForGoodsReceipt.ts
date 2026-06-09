@@ -1,5 +1,5 @@
 export interface ProductForGoodsReceipt {
-	id: number;
+	id: string;
 	name: string;
 	status: boolean;
 }

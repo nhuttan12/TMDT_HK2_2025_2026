@@ -4,7 +4,7 @@ import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmi
 export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 	const mockSuppliers: Supplier[] = [
 		{
-			id: 1,
+			id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đã chuyển sang GUID string
 			name: 'Công ty Cổ phần Bao bì Việt Nam',
 			contactName: 'Nguyễn Văn A',
 			phone: '0901234567',
@@ -13,7 +13,7 @@ export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 			taxCode: '0101234567',
 		},
 		{
-			id: 2,
+			id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', // Đã chuyển sang GUID string
 			name: 'Cơ sở Sản xuất Nhựa Hùng Phát',
 			// Không có email để test UI
 			contactName: 'Lê Thị B',
@@ -22,14 +22,14 @@ export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 			taxCode: '0312345678',
 		},
 		{
-			id: 3,
+			id: '7b233a01-5242-4f3b-8531-180a3a7800ab', // Đã chuyển sang GUID string
 			name: 'Công ty TNHH Nhập khẩu Vina',
 			// Thiếu hoàn toàn thông tin người liên hệ (contactName, phone, email)
 			address: 'Tầng 3, Tòa nhà Bitexco, Số 2 Hải Triều, Quận 1, TP.HCM',
 			taxCode: '0309876543',
 		},
 		{
-			id: 4,
+			id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479', // Đã chuyển sang GUID string
 			name: 'Tập đoàn Vận tải Global',
 			// Có email nhưng không có phone
 			contactName: 'Trần Đại C',
@@ -38,7 +38,7 @@ export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 			taxCode: '0105678901',
 		},
 		{
-			id: 5,
+			id: 'e58ed763-928c-4155-bee9-fdbaaadc15f3', // Đã chuyển sang GUID string
 			name: 'Nhà phân phối Hương Liệu Á Châu',
 			contactName: 'Phạm Văn D',
 			phone: '0934567890',
@@ -54,11 +54,11 @@ export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 };
 
 export const getProductBySupplierId = async (
-	supplierId: number,
+	supplierId: string,
 ): Promise<ProductListInfoAdmin[]> => {
 	const mockProducts: ProductListInfoAdmin[] = [
 		{
-			id: 1,
+			id: '550e8400-e29b-41d4-a716-446655440000', // Đổi thành GUID
 			name: 'Bonsai Tree Ecosystem',
 			slug: 'bonsai-tree-ecosystem',
 			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
@@ -68,7 +68,7 @@ export const getProductBySupplierId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 2,
+			id: '123e4567-e89b-12d3-a456-426614174000', // Đổi thành GUID
 			name: 'Rainforest Moss Bowl',
 			slug: 'rainforest-moss-bowl',
 			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
@@ -78,7 +78,7 @@ export const getProductBySupplierId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 3,
+			id: '987e6543-e21b-34d3-b456-426614174111', // Đổi thành GUID
 			name: 'Desert Succulent Oasis',
 			slug: 'desert-succulent-oasis',
 			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
@@ -88,7 +88,7 @@ export const getProductBySupplierId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 4,
+			id: '111e2222-e33b-44d3-c456-426614174222', // Đổi thành GUID
 			name: 'Geometric Glass Terrarium',
 			slug: 'geometric-glass-terrarium',
 			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
@@ -98,7 +98,7 @@ export const getProductBySupplierId = async (
 			updatedAt: '2024-02-01T15:30:00Z',
 		},
 		{
-			id: 5,
+			id: '333e4444-e55b-66d3-d456-426614174333', // Đổi thành GUID
 			name: 'Fittonia Closed Bottle',
 			slug: 'fittonia-closed-bottle',
 			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
@@ -112,9 +112,9 @@ export const getProductBySupplierId = async (
 	return mockProducts;
 };
 
-export const fetchSupplierById = async (supplierId: number): Promise<Supplier> => {
+export const fetchSupplierById = async (supplierId: string): Promise<Supplier> => {
 	const mockSupplier: Supplier = {
-		id: 1,
+		id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đồng bộ đúng GUID của Công ty Bao bì Việt Nam
 		name: 'Công ty Cổ phần Bao bì Việt Nam',
 		contactName: 'Nguyễn Văn A',
 		phone: '0901234567',

@@ -10,7 +10,7 @@ import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
 export interface UseShopPromotionAddingLogicReturn {
 	form: Omit<PromotionForAdding, 'products'>; // Tạm bỏ products ra khỏi form tĩnh
-	selection: UseTableSelectionReturn<number>;
+	selection: UseTableSelectionReturn<string>;
 	sorting: UseTableSortReturn<ProductPromotionSortField>;
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleDateChange: (field: 'fromDate' | 'toDate', value: string) => void;
@@ -22,13 +22,13 @@ export interface UseShopPromotionAddingLogicReturn {
 	isModalOpen: boolean;
 	openModal: () => void;
 	closeModal: () => void;
-	modalSelection: UseTableSelectionReturn<number>;
+	modalSelection: UseTableSelectionReturn<string>;
 	handleConfirmSelection: () => void;
 
 	// Quản lý Bảng chính (Sản phẩm đã chọn)
 	selectedProducts: ProductPromotionForAdding[];
-	handleDiscountPriceChange: (id: number, val: string) => void;
-	handleRemoveProduct: (id: number) => void;
+	handleDiscountPriceChange: (id: string, val: string) => void;
+	handleRemoveProduct: (id: string) => void;
 
 	statusModal: UseStatusModalReturn;
 }
@@ -55,8 +55,8 @@ export function useShopPromotionAddingLogic(
 	});
 
 	// 2. Logic Selection (Lấy tất cả ID của sản phẩm gán vào hook)
-	const allKeys: number[] = availableProducts.map((p) => p.id);
-	const modalSelection: UseTableSelectionReturn<number> = useTableSelection<number>(allKeys);
+	const allKeys = availableProducts.map((p) => p.id);
+	const modalSelection = useTableSelection<string>(allKeys);
 
 	// 3. Logic Sorting
 	const sorting = useTableSort<ProductPromotionSortField>();
@@ -94,7 +94,7 @@ export function useShopPromotionAddingLogic(
 		closeModal();
 	};
 
-	const handleDiscountPriceChange = (id: number, val: string) => {
+	const handleDiscountPriceChange = (id: string, val: string) => {
 		const newDiscountPrice = Number(val) || 0;
 
 		setSelectedProducts((prev) =>
@@ -114,7 +114,7 @@ export function useShopPromotionAddingLogic(
 		);
 	};
 
-	const handleRemoveProduct = (id: number) => {
+	const handleRemoveProduct = (id: string) => {
 		setSelectedProducts((prev) => prev.filter((p) => p.id !== id));
 	};
 
@@ -172,24 +172,24 @@ export function useShopPromotionAddingLogic(
 	};
 
 	return {
-		form: form,
+		form,
 		selection: modalSelection,
-		sorting: sorting,
-		handleInputChange: handleInputChange,
-		handleDateChange: handleDateChange,
-		handleStatusChange: handleStatusChange,
-		handleSubmit: handleSubmit,
-		isSubmitting: isSubmitting,
+		sorting,
+		handleInputChange,
+		handleDateChange,
+		handleStatusChange,
+		handleSubmit,
+		isSubmitting,
 
-		isModalOpen: isModalOpen,
-		openModal: openModal,
-		closeModal: closeModal,
-		modalSelection: modalSelection,
-		handleConfirmSelection: handleConfirmSelection,
-		selectedProducts: selectedProducts,
-		handleDiscountPriceChange: handleDiscountPriceChange,
-		handleRemoveProduct: handleRemoveProduct,
+		isModalOpen,
+		openModal,
+		closeModal,
+		modalSelection,
+		handleConfirmSelection,
+		selectedProducts,
+		handleDiscountPriceChange,
+		handleRemoveProduct,
 
-		statusModal: statusModal,
+		statusModal,
 	};
 }

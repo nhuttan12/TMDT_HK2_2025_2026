@@ -3,13 +3,13 @@ import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { HomeBannerLogicReturn } from '@/hooks/contents/home-banners/user/use-home-logic';
 import HomeBannerCarouselUi from '@/app/(app)/_components/home-banner-carousel-ui';
 import ProductList from '@/components/products/user/product-list';
-import { HomeBanner } from '@/types/contents/home-banners/HomeBanner';
 import { Spinner } from '@/components/ui/spinner';
 import CategoryListUi from '@/components/categories/user/category-list-ui';
 import { CategoryItem } from '@/types/categories/user/CategoryItem';
 import { Flame } from 'lucide-react';
-import { CouponList } from '@/components/marketing/coupons/user/coupon-list';
+import { CouponListUi } from '@/components/marketing/coupons/user/coupon-list-ui';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
+import { HomeBanner } from '@/types/contents/banners/HomeBanner';
 
 interface HomeUiProps extends HomeBannerLogicReturn {
 	banners: HomeBanner[];
@@ -69,7 +69,7 @@ export function HomeUi({
 						<Spinner className='size-6 text-slate-400' />
 					</div>
 				) : (
-					<CouponList
+					<CouponListUi
 						coupons={coupons}
 						onClaimClick={handleClaimCoupon}
 						label={'Mã giảm giá toàn nghành'}

@@ -10,17 +10,20 @@ export const metadata: Metadata = {
 export default async function ViewCouponPage(): Promise<JSX.Element> {
 	// Fetch dữ liệu ngay trên Server
 	const initialCoupon: AdminCoupon = {
-		id: 0,
+		id: '',
 		code: '',
 		name: '',
 		scope: 'platform',
+		createdByType: 'admin', // Đã bổ sung
 		shopId: null,
 		discountType: 'fixed_amount',
+        category: 'discount', // Mặc định
 		discountValue: 0,
 		maxDiscountAmount: null,
 		minOrderValue: 0,
 		totalQuantity: 0,
 		usedQuantity: 0,
+		maxUsagePerUser: 1, // Đã bổ sung
 		validTime: {
 			fromDate: '',
 			toDate: '',

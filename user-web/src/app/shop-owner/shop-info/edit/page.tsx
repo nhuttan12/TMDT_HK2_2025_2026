@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function Page(): Promise<JSX.Element> {
     // Mock user ID từ token
-    const userId = 1;
+    const userId = 'bc2477e8-4d3d-4c09-b9d2-7045ed120453';
 
 	// Fetch dữ liệu ngay tại Server
 	const initialData: ShopProfile = await getShopProfileByUserId(userId);

@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getUserDetailAdminById } from '@/services/users/admin/user-service';
 
 export function useUserDetailAdminQuery(
-	userId: number,
+	userId: string,
 	initialData: UserDetailInfoAdmin,
 ): UseQueryResult<UserDetailInfoAdmin> {
 	return useQuery({

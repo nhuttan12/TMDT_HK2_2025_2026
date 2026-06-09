@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import { getShopCouponsByShopId } from '@/services/marketing/coupon/admin/coupon-admin-service';
+import { getShopCouponsByShopId } from '@/services/marketing/coupon/admin/admin-coupon-service';
 import { CouponManagementContainer } from '@/components/marketing/coupons/admin/coupon-management-container';
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ interface Props {
 
 export default async function ShopCouponPage({ params }: Props): Promise<JSX.Element> {
 	const { shopPromotionId } = await params;
-	const id = parseInt(shopPromotionId);
+	const id = shopPromotionId;
 
 	// Gọi API/Service tại Server
 	const initialCoupons = await getShopCouponsByShopId(id);

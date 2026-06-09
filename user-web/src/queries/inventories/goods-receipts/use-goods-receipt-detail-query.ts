@@ -3,7 +3,7 @@ import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceip
 import { getGoodsReceiptById } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
 
 export interface UseGoodsReceiptDetailQueryProps {
-	id: number;
+	id: string;
 	initialData?: GoodsReceiptDetail;
 }
 
@@ -16,6 +16,6 @@ export const useGoodsReceiptDetailQuery = ({
 		queryKey: ['goods-receipt-detail', id],
 		queryFn: (): Promise<GoodsReceiptDetail> => getGoodsReceiptById(id),
 		initialData: initialData,
-		enabled: id !== 0,
+		enabled: !!id,
 	});
 };

@@ -1,20 +1,18 @@
 'use client';
 
-import { JSX } from 'react';
-import Image from 'next/image';
-import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
-import { Separator } from '@radix-ui/react-separator';
+import CommentItem from '@/components/products/user/comment-item';
+import { ProductDetailCarousel } from '@/components/products/user/product-detail-carousel';
+import Rating from '@/components/products/user/rating';
+import ReadMoreHtml from '@/components/products/user/read-more-html';
 import { Button } from '@/components/ui/button';
-import { Review } from '@/types/products/user/Review';
+import { ProductDetailLogicReturn } from '@/hooks/products/user/use-product-detail-logic';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { ProductDetailLogicReturn } from '@/hooks/products/user/use-product-detail-logic';
-import { ProductTierVariation } from '@/types/products/user/ProductTierVariation';
+import { Separator } from '@radix-ui/react-separator';
+import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { ProductDetailCarousel } from '@/components/products/user/product-detail-carousel';
-import ReadMoreHtml from '@/components/products/user/read-more-html';
-import Rating from '@/components/products/user/rating';
-import CommentItem from '@/components/products/user/comment-item';
+import { JSX } from 'react';
 
 interface ProductDetailUiProps extends ProductDetailLogicReturn {
 	product: ProductDetail;
@@ -35,10 +33,10 @@ export function ProductDetailUi({
 	handleDecreaseQuantity,
 	handleAddToCart,
 	handleBuyNow,
+	checkIsOptionDisabled,
 }: ProductDetailUiProps): JSX.Element {
-	const isFullySelected: boolean = !selectedOptions.includes(-1);
-	const isActionDisabled: boolean =
-		!isFullySelected || !selectedVariant?.isActive || currentStock === 0;
+	const isFullySelected = !selectedOptions.includes(-1);
+	const isActionDisabled = !isFullySelected || !selectedVariant?.isActive || currentStock === 0;
 
 	// Xử lý mảng an toàn ngay từ đầu
 	const safeTierVariations = product.tierVariations || [];
@@ -84,7 +82,7 @@ export function ProductDetailUi({
 					<div>
 						{/* Đã bọc an toàn safeReviews */}
 						{safeReviews.map(
-							(comment: Review): JSX.Element => (
+							(comment): JSX.Element => (
 								<CommentItem
 									comment={comment}
 									key={comment.id}
@@ -125,7 +123,7 @@ export function ProductDetailUi({
 					<div className='flex flex-col gap-6'>
 						{/* Đã bọc an toàn safeTierVariations */}
 						{safeTierVariations.map(
-							(tier: ProductTierVariation, tierIndex: number): JSX.Element => (
+							(tier, tierIndex): JSX.Element => (
 								<div
 									key={tier.name}
 									className='flex flex-col gap-3'
@@ -135,24 +133,32 @@ export function ProductDetailUi({
 									</span>
 									<div className='flex flex-wrap gap-3'>
 										{(tier.options || []).map(
-											(option: string, optionIndex: number): JSX.Element => {
+											(option, optionIndex): JSX.Element => {
 												const isSelected =
 													selectedOptions[tierIndex] === optionIndex;
+
+												const isDisabled = checkIsOptionDisabled(
+													tierIndex,
+													optionIndex,
+												);
 
 												return (
 													<Button
 														key={option}
 														variant={isSelected ? 'default' : 'outline'}
+														disabled={isDisabled}
 														onClick={() =>
 															handleOptionSelect(
 																tierIndex,
 																optionIndex,
 															)
 														}
-														className={`rounded-sm cursor-pointer ${
-															isSelected
-																? 'border-orange-500 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:text-orange-600'
-																: 'hover:border-orange-500 hover:text-orange-500'
+														className={`rounded-sm transition-all ${
+															isDisabled
+																? 'opacity-40 cursor-not-allowed border-dashed bg-slate-50 text-slate-400'
+																: isSelected
+																	? 'border-orange-500 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:text-orange-600 cursor-pointer'
+																	: 'hover:border-orange-500 hover:text-orange-500 cursor-pointer'
 														}`}
 													>
 														{option}

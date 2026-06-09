@@ -51,20 +51,20 @@ export async function getInvoiceDetailByInvoiceId(invoiceId: number): Promise<In
 	});
 }
 
-export async function getUserInvoicesByUserId(userId: number): Promise<UserInvoice[]> {
+export async function getUserInvoicesByUserId(userId: string): Promise<UserInvoice[]> {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve([
 				{
-					id: 1,
+					id: '550e8400-e29b-41d4-a716-446655440001', // Đã chuyển sang GUID string
 					createdAt: '2026-02-15T10:30:00',
-					status: 'paid', // Đã sửa lại đúng chữ thường theo Type
+					status: 'paid',
 					paymentMethod: 'bank_transfer',
 					totalAmount: 1250000,
 					totalItems: 3,
 				},
 				{
-					id: 2,
+					id: '123e4567-e89b-12d3-a456-426614174002', // Đã chuyển sang GUID string
 					createdAt: '2026-02-14T14:12:00',
 					status: 'pending',
 					paymentMethod: 'COD',
@@ -72,7 +72,7 @@ export async function getUserInvoicesByUserId(userId: number): Promise<UserInvoi
 					totalItems: 2,
 				},
 				{
-					id: 3,
+					id: '987e6543-e21b-34d3-b456-426614174003', // Đã chuyển sang GUID string
 					createdAt: '2026-02-12T09:45:00',
 					status: 'cancelled',
 					paymentMethod: 'MoMo',
@@ -80,7 +80,7 @@ export async function getUserInvoicesByUserId(userId: number): Promise<UserInvoi
 					totalItems: 1,
 				},
 				{
-					id: 4,
+					id: '111e2222-e33b-44d3-c456-426614174004', // Đã chuyển sang GUID string
 					createdAt: '2026-02-10T16:20:00',
 					status: 'paid',
 					paymentMethod: 'credit_card',
@@ -88,7 +88,7 @@ export async function getUserInvoicesByUserId(userId: number): Promise<UserInvoi
 					totalItems: 4,
 				},
 				{
-					id: 5,
+					id: '333e4444-e55b-66d3-d456-426614174005', // Đã chuyển sang GUID string
 					createdAt: '2026-02-08T11:05:00',
 					status: 'paid',
 					paymentMethod: 'bank_transfer',

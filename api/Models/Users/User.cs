@@ -3,6 +3,12 @@ using api.Models.Roles;
 using api.Models.Users;
 using Api.Models.Users;
 using System.ComponentModel.DataAnnotations;
+using api.Models.Inventory;
+using api.Models.Banners;
+using api.Models.Shops;
+using api.Models.Orders;
+using api.Models.Coupons;
+using api.Models.Promotions;
 
 namespace api.Models
 {
@@ -43,8 +49,15 @@ namespace api.Models
         public int RoleId { get; set; }
         public virtual Role Role { get; set; } = default!;
         public virtual UserDetail? UserDetail { get; set; }
-        public virtual UserExternalLogin? UserExternalLogin { get; set; }
+        public virtual Shop? Shop { get; set; }
+        public virtual UserExternalLogin?  UserExternalLogin{ get;  set; }
         public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+        public ICollection<GoodsIssue> GoodsIssues { get; set; } = new HashSet<GoodsIssue>();
+        public ICollection<UserBanking> UserBankings { get; set; } = new HashSet<UserBanking>();
+        public ICollection<Banner> Banners { get; set; } = new HashSet<Banner>();
+        public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
+        public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
+        public ICollection<Promotion> Promotions { get; set; } = new HashSet<Promotion>();
 
         public void SetPassword(string hash)
         {

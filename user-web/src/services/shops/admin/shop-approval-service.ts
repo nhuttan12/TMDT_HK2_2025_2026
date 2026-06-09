@@ -24,7 +24,7 @@ export const getApprovalShops = async (
 		if (i % 5 === 0) currentStatus = 'approved';
 
 		return {
-			id: 1000 + i,
+			id: `550e8400-e29b-41d4-a716-${(1000 + i).toString().padStart(12, '0')}`,
 			name: `Cửa hàng đăng ký mới ${i + 1}`,
 			email: `newshop${i + 1}@example.com`,
 			phone: `0909000${i.toString().padStart(3, '0')}`,
@@ -66,7 +66,6 @@ export const getShopRegistrationFormByApprovalId = async (
 		description:
 			'<p>Cửa hàng chuyên cung cấp các hệ sinh thái Terrarium thu nhỏ, rêu nhiệt đới và phụ kiện setup tiểu cảnh chuyên nghiệp.</p>',
 		address: '123 Nguyễn Văn Linh, Phường Tân Thuận Tây, Quận 7, TP.HCM',
-		facebookUrl: 'https://facebook.com/terrariumxanh.vn',
 		bankName: 'Vietcombank',
 		accountName: 'NGUYEN VAN A',
 		accountNumber: '10123456789',

@@ -189,7 +189,7 @@ export const CouponManagementUi = ({
 						columns={columns}
 						// Tạm thời dùng Regex để bóc số từ string ID (ví dụ 'v1' -> 1).
 						// Thực tế nên đổi getRowKey trong DataTable sang string.
-						getRowKey={(row: AdminCoupon): number => row.id}
+						getRowKey={(row: AdminCoupon): string => row.id}
 						onRowClick={(row: AdminCoupon) => onViewCoupon(row.id)}
 						tableHeight={600}
 					/>

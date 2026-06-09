@@ -1,5 +1,5 @@
 export interface ProductForGoodsIssue {
-	id: number;
+	id: string;
 	name: string;
 	sku: string;
 	serialNumber: string;

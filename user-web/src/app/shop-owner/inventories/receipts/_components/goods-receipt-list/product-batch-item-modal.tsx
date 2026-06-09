@@ -18,7 +18,7 @@ interface ProductBatchItemModalProps {
 const variantColumns: Column<ProductVariantRow>[] = [
 	{
 		key: 'name',
-		header: 'Tên biến thể',
+		header: 'Tên phân loại',
 	},
 	{
 		key: 'sku',
@@ -32,10 +32,10 @@ export function ProductBatchItemModal({
 	onOpenChange,
 	onSelect,
 }: ProductBatchItemModalProps): JSX.Element {
-	const allKeys: number[] = variants.map((v: ProductVariantRow): number => v.id);
+	const allKeys: string[] = variants.map((v: ProductVariantRow): string => v.id);
 
 	const { selected, onToggle, onToggleAll, isAllSelected, isIndeterminate } =
-		useTableSelection<number>(allKeys);
+		useTableSelection<string>(allKeys);
 
 	const handleConfirm = (): void => {
 		const selectedVariants: ProductVariantRow[] = variants.filter(
@@ -53,13 +53,13 @@ export function ProductBatchItemModal({
 		>
 			<DialogContent className='max-w-3xl'>
 				<DialogHeader>
-					<DialogTitle>Chọn biến thể sản phẩm</DialogTitle>
+					<DialogTitle>Chọn sản phẩm phân loại</DialogTitle>
 				</DialogHeader>
 
 				<DataTable<ProductVariantRow>
 					data={variants}
 					columns={variantColumns}
-					getRowKey={(row: ProductVariantRow): number => row.id}
+					getRowKey={(row: ProductVariantRow): string => row.id}
 					selectable={{
 						selected,
 						onToggle: onToggle,

@@ -31,7 +31,6 @@ export function useShopRegistrationLogic({
 			phone: '',
 			description: '',
 			address: '',
-			facebookUrl: '',
 			bankName: '',
 			accountName: '',
 			accountNumber: '',

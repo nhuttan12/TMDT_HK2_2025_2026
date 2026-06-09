@@ -1,19 +1,18 @@
 import { DataTable } from '@/components/layout/admin/data-table';
-import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
-import { Column } from '@/types/uis/Column';
-import { JSX } from 'react';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
+import { getGoodsReceiptStatusLabel } from '@/types/inventories/receipts/uis/GoodsReceiptStatus';
+import { Column } from '@/types/uis/Column';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
-import AdminTableAction from '@/components/layout/admin/admin-table-action';
+import { JSX } from 'react';
 
 interface Props {
 	receipts: GoodsReceiptList[];
 	handleSort: (field: GoodsReceiptSortField) => void;
 	renderSortIcon: (field: GoodsReceiptSortField) => JSX.Element | null;
 
-	onView: (id: number) => void;
-	onEdit: (id: number) => void;
+	onView: (id: string) => void;
+	onEdit: (id: string) => void;
 }
 
 export default function GoodsReceiptAdminTable({
@@ -69,7 +68,7 @@ export default function GoodsReceiptAdminTable({
 			key: 'totalQuantity',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Số lượng máy</span>
+					<span>Số lượng</span>
 					{renderSortIcon('totalQuantity')}
 				</div>
 			),
@@ -125,24 +124,13 @@ export default function GoodsReceiptAdminTable({
 			onHeaderClick: (): void => handleSort('createdAt'),
 			render: (row: GoodsReceiptList): string => formatDateTimeWithBrackets(row.createdAt),
 		},
-		{
-			key: 'actions',
-			header: <span className='text-right block'>Hành động</span>,
-			render: (row: GoodsReceiptList): JSX.Element => (
-				<AdminTableAction
-					id={row.id}
-					onEdit={onEdit}
-					onDelete={() => {}}
-				/>
-			),
-		},
 	];
 
 	return (
 		<DataTable<GoodsReceiptList>
 			data={receipts}
 			columns={goodsReceiptColumns}
-			getRowKey={(row: GoodsReceiptList): number => row.id}
+			getRowKey={(row: GoodsReceiptList): string => row.id}
 			onRowClick={(row: GoodsReceiptList): void => onView(row.id)}
 		/>
 	);

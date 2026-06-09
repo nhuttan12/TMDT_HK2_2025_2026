@@ -1,14 +1,12 @@
 'use client';
 
-import React, { JSX } from 'react';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header'; // Path của bạn
 import { DataTable } from '@/components/layout/admin/data-table'; // Path của bạn
 import Pagination from '@/components/layout/share/pagination'; // Path của bạn
-import { FilterField } from '@/types/uis/FilterField';
-import { ShopAdmin } from '@/types/shops/admin/ShopAdmin';
-import { UsePaginationReturn } from '@/hooks/share/use-pagination'; // Path chuẩn
-import { Column } from '@/types/uis/Column';
 import { ShopAdminTableLogicReturn } from '@/hooks/shops/admin/use-shop-admin-logic';
+import { ShopAdmin } from '@/types/shops/admin/ShopAdmin';
+import { FilterField } from '@/types/uis/FilterField';
+import { JSX } from 'react';
 
 export interface ShopManagementUiProps extends Omit<ShopAdminTableLogicReturn, 'data'> {
 	shops: ShopAdmin[];

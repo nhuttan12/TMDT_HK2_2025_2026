@@ -79,8 +79,8 @@ export default function GoodsStockOverviewUi({
 			<div className='flex items-baseline gap-2 px-6 py-4 border-b bg-white'>
 				<AdminTableHeader<ProductInStockFilterValues>
 					title='Tổng quan tồn kho'
-					description='Quản lý thông tin số lượng tồn kho của từng sản phẩm biến thể'
-					searchPlaceholder='Tìm theo tên biến thể'
+					description='Quản lý thông tin số lượng tồn kho của từng sản phẩm phân loại'
+					searchPlaceholder='Tìm theo tên phân loại'
 					filter
 					filterField={productInStockFilterFields}
 				/>

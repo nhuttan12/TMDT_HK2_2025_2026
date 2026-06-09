@@ -8,12 +8,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AppRole } from '@/types/uis/AppRole';
 
-export interface UseShopPromotionLogicReturn extends UseTableSelectionReturn<number> {
+export interface UseShopPromotionLogicReturn extends UseTableSelectionReturn<string> {
 	modal: UseStatusModalReturn;
-	handleViewPromotion: (id: number) => void;
+	handleViewPromotion: (id: string) => void;
 	handleAddPromotion: () => void;
-	handleEditPromotion: (id: number) => void;
-	handleDeletePromotion: (id: number) => void;
+	handleEditPromotion: (id: string) => void;
+	handleDeletePromotion: (id: string) => void;
 	handleTriggerToggleStatus: (promotion: ShopPromotion) => void;
 	handleConfirmAction: () => void;
 	handleCancelModal: () => void;
@@ -32,14 +32,14 @@ export function useShopPromotionLogic({
 
 	// 1. Logic Selection
 	// Lưu ý: Key của object này là promotionId
-	const allKeys: number[] = promotions.map((p: ShopPromotion): number => p.id);
-	const selection: UseTableSelectionReturn<number> = useTableSelection<number>(allKeys);
+	const allKeys: string[] = promotions.map((p: ShopPromotion): string => p.id);
+	const selection: UseTableSelectionReturn<string> = useTableSelection<string>(allKeys);
 
 	// 2. Logic Modal & Trạng thái
 	const modal: UseStatusModalReturn = useStatusModal();
 	const [activeAction, setActiveAction] = useState<{
 		type: 'toggle' | 'delete';
-		payload: ShopPromotion | number;
+		payload: ShopPromotion | string;
 	} | null>(null);
 
 	const route = role == 'admin' ? 'admin' : role == 'shop-owner' ? 'shop-owner' : '';
@@ -48,16 +48,16 @@ export function useShopPromotionLogic({
 		router.push(`/${route}/marketing/promotions/add-new`);
 	};
 
-	const handleViewPromotion = (id: number): void => {
+	const handleViewPromotion = (id: string): void => {
 		// Thêm ID vào URL để biết đang xem sản phẩm của Promotion nào
 		router.push(`/${route}/marketing/promotions/${id}`);
 	};
 
-	const handleEditPromotion = (id: number): void => {
+	const handleEditPromotion = (id: string): void => {
 		router.push(`/${route}/marketing/promotions/${id}/update`);
 	};
 
-	const handleDeletePromotion = (id: number): void => {
+	const handleDeletePromotion = (id: string): void => {
 		setActiveAction({ type: 'delete', payload: id });
 		modal.showWarning('Bạn có chắc chắn muốn xóa mã khuyến mãi này không?');
 	};
@@ -73,7 +73,7 @@ export function useShopPromotionLogic({
 			const target = activeAction.payload as ShopPromotion;
 			console.log(`Call API toggle status cho ID: ${target.id}`);
 		} else if (activeAction?.type === 'delete') {
-			const id = activeAction.payload as number;
+			const id = activeAction.payload;
 			console.log(`Call API delete cho ID: ${id}`);
 		}
 

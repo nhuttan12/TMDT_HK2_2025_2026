@@ -43,3 +43,5 @@ next-env.d.ts
 # Ignore merge backup files
 *.orig
 
+.vs/
+*.code-workspace

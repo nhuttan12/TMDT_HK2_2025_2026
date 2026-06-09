@@ -1,26 +1,25 @@
 import SidebarWrapper from '@/components/layout/share/sidebar-wrapper';
 import { SidebarItem } from '@/types/uis/SidebarItem';
 import {
-    Boxes,
-	BoxesIcon,
-	ClipboardClock,
-	FileText,
-	ImageIcon,
-	LayoutDashboard,
-	List,
-	Megaphone,
-	Package,
-	Store,
-	Tag,
-	Tickets,
-	Users,
+    BoxesIcon,
+    ClipboardClock,
+    FileText,
+    ImageIcon,
+    LayoutDashboard,
+    List,
+    Megaphone,
+    Package,
+    Store,
+    Tag,
+    Tickets,
+    Users
 } from 'lucide-react';
 import { Metadata } from 'next';
 import React, { JSX } from 'react';
 
 export const metadata: Metadata = {
 	title: {
-		default: 'Admin',
+		default: 'Admin - Quản trị hệ thống',
 		template: '%s | Admin',
 	},
 };

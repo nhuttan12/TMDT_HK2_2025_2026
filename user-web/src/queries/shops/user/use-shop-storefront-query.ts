@@ -6,7 +6,7 @@ import { ShopPublicFilter } from "@/types/shops/user/ShopPublicFilter";
 import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export const useShopProductsQuery = (
-	shopId: number,
+	shopId: string,
 	filter: ShopPublicFilter,
 ): UseQueryResult<PaginationResponse<ProductUserCard>, Error> => {
 	return useQuery<PaginationResponse<ProductUserCard>, Error>({
@@ -21,7 +21,7 @@ export const useShopProductsQuery = (
 /**
  * Hook lấy danh sách voucher của shop
  */
-export const useShopCouponsQuery = (shopId: number): UseQueryResult<UserCoupon[], Error> => {
+export const useShopCouponsQuery = (shopId: string): UseQueryResult<UserCoupon[], Error> => {
 	return useQuery<UserCoupon[], Error>({
 		queryKey: ['storefront-shop-coupons', shopId],
 		queryFn: () => getShopPublicCoupons(shopId),
@@ -33,7 +33,7 @@ export const useShopCouponsQuery = (shopId: number): UseQueryResult<UserCoupon[]
  */
 export const useFollowShopMutation = () => {
 	return useMutation({
-		mutationFn: async (shopId: number) => {
+		mutationFn: async (shopId: string) => {
 			// Gọi API lưu trạng thái follow
 			return new Promise((resolve) => setTimeout(() => resolve(true), 500));
 		},

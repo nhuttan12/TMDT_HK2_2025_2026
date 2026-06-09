@@ -1,10 +1,7 @@
-import { CouponType } from './CouponType';
+import { BaseCoupon } from "../BaseCoupon";
+import { UserSavedStatus } from "../UserSavedStatus";
 
-export interface UserCoupon {
-	id: number;
-	title: string;
-	couponType: CouponType;
-	description: string;
-	expiredAt: string;
-	code: string;
+export interface UserCoupon extends BaseCoupon {
+    // Trạng thái cá nhân hóa của user đang đăng nhập
+    userSavedStatus: UserSavedStatus;
 }

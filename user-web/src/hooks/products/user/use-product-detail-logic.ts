@@ -1,18 +1,17 @@
 'use client';
 
-import { CartItem } from '@/types/carts/CartItem';
-import { ProductDetail } from '@/types/products/user/ProductDetail';
-import { ProductVariant } from '@/types/products/user/ProductVariant';
-import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useCartStore } from '@/stores/cart.store';
 import { useCheckoutStore } from '@/stores/checkout.store';
+import { CartItem } from '@/types/carts/CartItem';
+import { ProductDetail } from '@/types/products/user/ProductDetail';
+import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 export interface ProductDetailLogicReturn {
 	quantity: number;
 	selectedOptions: number[];
-	selectedVariant: ProductVariant | undefined;
+	selectedVariant: ProductVariantUser | undefined;
 	displayPrice: string;
 	displayImage: string;
 	currentStock: number;
@@ -21,6 +20,8 @@ export interface ProductDetailLogicReturn {
 	handleDecreaseQuantity: () => void;
 	handleAddToCart: () => void;
 	handleBuyNow: () => void;
+
+    checkIsOptionDisabled: (tierIndex: number, optionIndex: number) => boolean;
 }
 
 export function useProductDetailLogic(product: ProductDetail): ProductDetailLogicReturn {
@@ -29,17 +30,17 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 	const [selectedOptions, setSelectedOptions] = useState<number[]>(initialSelected);
 	const [quantity, setQuantity] = useState<number>(1);
 
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 	const addItem = useCartStore((state) => state.addToCart);
 	const setCheckoutItems = useCheckoutStore((state) => state.setItems);
 
 	// Tìm Variant dựa trên các options đã chọn
-	const selectedVariant: ProductVariant | undefined = useMemo((): ProductVariant | undefined => {
-		const variants: ProductVariant[] = product.variants || [];
+	const selectedVariant: ProductVariantUser | undefined = useMemo((): ProductVariantUser | undefined => {
+		const variants = product.variants || [];
 
 		if (selectedOptions.includes(-1)) return undefined;
 
-		return variants.find((v: ProductVariant) =>
+		return variants.find((v: ProductVariantUser) =>
 			v.tierIndex.every((val: number, index: number) => val === selectedOptions[index]),
 		);
 	}, [selectedOptions, product.variants]); // Chỉ phụ thuộc vào data gốc của product
@@ -49,14 +50,14 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 	const maxP = product.maxPrice ?? 0;
 
 	// Xác định giá hiển thị
-	const displayPrice: string = selectedVariant
+	const displayPrice = selectedVariant
 		? `${selectedVariant.price.toLocaleString()}đ`
 		: minP === maxP
 			? `${minP.toLocaleString()}đ`
 			: `${minP.toLocaleString()}đ - ${maxP.toLocaleString()}đ`;
 
 	// Xác định ảnh hiển thị: Ảnh của variant -> Ảnh của option Tier 1 -> Ảnh mặc định của sản phẩm
-	const displayImage: string = useMemo((): string => {
+	const displayImage = useMemo((): string => {
 		const tierVariations = product.tierVariations || []; // Khai báo an toàn bên trong
 
 		if (selectedVariant?.image) return selectedVariant.image;
@@ -64,11 +65,11 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 			return tierVariations[0].images[selectedOptions[0]];
 		}
 
-		const safeImages: string[] = product.images || [];
+		const safeImages = product.images || [];
 		return safeImages[0] || product.images?.[0] || '';
 	}, [selectedVariant, selectedOptions, product.tierVariations, product.images]);
 
-	const currentStock: number = selectedVariant ? selectedVariant.stock : 0;
+	const currentStock = selectedVariant ? selectedVariant.stock : 0;
 
 	// Xử lý khi nhấn vào 1 nút phân loại
 	const handleOptionSelect = (tierIndex: number, optionIndex: number): void => {
@@ -82,6 +83,22 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		setQuantity(1);
 	};
 
+    const checkIsOptionDisabled = (tierIndex: number, optionIndex: number): boolean => {
+        const testOptions: number[] = [...selectedOptions];
+        testOptions[tierIndex] = optionIndex; // Giả lập chọn thử option này
+
+        const matchingVariants = (product.variants || []).filter((variant: ProductVariantUser): boolean => {
+            return testOptions.every((selectedOpt: number, idx: number): boolean => {
+                if (selectedOpt === -1) return true; // Bỏ qua các tier chưa chọn
+                return variant.tierIndex[idx] === selectedOpt;
+            });
+        });
+
+        // Nếu tất cả các biến thể thoả mãn đều có stock = 0, thì option này sẽ bị disable
+        const totalStock = matchingVariants.reduce((sum: number, v: ProductVariantUser): number => sum + v.stock, 0);
+        return totalStock === 0;
+    };
+
 	const handleIncreaseQuantity = (): void => {
 		setQuantity((prev: number): number => (prev < currentStock ? prev + 1 : prev));
 	};
@@ -90,7 +107,7 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		setQuantity((prev: number): number => (prev > 1 ? prev - 1 : 1));
 	};
 
-	// Helper tạo CartItem chuẩn xác từ biến thể đã chọn
+	// Helper tạo CartItem chuẩn xác từ phân loại đã chọn
 	const createCartItem = (): CartItem | null => {
 		if (!selectedVariant) return null;
 
@@ -150,5 +167,6 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		handleDecreaseQuantity,
 		handleAddToCart,
 		handleBuyNow,
+        checkIsOptionDisabled
 	};
 }

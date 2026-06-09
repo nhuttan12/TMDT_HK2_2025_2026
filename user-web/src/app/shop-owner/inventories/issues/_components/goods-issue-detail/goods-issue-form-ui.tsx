@@ -174,7 +174,7 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 
 				<div className='mt-10'>
 					<div className='flex justify-between items-center mb-4'>
-						<h2 className='font-bold text-lg'>Danh sách lô hàng chi tiết</h2>
+						<h2 className='font-bold text-lg'>Danh sách sản phẩm phân loại xuất kho</h2>
 						{!isView && (
 							<ProductSelectionGoodsIssueModal
 								products={products}
@@ -189,13 +189,13 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 					<DataTable<GoodsIssueItem>
 						data={form.items}
 						columns={itemColumns}
-						getRowKey={function (item: GoodsIssueItem): number {
+						getRowKey={function (item: GoodsIssueItem): string {
 							return item.id;
 						}}
 					/>
 				</div>
 
-				<div className='flex justify-end gap-16 mt-8 pt-6 border-t'>
+				<div className='flex justify-end gap-16 mt-8 pt-6 pb-6 border-t'>
 					<div className='text-right'>
 						<p className='text-sm text-slate-500 uppercase tracking-wider'>
 							Tổng số lượng

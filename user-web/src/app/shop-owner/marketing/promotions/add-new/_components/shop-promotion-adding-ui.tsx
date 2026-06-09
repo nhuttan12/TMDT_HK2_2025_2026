@@ -219,7 +219,7 @@ export default function ShopPromotionAddingUi({
 						<DataTable
 							data={selectedProducts}
 							columns={columns}
-							getRowKey={(row: ProductPromotionForAdding): number => row.id}
+							getRowKey={(row: ProductPromotionForAdding): string => row.id}
 						/>
 					) : (
 						<div className='p-12 text-center text-slate-500'>

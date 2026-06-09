@@ -1,6 +1,11 @@
-import { DashboardStatsResponse } from "@/types/analyst/DashboardStatsResponse";
+import { DashboardStatsResponse } from '@/types/analyst/DashboardStatsResponse';
+import { TimeRange } from '@/types/uis/TimeRange';
 
-export const getDashboardStats = async (): Promise<DashboardStatsResponse> => {
+export const getDashboardStats = async (
+	timeRange: TimeRange,
+	startDate: string,
+	endDate: string,
+): Promise<DashboardStatsResponse> => {
 	// Giả lập độ trễ mạng
 	await new Promise((resolve) => setTimeout(resolve, 500));
 

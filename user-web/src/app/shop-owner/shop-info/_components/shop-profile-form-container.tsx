@@ -5,20 +5,19 @@ import { useShopProfile, useUpdateShopProfile } from '@/queries/shops/admin/use-
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { ShopProfile } from '@/types/shops/admin/ShopProfile';
 import { UseMutationResult } from '@tanstack/react-query';
-import { JSX } from 'react';
 import ShopProfileFormUi from './shop-profile-form-ui';
 
 interface ShopProfileContainerProps {
 	initialData: ShopProfile;
 	formType: AdminFormType;
-	userId: number;
+	userId: string;
 }
 
 export default function ShopProfileFormContainer({
 	initialData,
 	formType,
 	userId,
-}: ShopProfileContainerProps): JSX.Element {
+}: ShopProfileContainerProps) {
 	// 1. Kết nối TanStack Query
 	const { data: storeData } = useShopProfile(userId, initialData);
 	const updateMutation: UseMutationResult<ShopProfile, Error, ShopProfile> =
