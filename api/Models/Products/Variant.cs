@@ -35,8 +35,8 @@ public class Variant
     {
         Id = id;
         ProductId = productId;
-        Sku = sku;
         Name = name;
+        Sku = sku;
         CostPrice = costPrice;
         SellPrice = sellPrice;
         ImageUrl = imageUrl;
@@ -44,7 +44,7 @@ public class Variant
     }
 
     // 3. Factory Method nhận ID tuần tự do App sinh ra
-    internal static Result<Variant> InternalCreate(Guid id, Guid productId, string sku, string name, decimal costPrice, decimal sellPrice, string imageUrl)
+    internal static Result<Variant> InternalCreate(Guid id, Guid productId,  string name, string sku, decimal costPrice, decimal sellPrice, string imageUrl)
     {
         // Fail Fast Validation
         if (string.IsNullOrWhiteSpace(sku))

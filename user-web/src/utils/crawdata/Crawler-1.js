@@ -78,7 +78,7 @@ async function crawlFullProductData() {
 		},
 		{
 			category: 'tropical terrarium',
-			baseUrl: 'https://terrafulness.com/collections/tropical-terrarium',
+			baseUrl: 'https://terrafulness.com/collecti ons/tropical-terrarium',
 			totalPages: 1,
 		},
 		{

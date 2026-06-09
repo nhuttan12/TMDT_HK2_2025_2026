@@ -20,24 +20,15 @@ namespace api.Services.Products
         Task<Result<ProductResponseDto>> GetProductById(Guid id, CancellationToken cancellationToken = default);
     }
     public class ProductService(
-        ILogger<ProductController> _logger,
-        IProductRepository _repo,
-        IUnitOfWork _unitOfWork,
-        IMapper _mapper,
-        IIdGenerator _idGenerator) : IProductService
+        ILogger<ProductController> logger,
+        IProductRepository repo,
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IIdGenerator idGenerator) : IProductService
     {
         public async Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default)
         {
-            if (productDto == null)
-            {
-                return Result<Product>.Failure(Error.Create("Input.Invalid", "Invalid product dto.", ErrorType.BadRequest));
-            }
-            var ValidInput = productDto.ValidData();
-            if (!ValidInput.IsSuccess)
-            {
-                return Result<Product>.Failure(ValidInput.Error);
-            }
-            var productId =_idGenerator.NewId();   
+            var productId =idGenerator.NewId();   
             var res = Product.Create(
                 productId,
                 productDto.Name,
@@ -54,9 +45,9 @@ namespace api.Services.Products
             {
                 return Result<Product>.Failure(res.Error);
             }
-            _logger.LogInformation("Creating product with name: {ProductName}", productDto.Name);
-            await _repo.CreateAsync(res.Value!, cancellationToken);
-            await _unitOfWork.CommitAsync();
+            logger.LogInformation("Creating product with name: {ProductName}", productDto.Name);
+            await repo.CreateAsync(res.Value!, cancellationToken);
+            await unitOfWork.CommitAsync();
             return res;
         }
         public async Task<Result<ProductResponseDto>> GetProductById(Guid id, CancellationToken cancellationToken = default)
@@ -65,13 +56,13 @@ namespace api.Services.Products
             {
                 return Result<ProductResponseDto>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
             }
-            var product = await _repo.GetByIdAsync(id);
+            var product = await repo.GetByIdAsync(id);
 
             if (product == null)
             {
                 return Result<ProductResponseDto>.Failure(Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
             }
-            var productDto = _mapper.Map<ProductResponseDto>(product);
+            var productDto = mapper.Map<ProductResponseDto>(product);
             return Result<ProductResponseDto>.Success(productDto);
         }
         /**
@@ -98,7 +89,7 @@ namespace api.Services.Products
             }
 
             // 3. Gọi Data Access Layer (I/O)
-            var products = await _repo.GetAllAsync(
+            var products = await repo.GetAllAsync(
                 paginationDto.PageNumber,
                 paginationDto.PageSize,
                 fillterDto!,
@@ -110,7 +101,7 @@ namespace api.Services.Products
                 Name: product.Name,
                 Rating: product.Rating,
                 BasePrice: product.BasePrice,
-                ImageUrl: product.ImageUrl,
+                ImageUrls: product.ImageUrls,
                 Status: product.Status.ToString() ,         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
                 Variants: product.Variants.Select(v => new VariantResponseDto
                 (
@@ -135,12 +126,12 @@ namespace api.Services.Products
             {
                 return Result<bool>.Failure(validationResult.Error);
             }
-            var existingProduct = await _repo.GetByIdAsync(id);
+            var existingProduct = await repo.GetByIdAsync(id);
             if (existingProduct != null)
             {
-                existingProduct.Update(productDto);
-                _repo.Update(existingProduct);
-                await _unitOfWork.CommitAsync();
+                existingProduct.Update(productDto.Name, productDto.BasePrice, productDto.ImageUrls, productDto.Status);
+                repo.Update(existingProduct);
+                await unitOfWork.CommitAsync();
                 return Result<bool>.Success(true);
             }else{
                 return Result<bool>.Failure(Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
@@ -149,12 +140,12 @@ namespace api.Services.Products
 
         public async Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default)
         {
-            var existingProduct = await _repo.GetByIdAsync(id);
+            var existingProduct = await repo.GetByIdAsync(id);
             if (existingProduct != null)
             {
                 existingProduct.Lock(); // Soft delete: Cập nhật trạng thái thay vì xóa vật lý
-                _repo.Update(existingProduct);
-                await _unitOfWork.CommitAsync();
+                repo.Update(existingProduct);
+                await unitOfWork.CommitAsync();
                 return Result<bool>.Success(true);
             }
             return Result<bool>.Failure(Error.Create("Product.NotFound.", "Product not found.", ErrorType.NotFound));

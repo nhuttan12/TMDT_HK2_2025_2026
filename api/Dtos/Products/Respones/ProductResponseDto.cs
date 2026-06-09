@@ -6,8 +6,8 @@
         string Name,
         decimal BasePrice,
         decimal Rating,
-        string ImageUrl,
         string Status,
+        IReadOnlyCollection<string> ImageUrls,
         VariantResponseDto[] Variants
     );
 }

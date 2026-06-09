@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<UserExternalLogin> builder)
         {
-            builder.ToTable("UserExternalLogins");
+            builder.ToTable("USER_EXTERNAL_LOGINS");
             builder.HasKey(uel => uel.Id);
             // Tắt tính năng tự tăng ID (Identity)
             builder.Property(uel => uel.Id)

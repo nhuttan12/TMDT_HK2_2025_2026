@@ -11,7 +11,7 @@ namespace api.Utilities.Seeders
     {
         public int ExecutionOrder => 2; // Chạy SAU CategorySeeder (Order = 1)
 
-        public async Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, CancellationToken cancellationToken)
+        public async Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, IIdGenerator idGenerator, CancellationToken cancellationToken)
         {
             var filePath = Path.Combine(contentRootPath, "Database", "Seeders", "SeedData", "products.json");
             if (!File.Exists(filePath)) return;
@@ -40,7 +40,7 @@ namespace api.Utilities.Seeders
                     cancellationToken);
 
             var productsToInsert = new List<Product>();
-
+            int globalSkuCounter = 1;
             foreach (var item in seedData)
             {
                 var normalizedName = item.Name.ToLower().Trim();
@@ -55,26 +55,26 @@ namespace api.Utilities.Seeders
                 }
 
                 // Dùng Guid.Empty cho ShopId tạm thời (nếu hệ thống bạn chưa làm Multi-tenant)
-                Guid shopId = Guid.Parse("0DBF433E-F36B-1410-8DC2-0031A65E736E");
-
-                // Product id tạm, để có j fix sau
-                var productId = Guid.NewGuid();
-
+                Guid shopId = Guid.Parse("7513433e-f36b-1410-8dc7-0031a65e736e");
+                Guid idProduct = idGenerator.NewId();
+                if(item.Images == null || item.Images.Count == 0)
+                {
+                    logger.LogWarning($"[ProductSeeder] Sản phẩm '{item.Name}' không có ảnh nào. Bỏ qua.");
+                    continue; // Fail fast: Sản phẩm phải có ít nhất 1 ảnh
+                }
                 // 3. Khởi tạo Product qua Factory Method an toàn
-                var productResult = Product.Create(
-                    productId,
-                    item.Name,
-                    item.Price,
-                    item.Images[0],
-                    categoryId,
-                    shopId,
-                    // Fix tạm thời, có j mốt chỉnh sau
-                    item.Price * 0.6m,
-                    $"SKU-{Guid.NewGuid().ToString()[..8].ToUpper()}",
-                    "Mô tả sản phẩm đang được cập nhật.",
-                    "Tóm tắt sản phẩm đang được cập nhật."
-                );
+                var productSku = createSku(item.brand, item.Category, item.Name, globalSkuCounter++);
 
+                var productResult = Product.Create(idProduct, item.Name, item.Price, item.Images[0], categoryId, shopId, item.Price * 0.7m,
+                    productSku, item.DescriptionHTML, item.Summary);
+
+                if (item.Images.Count > 1)
+                {
+                    for (int i = 1; i < item.Images.Count; i++)
+                    {
+                        productResult.Value?.AddImage(item.Images[i]);
+                    }
+                }
                 if (productResult.IsFailure)
                 {
                     logger.LogWarning($"[ProductSeeder] Lỗi tạo sản phẩm '{item.Name}': {productResult.Error.Message}");
@@ -83,30 +83,12 @@ namespace api.Utilities.Seeders
 
                 var product = productResult.Value!;
 
-                // 4. Set chi tiết sản phẩm
-                product.SetDetail(productId, item.Summary, item.DescriptionHTML);
 
                 // 5. XỬ LÝ LOGIC BIẾN THỂ (VARIANTS)
                 var firstImage = item.Images.FirstOrDefault() ?? string.Empty;
 
-                if (item.Variants == null || item.Variants.Count == 0)
+                if (item.Variants != null && item.Variants.Count > 0)
                 {
-                    // TRƯỜNG HỢP 1: Không có Variant -> Tự tạo 1 Variant mặc định
-                    // Lưu ý: JSON của bạn chỉ có 1 giá (price). Ta tạm dùng nó cho cả CostPrice và SellPrice
-                    var addVariantResult = product.AddVariant(
-                        name: "Mặc định",
-                        sku: string.IsNullOrWhiteSpace(item.Sku) ? $"SKU-{Guid.NewGuid().ToString()[..6]}" : item.Sku,
-                        sellPrice: item.Price,
-                        costPrice: item.Price * 0.7m, // Giả định giá vốn = 70% giá bán để test
-                        imageUrl: firstImage
-                    );
-
-                    if (addVariantResult.IsFailure)
-                        logger.LogWarning($"[ProductSeeder] Lỗi tạo Variant mặc định cho '{item.Name}': {addVariantResult.Error.Message}");
-                }
-                else
-                {
-                    // TRƯỜNG HỢP 2: Có Variants -> Duyệt mảng JSON để tạo
                     foreach (var v in item.Variants)
                     {
                         // Tạo mã SKU phụ cho variant (vd: XZ-640-Mau1)
@@ -138,5 +120,27 @@ namespace api.Utilities.Seeders
                 logger.LogInformation($"[ProductSeeder] Đã nạp thành công {productsToInsert.Count} sản phẩm và các biến thể.");
             }
         }
+        
+        string createSku(string shopCode,string category,string productName, int variantIndex)
+        {
+            // Sử dụng C# 8+ Switch Expression: Gọn gàng, dễ đọc và tối ưu hiệu năng hơn switch/case cũ.
+            // Dùng ToLowerInvariant() để tránh lỗi liên quan đến ngôn ngữ/vùng miền (Culture).
+            string shopPrefix = shopCode.Trim().ToLowerInvariant() switch
+            {
+                "terrafulness" => "TL",
+                "shop2" => "SP2",
+                _ => "SPX" // Default case
+            };
+
+            // Tái sử dụng hàm GetInitials tối ưu Zero-Allocation của chúng ta
+            string categoryPart = category.GetInitials();
+            string productPart = productName.GetInitials();
+
+            // Kết hợp C# String Interpolation. 
+            // KHÔNG dùng Guid Substring. Dùng index/counter để đảm bảo O(1) hiệu năng và 100% Unique.
+            return $"{shopPrefix}-{categoryPart}-{productPart}-{variantIndex}";
+        }
+       
     }
+
 }

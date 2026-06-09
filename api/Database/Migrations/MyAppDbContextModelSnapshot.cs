@@ -8,7 +8,7 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
     partial class MyAppDbContextModelSnapshot : ModelSnapshot
@@ -1114,7 +1114,7 @@ namespace api.Database.Migrations
                     b.HasIndex("Provider", "Id")
                         .IsUnique();
 
-                    b.ToTable("UserExternalLogins", (string)null);
+                    b.ToTable("USER_EXTERNAL_LOGINS", (string)null);
                 });
 
             modelBuilder.Entity("api.model.Products.Product", b =>
@@ -1137,7 +1137,7 @@ namespace api.Database.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("ImageUrl")
+                    b.PrimitiveCollection<string>("ImageUrls")
                         .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)")

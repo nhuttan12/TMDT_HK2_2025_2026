@@ -34,10 +34,11 @@ namespace api.Database.Configurations
                 .HasColumnName("base_price")
                 .HasColumnType("decimal(18,2)");
 
-            builder.Property(p => p.ImageUrl)
-                .IsRequired()
-                .HasColumnName("image_url")
-                .HasMaxLength(2048);
+            builder.Property(p => p.ImageUrls)
+                .HasField("_imageUrls") // BẮT BUỘC: Báo cho EF Core biết phải map trực tiếp vào private field này
+                .UsePropertyAccessMode(PropertyAccessMode.Field) // Ép EF Core đọc/ghi qua field, bảo toàn Encapsulation
+                .HasColumnName("image_urls")
+                .IsRequired();
 
             builder.Property(p => p.CreatedAt)
                 .HasColumnName("created_at")
