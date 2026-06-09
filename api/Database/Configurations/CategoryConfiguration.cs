@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Categories");
+            builder.ToTable("CATEGORIES");
             builder.HasKey(c => c.Id);
             // Vì Domain Entity của chúng ta đã cấp phát Id = Guid.NewGuid() tại RAM, 
             // ta cấm SQL Server tự sinh Id để tiết kiệm 1 round-trip I/O.

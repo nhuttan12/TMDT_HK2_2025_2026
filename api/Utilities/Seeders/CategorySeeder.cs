@@ -10,7 +10,7 @@ namespace api.Utilities.Seeders
     {
         public int ExecutionOrder => 1; // Chạy số 1
 
-        public async Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, CancellationToken cancellationToken)
+        public async Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, IIdGenerator idGenerator, CancellationToken cancellationToken)
         {
             var filePath = Path.Combine(contentRootPath, "Database", "Seeders", "SeedData", "Categories.json");
             if (!File.Exists(filePath)) return;

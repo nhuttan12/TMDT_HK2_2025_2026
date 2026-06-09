@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<UserDetail> builder)
         {
-            builder.ToTable("UserDetails");
+            builder.ToTable("USER_DETAILS");
             builder.HasKey(ud => ud.UserId);
             builder.HasOne(ud => ud.User)
                .WithOne(u => u.UserDetail)

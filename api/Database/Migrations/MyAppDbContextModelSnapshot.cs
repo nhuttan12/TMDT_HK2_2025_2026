@@ -8,7 +8,7 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
     partial class MyAppDbContextModelSnapshot : ModelSnapshot
@@ -47,7 +47,7 @@ namespace api.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("ADDRESSES", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Category.Category", b =>
@@ -83,7 +83,7 @@ namespace api.Database.Migrations
                     b.HasIndex("Sku")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("CATEGORIES", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Orders.Order", b =>
@@ -112,7 +112,7 @@ namespace api.Database.Migrations
 
                     b.HasIndex("Status", "CreatedAt");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("INVOICES", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Orders.OrderItem", b =>
@@ -145,7 +145,7 @@ namespace api.Database.Migrations
 
                     b.HasIndex("VariantId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("ORDER_ITEMS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Products.ProductDetail", b =>
@@ -162,7 +162,7 @@ namespace api.Database.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("ProductDetails", (string)null);
+                    b.ToTable("PRODUCT_DETAILS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>
@@ -208,7 +208,7 @@ namespace api.Database.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Variants_Sku");
 
-                    b.ToTable("Variants", (string)null);
+                    b.ToTable("VARIANTS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Roles.Role", b =>
@@ -272,7 +272,7 @@ namespace api.Database.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("USERS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserDetail", b =>
@@ -294,7 +294,7 @@ namespace api.Database.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserDetails", (string)null);
+                    b.ToTable("USER_DETAILS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Users.UserExternalLogin", b =>
@@ -315,7 +315,7 @@ namespace api.Database.Migrations
                     b.HasIndex("Provider", "Id")
                         .IsUnique();
 
-                    b.ToTable("UserExternalLogins", (string)null);
+                    b.ToTable("USER_EXTERNAL_LOGINS", (string)null);
                 });
 
             modelBuilder.Entity("api.model.Products.Product", b =>
@@ -334,10 +334,9 @@ namespace api.Database.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("ImageUrl")
+                    b.PrimitiveCollection<string>("ImageUrls")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

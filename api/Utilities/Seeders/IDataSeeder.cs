@@ -7,6 +7,6 @@ namespace api.Utilities.Seeders
         // Thứ tự thực hiện: Số nhỏ chạy trước (VD: Category = 1, Product = 2)
         int ExecutionOrder { get; }
 
-        Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, CancellationToken cancellationToken);
+        Task SeedAsync(MyAppDbContext dbContext, string contentRootPath, ILogger logger, IIdGenerator idGenerator, CancellationToken cancellationToken);
     }
 }

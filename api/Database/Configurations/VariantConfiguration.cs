@@ -8,7 +8,7 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Variant> builder)
         {
-            builder.ToTable("Variants");
+            builder.ToTable("VARIANTS");
             builder.HasKey(v => v.Id);
             // Tối ưu I/O: Cấm SQL Server tự sinh ID vì ta đã dùng Guid.NewGuid() ở C#
             builder.Property(v => v.Id).ValueGeneratedNever();
