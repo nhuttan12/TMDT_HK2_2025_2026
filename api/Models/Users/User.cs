@@ -8,6 +8,7 @@ using api.Models.Banners;
 using api.Models.Shops;
 using api.Models.Orders;
 using api.Models.Coupons;
+using api.Models.Promotions;
 
 namespace api.Models
 {
@@ -56,6 +57,7 @@ namespace api.Models
         public ICollection<Banner> Banners { get; set; } = new HashSet<Banner>();
         public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
         public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
+        public ICollection<Promotion> Promotions { get; set; } = new HashSet<Promotion>();
 
         public void SetPassword(string hash)
         {

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function ShopPromotionPage(): Promise<JSX.Element> {
 	// Gọi API/Service tại Server
-	const initialPromotions: ShopPromotion[] = await getShopPromotions();
+	const initialPromotions = await getShopPromotions();
 
 	return (
 		<ShopPromotionContainer

@@ -1,6 +1,9 @@
-﻿using api.model.Products;
+﻿using api.Dtos.Shops;
+using api.model.Products;
 using api.Models.Orders;
 using api.Models.Shops.Enums;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace api.Models.Shops
 {
@@ -27,5 +30,7 @@ namespace api.Models.Shops
         public Shop()
         {
         }
+
+        
     }
 }

@@ -40,7 +40,7 @@ BEGIN
         SELECT @RoleId = id FROM ROLES WHERE Name = 'shop-owner';
 
         -- A. TẠO USER
-        INSERT INTO USERS(
+        INSERT INTO USERS (
             id, 
             email, 
             phone, 

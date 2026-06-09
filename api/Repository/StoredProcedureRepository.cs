@@ -39,7 +39,15 @@ namespace api.Repository
             {
                 if (param is SqlParameter sqlParam)
                 {
-                    names.Add(sqlParam.ParameterName);
+                    if (sqlParam.Direction == System.Data.ParameterDirection.Output ||
+                        sqlParam.Direction == System.Data.ParameterDirection.InputOutput)
+                    {
+                        names.Add($"{sqlParam.ParameterName} OUTPUT");
+                    }
+                    else
+                    {
+                        names.Add(sqlParam.ParameterName);
+                    }
                 }
             }
             return names;

@@ -15,6 +15,10 @@ namespace api.Database.Configurations
                 .HasColumnName("id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
+            builder.Property(promotion => promotion.UserId)
+                .HasColumnName("user_id")
+                .IsRequired();
+
             builder.Property(promotion => promotion.Name)
                 .IsRequired()
                 .HasColumnName("name")
@@ -43,6 +47,11 @@ namespace api.Database.Configurations
                 .HasColumnName("updated_at")
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("GETUTCDATE()");
+
+            builder.HasOne(p => p.User)
+                .WithMany(p => p.Promotions)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
