@@ -11,7 +11,7 @@ export const getCouponsByUserId = async (userId: string): Promise<UserCoupon[]> 
 					scope: 'shop',
 					category: 'discount',
 					status: 'active',
-					shopId: 'shop_123',
+					shopId: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
 					discountType: 'percentage',
 					discountValue: 20,
 					maxDiscountAmount: 50000,

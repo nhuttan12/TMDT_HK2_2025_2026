@@ -5,6 +5,6 @@ namespace api.Services.Banners
 {
     public interface IBannerService
     {
-        Task<Result<int>> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners);
+        Task<Result<int>> BulkUpdateBannersAsync(Guid UserId, CancellationToken CancellationToken, List<UpdateBannerDto> Banners);
     }
 }

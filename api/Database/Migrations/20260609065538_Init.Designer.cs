@@ -186,7 +186,7 @@ namespace api.Database.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("max_discount_amount");
 
-                    b.Property<decimal>("MinOrderValue")
+                    b.Property<decimal>("MinInvoiceValue")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("min_order_value");
 
@@ -783,7 +783,7 @@ namespace api.Database.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("Discount")
+                    b.Property<int>("DiscountPrice")
                         .HasColumnType("int")
                         .HasColumnName("discount");
 

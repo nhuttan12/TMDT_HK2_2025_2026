@@ -13,7 +13,7 @@ interface Props {
 	relatedProducts: ProductUserCard[];
 }
 
-export default function ProductDetailContainer({ product, relatedProducts }: Props): JSX.Element {
+export default function ProductDetailContainer({ product, relatedProducts }: Props) {
 	const logic = useProductDetailLogic(product);
 
 	return (

@@ -1,7 +1,7 @@
 import { ShopProductPromotion } from '@/types/marketing/shop-promotions/ShopProductPromotion';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
-export async function getStoreProductPromotions(id: string): Promise<ShopProductPromotion[]> {
+export async function getStoreProductPromotions(promotionId: string): Promise<ShopProductPromotion[]> {
 	return new Promise((resolve) =>
 		setTimeout(
 			() =>

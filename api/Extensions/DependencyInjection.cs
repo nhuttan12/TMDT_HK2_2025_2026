@@ -14,8 +14,6 @@ using api.Services.Users;
 using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using api.Repository.UserRepo;
-using api.Repository.RoleRepo;
 using api.Services.Banners;
 
 namespace api.Extensions
@@ -63,6 +61,8 @@ namespace api.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBannerService, BannerService>();
+            services.AddScoped<IBankingService, BankingService>();
+            services.AddScoped<IBankingRepository, BankingRepository>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

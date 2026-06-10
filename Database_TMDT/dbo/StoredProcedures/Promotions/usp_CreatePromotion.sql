@@ -39,7 +39,7 @@ BEGIN
 		INSERT INTO PRODUCT_PROMOTIONS(
 			product_id, 
 			promotion_id, 
-			discount
+			discount_price
 		)
 		SELECT ProductId, @NewPromotionId, Discount 
 		FROM @Products

@@ -183,9 +183,9 @@ namespace api.Database.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("max_discount_amount");
 
-                    b.Property<decimal>("MinOrderValue")
+                    b.Property<decimal>("MinInvoiceValue")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("min_order_value");
+                        .HasColumnName("min_invoice_value");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -224,7 +224,13 @@ namespace api.Database.Migrations
                         .HasColumnType("int")
                         .HasColumnName("used_quantity");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("COUPONS", (string)null);
                 });
@@ -737,7 +743,8 @@ namespace api.Database.Migrations
                         .HasColumnName("name");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_id");
 
                     b.Property<decimal>("SellPrice")
                         .HasColumnType("decimal(18,2)")
@@ -780,9 +787,9 @@ namespace api.Database.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("int")
-                        .HasColumnName("discount");
+                    b.Property<decimal>("DiscountPrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("discount_price");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier")
@@ -1204,6 +1211,17 @@ namespace api.Database.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Coupons")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.Coupons.InvoiceAppliedCoupon", b =>
                 {
                     b.HasOne("api.Models.Coupons.Coupon", "Coupon")
@@ -1579,6 +1597,8 @@ namespace api.Database.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Banners");
+
+                    b.Navigation("Coupons");
 
                     b.Navigation("GoodsIssues");
 

@@ -67,7 +67,7 @@
     <Folder Include="dbo\StoredProcedures\Promotions" />
     <Folder Include="dbo\UserDefinedTypes\Banners" />
     <Folder Include="dbo\UserDefinedTypes\Promotions" />
-    <Folder Include="dbo\StoredProcedures\User" />
+    <Folder Include="dbo\StoredProcedures\Users" />
     <Folder Include="dbo\UserDefinedTypes\Users" />
     <Folder Include="dbo\StoredProcedures\Coupons" />
   </ItemGroup>
@@ -94,12 +94,12 @@
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCHES.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_RegisterShop.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_BulkUpdateBanners.sql" />
-    <Build Include="dbo\StoredProcedures\Banners\usp_GetBannersPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Banners\usp_GetAdminBannersPaging.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_CreatePromotion.sql" />
     <Build Include="dbo\UserDefinedTypes\Banners\BannerInsertType.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
-    <Build Include="dbo\StoredProcedures\User\usp_AddUserBankings.sql" />
-    <Build Include="dbo\StoredProcedures\User\usp_UpdateUserBanking.sql" />
+    <Build Include="dbo\StoredProcedures\Users\usp_AddUserBankings.sql" />
+    <Build Include="dbo\StoredProcedures\Users\usp_UpdateUserBanking.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopProfile.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopList.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopApprovalList.sql" />
@@ -116,6 +116,14 @@
     <Build Include="dbo\Tables\INVOICE_APPLIED_COUPONS.sql" />
     <Build Include="dbo\Tables\COUPONS.sql" />
     <Build Include="dbo\Tables\USER_EXTERNAL_LOGINS.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_CreateCoupon.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetUserSavedCouponListPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetPlatformCouponForUserSaving.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_UpdateCoupon.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetShopCouponPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetCouponDetail.sql" />
+    <Build Include="dbo\StoredProcedures\Banners\usp_GetHomeBanners.sql" />
+    <Build Include="dbo\StoredProcedures\Banners\usp_GetShopBanners.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

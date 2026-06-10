@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 	title: 'Thêm sửa thông tin mã giảm giá',
 };
 
-export default async function ViewCouponPage(): Promise<JSX.Element> {
+export default async function ViewCouponPage() {
 	// Fetch dữ liệu ngay trên Server
 	const initialCoupon: AdminCoupon = {
 		id: '',
@@ -23,7 +23,6 @@ export default async function ViewCouponPage(): Promise<JSX.Element> {
 		minOrderValue: 0,
 		totalQuantity: 0,
 		usedQuantity: 0,
-		maxUsagePerUser: 1, // Đã bổ sung
 		validTime: {
 			fromDate: '',
 			toDate: '',

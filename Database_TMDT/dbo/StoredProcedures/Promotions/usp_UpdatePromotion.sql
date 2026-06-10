@@ -38,7 +38,7 @@ BEGIN
 
         -- Cập nhật discount mới hoặc mở lại những sản phẩm từng bị xóa mềm
         UPDATE target
-        SET target.discount = source.Discount,
+        SET target.discount_price = source.Discount,
             target.status = 1
         FROM [PRODUCT_PROMOTIONS] AS target
         INNER JOIN @Products AS source 
@@ -53,7 +53,7 @@ BEGIN
         INSERT INTO [PRODUCT_PROMOTIONS] (
             product_id, 
             promotion_id, 
-            discount, 
+            discount_price, 
             status
         )
         SELECT 

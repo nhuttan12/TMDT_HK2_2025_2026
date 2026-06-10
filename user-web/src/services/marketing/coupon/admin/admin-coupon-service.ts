@@ -15,14 +15,13 @@ export const getShopCouponsByShopId = async (
 						scope: 'shop',
 						createdByType: 'shop',
 						shopId: shopId,
-                        category: 'shipping',
+						category: 'shipping',
 						discountType: 'fixed_amount',
 						discountValue: 50000,
 						maxDiscountAmount: null,
 						minOrderValue: 150000,
 						totalQuantity: 1000,
 						usedQuantity: 450,
-						maxUsagePerUser: 1,
 						validTime: {
 							fromDate: '2026-04-01T00:00:00Z',
 							toDate: '2026-05-01T23:59:59Z',
@@ -36,14 +35,13 @@ export const getShopCouponsByShopId = async (
 						scope: 'shop',
 						createdByType: 'shop',
 						shopId: shopId,
-                        category: 'discount',
+						category: 'discount',
 						discountType: 'percentage',
 						discountValue: 10,
 						maxDiscountAmount: 30000,
 						minOrderValue: 100000,
 						totalQuantity: 500,
 						usedQuantity: 500,
-						maxUsagePerUser: 2,
 						validTime: {
 							fromDate: '2026-01-01T00:00:00Z',
 							toDate: '2026-02-01T23:59:59Z',
@@ -84,13 +82,12 @@ export const getPlatformCoupons = async (): Promise<PaginationResponse<AdminCoup
 						createdByType: 'admin', // Bổ sung để khớp interface
 						shopId: null,
 						discountType: 'fixed_amount',
-                        category: 'shipping',
+						category: 'shipping',
 						discountValue: 50000,
 						maxDiscountAmount: null,
 						minOrderValue: 150000,
 						totalQuantity: 1000,
 						usedQuantity: 450,
-						maxUsagePerUser: 1, // Bổ sung để khớp interface
 						validTime: {
 							fromDate: '2026-04-01T00:00:00Z',
 							toDate: '2026-05-01T23:59:59Z',
@@ -104,14 +101,13 @@ export const getPlatformCoupons = async (): Promise<PaginationResponse<AdminCoup
 						scope: 'platform',
 						createdByType: 'admin', // Bổ sung để khớp interface
 						shopId: null,
-                        category: 'discount',
+						category: 'discount',
 						discountType: 'percentage',
 						discountValue: 10,
 						maxDiscountAmount: 30000,
 						minOrderValue: 100000,
 						totalQuantity: 500,
 						usedQuantity: 500,
-						maxUsagePerUser: 1, // Bổ sung để khớp interface
 						validTime: {
 							fromDate: '2026-01-01T00:00:00Z',
 							toDate: '2026-02-01T23:59:59Z',
@@ -134,14 +130,13 @@ export const getCouponDetailById = async (couponId: string): Promise<AdminCoupon
 				scope: 'platform',
 				createdByType: 'admin', // Bổ sung để khớp interface
 				shopId: null,
-                category: 'shipping',
+				category: 'shipping',
 				discountType: 'fixed_amount',
 				discountValue: 50000,
 				maxDiscountAmount: null,
 				minOrderValue: 150000,
 				totalQuantity: 1000,
 				usedQuantity: 450,
-				maxUsagePerUser: 1, // Bổ sung để khớp interface
 				validTime: {
 					fromDate: '2026-04-01T00:00:00Z',
 					toDate: '2026-05-01T23:59:59Z',

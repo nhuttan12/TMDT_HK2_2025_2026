@@ -1,6 +1,7 @@
 ﻿using api.Dtos.Banners.Request;
 using api.Dtos.Common;
-using api.Repository;
+using api.Models;
+using api.Repository.BannerRepo;
 using api.Utilities;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -9,45 +10,26 @@ namespace api.Services.Banners
 {
     public class BannerService : IBannerService
     {
-        private readonly IStoredProcedureRepository _spRepository;
+        private readonly IBannerRepository _bannerRepository;
 
-        public BannerService(IStoredProcedureRepository spRepository)
+        public BannerService(IBannerRepository bannerRepository)
         {
-            _spRepository = spRepository;
+            _bannerRepository = bannerRepository;
         }
 
-        public async Task<Result<int>> BulkUpdateBannersAsync(Guid userId, List<UpdateBannerDto> banners)
+        public async Task<Result<int>> BulkUpdateBannersAsync(Guid UserId, CancellationToken CancellationToken, List<UpdateBannerDto> Banners)
         {
-            if (banners == null || !banners.Any()) return 0;
-
-            var bannerTable = new DataTable();
-            bannerTable.Columns.Add("ImageUrl", typeof(string));
-            bannerTable.Columns.Add("Invoice", typeof(int));
-            bannerTable.Columns.Add("IsPrimary", typeof(bool));
-
-            foreach (var banner in banners)
+            try
             {
-                bannerTable.Rows.Add(banner.Url, banner.Order, banner.IsPrimary);
+                var result = await _bannerRepository.BulkUpdateBannersAsync(UserId, CancellationToken, Banners);
+
+                return result;
             }
-
-            var userIdParam = new SqlParameter("@UserId", SqlDbType.UniqueIdentifier)
+            catch (SqlException ex)
             {
-                Value = userId
-            };
-
-            var bannersParam = new SqlParameter("@Banners", SqlDbType.Structured)
-            {
-                TypeName = "dbo.BannerInsertType",
-                Value = bannerTable
-            };
-
-            var result = await _spRepository.QueryAsync<RowsAffectedResponse>(
-                "[dbo].[usp_BulkUpdateBanners]", userIdParam, bannersParam
-                );
-
-            var rowsAffected = result.Sum(row => row.RowsAffected);
-
-            return Result<int>.Success(rowsAffected);
+                var sysError = new Error("System.DatabaseError", "Đã có lỗi xảy ra khi kết nối cơ sở dữ liệu.");
+                return Result<int>.Failure(sysError);
+            }
         }
     }
 }
