@@ -17,7 +17,7 @@ namespace api.Services.Products
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto fillterDto, CancellationToken cancellationToken = default);
-        Task<Result<ProductResponseDto>> GetProductById(Guid id, CancellationToken cancellationToken = default);
+        Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
     }
     public class ProductService(
         ILogger<ProductController> logger,
@@ -50,11 +50,16 @@ namespace api.Services.Products
             await unitOfWork.CommitAsync();
             return res;
         }
-        public async Task<Result<ProductResponseDto>> GetProductById(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default)
         {
             if (id == Guid.Empty)
             {
                 return Result<ProductResponseDto>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
+            }
+
+            if(queryDto is not null)
+            {
+                // Process the query parameters if needed
             }
             var product = await repo.GetByIdAsync(id);
 

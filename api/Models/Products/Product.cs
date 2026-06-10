@@ -56,6 +56,7 @@ namespace api.model.Products
             BasePrice = basePrice;
             CategoryId = categoryId;
             ShopId = shopId;
+            Shop = null!; // Để EF Core tự động nạp khi cần
             _imageUrls.Add(imageUrl); // Thêm URL đầu tiên vào danh sách ảnh
         }
 

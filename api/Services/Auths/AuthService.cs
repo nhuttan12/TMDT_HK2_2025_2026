@@ -30,6 +30,7 @@ namespace api.Services.Auths
         IMapper mapper,
         IRoleRepo roleRepository,
         IUnitOfWork unitOfWork,
+        IIdGenerator idGenerator,
         ILogger<AuthService> logger) : IAuthService
     {
         private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
@@ -88,9 +89,9 @@ namespace api.Services.Auths
             {
                 return Result<UserInfoDTO>.Failure(Error.Create("AUTH_003", "Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'", ErrorType.Failure));
             }
-
+            var id = idGenerator.NewId();
             // 3. Domain Logic: Khởi tạo Entity thông qua Factory Method (Rich Domain Model)
-            var newUser = User.Create(request.Email, role, "Local", string.Empty);
+            var newUser = User.Create(id, request.Email, role, "Local", string.Empty);
 
             // 4. Security: Hashing (Sử dụng thư viện chuẩn thay vì hàm tự viết không rõ nguồn gốc)
             var passwordHash = _passwordHasher.HashPassword(newUser, request.Password);
@@ -116,8 +117,10 @@ namespace api.Services.Auths
 
                 // 3. Sử dụng Factory Method để tạo User object hoàn chỉnh
                 // Việc khởi tạo UserDetail và ExternalLogin nên nằm trong logic của Entity User
+                var id = idGenerator.NewId();
                 user = new User
                 {
+                    Id = id,    
                     Email = googleInfo.Email,
                     PasswordHash = "",
                     RoleId = 2,

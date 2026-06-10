@@ -8,6 +8,7 @@ using api.Models.Users;
 using api.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Api.Models.Users;
+using api.Models.Shops;
 namespace api.Database
 {
     public class MyAppDbContext : DbContext
@@ -34,6 +35,8 @@ namespace api.Database
         public DbSet<InvoiceItem> OrderItems { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
+
+        public DbSet<Shop> Shops { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

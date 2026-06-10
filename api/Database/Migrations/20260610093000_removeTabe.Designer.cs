@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Database.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260609065538_Init")]
-    partial class Init
+    [Migration("20260610093000_removeTabe")]
+    partial class removeTabe
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -906,7 +906,6 @@ namespace api.Database.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("description");
 
@@ -918,6 +917,10 @@ namespace api.Database.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int")
                         .HasColumnName("rating");
+
+                    b.Property<string>("ShopLogos")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -943,36 +946,6 @@ namespace api.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SHOPS", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Shops.ShopLogo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("LogoUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("logo_url");
-
-                    b.Property<Guid>("ShopId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("shop_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("SHOP_LOGOS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.User", b =>
@@ -1431,17 +1404,6 @@ namespace api.Database.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("api.Models.Shops.ShopLogo", b =>
-                {
-                    b.HasOne("api.Models.Shops.Shop", "Shop")
-                        .WithMany("ShopLogos")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.HasOne("api.Models.Roles.Role", "Role")
@@ -1573,8 +1535,6 @@ namespace api.Database.Migrations
                     b.Navigation("Invoices");
 
                     b.Navigation("Products");
-
-                    b.Navigation("ShopLogos");
                 });
 
             modelBuilder.Entity("api.Models.User", b =>

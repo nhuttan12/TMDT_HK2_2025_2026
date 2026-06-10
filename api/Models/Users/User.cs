@@ -9,18 +9,28 @@ using api.Models.Shops;
 using api.Models.Orders;
 using api.Models.Coupons;
 using api.Models.Promotions;
+using api.Utilities;
 
 namespace api.Models
 {
     public class User
     {
-        public static User Create(string email, Role role, string provider, String providerKey)
+        /// <summary>
+        /// Tạo mới một user với thông tin cơ bản và liên kết đến đăng nhập bên ngoài (nếu có)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        /// <param name="provider"></param>
+        /// <param name="providerKey"></param>
+        /// <returns></returns>
+        public static User Create(Guid id,string email, Role role, string provider, String providerKey)
         {
             UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
             UserDetail ud = UserDetail.Create();
             return new User
             {
-                Id = Guid.Empty, // Id sẽ được tự động sinh bởi database
+                Id = id, 
                 Email = email.ToLower().Trim(),
                 Role = role,
                 UserExternalLogin = ux,
@@ -79,6 +89,12 @@ namespace api.Models
                 throw new ArgumentException("Password hash cannot be empty.");
 
             PasswordHash = newHash;
+        }
+
+        internal Result<bool> AddShop(Shop shop)
+        {
+            this.Shop = shop;
+            return Result<bool>.Success(true);
         }
     }
 }

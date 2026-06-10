@@ -1,0 +1,29 @@
+[
+  {
+    "email": "Terrafulness@gmail.com",
+    "name": "Nguyễn Văn A",
+    "AvatarUrl": "https://cdn.hstatic.net/200000968796/file/terrarium_logo_2cd9473fd32440e7a1c6689c3b6191c2.png",
+    "shop": {
+      "name": "Terrafulness",
+      "description": "Chuyên cung cấp các mẫu terrarium nhiệt đới, hệ sinh thái mini để bàn và phụ kiện setup tiểu cảnh kính cao cấp."
+    }
+  },
+  {
+    "email": "Xanhzone@gmail.com",
+    "name": "Trần Thị B",
+    "AvatarUrl": "https://pos.nvncdn.com/524fc3-178700/store/20250616_12VfLmg9.png?v=1750060091",
+    "shop": {
+      "name": "Xanhzone",
+      "description": "Không gian xanh thu nhỏ với các bình terrarium thiết kế riêng, chuyên cung cấp các loại rêu, cẩm nhung và đất nền chuyên dụng."
+    }
+  },
+  {
+    "email": "LeJardin@gmail.com",
+    "name": "Lê Hoàng C",
+    "AvatarUrl": "https://terrariumlejardin.com/thumbs/372x102x2/upload/photo/logo-3109.png",
+    "shop": {
+      "name": "Le Jardin",
+      "description": "Góc rừng nguyên sinh trong lồng kính. Chuyên thiết kế, thi công các dự án paludarium, terrarium và tổ chức workshop làm hệ sinh thái."
+    }
+  }
+]

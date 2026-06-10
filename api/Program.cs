@@ -1,6 +1,7 @@
 using api.Database;
 using api.Extensions;
 using api.Services.Auths;
+using api.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +27,9 @@ using (var scope = app.Services.CreateScope())
     var config = services.GetRequiredService<IConfiguration>();
     var context = services.GetRequiredService<MyAppDbContext>();
     var authService = services.GetRequiredService<IAuthService>();
+    var idGenerator = services.GetRequiredService<IIdGenerator>();
 
-    await api.Database.Seeders.DatabaseSeeder.SeedAsync(app.Services);
+    await api.Database.Seeders.DatabaseSeeder.SeedAsync(app.Services, idGenerator);
 }
 
 await app.SeedSmartDataAsync(app.Lifetime.ApplicationStopped);

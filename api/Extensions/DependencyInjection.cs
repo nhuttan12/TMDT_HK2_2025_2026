@@ -25,15 +25,17 @@ namespace api.Extensions
     /// </summary>
     public static class DependencyInjection
     {
+        private const string Variable = "MSSQL_PORT";
+
         public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             // Nếu connection string chứa biến, chúng ta thay thế nó bằng giá trị thực tế từ Environment
             connectionString = connectionString
-                .Replace("${MSSQL_PORT}", Environment.GetEnvironmentVariable("MSSQL_PORT") ?? "1433")
+                .Replace("${MSSQL_PORT}", Environment.GetEnvironmentVariable(Variable) ?? "1433")
                 .Replace("${MSSQL_SA_PASSWORD}", Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD") ?? "YourStrongPassword123!");
-            // Đăng ký các dịch vụ bảo mật tại đây
+            // Đăng ký các dịch vụ bảo mật tại đây 
             // Đăng ký DbContext với SQL Server
             services.AddDbContext<MyAppDbContext>(options =>
                 options.UseSqlServer(connectionString,
@@ -53,6 +55,7 @@ namespace api.Extensions
             services.AddScoped<IAuthRepo, AuthRepo>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
+            services.AddScoped<IStoredProcedureRepository, StoredProcedureRepository>();
 
 
             // Đăng ký các service
@@ -70,6 +73,7 @@ namespace api.Extensions
 
             // Đăng ký các seed data
             services.AddScoped<IDataSeeder, CategorySeeder>();
+            services.AddScoped<IDataSeeder, ShopSeeder>();
             services.AddScoped<IDataSeeder, ProductSeeder>();
             // Đăng ký global exception handler
             return services;

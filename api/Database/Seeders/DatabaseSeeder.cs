@@ -1,6 +1,7 @@
 ﻿using api.Models;
 using api.Models.Roles;
 using api.Services.Auths;
+using api.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Database.Seeders
@@ -8,7 +9,7 @@ namespace api.Database.Seeders
     public class DatabaseSeeder
     {
         // Chỉ nhận IServiceProvider để tự động resolve (phân giải) các Dependency
-        public static async Task SeedAsync(IServiceProvider serviceProvider, CancellationToken ct = default)
+        public static async Task SeedAsync(IServiceProvider serviceProvider, IIdGenerator idGenerator, CancellationToken ct = default)
         {
             // 1. Resolve (Lấy ra) các service cần thiết từ DI Container
             using var scope = serviceProvider.CreateScope();
@@ -61,9 +62,9 @@ namespace api.Database.Seeders
                         logger.LogCritical("Không thể tạo Admin vì thiếu Role 'Admin' trong hệ thống!");
                         return;
                     }
-
+                    var id = idGenerator.NewId();
                     // Giả định User.Create trả về đối tượng User theo chuẩn DDD
-                    var adminUser = User.Create(email, adminRole, "local", "local");
+                    var adminUser = User.Create(id, email, adminRole, "local", "local");
 
                     // Rich Domain Model: Gán hash thông qua phương thức, không dùng public setter
                     var hash = authService.HashPassword(adminUser, password);
