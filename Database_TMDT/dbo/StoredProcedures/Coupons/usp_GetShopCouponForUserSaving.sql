@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[usp_GetPlatformCouponForUserSaving]
-	@UserId UNIQUEIDENTIFIER
+﻿CREATE PROCEDURE [dbo].[usp_GetShopCouponForUserSaving]
+	@ShopId UNIQUEIDENTIFIER,
+	@UserId UNIQUEIDENTIFIER = NULL
 AS
 BEGIN
 	SELECT TOP 5 
@@ -26,7 +27,7 @@ BEGIN
 		AND usc.user_id = @UserId 
 
 	WHERE c.[status] = 1
-		AND c.scope = 'platform'
+		AND c.scope = 'shop'
 
 	ORDER BY c.start_at DESC 
 END

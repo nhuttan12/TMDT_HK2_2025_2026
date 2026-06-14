@@ -14,7 +14,7 @@ BEGIN
 
 	SELECT 
 		s.id, 
-		s.name AS Name, 
+		s.[name] AS [Name], 
 		u.email AS Email, 
 		u.phone AS Phone, 
 		s.rating AS Rating, 

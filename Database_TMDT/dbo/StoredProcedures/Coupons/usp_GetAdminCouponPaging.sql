@@ -1,9 +1,16 @@
-﻿CREATE PROCEDURE [dbo].[usp_GetShopCouponPaging]
+﻿CREATE PROCEDURE [dbo].[usp_GetAdminCouponPaging]
 	@UserId UNIQUEIDENTIFIER,
 	@PageNumber INT,
 	@PageSize INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @TotalItems INT;
+	SELECT @TotalItems = COUNT(1)
+	FROM COUPONS c
+	WHERE c.user_id = @UserId;
+
 	SELECT 
 		c.id AS Id,
 		c.code AS Code,
@@ -11,29 +18,21 @@ BEGIN
 		c.scope AS Scope,
 		c.category AS Category,
 		c.[status] AS [Status],
-		s.id AS ShopId,
+		c.user_id AS ShopId,
 		c.[type] AS [Type],
 		c.discount_value AS [DiscountValue],
 		c.max_discount_amount AS [MaxDiscountAmount],
 		c.min_invoice_value AS [MinInvoiceValue],
 		c.start_at AS StartAt, 
-		c.end_at AS EndAt
-	FROM USER_SAVED_COUPONS usc
+		c.end_at AS EndAt,
+		c.total_quantity AS TotalQuantity,
+		c.used_quantity AS UsedQuantity,
+		@TotalItems AS TotalItems
+	FROM COUPONS c
 
-	INNER JOIN COUPONS c
-		ON usc.coupon_id = c.id
+	WHERE c.user_id = @UserId
 
-	-- JOIN với bảng SHOPS để xác thực. 
-	-- Điều kiện scope = 'shop' giúp tăng tốc query (bỏ qua mã platform)
-	LEFT JOIN SHOPS s
-		ON c.user_id = s.id
-			AND c.scope = 'shop'
-
-	WHERE usc.user_id = @UserId
-		AND usc.is_used = 0
-		AND c.[status] = 1
-
-	ORDER BY usc.saved_at DESC 
+	ORDER BY c.created_at DESC 
 	OFFSET (@PageNumber - 1) * @PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY;
 END

@@ -154,7 +154,7 @@ export const CouponFormUi = ({
 				<Field label='Giá trị đơn hàng tối thiểu'>
 					<Input
 						type='number'
-						value={formData.minOrderValue}
+						value={formData.minInvoiceValue}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
 							handleInputChange('minOrderValue', Number(e.target.value))
 						}

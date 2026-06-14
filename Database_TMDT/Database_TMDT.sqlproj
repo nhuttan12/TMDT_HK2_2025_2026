@@ -120,10 +120,11 @@
     <Build Include="dbo\StoredProcedures\Coupons\usp_GetUserSavedCouponListPaging.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_GetPlatformCouponForUserSaving.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_UpdateCoupon.sql" />
-    <Build Include="dbo\StoredProcedures\Coupons\usp_GetShopCouponPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetAdminCouponPaging.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_GetCouponDetail.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetHomeBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetShopBanners.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_GetShopCouponForUserSaving.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

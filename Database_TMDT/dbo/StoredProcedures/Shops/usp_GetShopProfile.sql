@@ -3,10 +3,10 @@ AS
 BEGIN
 	SELECT 
 		s.id, 
-		s.name AS Name,
+		s.[name] AS [Name],
 		u.email AS Email,
 		u.phone AS Phone,
-		s.description AS [Description],
+		s.[description] AS [Description],
 		a.address_url AS [Address],
 		sl.logo_url AS Logo,
 		ub.bank_name AS BankName,

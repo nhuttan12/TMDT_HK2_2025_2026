@@ -4,7 +4,7 @@
     @Status BIT, 
     @StartAt DATETIMEOFFSET, 
     @EndAt DATETIMEOFFSET, 
-    @Products dbo.[ProductPromotionType] READONLY
+    @Products ProductPromotionType READONLY
 AS
 BEGIN
     SET NOCOUNT ON;

@@ -1,6 +1,6 @@
-﻿namespace api.Dtos.Coupons
+﻿namespace api.Dtos.Coupons.Response
 {
-    public record UserCoupon(
+    public record AdminCoupon(
         Guid Id,
         string Code,
         string Name,
@@ -13,5 +13,7 @@
         decimal MaxDiscountAmount,
         decimal MinInvoiceValue,
         DateTimeOffset StartAt,
-        DateTimeOffset EndAt);
+        DateTimeOffset EndAt,
+        int TotalQuantity,
+        int UsedQuantity);
 }

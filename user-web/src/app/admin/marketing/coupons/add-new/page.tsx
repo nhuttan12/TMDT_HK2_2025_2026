@@ -14,13 +14,12 @@ export default async function ViewCouponPage() {
 		code: '',
 		name: '',
 		scope: 'platform',
-		createdByType: 'admin', // Đã bổ sung
 		shopId: null,
 		discountType: 'fixed_amount',
         category: 'discount', // Mặc định
 		discountValue: 0,
 		maxDiscountAmount: null,
-		minOrderValue: 0,
+		minInvoiceValue: 0,
 		totalQuantity: 0,
 		usedQuantity: 0,
 		validTime: {

@@ -15,6 +15,9 @@ using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Services.Banners;
+using api.Repository.BannerRepo;
+using api.Services.Coupons;
+using api.Repository.Coupons;
 
 namespace api.Extensions
 {
@@ -51,7 +54,11 @@ namespace api.Extensions
             services.AddScoped<IAuthRepo, AuthRepo>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
-
+            services.AddScoped<IBankingRepository, BankingRepository>();
+            services.AddScoped<IUserBannerRepository, UserBannerRepository>();
+            services.AddScoped<IAdminBannerRepository, AdminBannerRepository>();
+            services.AddScoped<IAdminCouponRepository, AdminCouponRepository>();
+            services.AddScoped<IUserCouponRepository, UserCouponRepository>();
 
             // Đăng ký các service
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -60,9 +67,11 @@ namespace api.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IBannerService, BannerService>();
+            services.AddScoped<IAdminBannerService, AdminBannerService>();
+            services.AddScoped<IUserBannerService, UserBannerService>();
             services.AddScoped<IBankingService, BankingService>();
-            services.AddScoped<IBankingRepository, BankingRepository>();
+            services.AddScoped<IAdminCouponService, AdminCouponService>();
+            services.AddScoped<IUserCouponService, UserCouponService>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

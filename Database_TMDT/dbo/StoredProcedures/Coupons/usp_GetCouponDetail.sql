@@ -1,4 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[usp_GetCouponDetail]
+	@UserId UNIQUEIDENTIFIER,
+	@CouponId UNIQUEIDENTIFIER
 AS
 BEGIN
 	SELECT 
@@ -17,4 +19,6 @@ BEGIN
 		c.end_at AS [EndAt],
 		c.[status] AS [Status]
 	FROM COUPONS c
+	WHERE c.id = @CouponId
+		AND c.user_id = @UserId
 END

@@ -1,19 +1,16 @@
-﻿namespace api.Dtos.Coupons
+﻿namespace api.Dtos.Coupons.Response
 {
-    public record CouponDetailResponse(
+    public record PlatformCouponForUserSaving(
         int Id,
         string Code,
         string Name,
         string Scope,
         string Category,
+        int Status,
         string Type,
         decimal DiscountValue,
         decimal MaxDiscountAmount,
         decimal MinInvoiceValue,
-        int TotalQuantity,
-        int UsedQuantity,
         DateTimeOffset StartAt,
-        DateTimeOffset EndAt,
-        bool Status
-    );
+        DateTimeOffset EndAt);
 }

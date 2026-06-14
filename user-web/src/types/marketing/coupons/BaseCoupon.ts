@@ -17,7 +17,7 @@ export interface BaseCoupon {
     discountType: DiscountType;
     discountValue: number; 
     maxDiscountAmount: number | null; 
-    minOrderValue: number; 
+    minInvoiceValue: number; 
 
     // Thời gian áp dụng
     validTime: TimeArrange; 

@@ -15,7 +15,7 @@ export const getCouponsByUserId = async (userId: string): Promise<UserCoupon[]> 
 					discountType: 'percentage',
 					discountValue: 20,
 					maxDiscountAmount: 50000,
-					minOrderValue: 150000,
+					minInvoiceValue: 150000,
 					validTime: {
 						fromDate: '2026-05-01T00:00:00Z',
 						toDate: '2026-05-31T23:59:59Z',
@@ -33,7 +33,7 @@ export const getCouponsByUserId = async (userId: string): Promise<UserCoupon[]> 
 					discountType: 'fixed_amount',
 					discountValue: 30000,
 					maxDiscountAmount: 30000,
-					minOrderValue: 200000,
+					minInvoiceValue: 200000,
 					validTime: {
 						fromDate: '2026-05-01T00:00:00Z',
 						toDate: '2026-06-05T23:59:59Z',
@@ -60,7 +60,7 @@ export const getPlatformCoupons = async (): Promise<UserCoupon[]> => {
 					discountType: 'fixed_amount',
 					discountValue: 50000,
 					maxDiscountAmount: 50000,
-					minOrderValue: 300000,
+					minInvoiceValue: 300000,
 					validTime: {
 						fromDate: '2026-05-01T00:00:00Z',
 						toDate: '2026-05-30T23:59:59Z',
@@ -87,7 +87,7 @@ export const getShopPublicCoupons = async (shopId: number): Promise<UserCoupon[]
 					discountType: 'fixed_amount',
 					discountValue: 100000,
 					maxDiscountAmount: 100000,
-					minOrderValue: 500000,
+					minInvoiceValue: 500000,
 					validTime: {
 						fromDate: '2026-05-01T00:00:00Z',
 						toDate: '2026-06-30T23:59:59Z',
@@ -105,7 +105,7 @@ export const getShopPublicCoupons = async (shopId: number): Promise<UserCoupon[]
 					discountType: 'fixed_amount',
 					discountValue: 30000,
 					maxDiscountAmount: 30000,
-					minOrderValue: 150000,
+					minInvoiceValue: 150000,
 					validTime: {
 						fromDate: '2026-05-01T00:00:00Z',
 						toDate: '2026-05-15T23:59:59Z',
