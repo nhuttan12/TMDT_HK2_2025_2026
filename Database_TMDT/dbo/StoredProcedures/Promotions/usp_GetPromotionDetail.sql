@@ -3,6 +3,8 @@
 AS
 BEGIN
 	BEGIN TRY
+		SET NOCOUNT ON;
+
 		SELECT 
 			p.id AS Id,
 			pd.id AS [ProductId],
@@ -15,11 +17,14 @@ BEGIN
 			p.[status] AS [Status]
 		FROM PROMOTIONS p
 		INNER JOIN PRODUCT_PROMOTIONS pp
-			ON pp.product_id = p.id
+			ON pp.promotion_id = p.id
+
 		INNER JOIN PRODUCTS pd
 			ON pd.id = pp.product_id
+
 		INNER JOIN VARIANTS v
-			ON v.product_id = p.id
+			ON v.product_id = pd.id
+
 		WHERE p.id = @PromotionId
 	END TRY
 	BEGIN CATCH

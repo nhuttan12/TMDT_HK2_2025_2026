@@ -18,6 +18,8 @@ using api.Services.Banners;
 using api.Repository.BannerRepo;
 using api.Services.Coupons;
 using api.Repository.Coupons;
+using api.Repository.Promotions;
+using api.Services.Promotions;
 
 namespace api.Extensions
 {
@@ -47,6 +49,7 @@ namespace api.Extensions
                 }));
 
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+
             // dang ky ropository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -59,6 +62,8 @@ namespace api.Extensions
             services.AddScoped<IAdminBannerRepository, AdminBannerRepository>();
             services.AddScoped<IAdminCouponRepository, AdminCouponRepository>();
             services.AddScoped<IUserCouponRepository, UserCouponRepository>();
+            services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
+            services.AddScoped<IAdminPromotionRepository, AdminPromotionRepository>();
 
             // Đăng ký các service
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -72,6 +77,8 @@ namespace api.Extensions
             services.AddScoped<IBankingService, BankingService>();
             services.AddScoped<IAdminCouponService, AdminCouponService>();
             services.AddScoped<IUserCouponService, UserCouponService>();
+            services.AddScoped<IUserPromotionService, UserPromotionService>();
+            services.AddScoped<IAdminPromotionService, AdminPromotionService>();
 
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

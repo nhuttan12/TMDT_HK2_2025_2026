@@ -1,9 +1,9 @@
 ﻿namespace api.Dtos.Promotiions.Response
 {
-    public record PromotionPaging(
-        int Id,
+    public record ShopPromotion(
+        Guid Id,
         string Name,
-        int Status,
+        bool Status,
         DateTimeOffset StartAt,
         DateTimeOffset EndAt,
         DateTimeOffset CreatedAt,

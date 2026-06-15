@@ -125,6 +125,7 @@
     <Build Include="dbo\StoredProcedures\Banners\usp_GetHomeBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetShopBanners.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_GetShopCouponForUserSaving.sql" />
+    <Build Include="dbo\StoredProcedures\Coupons\usp_CreateUserSavedCoupon.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

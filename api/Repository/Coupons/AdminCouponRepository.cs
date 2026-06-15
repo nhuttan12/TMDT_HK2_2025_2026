@@ -83,7 +83,7 @@ namespace api.Repository.Coupons
             };
 
             // 1. Thực thi SP và map vào record chứa dữ liệu thô (có TotalItems)
-            var rawResults = await storedProcedureRepository.QueryAsync<RawAdminCoupon>(
+            var rawResults = await storedProcedureRepository.QueryAsync<RawAdminCouponPaging>(
                 "usp_GetAdminCouponPaging",
                 cancellationToken,
                 parameters);

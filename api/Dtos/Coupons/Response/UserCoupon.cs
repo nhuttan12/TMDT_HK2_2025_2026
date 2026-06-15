@@ -7,7 +7,7 @@
         string Scope,
         string Category,
         int Status,
-        Guid ShopId,
+        Guid? ShopId,
         string Type,
         decimal DiscountValue,
         decimal MaxDiscountAmount,

@@ -4,6 +4,17 @@
 	@PageSize INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @TotalItems INT;
+	SELECT @TotalItems = COUNT(1)
+	FROM USER_SAVED_COUPONS usc
+	INNER JOIN COUPONS c 
+		ON usc.coupon_id = c.id
+	WHERE usc.user_id = @UserId 
+		AND usc.is_used = 0 
+		AND c.[status] = 1;
+
 	SELECT 
 		c.id AS Id,
 		c.code AS Code,
@@ -13,11 +24,13 @@ BEGIN
 		c.[status] AS [Status],
 		s.id AS ShopId,
 		c.[type] AS [Type],
-		c.discount_value AS [DiscountValue],
-		c.max_discount_amount AS [MaxDiscountAmount],
-		c.min_invoice_value AS [MinInvoiceValue],
+		c.discount_value AS DiscountValue,
+		c.max_discount_amount AS MaxDiscountAmount,
+		c.min_invoice_value AS MinInvoiceValue,
 		c.start_at AS StartAt, 
-		c.end_at AS EndAt
+		c.end_at AS EndAt,
+		CAST(1 AS BIT) AS IsSaved,
+		@TotalItems AS TotalItems
 	FROM USER_SAVED_COUPONS usc
 
 	INNER JOIN COUPONS c

@@ -11,8 +11,6 @@ BEGIN
 	DECLARE @InsertedIds TABLE (id UNIQUEIDENTIFIER);
 	DECLARE @NewPromotionId UNIQUEIDENTIFIER;
 
-	DECLARE @TotalRowsAffected INT = 0;
-
 	BEGIN TRY
 		BEGIN TRANSACTION
 
@@ -22,16 +20,13 @@ BEGIN
 			end_at, 
 			status
 		)
-		OUTPUT inserted.id 
-		INTO @InsertedIds
+		OUTPUT inserted.id INTO @InsertedIds
 		VALUES (
 			@Name, 
 			@StartAt, 
 			@EndAt, 
 			@Status
 		);
-
-		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 
 		SELECT TOP 1 @NewPromotionId = id 
 		FROM @InsertedIds
@@ -41,14 +36,13 @@ BEGIN
 			promotion_id, 
 			discount_price
 		)
-		SELECT ProductId, @NewPromotionId, Discount 
-		FROM @Products
+		SELECT 
+			ProductId, 
+			@NewPromotionId, 
+			Discount 
+		FROM @Products;
 		
-		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
-
 		COMMIT TRANSACTION;
-
-		SELECT @TotalRowsAffected AS RowsAffected;
 
 	END TRY
 	BEGIN CATCH

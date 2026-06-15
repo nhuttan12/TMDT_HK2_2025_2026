@@ -44,7 +44,7 @@ BEGIN
         INNER JOIN @Products AS source 
             ON target.promotion_id = source.PromotionId
             AND target.product_id = source.ProductId
-        WHERE target.discount <> source.Discount
+        WHERE target.discount_price <> source.Discount
             OR target.status = 0;
 
         SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;

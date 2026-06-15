@@ -1,6 +1,6 @@
 ﻿namespace api.Dtos.Coupons.Response
 {
-    public record RawAdminCoupon(
+    public record RawUserCouponPaging(
         Guid Id,
         string Code,
         string Name,
@@ -14,7 +14,6 @@
         decimal MinInvoiceValue,
         DateTimeOffset StartAt,
         DateTimeOffset EndAt,
-        int TotalQuantity,
-        int UsedQuantity,
+        bool IsSaved,
         int TotalItems);
 }

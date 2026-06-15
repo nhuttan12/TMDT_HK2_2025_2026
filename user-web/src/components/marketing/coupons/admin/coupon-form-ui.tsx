@@ -156,7 +156,7 @@ export const CouponFormUi = ({
 						type='number'
 						value={formData.minInvoiceValue}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-							handleInputChange('minOrderValue', Number(e.target.value))
+							handleInputChange('minInvoiceValue', Number(e.target.value))
 						}
 						disabled={isView}
 					/>
