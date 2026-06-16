@@ -11,7 +11,7 @@ namespace api.Controllers.Coupons
     public class CouponUserController (
         IUserCouponService couponService) : BaseController
     {
-        [HttpGet]
+        [HttpGet("/platform")]
         public async Task<IActionResult> GetPlatformCouponForUserSaving(
             CancellationToken cancellationToken)
         {
@@ -22,7 +22,7 @@ namespace api.Controllers.Coupons
             return HandleResult(result);
         }
 
-        [HttpGet]
+        [HttpGet("/shop")]
         public async Task<IActionResult> GetShopCouponForUserSaving(
             [FromQuery] Guid shopId,
             CancellationToken cancellation)
@@ -37,7 +37,7 @@ namespace api.Controllers.Coupons
             return HandleResult(result);
         }
 
-        [HttpGet]
+        [HttpGet("/saved")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetUserSavedCouponListPaging(
             [FromQuery] PaginationRequestDto pagination,
@@ -58,7 +58,7 @@ namespace api.Controllers.Coupons
             return HandleResult(result);
         }
 
-        [HttpPost]
+        [HttpPost("/claim")]
         public async Task<IActionResult> ClaimCoupon(
             [FromBody] Guid couponId,
             CancellationToken cancellationToken)

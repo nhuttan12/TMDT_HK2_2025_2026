@@ -6,6 +6,7 @@ namespace api.Repository.UserRepo
 {
     public interface IBankingRepository
     {
-        Task<Result<int>> AddBankAsync(Guid userId, CancellationToken cancellationToken, List<UserBankingCreateDTO> Dtos);
+        Task<int> AddBankAsync(Guid userId, CancellationToken cancellationToken, List<UserBankingCreateDTO> Dtos);
+        Task<bool> UpdateBankAsync(Guid userId, List<UserBankingCreateDTO> request, CancellationToken cancellationToken);
     }
 }

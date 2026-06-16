@@ -1,5 +1,8 @@
-﻿using api.Dtos.Products.Request;
+﻿using api.Dtos.Coupons.Response;
+using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
+using api.Dtos.Promotiions.Response;
+using api.Dtos.Shops.Response;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.model.Products;
@@ -19,12 +22,15 @@ namespace api.Utilities
             CategoryMapping();
             ProductMapping();
             VariantMapping();
-
+            CouponMapping();
+            PromotionMapping();
+            ShopMapping();
 
         }
+
         /**
-         * User Mapping
-         */
+          * User Mapping
+          */
         private void UserMapping()
         {
             // dto to user
@@ -72,6 +78,22 @@ namespace api.Utilities
                 .ForMember(dest => dest.ProductId, opt => opt.Ignore());
             // variant to dto
             CreateMap<Variant, VariantResponseDto>();
+        }
+
+        private void CouponMapping()
+        {
+            CreateMap<RawAdminCouponPaging, AdminCoupon>();
+            CreateMap<RawUserCouponPaging, UserCoupon>();
+        }
+
+        private void PromotionMapping()
+        {
+            CreateMap<RawShopPromotion, ShopPromotion>();
+        }
+
+        private void ShopMapping()
+        {
+            CreateMap<RawShopAdmin, ShopAdmin>();
         }
     }
 }

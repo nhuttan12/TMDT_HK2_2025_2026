@@ -3,13 +3,15 @@ using api.Dtos.Coupons.Request;
 using api.Dtos.Coupons.Response;
 using api.Models;
 using api.Utilities;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace api.Repository.Coupons
 {
     public class AdminCouponRepository(
-        IStoredProcedureRepository storedProcedureRepository
+        IStoredProcedureRepository storedProcedureRepository,
+        IMapper mapper
         ) : IAdminCouponRepository
     {
         public async Task<Guid> CreateCouponAsync(Guid userId, CancellationToken cancellationToken, CreateCouponRequest request)
@@ -92,23 +94,7 @@ namespace api.Repository.Coupons
             int totalCount = rawResults.FirstOrDefault()?.TotalItems ?? 0;
 
             // 3. Map từ Raw data sang DTO chính thức cho Frontend
-            var items = rawResults.Select(r => new AdminCoupon(
-                r.Id,
-                r.Code,
-                r.Name,
-                r.Scope,
-                r.Category,
-                r.Status,
-                r.ShopId,
-                r.Type,
-                r.DiscountValue,
-                r.MaxDiscountAmount,
-                r.MinInvoiceValue,
-                r.StartAt,
-                r.EndAt,
-                r.TotalQuantity,
-                r.UsedQuantity
-            )).ToList();
+            var items = mapper.Map<List<AdminCoupon>>(rawResults);
 
             // 4. Đóng gói vào chuẩn phân trang PagedResult
             return new PagedResult<AdminCoupon>(

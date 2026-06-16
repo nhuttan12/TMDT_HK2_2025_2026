@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/user/bank")]
+    [Route("api/bank")]
     [ApiController]
     public class BankingController (
             IBankingService bankingService
@@ -26,6 +26,24 @@ namespace api.Controllers
             }
 
             var result = await bankingService.AddBankAsync(userId.Value, CancellationToken, Dtos);
+
+            return HandleResult(result);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "User, Shop")]
+        public async Task<IActionResult> UpdateBankAsync(
+            [FromBody] List<UserBankingCreateDTO> request,
+            CancellationToken cancellationToken)
+        {
+            var userId = AuthenticatedUserId;
+
+            if (userId == null)
+            {
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
+            }
+
+            var result = await bankingService.UpdateBankAsync(userId.Value, request, cancellationToken);
 
             return HandleResult(result);
         }

@@ -22,11 +22,15 @@ BEGIN
 		s.system_status AS [Status],
 		@TotalItems AS TotalItems
 	FROM SHOPS s
+
 	INNER JOIN USERS u 
 		ON s.id = u.id
+
 	WHERE s.status = 'closed'
 		AND s.system_status = 'pending-approval'
+
 	ORDER BY s.created_at DESC
+
 	OFFSET (@PageNumber - 1) * @PageSize ROWS
 	FETCH NEXT @PageSize ROWS ONLY;
 END

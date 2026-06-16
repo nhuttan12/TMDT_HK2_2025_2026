@@ -1,16 +1,16 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Promotiions.Request;
 using api.Dtos.Promotiions.Response;
-using api.model.Products;
 using api.Utilities;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Net.NetworkInformation;
 
 namespace api.Repository.Promotions
 {
     public class AdminPromotionRepository(
-        IStoredProcedureRepository storedProcedureRepository
+        IStoredProcedureRepository storedProcedureRepository,
+        IMapper mapper
         ) : IAdminPromotionRepository
     {
         public async Task<Guid> CreatePromotion(UpdatePromotion request, CancellationToken cancellationToken)
@@ -99,15 +99,7 @@ namespace api.Repository.Promotions
             int totalCount = rawResults.FirstOrDefault()?.TotalItems ?? 0;
 
             // 4. Map từ Raw data sang DTO chính thức cho Frontend
-            var items = rawResults.Select(r => new ShopPromotion(
-                r.Id,
-                r.Name,
-                r.Status,
-                r.StartAt,
-                r.EndAt,
-                r.CreatedAt,
-                r.UpdatedAt
-            )).ToList();
+            var items = mapper.Map<List<ShopPromotion>>(rawResults);
 
             // 5. Đóng gói vào chuẩn phân trang PagedResult và trả về
             return new PagedResult<ShopPromotion>(

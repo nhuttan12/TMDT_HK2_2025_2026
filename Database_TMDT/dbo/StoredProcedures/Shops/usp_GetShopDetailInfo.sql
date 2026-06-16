@@ -25,6 +25,7 @@ BEGIN
 				FROM INVOICES i 
 				WHERE i.shop_id = s.id) AS TotalInvoices
 		FROM SHOPS s
+
 		INNER JOIN USERS u 
 			ON s.id = u.Id
 		INNER JOIN ADDRESSES a
@@ -32,9 +33,7 @@ BEGIN
 		INNER JOIN SHOP_LOGOS sl
 			ON sl.shop_id = s.id
 		INNER JOIN USER_BANKINGS ub
-			ON ub.user_id = u.Id
-		INNER JOIN PRODUCTS p
-			ON p.shop_id = s.id
+			ON ub.user_id = u.Id 
 		INNER JOIN INVOICES i
 			ON i.shop_id = s.id
 

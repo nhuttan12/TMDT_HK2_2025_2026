@@ -1,14 +1,15 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Coupons.Response;
-using api.Models.Utilities;
 using api.Utilities;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace api.Repository.Coupons
 {
     public class UserCouponRepository(
-        IStoredProcedureRepository storedProcedureRepository
+        IStoredProcedureRepository storedProcedureRepository,
+        IMapper mapper
         ) : IUserCouponRepository
     {
         public async Task<Guid> ClaimCoupon(Guid userId, Guid couponId, CancellationToken cancellationToken)
@@ -83,22 +84,7 @@ namespace api.Repository.Coupons
             int totalCount = rawResults.FirstOrDefault()?.TotalItems ?? 0;
 
             // Map sang DTO sạch sẽ cho Frontend
-            var items = rawResults.Select(r => new UserCoupon(
-                r.Id, 
-                r.Code, 
-                r.Name, 
-                r.Scope, 
-                r.Category, 
-                r.Status,
-                r.ShopId, 
-                r.Type, 
-                r.DiscountValue, 
-                r.MaxDiscountAmount,
-                r.MinInvoiceValue, 
-                r.StartAt, 
-                r.EndAt,
-                r.IsSaved
-            )).ToList();
+            var items = mapper.Map<List<UserCoupon>>(rawResults);
 
             // Đóng gói vào PagedResult
             return new PagedResult<UserCoupon>(
