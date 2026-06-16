@@ -31,7 +31,7 @@ namespace api.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Shop")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var user = await UserService.GetByIdAsync(id);
@@ -90,14 +90,7 @@ namespace api.Controllers
         }
         // *********************************************************************
 
-        [HttpPost("shop")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateShop([FromBody] UserCreateShopDto userCreateDto)
-        {
-            //TODO implement method create shop
-            return HandleResult(Result<string>.Success("Shop created successfully."));
-        }
-
+    
         [HttpPost("{id}/lock")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> LockUser([FromRoute] Guid id, [FromBody] LockInfoDto req)

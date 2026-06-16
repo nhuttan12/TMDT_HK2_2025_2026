@@ -56,7 +56,15 @@ namespace api.Utilities.Seeders
                 processedShopNames.Add(normalizedShopName);
 
                 var id = idGenerator.NewId();
-                var user = User.Create(id, shopDto.Email, role, "LOCAL", "LOCAL");
+                var result = User.Create(id, shopDto.Email, shopDto.Name, role, User.LOCAL_KEY, User.LOCAL_PROVIDER);
+
+                if (result.IsFailure)
+                {
+                    logger.LogError("Validation thất bại tạo User cho {Email}: {Error}", shopDto.Email, result.Error.Message);
+                    continue;
+                }
+
+                var user = result.Value!;
 
                 // Khởi tạo Shop qua Factory Method (Fail Fast)
                 var shopResult = Shop.Create(user, shopDto.Shop.Name, shopDto.Shop.Description, shopDto.AvatarUrl);

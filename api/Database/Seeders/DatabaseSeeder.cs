@@ -64,11 +64,16 @@ namespace api.Database.Seeders
                     }
                     var id = idGenerator.NewId();
                     // Giả định User.Create trả về đối tượng User theo chuẩn DDD
-                    var adminUser = User.Create(id, email, adminRole, "local", "local");
-
+                    var result = User.Create(id, email, "Admin", adminRole, User.LOCAL_KEY, User.LOCAL_PROVIDER);
+                    if(result.IsFailure)
+                    {
+                        logger.LogError("Tạo User Admin thất bại: {ErrorMessage}", result.Error.Message);
+                        return;
+                    }
+                    var adminUser = result.IsSuccess ? result.Value : null;
                     // Rich Domain Model: Gán hash thông qua phương thức, không dùng public setter
-                    var hash = authService.HashPassword(adminUser, password);
-                    adminUser.SetPassword(hash);
+                    var hash = authService.HashPassword(adminUser!, password);
+                    adminUser!.SetPassword(hash);
 
                     context.Users.Add(adminUser);
                     await context.SaveChangesAsync(ct);

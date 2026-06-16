@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using api.Models.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace api.Database.Interceptors
@@ -27,21 +28,19 @@ namespace api.Database.Interceptors
         {
             if (context == null) return;
 
-            var entries = context.ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+            // Lọc thẳng các entity có triển khai IAuditableEntity
+            var entries = context.ChangeTracker.Entries<IAuditableEntity>()
+                .Where(e => e.State is EntityState.Added or EntityState.Modified);
+
+            var utcNow = DateTimeOffset.UtcNow;
 
             foreach (var entry in entries)
             {
-                // Tối ưu hóa: Thay vì truyền string "UpdatedAt" dễ gây Exception nếu Entity không có cột này,
-                // chúng ta kiểm tra xem property có tồn tại trong Metadata hay không (Fail-Safe).
-                if (entry.Metadata.FindProperty("UpdatedAt") != null)
-                {
-                    entry.Property("UpdatedAt").CurrentValue = DateTimeOffset.UtcNow;
-                }
+                entry.Entity.UpdateAt = utcNow; // Gán trực tiếp qua thuộc tính, an toàn 100%
 
-                if (entry.State == EntityState.Added && entry.Metadata.FindProperty("CreatedAt") != null)
+                if (entry.State == EntityState.Added)
                 {
-                    entry.Property("CreatedAt").CurrentValue = DateTimeOffset.UtcNow;
+                    entry.Entity.CreateAt = utcNow;
                 }
             }
         }

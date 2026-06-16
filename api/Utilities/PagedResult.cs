@@ -16,6 +16,6 @@
             TotalCount = totalCount;
             PageNumber = pageNumber;
             PageSize = pageSize;
-        }
+        }   
     }
 }

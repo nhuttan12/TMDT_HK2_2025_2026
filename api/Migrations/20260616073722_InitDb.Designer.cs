@@ -9,11 +9,11 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260610093000_removeTabe")]
-    partial class removeTabe
+    [Migration("20260616073722_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1061,11 +1061,11 @@ namespace api.Database.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LockTimeEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LockTimeEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("LockTimeStart")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LockTimeStart")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("UserId");
 
@@ -1407,7 +1407,7 @@ namespace api.Database.Migrations
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.HasOne("api.Models.Roles.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1523,11 +1523,6 @@ namespace api.Database.Migrations
             modelBuilder.Entity("api.Models.Promotions.Promotion", b =>
                 {
                     b.Navigation("ProductPromotions");
-                });
-
-            modelBuilder.Entity("api.Models.Roles.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("api.Models.Shops.Shop", b =>

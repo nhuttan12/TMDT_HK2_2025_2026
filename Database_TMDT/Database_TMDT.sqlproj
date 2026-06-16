@@ -85,7 +85,6 @@
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Tables\Addresses.sql" />
     <Build Include="dbo\Tables\Products.sql" />
-    <Build Include="dbo\Tables\UserExternalLogins.sql" />
     <Build Include="dbo\Tables\Variants.sql" />
     <Build Include="dbo\Tables\GOODS_ISSUES.sql" />
     <Build Include="dbo\Tables\SUPPLIERS.sql" />
@@ -106,7 +105,6 @@
     <Build Include="dbo\StoredProcedures\Shops\usp_ApproveShop.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionPaging.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_GetPromotionDetail.sql" />
-    <Build Include="dbo\Tables\SHOP_LOGOS.sql" />
     <Build Include="dbo\StoredProcedures\Shops\usp_GetShopDetailInfo.sql" />
     <Build Include="dbo\Tables\USER_DETAILS.sql" />
     <Build Include="dbo\Tables\PRODUCT_DETAILS.sql" />

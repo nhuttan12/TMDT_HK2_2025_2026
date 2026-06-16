@@ -17,7 +17,7 @@ namespace api.Services.Products
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto fillterDto, CancellationToken cancellationToken = default);
-        Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
+        Task<Result<ProductResponseDto>>    GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
     }
     public class ProductService(
         ILogger<ProductController> logger,

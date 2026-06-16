@@ -1,42 +1,31 @@
 ﻿using api.Exceptions;
+using api.Models.Banners;
+using api.Models.Common;
+using api.Models.Coupons;
+using api.Models.Inventory;
+using api.Models.Orders;
+using api.Models.Promotions;
 using api.Models.Roles;
+using api.Models.Shops;
 using api.Models.Users;
+using api.Utilities;
 using Api.Models.Users;
 using System.ComponentModel.DataAnnotations;
-using api.Models.Inventory;
-using api.Models.Banners;
-using api.Models.Shops;
-using api.Models.Orders;
-using api.Models.Coupons;
-using api.Models.Promotions;
-using api.Utilities;
+using System.Data;
+using System.Diagnostics.Contracts;
 
 namespace api.Models
 {
-    public class User
+    public class User : IAuditableEntity
     {
-        /// <summary>
-        /// Tạo mới một user với thông tin cơ bản và liên kết đến đăng nhập bên ngoài (nếu có)
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="email"></param>
-        /// <param name="role"></param>
-        /// <param name="provider"></param>
-        /// <param name="providerKey"></param>
-        /// <returns></returns>
-        public static User Create(Guid id,string email, Role role, string provider, String providerKey)
-        {
-            UserExternalLogin ux = UserExternalLogin.Create(provider, providerKey);
-            UserDetail ud = UserDetail.Create();
-            return new User
-            {
-                Id = id, 
-                Email = email.ToLower().Trim(),
-                Role = role,
-                UserExternalLogin = ux,
-                UserDetail = ud
-            };
-        }
+        public const string ROLE_ADMIN = "Admin";
+        public const string ROLE_USER = "User";
+        public const string ROLE_SHOP = "Shop";
+        public const  string LOCAL_KEY = "LOCAL";
+        public const string GOOGLE_KEY = "GOOGLE";
+        public const string FACEBOOK_KEY = "FACEBOOK";
+        public const string LOCAL_PROVIDER = "local";
+      
         public Guid Id { get; set; }
 
         [Required]
@@ -51,9 +40,7 @@ namespace api.Models
         //public bool isActive { get; set; }
 
         public DateTimeOffset CreateAt { get; set; }
-
         public DateTimeOffset? UpdateAt { get; set; }
-
         public DateTimeOffset? DeleteAt { get; set; }
 
         public int RoleId { get; set; }
@@ -68,27 +55,73 @@ namespace api.Models
         public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
         public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
         public ICollection<Promotion> Promotions { get; set; } = new HashSet<Promotion>();
+       
+        public User()
+        {
+        }
 
+        public User(Guid id, string email, string fullName, Role role, UserExternalLogin ux, UserDetail ud)
+        {
+            this.Id = id;
+            this.Email = email.ToLower().Trim();
+            this.FullName = fullName;
+            this.Role = role;
+            this.UserExternalLogin = ux;
+            this.UserDetail = ud;
+        }
+        /// <summary>
+        /// Tạo mới một user với thông tin cơ bản và liên kết đến đăng nhập bên ngoài (nếu có)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="email"></param>
+        /// <param name="role"></param>
+        /// <param name="provider"></param>
+        /// <param name="providerKey"></param>
+        /// <returns></returns>
+        public static Result<User> Create(Guid id, string email, string fullName, Role role, string provider, String providerKey)
+        {
+            if (!ValidDataUtil.IsValidEmail(email))
+                return Result<User>.Failure(Error.Create("", "Invalid email format.", ErrorType.Validation));
+           
+            UserExternalLogin ux = UserExternalLogin.Create(id,provider, providerKey);
+            UserDetail ud = UserDetail.Create();
+            var user = new User(id, email, fullName, role, ux, ud) 
+            {
+                Email = email,
+            };
+            return Result<User>.Success(user);
+        }
         public void SetPassword(string hash)
         {
             if (string.IsNullOrEmpty(hash)) throw new InternalServerErrorException("user: mật khẩu bị null");
             this.PasswordHash = hash;
         }
 
-        internal void Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, Guid userId)
+        internal Result<bool> Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, Guid userId)
         {
+            if (!string.IsNullOrEmpty(phoneNumber))
+            {
+                if(!ValidDataUtil.IsValidPhone(phoneNumber))
+                    return Result<bool>.Failure(Error.Create("InvalidPhone", "Invalid phone number format.", ErrorType.Validation));
+                this.Phone = phoneNumber;
+            }
+
             if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
-            if (!string.IsNullOrEmpty(phoneNumber)) Phone = phoneNumber;
-            if (!string.IsNullOrEmpty(avatarUrl)) UserDetail!.AvatarUrl = avatarUrl;
+
+            if (!string.IsNullOrEmpty(avatarUrl)) 
+                UserDetail!.AvatarUrl = avatarUrl;
             if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create(userId, a)));
+
+            return Result<bool>.Success(true);
         }
 
-        internal void UpdatePassword(string newHash)
+        internal Result<bool> UpdatePassword(string newHash)
         {
             if (string.IsNullOrWhiteSpace(newHash))
-                throw new ArgumentException("Password hash cannot be empty.");
+                return Result<bool>.Failure(Error.Create("InvalidPassword", "Password hash cannot be empty.", ErrorType.Validation));
 
             PasswordHash = newHash;
+            return Result<bool>.Success(true);
         }
 
         internal Result<bool> AddShop(Shop shop)

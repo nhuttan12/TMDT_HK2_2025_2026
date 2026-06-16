@@ -2,6 +2,7 @@
 using api.Dtos.Users.Responses;
 using api.Exceptions;
 using api.Models;
+using api.Models.Roles;
 using api.Models.Users;
 using api.Repository;
 using api.Repository.RoleRepo;
@@ -77,32 +78,52 @@ namespace api.Services.Auths
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
                 return Result<UserInfoDTO>.Failure(Error.Create("AUTH_001", "Email và mật khẩu không được để trống", ErrorType.Validation));
-            // 1. Validation Logic
             if (await _authRepo.ExistsByEmailAsync(request.Email, ct))
-            {
                 return Result<UserInfoDTO>.Failure(Error.Create("AUTH_002", "Tài khoản đã tồn tại", ErrorType.Conflict));
-            }
 
             // 2. Business Rule: Mỗi User mới phải có Role mặc định
-            var role = await _roleRepository.GetByNameAsync("User");
-            if (role == null)
+            var role = await GetDefaultRole(User.ROLE_USER);
+            if (!role.IsSuccess)
             {
-                return Result<UserInfoDTO>.Failure(Error.Create("AUTH_003", "Cấu hình hệ thống lỗi: Không tìm thấy Role 'User'", ErrorType.Failure));
+                return Result<UserInfoDTO>.Failure(role.Error);
             }
             var id = idGenerator.NewId();
             // 3. Domain Logic: Khởi tạo Entity thông qua Factory Method (Rich Domain Model)
-            var newUser = User.Create(id, request.Email, role, "Local", string.Empty);
+            var result = User.Create(id, request.Email, request.FullName, role.Value!, User.LOCAL_KEY, User.LOCAL_PROVIDER);
+            if(!result.IsSuccess)
+            {
+                return Result<UserInfoDTO>.Failure(result.Error);
+            }
+            var newUser = result.Value!;
+            if (request.Phone != null)
+            {
+                var r =newUser.Update(request.FullName, request.Phone, null, null, id);
+                if(!r.IsSuccess)
+                {
+                    return Result<UserInfoDTO>.Failure(r.Error);
+                } 
+            }
 
             // 4. Security: Hashing (Sử dụng thư viện chuẩn thay vì hàm tự viết không rõ nguồn gốc)
             var passwordHash = _passwordHasher.HashPassword(newUser, request.Password);
             newUser.SetPassword(passwordHash);
 
-            // 5. Persistence
+            // 5. Persistence`
             await _authRepo.AddAsync(newUser);
             await _unitOfWork.CommitAsync();
 
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(newUser));
         }
+        internal async Task<Result<Role>> GetDefaultRole(string roleName)
+        {
+            var role = await _roleRepository.GetByNameAsync(roleName);
+            if (role == null)
+            {
+                return Result<Role>.Failure(Error.Create("AUTH_003", $"Cấu hình hệ thống lỗi: Không tìm thấy Role '{roleName}'", ErrorType.Failure));
+            }
+            return Result<Role>.Success(role);
+        }
+
 
         public async Task<Result<TokenResponse>> HandleGoogleLogin(GoogleInfoResponse googleInfo)
         {
@@ -124,7 +145,7 @@ namespace api.Services.Auths
                     Email = googleInfo.Email,
                     PasswordHash = "",
                     RoleId = 2,
-                    UserExternalLogin = UserExternalLogin.Create("Google", googleInfo.Sub),
+                    UserExternalLogin = UserExternalLogin.Create(id, "Google", googleInfo.Sub),
                     UserDetail = new UserDetail
                     {
                         AvatarUrl = googleInfo.Avatar_url
