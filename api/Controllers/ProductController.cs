@@ -29,9 +29,9 @@ namespace api.Controllers
         }
 
         [HttpGet("/{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] ProductQueryDto queryDto)
         {
-            var product = await _service.GetProductById(id);
+            var product = await _service.GetProductById(id, queryDto);
             return HandleResult(product);
         }
       
@@ -42,4 +42,5 @@ namespace api.Controllers
             return HandleResult(products);
         }
     }
+    public record ProductQueryDto(string? detail);
 }

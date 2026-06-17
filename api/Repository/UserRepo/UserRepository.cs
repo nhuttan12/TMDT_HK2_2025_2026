@@ -1,4 +1,5 @@
 ﻿using api.Database;
+using api.Dtos.Users.Responses;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -29,7 +30,6 @@ namespace api.Repository.UserRepo
                  .Include(u => u.UserExternalLogin)
                  .FirstOrDefaultAsync(u => u.Id == id, ct);
         }
-
         public async Task<(IEnumerable<User> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken ct = default)
         {
             var query = _context.Users
@@ -103,6 +103,6 @@ namespace api.Repository.UserRepo
             _context.Users.Remove(entity);
         }
 
-
+       
     }
 }

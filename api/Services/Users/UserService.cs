@@ -4,7 +4,6 @@ using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Models;
 using api.Models.Roles;
-using api.Models.Utilities;
 using api.Repository;
 using api.Repository.UserRepo;
 using api.Services.Auths;
@@ -20,78 +19,75 @@ namespace api.Services.Users
         public Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default);
         public ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default);
-        public Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
+        public Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
         Task<Result<object>> ChangePasswordAsync(Guid id, ChangePasswordDto request, CancellationToken ct = default);
     }
-    public class UserService : IUserService
+    public class UserService(
+        MyAppDbContext context, 
+        IMapper mapper, 
+        IAuthService authService, 
+        IUserRepository repo, 
+        IIdGenerator idGenerator,
+        IUnitOfWork unitOfWork) : IUserService
     {
-        private readonly MyAppDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
-        private readonly IUserRepository _userRepo;
-        private readonly IUnitOfWork _unitOfWork;
-
-
-        public UserService(MyAppDbContext context, IMapper Mapper, IAuthService authService, IUserRepository userRepository, IUnitOfWork unitOfWork)
-        {
-            _context = context;
-            _mapper = Mapper;
-            _authService = authService;
-            _userRepo = userRepository;
-            _unitOfWork = unitOfWork;
-        }
 
         public async Task<Result<UserInfoDTO>> CreateAsync(UserCreateDto userCreateDto, CancellationToken ct = default)
         {
-            var user = _mapper.Map<User>(userCreateDto);
-            //  hash password
-            user.SetPassword(_authService.HashPassword(user, userCreateDto.Password));
-            // add role
-            Role? role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+            var id = idGenerator.NewId();
+            
+            Role? role = await context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
             if (role == null)
             {
                 return Result<UserInfoDTO>.Failure(Error.Create("RoleNotFound", "Default role 'User' not found.", ErrorType.NotFound));
             }
-            user.Role = role;
+            var result = User.Create(id,userCreateDto.Email, userCreateDto.FullName, role, User.LOCAL_KEY,User.LOCAL_PROVIDER);
+            if (!result.IsSuccess)
+            {
+                return Result<UserInfoDTO>.Failure(result.Error);
+            }
+            var user = result.Value!;
+            //  hash password
+            user.SetPassword(authService.HashPassword(user, userCreateDto.Password));
 
-            await _userRepo.CreateAsync(user, ct);
-            await _unitOfWork.CommitAsync(ct);
-            return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
+            await repo.CreateAsync(user, ct);
+            await unitOfWork.CommitAsync(ct);
+            return Result<UserInfoDTO>.Success(mapper.Map<UserInfoDTO>(user));
         }
         public Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
-        public async Task<Result<Pagination<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default)
+        public async Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default)
         {
             // 1. Validation (Có thể đưa vào FluentValidation)
             if (query.PageNumber <= 0 || query.PageSize <= 0)
-                return Result<Pagination<UserInfoDTO>>.Failure(Error.Create("InvalidPagination", "PageNumber and PageSize must be greater than 0.", ErrorType.BadRequest));
+                return Result<PagedResult<UserInfoDTO>>.Failure(Error.Create("InvalidPagination", "PageNumber and PageSize must be greater than 0.", ErrorType.BadRequest));
 
             // 2. Gọi Repo lấy dữ liệu thô (Domain Entities)
-            var (users, totalCount) = await _userRepo.GetAllPagedAsync(query.PageNumber, query.PageSize, ct);
+            var (users, totalCount) = await repo.GetAllPagedAsync(query.PageNumber, query.PageSize, ct);
 
             if (!users.Any())
-                return Result<Pagination<UserInfoDTO>>.Failure(Error.Create("NoUsers", "No users found.", ErrorType.NotFound));
+                return Result<PagedResult<UserInfoDTO>>.Failure(Error.Create("NoUsers", "No users found.", ErrorType.NotFound));
 
             // 3. Mapping sang DTOs
-            var userDtos = _mapper.Map<IEnumerable<UserInfoDTO>>(users);
+            var userDtos = mapper.Map<IEnumerable<UserInfoDTO>>(users);
+            IReadOnlyList<UserInfoDTO> userDtosList = userDtos.ToList();
 
             // 4. Trả về kết quả phân trang
-            return Result<Pagination<UserInfoDTO>>.Success(new Pagination<UserInfoDTO>(userDtos, totalCount, query.PageNumber, query.PageSize));
+            return Result<PagedResult<UserInfoDTO>>.Success(new PagedResult<UserInfoDTO>(userDtosList, totalCount, query.PageNumber, query.PageSize));
 
         }
         public async Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
+            var user = await repo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
             {
                 return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
             }
-            var dto = _mapper.Map<UserInfoDTO>(user);
+            var dto = mapper.Map<UserInfoDTO>(user);
             return Result<UserInfoDTO>.Success(dto);
 
         }
@@ -99,7 +95,7 @@ namespace api.Services.Users
         {
             if (string.IsNullOrWhiteSpace(email)) return Result<User>.Failure(Error.Create("InvalidEmail", "Email cannot be null or empty.", ErrorType.BadRequest));
 
-            var user = await _userRepo.GetByEmailAsync(email, ct: ct);
+            var user = await repo.GetByEmailAsync(email, ct: ct);
             return user == null ? Result<User>.Failure(Error.Create("UserNotFound", "No user found with the provided email.", ErrorType.NotFound)) : Result<User>.Success(user);
         }
         //**********************************************************************************
@@ -112,18 +108,20 @@ namespace api.Services.Users
 
         public async ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email, ct);
+            return await context.Users.AnyAsync(u => u.Email == email, ct);
         }
 
         public async Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
         {
-            var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
+            var user = await repo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
                 return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
-            user.Update(userUpdateDto.Fullname, userUpdateDto.PhoneNumber, userUpdateDto.AvatarUrl, userUpdateDto.Addresses, id);
-            _userRepo.Update(user);
-            await _unitOfWork.CommitAsync(ct);
-            return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(user));
+            var updateResult = user.Update(userUpdateDto.Fullname, userUpdateDto.PhoneNumber, userUpdateDto.AvatarUrl, userUpdateDto.Addresses, id);
+            if (!updateResult.IsSuccess)
+                return Result<UserInfoDTO>.Failure(updateResult.Error);
+            repo.Update(user);
+            await unitOfWork.CommitAsync(ct);
+            return Result<UserInfoDTO>.Success(mapper.Map<UserInfoDTO>(user));
         }
 
         public async Task<Result<object>> ChangePasswordAsync(
@@ -136,22 +134,24 @@ namespace api.Services.Users
                 return Result<object>.Failure(Error.Create("User.SamePassword", "Mật khẩu mới không được trùng mật khẩu cũ.", ErrorType.BadRequest));
 
             // 2. I/O Bound
-            var user = await _userRepo.GetUserByIdAsync(id, ct: ct);
+            var user = await repo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
                 return Result<object>.Failure(Error.Create("User.NotFound", $"Người dùng ID {id} không tồn tại.", ErrorType.NotFound));
 
             // 3. Logic Validation: Kiểm tra mật khẩu cũ thông qua AuthService
-            var isOldPasswordValid = _authService.VerifyPassword(user, request.OldPassword, user.PasswordHash);
+            var isOldPasswordValid = authService.VerifyPassword(user, request.OldPassword, user.PasswordHash);
             if (!isOldPasswordValid)
                 return Result<object>.Failure(Error.Create("User.InvalidPassword", "Mật khẩu cũ không chính xác.", ErrorType.BadRequest));
 
             // 4. Update & Hash
-            var newPasswordHash = _authService.HashPassword(user, request.NewPassword);
-            user.UpdatePassword(newPasswordHash);
+            var newPasswordHash = authService.HashPassword(user, request.NewPassword);
+            var passwordUpdateResult = user.UpdatePassword(newPasswordHash);
+            if (!passwordUpdateResult.IsSuccess)
+                return Result<object>.Failure(passwordUpdateResult.Error);
 
             // 5. Persistence: Sử dụng Unit of Work để đảm bảo Transaction
-            _userRepo.Update(user);
-            await _unitOfWork.CommitAsync(ct);
+            repo.Update(user);
+            await unitOfWork.CommitAsync(ct);
 
             return Result<string>.Success("Password changed successfully.");
         }

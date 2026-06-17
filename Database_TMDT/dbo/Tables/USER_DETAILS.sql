@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[USER_DETAILS] (
-    [user_id]       UNIQUEIDENTIFIER NOT NULL,
-    [LockTimeStart] DATETIME2 (7)    NOT NULL,
-    [LockTimeEnd]   DATETIME2 (7)    NOT NULL,
-    [AvatarUrl]     NVARCHAR (MAX)   NULL,
-    [AddressId]     NVARCHAR (MAX)   NULL,
+    [user_id]       UNIQUEIDENTIFIER   NOT NULL,
+    [LockTimeStart] DATETIMEOFFSET (7) NULL,
+    [LockTimeEnd]   DATETIMEOFFSET (7) NULL,
+    [AvatarUrl]     NVARCHAR (MAX)     NULL,
+    [AddressId]     NVARCHAR (MAX)     NULL,
     CONSTRAINT [PK_USER_DETAILS] PRIMARY KEY CLUSTERED ([user_id] ASC),
     CONSTRAINT [FK_USER_DETAILS_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id]) ON DELETE CASCADE
 );

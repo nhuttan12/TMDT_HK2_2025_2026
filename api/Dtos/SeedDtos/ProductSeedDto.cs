@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using api.Utilities.Seeders;
+using System.Globalization;
 
 namespace api.Dtos.SeedDtos
 {
@@ -23,4 +24,19 @@ namespace api.Dtos.SeedDtos
         public string Summary { get; set; } = string.Empty;
         public List<VariantSeedJsonDto> Variants { get; set; } = [];
     }
+
+
+    public class UserSeedJsonDto
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string AvatarUrl { get; set; }
+        public ShopSeedJsonDto Shop { get; set; }
+    }
+    public class ShopSeedJsonDto
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
 }

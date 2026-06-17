@@ -6,6 +6,7 @@ using api.model.Products;
 using api.Models;
 using api.Models.Category;
 using api.Models.Products;
+using api.Models.Users;
 using AutoMapper;
 
 namespace api.Utilities
@@ -16,6 +17,7 @@ namespace api.Utilities
         public MappingProfile()
         {
             UserMapping();
+            UserDetailMapping();
             CategoryMapping();
             ProductMapping();
             VariantMapping();
@@ -33,7 +35,12 @@ namespace api.Utilities
 
             // user to dto
             CreateMap<User, UserInfoDTO>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+                .ForMember(dest => dest.UserExternalLogin, opt => opt.MapFrom(src => src.UserExternalLogin.Provider));
+        }
+        private void UserDetailMapping()
+        {
+            CreateMap<UserDetail, UserDetailDto>();
         }
         private void CategoryMapping()
         {

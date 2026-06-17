@@ -1,19 +1,10 @@
 [
   {
-    "Name": "quà tặng sinh nhật",
-    "Sku": "DM001",
-    "ImageUrl": "https://example.com/image1.jpg"
-  },
-  {
     "Name": "quà tặng sếp, đối tác",
     "Sku": "DM002",
     "ImageUrl": "https://example.com/image2.jpg"
   },
-  {
-    "Name": "quà tặng tân gia",
-    "Sku": "DM003",
-    "ImageUrl": "https://example.com/image3.jpg"
-  },
+
   {
     "Name": "zen terrarium",
     "Sku": "DM004",
@@ -36,12 +27,112 @@
   },
   {
     "Name": "trang rêu",
-    "Sku": "tranh-reu",
+    "Sku": "tranh-reu2",
     "ImageUrl": "https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png"
   },
-	{
-		"Name": "binh-terrarium",
-		"Sku": "binh-terrarium",
-		"ImageUrl": "https://file.hstatic.net/200000968796/file/binh-terrarium.jpg"
-	}
+  {
+    "Name": "binh-terrarium",
+    "Sku": "binh-terrarium",
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/binh-terrarium.jpg"
+  },
+  {
+    "Name": "Quà tặng sinh nhật",
+    "Sku": "qua-tang-sinh-nhat",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Quà tặng sếp - đối tác",
+    "Sku": "qua-tang-sep-doi-tac",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Quà tặng tân gia",
+    "Sku": "qua-tang-tan-gia",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Tiểu cảnh phật giáo",
+    "Sku": "tieu-canh-phat-giao",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Quà tặng độc đáo",
+    "Sku": "qua-tang-doc-dao",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Hồ chuyên nuôi bò sát",
+    "Sku": "ho-chuyen-nuoi-bo-sat",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Đất nền - giá thể",
+    "Sku": "dat-nen-gia-the",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Đá lụa tạo bố cục",
+    "Sku": "da-lua-tao-bo-cuc",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Đèn quang hợp",
+    "Sku": "den-quang-hop",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Mô hình",
+    "Sku": "mo-hinh",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Rêu",
+    "Sku": "reu",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Cây không cần đất",
+    "Sku": "cay-khong-can-dat",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Bon sai mini",
+    "Sku": "bon-sai-mini",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Cây thủy canh thả rễ",
+    "Sku": "cay-thuy-canh-tha-re",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Cỏ mini",
+    "Sku": "co-mini",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Cây màu sắc",
+    "Sku": "cay-mau-sac",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Dương xỉ",
+    "Sku": "duong-xi",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Thực vật bắt mồi",
+    "Sku": "thuc-vat-bat-moi",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  {
+    "Name": "Combo tự làm",
+    "Sku": "combo-tu-lam",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  },
+  { 
+    "Name": "Tranh rêu",
+    "Sku": "tranh-reu",
+    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+  }
 ]

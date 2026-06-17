@@ -138,16 +138,15 @@ async function crawlXanhzoneData() {
 			totalPages: 1,
 		},
 		{
-			category: 'Tiểu cảnh phật giáo',
+			category: 'Tiểu cảnh Phật giáo',
 			baseUrl: `${DOMAIN}/tieu-canh-terrarium-phat-giao-pc34.html`,
 			totalPages: 1,
 		},
 		{
-			category: 'Quà tặng đọc đáo',
+			category: 'Quà tặng độc đáo',
 			baseUrl: `${DOMAIN}/san-pham-dac-biet-qua-tang-doc-dao-pc36.html`,
 			totalPages: 1,
 		},
-
 		{
 			category: 'Hồ chuyên nuôi bò sát',
 			baseUrl: `${DOMAIN}/ho-chuyen-bo-sat-pc40.html`,
@@ -176,51 +175,6 @@ async function crawlXanhzoneData() {
 		{
 			category: 'Rêu',
 			baseUrl: `${DOMAIN}/tong-hop-reu-terrarum-reu-lam-tieu-canh-pc47.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Cây không cần đất',
-			baseUrl: `${DOMAIN}/cay-khong-can-dat-pc48.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Bon sai mini',
-			baseUrl: `${DOMAIN}/bonsai-mini-pc49.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Cây thủy canh thả rễ',
-			baseUrl: `${DOMAIN}/cay-thuy-canh-tha-re-pc50.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Cỏ mini',
-			baseUrl: `${DOMAIN}/cac-loai-co-mini-pc51.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Cây màu sắc',
-			baseUrl: `${DOMAIN}/cac-loai-cay-mau-sac-pc52.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Dương sỉ',
-			baseUrl: `${DOMAIN}/cac-dong-duong-xi-pc54.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Thực vật bắt mồi',
-			baseUrl: `${DOMAIN}/thuc-vat-bat-moi-pc55.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Combo tự làm',
-			baseUrl: `${DOMAIN}/combo-bo-kit-terrarium-bo-combo-workshop-pc56.html`,
-			totalPages: 1,
-		},
-		{
-			category: 'Tranh rêu',
-			baseUrl: `${DOMAIN}/phu-kien-tranh-reu-pc57.html`,
 			totalPages: 1,
 		},
 	];

@@ -53,7 +53,7 @@ namespace api.Database.Configurations
             // Relationship: a User belongs to a Role. Restrict deletion of
             // a Role when users reference it to prevent accidental data loss.
             builder.HasOne(u => u.Role)
-                .WithMany(r => r.Users)
+                .WithMany()
                 .HasForeignKey(u => u.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -153,9 +153,9 @@ namespace api.Controllers
         [PasswordPropertyText]
         string Password);
     public record RegisterRequest(
-        [EmailAddress]
+        string FullName,
+        string? Phone,
         string Email,
-        [PasswordPropertyText]
         string Password
         );
     public record GoogleInfoResponse(string Name, string Email, string Sub, string Avatar_url);
