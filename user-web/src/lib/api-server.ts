@@ -1,67 +1,113 @@
 // eslint-disable-next-line import/no-unresolved
-import 'server-only'; // Đảm bảo an toàn tuyệt đối
+import 'server-only';
+import axios, {
+	type AxiosResponse,
+	type AxiosError,
+	type InternalAxiosRequestConfig }
+	from 'axios';
+import { cookies } from 'next/headers';
+import { type ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import {type ResponseApi } from '@/types/commom/ResponseApi';
+
 if (process.env.NODE_ENV === 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }
-import axios from 'axios';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-// Định nghĩa chuẩn Response từ .NET 9 (ProblemDetails hoặc ApiResponse)
-interface ApiError {
-	message?: string;
-	errors?: Record<string, string[]>;
-}
-const d = "https://localhost:7087/api";
+const backendUrl: string = 'https://localhost:7087/api';
+
 const apiServer = axios.create({
-	// baseURL: process.env.BACKEND_INTERNAL_URL, // Dùng Internal URL cho Server-to-Server
-	baseURL: d,
+	baseURL: backendUrl,
 	timeout: 15000,
 	headers: { 'Content-Type': 'application/json' },
 });
 
-apiServer.interceptors.request.use(async (config) => {
-	const publicEndpoints = ['/auth/login', '/auth/register', '/auth/forgot-password'];
-	// Nếu URL hiện tại nằm trong whitelist, trả về config ngay lập tức
-	if (publicEndpoints.some((endpoint) => config.url?.includes(endpoint))) {
+apiServer.interceptors.request.use(
+	async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+		const publicEndpoints: string[] = [
+			'/auth/register',
+			'/auth/login',
+			'/auth/forgot-password',
+		];
+
+		const isPublicEndpoint: boolean = publicEndpoints.some((endpoint: string): boolean => {
+			return Boolean(config.url?.includes(endpoint));
+		});
+
+		if (isPublicEndpoint) {
+			return config;
+		}
+
+		try {
+			const cookieStore: ReadonlyRequestCookies = await cookies();
+			const token: string | undefined = cookieStore.get('accessToken')?.value;
+
+			if (token) {
+				config.headers.Authorization = `Bearer ${token}`;
+			}
+		} catch (e) {
+			// Silent catch cho static rendering
+		}
+
 		return config;
-	}
-	try {
-		const cookieStore = await cookies();
-		const token = cookieStore.get('accessToken')?.value;
-
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
-		}
-	} catch (e) {
-		// Handle cases where cookies are not accessible (e.g. static rendering)
-	}
-	return config;
-});
-
-apiServer.interceptors.response.use(
-	(response) => response.data, // Trả về data trực tiếp để Service layer gọn hơn
-	async (error) => {
-		const status = error.response?.status;
-
-		// Xử lý lỗi 401 chuyên nghiệp
-		if (status === 401) {
-			// Không nên redirect ngay trong Interceptor nếu đây là một API call ngầm
-			// Nhưng nếu là trang chính, redirect là hợp lý
-			redirect('/login');
-		}
-
-		// Senior Tip: Xử lý lỗi từ .NET FluentValidation
-		const apiError: ApiError = error.response?.data;
-		let errorMessage = apiError?.message || "Something went wrong";
-
-		if (apiError?.errors) {
-			// Flatten các lỗi từ Validation của .NET
-			errorMessage = Object.values(apiError.errors).flat().join(", ");
-		}
-
-		return Promise.reject(new Error(errorMessage));
-	}
+	},
 );
+apiServer.interceptors.response.use(
+	(response: AxiosResponse): AxiosResponse => {
+		return response;
+	},
+	async (error: AxiosError): Promise<AxiosResponse> => {
+		const status: number = error.response?.status || 500;
 
+		interface DotNetError {
+			message?: string;
+			errors?: Record<string, string[]>;
+		}
+
+		const responseData = error.response?.data as DotNetError | undefined;
+
+		const fallbackResponse: ResponseApi<null> = {
+			IsSuccess: false,
+			Value: null,
+			Error: {
+				Code: `SERVER_HTTP_${status}`,
+				Message: 'Lỗi kết nối Backend',
+				ErrorType: 'ServerError',
+			},
+		};
+
+		if (status === 401) {
+			fallbackResponse.Error = {
+				Code: 'UNAUTHORIZED',
+				Message: 'Phiên đăng nhập không hợp lệ.',
+				ErrorType: 'AuthenticationError',
+			};
+		} else if (responseData) {
+			let errorMessage: string = responseData.message || fallbackResponse.Error!.Message;
+			if (responseData.errors) {
+				errorMessage = Object.values(responseData.errors).flat().join(', ');
+			}
+			fallbackResponse.Error = {
+				Code: 'VALIDATION_ERROR',
+				Message: errorMessage,
+				ErrorType: 'DotNetError',
+			};
+		}
+
+		// Đè lại data chuẩn hóa vào cái vỏ Axios có sẵn
+		if (error.response) {
+			error.response.data = fallbackResponse;
+			return Promise.resolve(error.response);
+		}
+
+		const mockResponse: AxiosResponse = {
+			data: fallbackResponse,
+			status: status,
+			statusText: 'Network Error',
+			headers: {},
+			config: error.config!,
+		};
+
+		return Promise.resolve(mockResponse);
+	},
+);
 export default apiServer;

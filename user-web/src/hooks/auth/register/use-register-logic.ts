@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 interface registerPayload {
 	email : string;
 	password: string;
+	phone: string;
+	fullName: string;
 	retypePassword: string;
 	[key: string]: string;
 }
@@ -24,6 +26,8 @@ export const useRegisterLogic = () => {
 	const [formData, setFormData] = useState<registerPayload>({
 		email: '',
 		password: '',
+		phone: '',
+		fullName: '',
 		retypePassword: '',
 	});
 	useEffect((): void => {
@@ -41,6 +45,8 @@ export const useRegisterLogic = () => {
 			const req = {
 				email: data.email,
 				password: data.password,
+				phone: data.phone,
+				fullName: data.fullName,
 			};
 			return authService.register(req);
 		},
