@@ -1,10 +1,7 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Promotiions.Request;
-using api.Models;
-using api.Models.Utilities;
 using api.Services.Promotions;
 using api.Utilities;
-using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

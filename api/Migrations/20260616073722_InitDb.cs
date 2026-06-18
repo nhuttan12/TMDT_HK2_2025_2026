@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,9 +236,10 @@ namespace api.Database.Migrations
                     rating = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(255)", nullable: false),
                     tax_code = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ShopLogos = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -280,8 +281,8 @@ namespace api.Database.Migrations
                 columns: table => new
                 {
                     user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LockTimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LockTimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LockTimeStart = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockTimeEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -432,26 +433,6 @@ namespace api.Database.Migrations
                         principalTable: "USERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SHOP_LOGOS",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    logo_url = table.Column<string>(type: "nvarchar(255)", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SHOP_LOGOS", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_SHOP_LOGOS_SHOPS_shop_id",
-                        column: x => x.shop_id,
-                        principalTable: "SHOPS",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -805,11 +786,6 @@ namespace api.Database.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SHOP_LOGOS_shop_id",
-                table: "SHOP_LOGOS",
-                column: "shop_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_USER_BANKINGS_user_id",
                 table: "USER_BANKINGS",
                 column: "user_id");
@@ -876,9 +852,6 @@ namespace api.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "PRODUCT_PROMOTIONS");
-
-            migrationBuilder.DropTable(
-                name: "SHOP_LOGOS");
 
             migrationBuilder.DropTable(
                 name: "USER_BANKINGS");

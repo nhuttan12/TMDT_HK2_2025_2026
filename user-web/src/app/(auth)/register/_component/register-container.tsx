@@ -6,12 +6,23 @@ import { RegisterFormUI } from '@/app/(auth)/register/_component/register-ui';
 import { useRegisterLogic } from '@/hooks/auth/register/use-register-logic';
 
 const fields: BaseInputField[] = [
-
 	{
 		name: 'email',
 		label: 'Email',
 		type: 'email',
 		errorMessage: 'Địa chỉ Email không được để trống',
+	},
+	{
+		name: 'phone',
+		label: 'Phone',
+		type: 'text',
+		errorMessage: 'phone không được để trống',
+	},
+	{
+		name: 'fullName',
+		label: 'FullName',
+		type: 'text',
+		errorMessage: 'phone không được để trống',
 	},
 	{
 		name: 'password',

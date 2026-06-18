@@ -27,7 +27,7 @@ namespace api.Extensions
                 var seeders = services.GetServices<IDataSeeder>()
                                       .OrderBy(s => s.ExecutionOrder)
                                       .ToList();
-
+                logger.LogWarning("số tiến trình {Count}", seeders.Count);
                 if (seeders.Count == 0)
                 {
                     logger.LogWarning("Không có IDataSeeder nào được đăng ký trong hệ thống.");

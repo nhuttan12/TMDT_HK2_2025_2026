@@ -8,7 +8,7 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
     partial class MyAppDbContextModelSnapshot : ModelSnapshot
@@ -912,7 +912,6 @@ namespace api.Database.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("description");
 
@@ -924,6 +923,10 @@ namespace api.Database.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int")
                         .HasColumnName("rating");
+
+                    b.Property<string>("ShopLogos")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -949,36 +952,6 @@ namespace api.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SHOPS", (string)null);
-                });
-
-            modelBuilder.Entity("api.Models.Shops.ShopLogo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("LogoUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("logo_url");
-
-                    b.Property<Guid>("ShopId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("shop_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("SHOP_LOGOS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.User", b =>
@@ -1094,11 +1067,11 @@ namespace api.Database.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LockTimeEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LockTimeEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("LockTimeStart")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LockTimeStart")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("UserId");
 
@@ -1448,21 +1421,10 @@ namespace api.Database.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("api.Models.Shops.ShopLogo", b =>
-                {
-                    b.HasOne("api.Models.Shops.Shop", "Shop")
-                        .WithMany("ShopLogos")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.HasOne("api.Models.Roles.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1580,18 +1542,11 @@ namespace api.Database.Migrations
                     b.Navigation("ProductPromotions");
                 });
 
-            modelBuilder.Entity("api.Models.Roles.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
                 {
                     b.Navigation("Invoices");
 
                     b.Navigation("Products");
-
-                    b.Navigation("ShopLogos");
                 });
 
             modelBuilder.Entity("api.Models.User", b =>
