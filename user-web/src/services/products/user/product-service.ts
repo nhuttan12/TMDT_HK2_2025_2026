@@ -2,10 +2,16 @@ import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfo
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductDetailRawUser } from '@/types/products/user/ProductDetailRawUser';
 import { ProductShop } from '@/types/products/user/ProductShop';
-import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import { ProductUserCard, ProductUserCard2 } from '@/types/products/user/ProductUserCard';
 import { Review } from '@/types/products/user/Review';
 import { convertRawUserToProductDetail } from '@/utils/products/product-adapter';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
+import { PaginationResponse2 } from '@/types/shared/PaginationResponse';
+import apiServer from '@/lib/api-server';
+import { BackendPagination, BackendProduct } from '@/types/products/user/productBackend';
+import { ResponseApi } from '@/types/commom/ResponseApi';
+import { type AxiosResponse } from 'axios';
+import apiClient from '@/lib/api-client';
 
 export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
 	const reviews: Review[] = [
@@ -520,7 +526,68 @@ export const getProductsHome = async (): Promise<ProductUserCard[]> => {
 
 	return products;
 };
+// Hàm mapper độc lập (Pure Function) - Tách ra ngoài để dễ viết Unit Test sau này
+const mapToPageProduct = (
+	backendPagination: BackendPagination,
+): PaginationResponse2<ProductUserCard2> => {
+	// Ánh xạ từng phần tử từ BackendProduct sang ProductUserCard
+	const mappedProducts: ProductUserCard2[] = backendPagination.items.map(
+		(item: BackendProduct): ProductUserCard2 => {
+			// Lấy giá bán từ biến thể đầu tiên (nếu có), nếu không có biến thể thì lấy basePrice
+			const firstVariant =
+				item.variants && item.variants.length > 0 ? item.variants[0] : null;
+			const finalPrice: number = firstVariant ? firstVariant.sellPrice : item.basePrice;
 
+			// Tính toán % giảm giá (Làm tròn số)
+			let calculatedDiscount: number = 0;
+			if (item.basePrice > finalPrice) {
+				calculatedDiscount = Math.round(
+					((item.basePrice - finalPrice) / item.basePrice) * 100,
+				);
+			}
+
+			return {
+				id: item.id,
+				name: item.name,
+				image: item.imageUrls[0] || '', // Lấy ảnh đầu tiên làm ảnh đại diện
+				price: finalPrice,
+				discount: calculatedDiscount, // Trả về phần trăm giảm giá (VD: 30%)
+				rating: item.rating,
+				isInWishlist: false, // Mặc định chưa thích (Do Backend không cấp trạng thái user ở public API)
+			};
+		},
+	);
+
+	// Trả về cấu trúc Pagination mà Frontend Hook đang kỳ vọng
+	return {
+		data: mappedProducts, // Map "items" của BE vào "data" của FE
+		totalCount: backendPagination.totalCount,
+		pageNumber: backendPagination.pageNumber,
+		pageSize: backendPagination.pageSize,
+		totalPages: backendPagination.totalPages,
+		hasNextPage: backendPagination.hasNextPage,
+		hasPreviousPage: backendPagination.hasPreviousPage,
+	};
+};
+
+// Hàm gọi API trong Service
+export const getProductHome2 = async (): Promise<PaginationResponse2<ProductUserCard2>> => {
+	// 1. Lấy vỏ bọc Axios và quy định Type rõ ràng
+	const response: AxiosResponse<ResponseApi<BackendPagination>> =
+		await apiClient.get('/products');
+
+	// 2. Bóc lấy phần lõi Dữ liệu (ResponseApi)
+	const responseData: ResponseApi<BackendPagination> = response.data;
+	console.log(responseData)
+	// 3. Xử lý lỗi nếu API trả về isSuccess = false
+	if (!responseData.isSuccess || !responseData.data) {
+		throw new Error(responseData.error?.message || 'Lỗi khi gọi danh sách sản phẩm');
+	}
+
+	// 4. Bơm phần data cấp 2 (BackendPagination) vào hàm Map và trả về UI
+	return mapToPageProduct(responseData.data);
+};
+export default getProductHome2
 export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {

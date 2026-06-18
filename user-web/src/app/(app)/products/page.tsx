@@ -1,8 +1,9 @@
 import { JSX } from 'react';
 import ProductsContainer from '@/app/(app)/products/_components/products-container';
-import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { getProductsHome } from '@/services/products/user/product-service';
+import { ProductUserCard, ProductUserCard2 } from '@/types/products/user/ProductUserCard';
+import getProductHome2, { getProductsHome } from '@/services/products/user/product-service';
 import { Metadata } from 'next';
+import { PaginationResponse, PaginationResponse2 } from '@/types/shared/PaginationResponse';
 
 export const metadata: Metadata = {
 	title: 'Danh sách sản phẩm',
@@ -18,6 +19,6 @@ export const metadata: Metadata = {
 
 export default async function ProductsPage(): Promise<JSX.Element> {
 	const products: ProductUserCard[] = await getProductsHome();
-
+	const  products2 : PaginationResponse2<ProductUserCard2> = await getProductHome2();
 	return <ProductsContainer initialProducts={products} />;
 }
