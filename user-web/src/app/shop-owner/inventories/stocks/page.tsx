@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
 import {
-	fetchGoodsStockSummary,
-	fetchProductInStock,
+	getGoodsStockSummary,
+	getProductInStock,
 } from '@/services/inventories/stocks/goods-stock-service';
 import GoodsStockContainer from './_components/goods-stock-container';
 
@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default async function InventoriesPage(): Promise<JSX.Element> {
 	const [summaryData, productData] = await Promise.all([
-		fetchGoodsStockSummary(),
-		fetchProductInStock(),
+		getGoodsStockSummary(),
+		getProductInStock(),
 	]);
 	return (
 		<GoodsStockContainer

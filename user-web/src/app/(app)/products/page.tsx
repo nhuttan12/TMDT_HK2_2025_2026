@@ -1,8 +1,7 @@
-import { JSX } from 'react';
 import ProductsContainer from '@/app/(app)/products/_components/products-container';
-import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { getProductsHome } from '@/services/products/user/product-service';
+import { getProductListPaging } from '@/services/products/user/product-service';
 import { Metadata } from 'next';
+import { JSX } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Danh sách sản phẩm',
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage(): Promise<JSX.Element> {
-	const products: ProductUserCard[] = await getProductsHome();
+	const products = await getProductListPaging();
 
 	return <ProductsContainer initialProducts={products} />;
 }

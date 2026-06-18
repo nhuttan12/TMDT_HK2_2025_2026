@@ -1,17 +1,17 @@
-import ProductAdminContainer from '@/components/products/admin/product-admin-container';
-import { getProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
+import { getProductApprovalListAdmin } from '@/services/products/admin/product-admin-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
+import ProductApprovalContainer from './_components/product-approval-container';
 
 export const metadata: Metadata = {
 	title: 'Phê duyệt sản phẩm được đăng bán của cửa hàng',
 };
 
 export default async function ProductsPage(): Promise<JSX.Element> {
-	const products = await getProductListInfoAdmin();
+	const products = await getProductApprovalListAdmin();
 
 	return (
-		<ProductAdminContainer
+		<ProductApprovalContainer
 			initialProducts={products}
 			role={'admin'}
             productApproval={true}

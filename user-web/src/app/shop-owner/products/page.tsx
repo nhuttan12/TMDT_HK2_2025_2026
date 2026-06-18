@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default async function ProductsPage(): Promise<JSX.Element> {
 	// Mock user id
-	const userId = 1;
+	const userId = '550e8400-e29b-41d4-a716-446655440000';
 
-	const products = await getProductListInfoByShopId(userId);
+	const products = await getProductListInfoByShopId(userId, { page: 1, limit: 10 });
 
 	return (
 		<ProductAdminContainer

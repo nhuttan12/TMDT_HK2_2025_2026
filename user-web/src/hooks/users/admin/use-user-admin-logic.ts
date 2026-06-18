@@ -1,13 +1,13 @@
-import { JSX } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
+import { JSX } from 'react';
 
-import { useTableSort } from '@/hooks/share/use-table-sort';
 import { usePagination } from '@/hooks/share/use-pagination';
+import { useTableSort } from '@/hooks/share/use-table-sort';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
 
 export interface UseUserAdminLogicReturn {
 	currentPage: number;
+    totalPages: number;
 	changePage: (page: number) => void;
 	handleSort: (field: UserAdminSortField) => void;
 	renderSortIcon: (field: UserAdminSortField) => JSX.Element | null;
@@ -15,8 +15,8 @@ export interface UseUserAdminLogicReturn {
 	handleRedirectToEditCustomerEditMode: (userId: string) => void;
 }
 
-export function useUserAdminLogic(): UseUserAdminLogicReturn {
-	const router: AppRouterInstance = useRouter();
+export function useUserAdminLogic(totalPages: number): UseUserAdminLogicReturn {
+	const router = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<UserAdminSortField>();
 	const { currentPage, changePage } = usePagination();
@@ -30,11 +30,12 @@ export function useUserAdminLogic(): UseUserAdminLogicReturn {
 	};
 
 	return {
-		currentPage: currentPage,
-		changePage: changePage,
-		handleSort: handleSort,
+		currentPage,
+        totalPages,
+		changePage,
+		handleSort,
 		renderSortIcon: renderSortIcon as (field: UserAdminSortField) => JSX.Element | null,
-		handleRedirectToCustomerInfoViewMode: handleRedirectToCustomerInfoViewMode,
-		handleRedirectToEditCustomerEditMode: handleRedirectToEditCustomerEditMode,
+		handleRedirectToCustomerInfoViewMode,
+		handleRedirectToEditCustomerEditMode,
 	};
 }

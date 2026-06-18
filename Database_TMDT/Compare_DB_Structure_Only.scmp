@@ -1056,6 +1056,18 @@
       <Name>dbo</Name>
       <Name>usp_CreatePromotion</Name>
     </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_ApproveShop</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetPromotionPaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetBannersPaging</Name>
+    </SelectedItem>
   </ExcludedSourceElements>
   <ExcludedTargetElements>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
@@ -1102,6 +1114,66 @@
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
       <Name>dbo</Name>
       <Name>usp_CreateCoupon</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_CreateGoodsReceipt</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_CreateSupplier</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_CreateUserSavedCoupon</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetAdminBannersPaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetAdminCouponPaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetCouponDetail</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetGoodsSupplierListPaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetHomeBanners</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetPlatformCouponForUserSaving</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetShopBanners</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetShopCouponForUserSaving</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetUserSavedCouponListPaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_UpdateCoupon</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_ApproveShop</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetPromotionPaging</Name>
     </SelectedItem>
   </ExcludedTargetElements>
 </SchemaComparison>

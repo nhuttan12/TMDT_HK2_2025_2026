@@ -8,24 +8,25 @@ import {
 	CategoryAdminLogicReturn,
 	useCategoryAdminLogic,
 } from '@/hooks/categories/admin/use-category-admin-logic';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 interface CategoryAdminContainerProps {
-	initialCategories: CategoryListItemAdmin[];
+	initialCategories: PaginationResponse<CategoryListItemAdmin>;
 }
 
 export default function CategoryAdminContainer({
 	initialCategories,
 }: CategoryAdminContainerProps): JSX.Element {
 	// 1. Fetch & Hydrate Data
-	const { data: categories = [], isLoading } = useCategoryAdminQuery(initialCategories);
+	const { data, isLoading } = useCategoryAdminQuery(initialCategories);
 
 	// 2. Initialize Logic (Truyền categories vào để tính toán mảng selected keys)
-	const logic: CategoryAdminLogicReturn = useCategoryAdminLogic(categories);
+	const logic = useCategoryAdminLogic(data?.data || []);
 
 	// 3. Render UI
 	return (
 		<CategoryAdminUi
-			categories={categories}
+			categories={data?.data || []}
 			isLoading={isLoading}
 			{...logic}
 		/>

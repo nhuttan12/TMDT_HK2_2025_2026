@@ -11,6 +11,7 @@ import { AppRole } from '@/types/uis/AppRole';
 
 export interface UseProductAdminLogicReturn {
 	currentPage: number;
+    totalPage: number;
 	changePage: (page: number) => void;
 	handleSort: (field: ProductAdminSortField) => void;
 	renderSortIcon: (field: ProductAdminSortField) => JSX.Element | null;
@@ -23,14 +24,16 @@ export interface UseProductAdminLogicReturn {
 
 interface UseProductAdminLogicProps {
 	role: AppRole;
+    totalPage: number;
 	productApproval?: boolean;
 }
 
 export function useProductAdminLogic({
 	role,
+    totalPage,
 	productApproval = false,
 }: UseProductAdminLogicProps): UseProductAdminLogicReturn {
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 
 	const { handleSort, renderSortIcon } = useTableSort<ProductAdminSortField>();
 	const { currentPage, changePage } = usePagination();
@@ -98,6 +101,7 @@ export function useProductAdminLogic({
 
 	return {
 		currentPage,
+        totalPage,
 		changePage,
 		handleSort,
 		renderSortIcon: renderSortIcon as (field: ProductAdminSortField) => JSX.Element | null,
