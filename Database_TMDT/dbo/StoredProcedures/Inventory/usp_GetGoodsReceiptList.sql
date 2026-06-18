@@ -9,7 +9,9 @@ BEGIN
 		gr.id AS Id,
 		gr.code AS Code,
 		s.[name] AS SupplierName,
-		(SELECT COUNT(grb.id) FROM GOODS_RECEIPT_BATCHES grb WHERE grb.goods_receipt_id = ) AS TotalBatches
+		(SELECT COUNT(grb.id) 
+			FROM GOODS_RECEIPT_BATCHES grb 
+			WHERE grb.goods_receipt_id = gr.id) AS TotalBatches
 	FROM GOODS_RECEIPTS gr
 	INNER JOIN SUPPLIERS s
 		ON gr.supplier_id = s.id
