@@ -14,13 +14,18 @@ export interface UserInvoicesLogicReturn {
 	handleRedirectInvoiceDetail: (invoiceId: string) => void;
 }
 
-export function useUserInvoicesLogic(invoices: UserInvoice[]): UserInvoicesLogicReturn {
+interface UserInvoicesLogic {
+	invoices: UserInvoice[];
+	totalPages: number;
+}
+
+export function useUserInvoicesLogic({
+	invoices,
+	totalPages,
+}: UserInvoicesLogic): UserInvoicesLogicReturn {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const router: AppRouterInstance = useRouter();
 	const pageSize: number = 10;
-
-	// Tính toán tổng số trang
-	const totalPages: number = Math.ceil(invoices.length / pageSize) || 1;
 
 	// Lấy ra danh sách hóa đơn theo trang hiện tại (Fix lỗi phân trang cũ)
 	const paginatedInvoices: UserInvoice[] = useMemo(() => {

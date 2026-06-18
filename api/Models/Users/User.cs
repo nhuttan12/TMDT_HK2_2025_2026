@@ -55,6 +55,7 @@ namespace api.Models
         public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
         public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
         public ICollection<Promotion> Promotions { get; set; } = new HashSet<Promotion>();
+        public ICollection<Coupon> Coupons { get; set; } = new HashSet<Coupon>();
        
         public User()
         {

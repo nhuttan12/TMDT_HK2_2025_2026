@@ -4,9 +4,8 @@ import { JSX } from 'react';
 import { BadgeVariant } from '@/types/inventories/receipts/uis/BadgeVariant';
 
 const statusMap: Record<GoodsReceiptStatus, { label: string; variant: BadgeVariant }> = {
-	draft: { label: 'Bản nháp', variant: 'secondary' },
-	confirmed: { label: 'Đã xác nhận', variant: 'default' },
-	cancelled: { label: 'Đã huỷ', variant: 'destructive' },
+	pending: { label: 'Đang duyệt', variant: 'default' },
+	completed: { label: 'Đã xác nhận', variant: 'default' },
 };
 
 interface Props {

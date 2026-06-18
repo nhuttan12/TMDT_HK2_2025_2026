@@ -6,6 +6,9 @@ namespace api.Models.Coupons
     {
         public Guid Id { get; set; }
 
+        public Guid UserId { get; set; }
+        public User User { get; set; }
+
         public string Code { get; set; }
         public string Name { get; set; }
 
@@ -15,7 +18,7 @@ namespace api.Models.Coupons
 
         public decimal DiscountValue { get; set; }
         public decimal MaxDiscountAmount { get; set; }
-        public decimal MinOrderValue { get; set; }
+        public decimal MinInvoiceValue { get; set; }
 
         public int TotalQuantity { get; set; }
         public int UsedQuantity { get; set; }

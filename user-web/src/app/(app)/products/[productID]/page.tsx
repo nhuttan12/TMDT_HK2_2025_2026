@@ -45,8 +45,8 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 		notFound();
 	}
 
-	const product: ProductDetail = await getProductDetailById(numericProductID);
-	const relatedProducts: ProductUserCard[] = await getRelatedProducts(product.name);
+	const product = await getProductDetailById(numericProductID);
+	const relatedProducts = await getRelatedProducts(product.name);
 
 	return (
 		<ProductDetailContainer

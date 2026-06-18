@@ -63,7 +63,7 @@ export function CouponsUi({ coupons, isLoading }: CouponsUiProps): JSX.Element {
                                             HSD: {formatValidTime(coupon.validTime.toDate)}
                                         </p>
                                         <p className='text-xs text-slate-400 mt-1'>
-                                            Đơn tối thiểu: {coupon.minOrderValue.toLocaleString('vi-VN')}đ
+                                            Đơn tối thiểu: {coupon.minInvoiceValue.toLocaleString('vi-VN')}đ
                                         </p>
                                         <p className='text-sm font-mono text-slate-600 mt-2 bg-slate-100 inline-block px-2 py-1 rounded'>
                                             Mã: {coupon.code}

@@ -10,11 +10,13 @@ import { JSX } from 'react';
 
 interface ProductUiProps extends UsePaginationReturn {
 	products: ProductUserCard[];
+    totalPages: number;
 	isLoading: boolean;
 }
 
 export default function ProductUi({
 	products,
+    totalPages,
 	isLoading,
 	currentPage,
 	changePage,
@@ -47,7 +49,7 @@ export default function ProductUi({
 						<div className='flex justify-center mt-4'>
 							<Pagination
 								currentPage={currentPage}
-								totalPages={10} // TODO: Update totalPages thực tế từ API
+								totalPages={totalPages}
 								onPageChange={changePage}
 							/>
 						</div>

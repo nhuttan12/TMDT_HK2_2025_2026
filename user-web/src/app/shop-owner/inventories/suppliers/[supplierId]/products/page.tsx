@@ -1,8 +1,7 @@
-import { JSX } from 'react';
-import { Metadata } from 'next';
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { getProductBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
 import ProductAdminContainer from '@/components/products/admin/product-admin-container';
+import { getProductBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
+import { Metadata } from 'next';
+import { JSX } from 'react';
 
 interface SupplierProductsPageProps {
 	params: {

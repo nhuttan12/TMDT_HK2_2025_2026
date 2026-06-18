@@ -1,4 +1,5 @@
 ﻿using api.model.Products;
+using api.Models.Inventory;
 using api.Models.Orders;
 using api.Models.Shops.Enums;
 using api.Utilities;
@@ -27,6 +28,7 @@ namespace api.Models.Shops
         public string ShopLogos { get; private set; } = string.Empty;
         public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
         public ICollection<Invoice> Invoices { get; private set; } = new HashSet<Invoice>();
+        public ICollection<Supplier> Suppliers { get; private set; } = new HashSet<Supplier>();
 
         protected Shop() { }
         public Shop(User user,  string name, string description, string shopLogos)

@@ -28,32 +28,6 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "COUPONS",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    scope = table.Column<string>(type: "varchar(20)", nullable: false),
-                    category = table.Column<string>(type: "varchar(20)", nullable: false),
-                    type = table.Column<string>(type: "varchar(20)", nullable: false),
-                    discount_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    max_discount_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    min_order_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    total_quantity = table.Column<int>(type: "int", nullable: false),
-                    used_quantity = table.Column<int>(type: "int", nullable: false),
-                    start_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    end_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETDATE()"),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_COUPONS", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ROLES",
                 columns: table => new
                 {
@@ -72,10 +46,10 @@ namespace api.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    Name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    name = table.Column<string>(type: "varchar(100)", nullable: false),
                     tax_code = table.Column<string>(type: "varchar(13)", nullable: false),
                     phone_number = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Email = table.Column<string>(type: "varchar(100)", nullable: false),
+                    email = table.Column<string>(type: "varchar(100)", nullable: false),
                     contact_name = table.Column<string>(type: "varchar(100)", nullable: false),
                     address = table.Column<string>(type: "varchar(100)", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -178,6 +152,38 @@ namespace api.Migrations
                         principalTable: "USERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "COUPONS",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    code = table.Column<string>(type: "varchar(50)", nullable: false),
+                    name = table.Column<string>(type: "varchar(255)", nullable: false),
+                    scope = table.Column<string>(type: "varchar(20)", nullable: false),
+                    category = table.Column<string>(type: "varchar(20)", nullable: false),
+                    type = table.Column<string>(type: "varchar(20)", nullable: false),
+                    discount_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    max_discount_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    min_invoice_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    total_quantity = table.Column<int>(type: "int", nullable: false),
+                    used_quantity = table.Column<int>(type: "int", nullable: false),
+                    start_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    end_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETDATE()"),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_COUPONS", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_COUPONS_USERS_user_id",
+                        column: x => x.user_id,
+                        principalTable: "USERS",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -317,6 +323,29 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GOODS_RECEIPT_BATCHES",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    goods_receipt_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    batch_code = table.Column<string>(type: "varchar(50)", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    total_cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GOODS_RECEIPT_BATCHES", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_GOODS_RECEIPT_BATCHES_GOODS_RECEIPTS_goods_receipt_id",
+                        column: x => x.goods_receipt_id,
+                        principalTable: "GOODS_RECEIPTS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "USER_SAVED_COUPONS",
                 columns: table => new
                 {
@@ -342,29 +371,6 @@ namespace api.Migrations
                         principalTable: "USERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GOODS_RECEIPT_BATCHES",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    goods_receipt_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    batch_code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    total_cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GOODS_RECEIPT_BATCHES", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_GOODS_RECEIPT_BATCHES_GOODS_RECEIPTS_goods_receipt_id",
-                        column: x => x.goods_receipt_id,
-                        principalTable: "GOODS_RECEIPTS",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -431,6 +437,34 @@ namespace api.Migrations
                         name: "FK_Products_Users_ShopId",
                         column: x => x.shop_id,
                         principalTable: "USERS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SHOP_SUPPLIERS",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false),
+                    supplier_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SHOP_SUPPLIERS", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_SHOP_SUPPLIERS_SHOPS_shop_id",
+                        column: x => x.shop_id,
+                        principalTable: "SHOPS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SHOP_SUPPLIERS_SUPPLIERS_supplier_id",
+                        column: x => x.supplier_id,
+                        principalTable: "SUPPLIERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -510,7 +544,7 @@ namespace api.Migrations
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     promotion_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    discount = table.Column<int>(type: "int", nullable: false),
+                    discount_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
@@ -537,7 +571,7 @@ namespace api.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     sku = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -549,8 +583,8 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_VARIANTS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_VARIANTS_PRODUCTS_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_VARIANTS_PRODUCTS_product_id",
+                        column: x => x.product_id,
                         principalTable: "PRODUCTS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -663,6 +697,11 @@ namespace api.Migrations
                 table: "CATEGORIES",
                 column: "sku",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_COUPONS_user_id",
+                table: "COUPONS",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GOODS_ISSUE_DETAILS_issue_id",
@@ -786,6 +825,16 @@ namespace api.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SHOP_SUPPLIERS_shop_id",
+                table: "SHOP_SUPPLIERS",
+                column: "shop_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SHOP_SUPPLIERS_supplier_id",
+                table: "SHOP_SUPPLIERS",
+                column: "supplier_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_USER_BANKINGS_user_id",
                 table: "USER_BANKINGS",
                 column: "user_id");
@@ -814,7 +863,7 @@ namespace api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_ProductId",
                 table: "VARIANTS",
-                column: "ProductId");
+                column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Variants_Sku",
@@ -852,6 +901,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "PRODUCT_PROMOTIONS");
+
+            migrationBuilder.DropTable(
+                name: "SHOP_SUPPLIERS");
 
             migrationBuilder.DropTable(
                 name: "USER_BANKINGS");

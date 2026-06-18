@@ -15,11 +15,15 @@ namespace api.Database.Configurations
 
             builder.HasKey(c => c.Id);
 
-            builder.Property(c=>c.Id)
+            builder.Property(c => c.Id)
                 .IsRequired()
                 .HasColumnName("id");
 
-            builder.Property(c=>c.Code)
+            builder.Property(c => c.UserId)
+                .HasColumnName("user_id")
+                .IsRequired();
+
+            builder.Property(c => c.Code)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasColumnName("code");
@@ -61,15 +65,15 @@ namespace api.Database.Configurations
                 .HasColumnType("decimal(18,2)")
                 .HasColumnName("discount_value");
 
-            builder.Property(c=>c.MaxDiscountAmount)
+            builder.Property(c => c.MaxDiscountAmount)
                 .HasColumnType("decimal(18,2)")
                 .HasColumnName("max_discount_amount");
 
-            builder.Property(c => c.MinOrderValue)
+            builder.Property(c => c.MinInvoiceValue)
                 .HasColumnType("decimal(18,2)")
-                .HasColumnName("min_order_value");
+                .HasColumnName("min_invoice_value");
 
-            builder.Property(c=>c.TotalQuantity)
+            builder.Property(c => c.TotalQuantity)
                 .IsRequired()
                 .HasColumnName("total_quantity");
 
@@ -98,6 +102,11 @@ namespace api.Database.Configurations
                 .HasColumnType("datetimeoffset")
                 .HasColumnName("updated_at")
                 .HasDefaultValueSql("GETDATE()");
+
+            builder.HasOne(c => c.User)
+                .WithMany(u => u.Coupons)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -13,12 +13,12 @@ BEGIN
 
 	SELECT 
 		s.id, 
-		s.name AS Name, 
+		s.[name] AS [Name], 
 		u.email AS Email, 
 		u.phone AS Phone, 
 		s.rating AS Rating, 
 		s.created_at AS CreatedAt,
-		s.status AS [Status],
+		s.[status] AS [Status],
 		@TotalItems AS TotalItems
 	FROM SHOPS s
 	INNER JOIN USERS u 

@@ -93,7 +93,7 @@ namespace api.Controllers
     
         [HttpPost("{id}/lock")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> LockUser([FromRoute] Guid id, [FromBody] LockInfoDto req)
+        public async Task<IActionResult> Lock([FromRoute] Guid id, [FromBody] LockInfoDto req)
         {
             //TODO: implement method lock user
             return Ok();

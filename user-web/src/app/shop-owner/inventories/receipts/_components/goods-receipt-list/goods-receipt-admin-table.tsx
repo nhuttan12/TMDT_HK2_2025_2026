@@ -101,11 +101,9 @@ export default function GoodsReceiptAdminTable({
 				return (
 					<span
 						className={`px-2 py-1 rounded text-[12px] font-medium ${
-							row.status === 'draft'
+							row.status === 'pending'
 								? 'bg-amber-100 text-amber-700'
-								: row.status === 'confirmed'
-									? 'bg-emerald-100 text-emerald-700'
-									: 'bg-rose-100 text-rose-700'
+								: 'bg-emerald-100 text-emerald-700'
 						}`}
 					>
 						{label}

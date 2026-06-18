@@ -1,13 +1,17 @@
+import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
 
-export async function getCustomerList(): Promise<CustomerListAdmin[]> {
-	return new Promise<CustomerListAdmin[]>((resolve) => {
+export async function getCustomerList({ page = 1, limit = 10 }: PaginationRequest = {}): Promise<
+	PaginationResponse<CustomerListAdmin>
+> {
+	return new Promise<PaginationResponse<CustomerListAdmin>>((resolve) => {
 		setTimeout(() => {
 			// Giả lập trả về danh sách dựa theo mode
-			resolve([
+			const mockData: CustomerListAdmin[] = [
 				{
-					id: 'e0b3c2d4-1a2b-3c4d-5e6f-7a8b9c0d1e2f', // Chuyển sang GUID string
+					id: 'e0b3c2d4-1a2b-3c4d-5e6f-7a8b9c0d1e2f',
 					fullName: 'Nguyễn Văn An',
 					email: 'an.nguyen@gmail.com',
 					phone: '0909123456',
@@ -17,7 +21,7 @@ export async function getCustomerList(): Promise<CustomerListAdmin[]> {
 					createdAt: '2024-01-05T08:30:00Z',
 				},
 				{
-					id: 'f1c4d3e5-2b3c-4d5e-6f7a-8b9c0d1e2f3a', // Chuyển sang GUID string
+					id: 'f1c4d3e5-2b3c-4d5e-6f7a-8b9c0d1e2f3a',
 					fullName: 'Trần Thị Bình',
 					email: 'binh.tran@gmail.com',
 					phone: '0911222333',
@@ -27,7 +31,7 @@ export async function getCustomerList(): Promise<CustomerListAdmin[]> {
 					createdAt: '2024-01-10T09:00:00Z',
 				},
 				{
-					id: 'a2d5e4f6-3c4d-5e6f-7a8b-9c0d1e2f3a4b', // Chuyển sang GUID string
+					id: 'a2d5e4f6-3c4d-5e6f-7a8b-9c0d1e2f3a4b',
 					fullName: 'Đỗ Thanh Tùng',
 					email: 'tung.do@gmail.com',
 					phone: '0933444555',
@@ -36,7 +40,18 @@ export async function getCustomerList(): Promise<CustomerListAdmin[]> {
 					status: true,
 					createdAt: '2024-01-25T07:20:00Z',
 				},
-			]);
+			];
+
+			// Bọc dữ liệu vào dạng PaginationResponse
+			resolve({
+				data: mockData,
+				meta: {
+					totalItems: 3, // Tổng số lượng item thực tế trong DB (giả lập là 3)
+					totalPages: Math.ceil(3 / limit),
+					currentPage: page,
+					itemsPerPage: limit,
+				},
+			});
 		}, 500);
 	});
 }

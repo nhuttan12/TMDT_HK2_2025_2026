@@ -13,7 +13,7 @@ namespace api.Models.Promotions
 
         public Product Product { get; private set; }
 
-        public int Discount { get; private set; }
+        public decimal DiscountPrice { get; private set; }
         public bool Status { get; private set; }
 
         public DateTimeOffset CreatedAt { get; private set; }

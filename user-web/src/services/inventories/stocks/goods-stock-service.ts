@@ -1,7 +1,7 @@
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 
-export const fetchGoodsStockSummary = async (): Promise<GoodsStockSummaryItem[]> => {
+export const getGoodsStockSummary = async (): Promise<GoodsStockSummaryItem[]> => {
 	const mockGoodsStock: GoodsStockSummaryItem[] = [
 		{
 			id: 'in-stock',
@@ -43,7 +43,7 @@ export const fetchGoodsStockSummary = async (): Promise<GoodsStockSummaryItem[]>
 	});
 };
 
-export const fetchProductInStock = async (): Promise<ProductInStock[]> => {
+export const getProductInStock = async (): Promise<ProductInStock[]> => {
 	const mockProductInStock: ProductInStock[] = [
     {
         id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // GUID của bản ghi tồn kho

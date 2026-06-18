@@ -1,10 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[usp_ApproveShop]
-	@ShopId UNIQUEIDENTIFIER
+	@ShopId UNIQUEIDENTIFIER,
+	@RowsAffected INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @TotalRowsAffected INT = 0;
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
@@ -14,11 +13,9 @@ BEGIN
 			updated_at = GETUTCDATE()
 		WHERE id = @ShopId
 
-		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
-		
-		COMMIT TRANSACTION;
+		SET @RowsAffected = @@ROWCOUNT;
 
-		SELECT @TotalRowsAffected AS RowsAffected;
+		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0

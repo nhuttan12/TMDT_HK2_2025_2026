@@ -12,15 +12,15 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<int> ExecuteAsync(string storedProcedureName, params object[] parameters)
+        public async Task<int> ExecuteAsync(string storedProcedureName, CancellationToken cancellationToken = default, params object[] parameters)
         {
             var parameterNames = GetParameterNames(parameters);
             var commandText = $"EXEC {storedProcedureName} {string.Join(", ", parameterNames)}";
 
-            return await _context.Database.ExecuteSqlRawAsync(commandText, parameters);
+            return await _context.Database.ExecuteSqlRawAsync(commandText, parameters, cancellationToken);
         }
 
-        public async Task<List<T>> QueryAsync<T>(string storedProcedureName, params object[] parameters) where T : class
+        public async Task<List<T>> QueryAsync<T>(string storedProcedureName, CancellationToken cancellationToken = default, params object[] parameters) where T : class
         {
             // Tạo chuỗi command: "EXEC SpName @param1, @param2"
             var parameterNames = GetParameterNames(parameters);
@@ -29,7 +29,7 @@ namespace api.Repository
             // Sử dụng SqlQueryRaw cho các type không phải là Entity (Yêu cầu EF Core 7+)
             return await _context.Database
                 .SqlQueryRaw<T>(commandText, parameters)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
         private IEnumerable<string> GetParameterNames(object[] parameters)

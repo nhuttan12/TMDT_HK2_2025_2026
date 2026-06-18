@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260616073722_InitDb")]
-    partial class InitDb
+    [Migration("20260618065049_RemoveShopSupplierTable")]
+    partial class RemoveShopSupplierTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,9 +186,9 @@ namespace api.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("max_discount_amount");
 
-                    b.Property<decimal>("MinOrderValue")
+                    b.Property<decimal>("MinInvoiceValue")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("min_order_value");
+                        .HasColumnName("min_invoice_value");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -227,7 +227,13 @@ namespace api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("used_quantity");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("COUPONS", (string)null);
                 });
@@ -588,11 +594,13 @@ namespace api.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("email");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -740,7 +748,8 @@ namespace api.Migrations
                         .HasColumnName("name");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_id");
 
                     b.Property<decimal>("SellPrice")
                         .HasColumnType("decimal(18,2)")
@@ -783,9 +792,9 @@ namespace api.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("int")
-                        .HasColumnName("discount");
+                    b.Property<decimal>("DiscountPrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("discount_price");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier")
@@ -1180,6 +1189,17 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Coupons")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.Coupons.InvoiceAppliedCoupon", b =>
                 {
                     b.HasOne("api.Models.Coupons.Coupon", "Coupon")
@@ -1537,6 +1557,8 @@ namespace api.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Banners");
+
+                    b.Navigation("Coupons");
 
                     b.Navigation("GoodsIssues");
 

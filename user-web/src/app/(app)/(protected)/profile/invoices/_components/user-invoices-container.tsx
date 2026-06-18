@@ -8,10 +8,11 @@ import {
 	useUserInvoicesLogic,
 } from '@/hooks/invoices/user/use-user-invoices-logic';
 import { UserInvoicesUi } from '@/app/(app)/(protected)/profile/invoices/_components/user-invoices-ui';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 interface UserInvoicesContainerProps {
 	userId: string;
-	initialInvoices: UserInvoice[];
+	initialInvoices: PaginationResponse<UserInvoice>;
 }
 
 export default function UserInvoicesContainer({
@@ -19,9 +20,15 @@ export default function UserInvoicesContainer({
 	initialInvoices,
 }: UserInvoicesContainerProps): JSX.Element {
 	// Truyền userId vào Query
-	const { data: invoices = [], isLoading } = useUserInvoicesQuery(userId, initialInvoices);
+	const { data, isLoading } = useUserInvoicesQuery(userId, initialInvoices);
 
-	const logic: UserInvoicesLogicReturn = useUserInvoicesLogic(invoices);
+	const currentData = data?.data || initialInvoices.data;
+	const currentMeta = data?.meta || initialInvoices.meta;
+
+	const logic = useUserInvoicesLogic({
+		invoices: currentData,
+		totalPages: currentMeta.totalPages,
+	});
 
 	return (
 		<UserInvoicesUi

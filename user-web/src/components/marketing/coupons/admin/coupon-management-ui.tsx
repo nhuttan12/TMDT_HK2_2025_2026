@@ -107,7 +107,7 @@ export const CouponManagementUi = ({
 			header: 'Điều kiện',
 			render: (row: AdminCoupon): JSX.Element => (
 				<div className='flex flex-col text-sm'>
-					<span>Từ {formatMoney(row.minOrderValue)}</span>
+					<span>Từ {formatMoney(row.minInvoiceValue)}</span>
 					{row.maxDiscountAmount && (
 						<span className='text-xs text-gray-500'>
 							Tối đa: {formatMoney(row.maxDiscountAmount)}

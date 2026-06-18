@@ -15,7 +15,13 @@ namespace api.Database.Configurations
                 .HasColumnName("id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(supplier => supplier.Name).HasColumnType("varchar(100)");
+            builder.Property(supplier => supplier.ShopId)
+                .HasColumnName("shop_id");
+
+            builder.Property(supplier => supplier.Name)
+                .HasColumnName("name")
+                .HasColumnType("varchar(100)");
+
             builder.Property(supplier => supplier.TaxCode)
                 .HasColumnName("tax_code")
                 .HasColumnType("varchar(13)");
@@ -24,7 +30,10 @@ namespace api.Database.Configurations
                 .HasColumnName("phone_number")
                 .HasColumnType("varchar(10)");
 
-            builder.Property(supplier => supplier.Email).HasColumnType("varchar(100)");
+            builder.Property(supplier => supplier.Email)
+                .HasColumnName("email")
+                .HasColumnType("varchar(100)");
+
             builder.Property(supplier => supplier.ContactName)
                 .HasColumnName("contact_name")
                 .HasColumnType("varchar(100)");
@@ -33,15 +42,20 @@ namespace api.Database.Configurations
                 .HasColumnName("address")
                 .HasColumnType("varchar(100)");
 
-            builder.Property(s=>s.CreatedAt)
+            builder.Property(s => s.CreatedAt)
                 .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("GETUTCDATE()");
 
-            builder.Property(s=>s.UpdatedAt)
+            builder.Property(s => s.UpdatedAt)
                 .HasColumnName("updated_at")
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("GETUTCDATE()");
+
+            builder.HasOne(supplier => supplier.Shop)
+                .WithMany(shop => shop.Suppliers)
+                .HasForeignKey(supplier => supplier.ShopId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

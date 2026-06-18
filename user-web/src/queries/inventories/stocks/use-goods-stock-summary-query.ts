@@ -1,13 +1,13 @@
 import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { fetchGoodsStockSummary } from '@/services/inventories/stocks/goods-stock-service';
+import { getGoodsStockSummary } from '@/services/inventories/stocks/goods-stock-service';
 
 export function useGoodsStockSummaryQuery(
 	initialData?: GoodsStockSummaryItem[],
 ): UseQueryResult<GoodsStockSummaryItem[], Error> {
 	return useQuery({
 		queryKey: ['goods-stock-summary'],
-		queryFn: fetchGoodsStockSummary,
+		queryFn: getGoodsStockSummary,
 		// Lấy data từ Server làm vốn ban đầu
 		initialData: initialData,
 		// Sau đó nó sẽ tự động chạy ngầm để lấy data mới nhất (nếu cần)

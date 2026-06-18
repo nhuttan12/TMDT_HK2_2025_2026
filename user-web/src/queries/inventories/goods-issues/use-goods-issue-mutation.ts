@@ -4,7 +4,7 @@ import {
 	getProductsForIssue,
 	submitGoodsIssueForm,
 } from '@/services/inventories/goods-issues/goods-issue-detail-service';
-import { getGoodsSupplier } from '@/services/inventories/suppliers/goods-supplier-service';
+import { getGoodsSupplierList } from '@/services/inventories/suppliers/goods-supplier-service';
 
 export function useGoodsIssueMutation(currentSupplierId: string) {
 	// Gọi song song 2 hàm lấy dữ liệu phụ trợ cho Form (Nhà cung cấp & Sản phẩm)
@@ -13,7 +13,7 @@ export function useGoodsIssueMutation(currentSupplierId: string) {
 		queryKey: ['goods-issue-aux-data', currentSupplierId],
 		queryFn: async () => {
 			const [suppliers, products] = await Promise.all([
-				getGoodsSupplier(),
+				getGoodsSupplierList(),
 				getProductsForIssue(),
 			]);
 

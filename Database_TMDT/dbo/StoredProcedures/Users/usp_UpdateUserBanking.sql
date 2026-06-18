@@ -38,7 +38,7 @@ BEGIN
 			AND target.bank_name = source.BankName
 			AND target.user_id = @UserId
 		WHERE target.account_name <> source.AccountName
-			OR target.status <> 0;
+			OR target.status = 0;
 
 		SET @TotalRowsAffected = @TotalRowsAffected + @@ROWCOUNT;
 

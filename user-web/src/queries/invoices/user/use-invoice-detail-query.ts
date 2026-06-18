@@ -7,6 +7,7 @@ import {
 	getUserInvoicesByUserId,
 } from '@/services/invoices/user/invoice-service';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 export function useInvoiceDetailQuery(
 	invoiceId: number,
@@ -23,14 +24,14 @@ export function useInvoiceDetailQuery(
 
 export function useUserInvoicesQuery(
 	userId: string,
-	initialData?: UserInvoice[],
-): UseQueryResult<UserInvoice[], Error> {
+	initialData?: PaginationResponse<UserInvoice>,
+): UseQueryResult<PaginationResponse<UserInvoice>, Error> {
 	return useQuery({
 		// Đưa userId vào key để định danh bộ cache duy nhất cho user này
 		queryKey: ['user-invoices', userId],
 
 		// Sử dụng arrow function để truyền tham số vào service
-		queryFn: (): Promise<UserInvoice[]> => getUserInvoicesByUserId(userId),
+		queryFn: () => getUserInvoicesByUserId(userId),
 
 		initialData: initialData,
 

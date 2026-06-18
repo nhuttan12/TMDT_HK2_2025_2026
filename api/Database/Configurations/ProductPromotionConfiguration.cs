@@ -15,9 +15,9 @@ namespace api.Database.Configurations
                 .HasColumnName("id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(pp => pp.Discount)
+            builder.Property(pp => pp.DiscountPrice)
                 .IsRequired()
-                .HasColumnName("discount");
+                .HasColumnName("discount_price");
 
             builder.Property(pp => pp.Status)
                 .HasColumnName("status")

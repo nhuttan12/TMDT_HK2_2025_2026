@@ -1,13 +1,16 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { getProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { PaginationRequest } from '@/types/shared/PaginationRequest';
 
 export function useProductListInfoAdminQuery(
-	initialData?: ProductListInfoAdmin[],
-): UseQueryResult<ProductListInfoAdmin[], Error> {
+	initialData?: PaginationResponse<ProductListInfoAdmin>,
+	request?: PaginationRequest,
+): UseQueryResult<PaginationResponse<ProductListInfoAdmin>, Error> {
 	return useQuery({
 		queryKey: ['product-list-info-admin'],
-		queryFn: getProductListInfoAdmin,
+		queryFn: () => getProductListInfoAdmin({ page: request?.page, limit: request?.limit }),
 		// Lấy data từ Server làm vốn ban đầu
 		initialData: initialData,
 		// Sau đó nó sẽ tự động chạy ngầm để lấy data mới nhất (nếu cần)

@@ -12,7 +12,10 @@ namespace api.Database.Configurations
 
             builder.HasKey(v => v.Id);
             // Tối ưu I/O: Cấm SQL Server tự sinh ID vì ta đã dùng Guid.NewGuid() ở C#
-            builder.Property(v => v.Id).HasColumnName("id").ValueGeneratedNever();
+            builder.Property(v => v.Id)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+
             builder.Property(v => v.Name)
                  .HasColumnName("name")
                  .IsRequired()
@@ -36,8 +39,16 @@ namespace api.Database.Configurations
                    .HasConversion<int>()
                    .IsRequired();
 
-            builder.Property(v => v.CostPrice).HasColumnName("cost_price").HasColumnType("decimal(18,2)");
-            builder.Property(v => v.SellPrice).HasColumnName("sell_price").HasColumnType("decimal(18,2)");
+            builder.Property(v => v.CostPrice)
+                .HasColumnName("cost_price")
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(v => v.SellPrice)
+                .HasColumnName("sell_price")
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(v => v.ProductId)
+                .HasColumnName("product_id");
 
             // INDEXING STRATEGY
             // 1. SKU phải duy nhất TRÊN TOÀN HỆ THỐNG để phục vụ quét mã vạch máy tít

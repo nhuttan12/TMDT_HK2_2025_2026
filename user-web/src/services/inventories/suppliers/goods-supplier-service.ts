@@ -1,7 +1,9 @@
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
-export const getGoodsSupplier = async (): Promise<Supplier[]> => {
+export const getGoodsSupplierList = async (): Promise<Supplier[]> => {
 	const mockSuppliers: Supplier[] = [
 		{
 			id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đã chuyển sang GUID string
@@ -54,65 +56,87 @@ export const getGoodsSupplier = async (): Promise<Supplier[]> => {
 };
 
 export const getProductBySupplierId = async (
-	supplierId: string,
-): Promise<ProductListInfoAdmin[]> => {
-	const mockProducts: ProductListInfoAdmin[] = [
-		{
-			id: '550e8400-e29b-41d4-a716-446655440000', // Đổi thành GUID
-			name: 'Bonsai Tree Ecosystem',
-			slug: 'bonsai-tree-ecosystem',
-			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
-			status: true,
-			systemStatus: 'approved',
-			createdAt: '2024-01-10T10:00:00Z',
-			updatedAt: '2024-02-01T15:30:00Z',
-		},
-		{
-			id: '123e4567-e89b-12d3-a456-426614174000', // Đổi thành GUID
-			name: 'Rainforest Moss Bowl',
-			slug: 'rainforest-moss-bowl',
-			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
-			status: true,
-			systemStatus: 'pending_approval',
-			createdAt: '2024-01-10T10:00:00Z',
-			updatedAt: '2024-02-01T15:30:00Z',
-		},
-		{
-			id: '987e6543-e21b-34d3-b456-426614174111', // Đổi thành GUID
-			name: 'Desert Succulent Oasis',
-			slug: 'desert-succulent-oasis',
-			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
-			status: false,
-			systemStatus: 'rejected',
-			createdAt: '2024-01-10T10:00:00Z',
-			updatedAt: '2024-02-01T15:30:00Z',
-		},
-		{
-			id: '111e2222-e33b-44d3-c456-426614174222', // Đổi thành GUID
-			name: 'Geometric Glass Terrarium',
-			slug: 'geometric-glass-terrarium',
-			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
-			status: true,
-			systemStatus: 'banned',
-			createdAt: '2024-01-10T10:00:00Z',
-			updatedAt: '2024-02-01T15:30:00Z',
-		},
-		{
-			id: '333e4444-e55b-66d3-d456-426614174333', // Đổi thành GUID
-			name: 'Fittonia Closed Bottle',
-			slug: 'fittonia-closed-bottle',
-			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
-			status: false,
-			systemStatus: 'approved',
-			createdAt: '2024-01-10T10:00:00Z',
-			updatedAt: '2024-02-01T15:30:00Z',
-		},
-	];
+    supplierId: string,
+    { page = 1, limit = 10 }: PaginationRequest = {}
+): Promise<PaginationResponse<ProductListInfoAdmin>> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            // Có thể in supplierId ra console để test xem tham số truyền vào đúng chưa
+            // console.log("Fetching products for supplier:", supplierId);
 
-	return mockProducts;
+            const mockProducts: ProductListInfoAdmin[] = [
+                {
+                    id: '550e8400-e29b-41d4-a716-446655440000',
+                    name: 'Bonsai Tree Ecosystem',
+                    slug: 'bonsai-tree-ecosystem',
+                    image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
+                    status: true,
+                    systemStatus: 'approved',
+                    createdAt: '2024-01-10T10:00:00Z',
+                    updatedAt: '2024-02-01T15:30:00Z',
+                },
+                {
+                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    name: 'Rainforest Moss Bowl',
+                    slug: 'rainforest-moss-bowl',
+                    image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
+                    status: true,
+                    systemStatus: 'pending_approval',
+                    createdAt: '2024-01-10T10:00:00Z',
+                    updatedAt: '2024-02-01T15:30:00Z',
+                },
+                {
+                    id: '987e6543-e21b-34d3-b456-426614174111',
+                    name: 'Desert Succulent Oasis',
+                    slug: 'desert-succulent-oasis',
+                    image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
+                    status: false,
+                    systemStatus: 'rejected',
+                    createdAt: '2024-01-10T10:00:00Z',
+                    updatedAt: '2024-02-01T15:30:00Z',
+                },
+                {
+                    id: '111e2222-e33b-44d3-c456-426614174222',
+                    name: 'Geometric Glass Terrarium',
+                    slug: 'geometric-glass-terrarium',
+                    image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
+                    status: true,
+                    systemStatus: 'banned',
+                    createdAt: '2024-01-10T10:00:00Z',
+                    updatedAt: '2024-02-01T15:30:00Z',
+                },
+                {
+                    id: '333e4444-e55b-66d3-d456-426614174333',
+                    name: 'Fittonia Closed Bottle',
+                    slug: 'fittonia-closed-bottle',
+                    image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
+                    status: false,
+                    systemStatus: 'approved',
+                    createdAt: '2024-01-10T10:00:00Z',
+                    updatedAt: '2024-02-01T15:30:00Z',
+                },
+            ];
+
+            // 1. Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang)
+            const startIndex = (page - 1) * limit;
+            const endIndex = startIndex + limit;
+            const paginatedProducts = mockProducts.slice(startIndex, endIndex);
+
+            // 2. Trả về cấu trúc PaginationResponse chuẩn
+            resolve({
+                data: paginatedProducts,
+                meta: {
+                    totalItems: mockProducts.length,
+                    totalPages: Math.ceil(mockProducts.length / limit),
+                    currentPage: page,
+                    itemsPerPage: limit,
+                },
+            });
+        }, 500); // Thêm độ trễ 500ms
+    });
 };
 
-export const fetchSupplierById = async (supplierId: string): Promise<Supplier> => {
+export const getSupplierDetailBySupplierId = async (supplierId: string): Promise<Supplier> => {
 	const mockSupplier: Supplier = {
 		id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đồng bộ đúng GUID của Công ty Bao bì Việt Nam
 		name: 'Công ty Cổ phần Bao bì Việt Nam',

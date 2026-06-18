@@ -21,7 +21,6 @@ export default function ShopRegistrationContainer({
     role
 }: ShopRegistrationContainerProps): JSX.Element {
     const logic = useShopRegistrationLogic({ initialData });
-    
 
 	return (
 		<ShopRegistrationUi

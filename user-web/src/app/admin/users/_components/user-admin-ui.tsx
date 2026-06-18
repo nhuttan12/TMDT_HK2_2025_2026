@@ -13,6 +13,7 @@ interface Props extends UseUserAdminLogicReturn {
 export default function UserAdminUi({
 	users,
 	currentPage,
+    totalPages,
 	changePage,
 	handleSort,
 	renderSortIcon,
@@ -42,7 +43,7 @@ export default function UserAdminUi({
 			{/* Pagination */}
 			<Pagination
 				currentPage={currentPage}
-				totalPages={10}
+				totalPages={totalPages}
 				onPageChange={changePage}
 			/>
 		</div>

@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 import { Metadata } from 'next';
-import { fetchSupplierById } from '@/services/inventories/suppliers/goods-supplier-service';
+import { getSupplierDetailBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import SupplierFormContainer from './_components/supplier-form-container';
 
@@ -25,7 +25,7 @@ export default async function SupplierProductsPage({
 	// 2. Fetch dữ liệu từ Server
 	const supplierName = 'Công ty TNHH Nhập khẩu Vina'; // Ví dụ: await fetchSupplierName(supplierId);
 
-	const supplier: Supplier = await fetchSupplierById(supplierId);
+	const supplier: Supplier = await getSupplierDetailBySupplierId(supplierId);
 
 	// 3. Render Container và truyền Props xuống
 	return (

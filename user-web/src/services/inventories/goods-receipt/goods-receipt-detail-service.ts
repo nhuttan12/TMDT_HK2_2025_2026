@@ -16,7 +16,7 @@ export const getGoodsReceiptById = async (id: string): Promise<GoodsReceiptDetai
 		supplierID: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đã chuyển sang GUID string
 		supplierName: 'Xưởng Thủy Tinh GreenLife',
 		importDate: new Date(now).toISOString(),
-		importStatus: 'draft',
+		importStatus: 'completed',
 		note: 'Nhập hàng vật tư bể và đèn LED đầu tháng',
 		batches: [
 			{

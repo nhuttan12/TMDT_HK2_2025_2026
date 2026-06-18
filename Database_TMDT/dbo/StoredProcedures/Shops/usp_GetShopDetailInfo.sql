@@ -7,16 +7,16 @@ BEGIN
 	BEGIN TRY
 		SELECT 
 			s.id, 
-			s.name AS Name, 
+			s.[name] AS [Name], 
 			u.email AS Email,
 			u.phone AS Phone,
-			s.description AS [Description],
+			s.[description] AS [Description],
 			a.address_url AS [Address],
 			sl.logo_url AS Logo,
 			ub.bank_name AS BankName,
 			ub.account_name AS AccountName,
 			ub.account_number AS AccountNumber,
-			s.status AS [Status],
+			s.[status] AS [Status],
 			s.rating AS Rating,
 			(SELECT COUNT(1) 
 				FROM PRODUCTS p 
@@ -25,6 +25,7 @@ BEGIN
 				FROM INVOICES i 
 				WHERE i.shop_id = s.id) AS TotalInvoices
 		FROM SHOPS s
+
 		INNER JOIN USERS u 
 			ON s.id = u.Id
 		INNER JOIN ADDRESSES a
@@ -32,9 +33,7 @@ BEGIN
 		INNER JOIN SHOP_LOGOS sl
 			ON sl.shop_id = s.id
 		INNER JOIN USER_BANKINGS ub
-			ON ub.user_id = u.Id
-		INNER JOIN PRODUCTS p
-			ON p.shop_id = s.id
+			ON ub.user_id = u.Id 
 		INNER JOIN INVOICES i
 			ON i.shop_id = s.id
 

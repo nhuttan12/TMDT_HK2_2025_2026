@@ -1,8 +1,14 @@
-﻿namespace api.Models.Inventory
+﻿using api.Models.Shops;
+
+namespace api.Models.Inventory
 {
     public class Supplier
     {
         public Guid Id { get; private set; }
+
+        public Guid ShopId { get; private set; }
+        public Shop Shop { get; private set; }
+
         public string Name { get; private set; }
         public string TaxCode { get; private set; }
         public string PhoneNumber { get; private set; }

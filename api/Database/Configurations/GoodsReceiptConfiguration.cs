@@ -35,6 +35,7 @@ namespace api.Database.Configurations
             );
             builder.Property(goodsReceipt => goodsReceipt.Type)
                 .HasConversion(typeConverter)
+                .HasColumnName("type")
                 .HasColumnType("varchar(50)")
                 .IsRequired();
 
@@ -44,6 +45,7 @@ namespace api.Database.Configurations
             );
             builder.Property(goodsReceipt => goodsReceipt.Status)
                 .HasConversion(statusConverter)
+                .HasColumnName("status")
                 .HasColumnType("varchar(50)")
                 .IsRequired();
 

@@ -25,6 +25,7 @@ export default function ProductAdminUi({
 	addLabel,
 
 	// Props được kế thừa từ hook (destructuring chuẩn xác tên gốc)
+    totalPage,
 	currentPage,
 	changePage,
 	handleSort,
@@ -64,7 +65,7 @@ export default function ProductAdminUi({
 
 			<Pagination
 				currentPage={currentPage}
-				totalPages={10}
+				totalPages={totalPage}
 				onPageChange={changePage}
 			/>
 		</div>
