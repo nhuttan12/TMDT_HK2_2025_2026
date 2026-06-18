@@ -1,5 +1,6 @@
 ﻿using api.Database;
 using api.Dtos.Products.Request;
+using api.Dtos.Products.Respones;
 using api.model.Products;
 using api.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace api.Repository.ProductRepo
         Task<bool> ExistsAsync(Guid productId, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto filterDto, CancellationToken cancellationToken);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Product?> GetByIdWithShopAsync(Guid productId, CancellationToken cancellationToken = default);
+        Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
     public class ProductRepository : IProductRepository
     {
@@ -111,6 +114,43 @@ namespace api.Repository.ProductRepo
         public Task<bool> ExistsAsync(Guid productId, CancellationToken cancellationToken)
         {
             return _context.Products.AnyAsync(p => p.Id == productId, cancellationToken);
+        }
+
+      
+
+        public async Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            var query = _context.Products
+                .AsNoTracking()
+                .Where(p => p.Id != productId && p.Status == ProductStatus.Approved && p.ShopId == shopId);
+
+           
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            if (totalCount == 0)
+            {
+                return new PagedResult<Product>(new List<Product>(), 0, pageNumber, pageSize);
+            }
+
+            // 5. Phân trang và DTO Projection (Tối ưu Memory/CPU)
+            var items = await query
+                .OrderByDescending(p => p.CreatedAt) // BẮT BUỘC: Sắp xếp trước khi phân trang
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<Product?> GetByIdWithShopAsync(Guid productId, CancellationToken cancellationToken = default)
+        {
+            // Khởi tạo Queryable
+            IQueryable<Product> query = _context.Products;
+            return await query
+                .AsNoTracking() // Tối ưu cho truy vấn chỉ đọc
+                .Include(p => p.Shop)
+                .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
         }
     }
 }

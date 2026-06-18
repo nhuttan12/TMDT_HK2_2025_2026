@@ -3,6 +3,8 @@ import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopPublicFilter } from '@/types/shops/user/ShopPublicFilter';
 import { ShopStorefront } from '@/types/shops/user/ShopStorefront';
+import apiClient from '@/lib/api-client';
+import apiServer from '@/lib/api-server';
 
 export const getShopPublicInfoById = async (shopId: string): Promise<ShopStorefront> => {
 	return new Promise((resolve, reject) => {

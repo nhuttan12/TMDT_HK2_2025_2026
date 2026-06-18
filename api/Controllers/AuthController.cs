@@ -146,11 +146,7 @@ namespace api.Controllers
     }
 
     public record LoginRequest(
-        [Required]
-        [EmailAddress]
         string Email,
-        [Required]
-        [PasswordPropertyText]
         string Password);
     public record RegisterRequest(
         string FullName,

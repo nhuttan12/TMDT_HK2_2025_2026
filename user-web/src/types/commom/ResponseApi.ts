@@ -1,14 +1,14 @@
-export interface ErrorApi {
-	Code: string;
-	Message: string;
-	ErrorType: string;
+export interface ResponseError {
+	code: string;
+	message: string;
+	errorType: string;
 }
 
 // Mặc định T là object nếu không truyền type cụ thể
 export interface ResponseApi<T = object> {
-	IsSuccess: boolean;
-	Value: T | null;
-	Error: ErrorApi | null;
+	isSuccess: boolean;
+	data: T | null;
+	error: ResponseError | null;
 }
 
 export interface LoginPayload {

@@ -17,7 +17,8 @@ namespace api.Services.Products
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto fillterDto, CancellationToken cancellationToken = default);
-        Task<Result<ProductResponseDto>>    GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
+        Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(Guid productId, PaginationRequestDto paginationDto, CancellationToken cancellationToken);
     }
     public class ProductService(
         ILogger<ProductController> logger,
@@ -28,7 +29,7 @@ namespace api.Services.Products
     {
         public async Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default)
         {
-            var productId =idGenerator.NewId();   
+            var productId = idGenerator.NewId();
             var res = Product.Create(
                 productId,
                 productDto.Name,
@@ -57,7 +58,7 @@ namespace api.Services.Products
                 return Result<ProductResponseDto>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
             }
 
-            if(queryDto is not null)
+            if (queryDto is not null)
             {
                 // Process the query parameters if needed
             }
@@ -107,10 +108,10 @@ namespace api.Services.Products
                 Rating: product.Rating,
                 BasePrice: product.BasePrice,
                 ImageUrls: product.ImageUrls,
-                Status: product.Status.ToString() ,         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
+                Status: product.Status.ToString(),         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
                 Variants: product.Variants.Select(v => new VariantResponseDto
                 (
-                 Id : v.Id,
+                 Id: v.Id,
                  Sku: v.Sku,
                  Name: v.Name,
                  CostPrice: v.CostPrice,
@@ -118,7 +119,7 @@ namespace api.Services.Products
                  ImageUrl: v.ImageUrl,
                  Status: v.Status.ToString() // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
 
-                )).ToArray()    
+                )).ToArray()
             )); // Sử dụng Implicit Conversion đã cấu hình trong class PagedResult<ProductResponseDto>
 
             // Sử dụng Implicit Conversion đã cấu hình trong class Result
@@ -138,7 +139,9 @@ namespace api.Services.Products
                 repo.Update(existingProduct);
                 await unitOfWork.CommitAsync();
                 return Result<bool>.Success(true);
-            }else{
+            }
+            else
+            {
                 return Result<bool>.Failure(Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
             }
         }
@@ -156,9 +159,28 @@ namespace api.Services.Products
             return Result<bool>.Failure(Error.Create("Product.NotFound.", "Product not found.", ErrorType.NotFound));
         }
 
+        public async Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(Guid productId, PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            if (productId == Guid.Empty)
+            {
+                return Result<PagedResult<ProductResponseDto>>.Failure(
+                    Error.Create("ProductId.Invalid", "Product ID cannot be empty.", ErrorType.Validation));
+            }
+            var product = await repo.GetByIdWithShopAsync(productId, cancellationToken);
+            if (product == null)
+            {
+                return Result<PagedResult<ProductResponseDto>>.Failure(
+                    Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
+            }
 
-
-        
-
+            var relatedProducts = await repo.GetRelatedProductsAsync(productId, product.Shop.Id, paginationDto.PageNumber, paginationDto.PageSize, cancellationToken);
+            if (relatedProducts != null && relatedProducts.Items.Any())
+            {
+                var relatedProductDtos = relatedProducts.Map(p => mapper.Map<ProductResponseDto>(p));
+                return Result<PagedResult<ProductResponseDto>>.Success(relatedProductDtos);
+            }
+            return Result<PagedResult<ProductResponseDto>>.Failure(
+                Error.Create("RelatedProducts.NotFound", "No related products found.", ErrorType.NotFound));
+        }
     }
 }
