@@ -23,6 +23,7 @@ const apiServer = axios.create({
 
 apiServer.interceptors.request.use(
 	async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+		console.log("interceptors for requests")
 		const publicEndpoints: string[] = [
 			'/auth/register',
 			'/auth/login',
@@ -51,11 +52,16 @@ apiServer.interceptors.request.use(
 		return config;
 	},
 );
+
 apiServer.interceptors.response.use(
 	(response: AxiosResponse): AxiosResponse => {
+		console.log(
+			`[API-SUCCESS] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`,
+		);
 		return response;
 	},
 	async (error: AxiosError): Promise<AxiosResponse> => {
+		console.log('interceptors for response');
 		const status: number = error.response?.status || 500;
 
 		interface DotNetError {
@@ -66,30 +72,30 @@ apiServer.interceptors.response.use(
 		const responseData = error.response?.data as DotNetError | undefined;
 
 		const fallbackResponse: ResponseApi<null> = {
-			IsSuccess: false,
-			Value: null,
-			Error: {
-				Code: `SERVER_HTTP_${status}`,
-				Message: 'Lỗi kết nối Backend',
-				ErrorType: 'ServerError',
+			isSuccess: false,
+			data: null,
+			error: {
+				code: `SERVER_HTTP_${status}`,
+				message: 'Lỗi kết nối Backend',
+				errorType: 'ServerError',
 			},
 		};
 
 		if (status === 401) {
-			fallbackResponse.Error = {
-				Code: 'UNAUTHORIZED',
-				Message: 'Phiên đăng nhập không hợp lệ.',
-				ErrorType: 'AuthenticationError',
+			fallbackResponse.error = {
+				code: 'UNAUTHORIZED',
+				message: 'Phiên đăng nhập không hợp lệ.',
+				errorType: 'AuthenticationError',
 			};
 		} else if (responseData) {
-			let errorMessage: string = responseData.message || fallbackResponse.Error!.Message;
+			let errorMessage: string = responseData.message || fallbackResponse.error!.message;
 			if (responseData.errors) {
 				errorMessage = Object.values(responseData.errors).flat().join(', ');
 			}
-			fallbackResponse.Error = {
-				Code: 'VALIDATION_ERROR',
-				Message: errorMessage,
-				ErrorType: 'DotNetError',
+			fallbackResponse.error = {
+				code: 'VALIDATION_ERROR',
+				message: errorMessage,
+				errorType: 'DotNetError',
 			};
 		}
 
@@ -106,6 +112,7 @@ apiServer.interceptors.response.use(
 			headers: {},
 			config: error.config!,
 		};
+		console.log(mockResponse);
 
 		return Promise.resolve(mockResponse);
 	},

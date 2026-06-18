@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState, Dispatch, SetStateAction, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
+import { ResponseApi } from '@/types/commom/ResponseApi';
 
 export interface LoginReturn {
 	loginWithGoogle: () => Promise<void>;
@@ -29,8 +30,8 @@ export function useLoginLogic(): LoginReturn {
 	// Định nghĩa Mutation: Quản lý vòng đời của request Login
 	const loginMutation = useMutation({
 		// 1. Hàm thực thi chính
-		mutationFn: ({ email, password }: LoginPayload): Promise<LoginResponse> => {
-			return  authService.login({ email, password });
+		mutationFn: ({ email, password }: LoginPayload): Promise<ResponseApi<LoginResponse>> => {
+			return authService.login({ email, password });
 		},
 		// 2. Khi bắt đầu gửi request (thay cho setIsLoading(true))
 		onMutate: () => {
@@ -38,11 +39,12 @@ export function useLoginLogic(): LoginReturn {
 		},
 
 		// 3. Khi thành công
-		onSuccess: (data: LoginResponse) => {
+		onSuccess: (data: ResponseApi<LoginResponse>) => {
+			console.log(data);
 			// Cập nhật Zustand Store
 			const user = {
 				username: formData.email,
-			}
+			};
 			login(user);
 			// Điều hướng người dùng
 			router.push('/');

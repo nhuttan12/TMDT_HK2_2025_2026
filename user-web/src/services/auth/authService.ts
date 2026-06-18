@@ -1,6 +1,6 @@
 import { UserModel } from '@/stores/auth.store';
 import apiClient from '@/lib/api-client';
-import apiServer from '@/lib/api-server';
+import { ResponseApi } from '@/types/commom/ResponseApi';
 
 export interface LoginPayload {
 	email: string;
@@ -8,8 +8,9 @@ export interface LoginPayload {
 	[key: string]: string;
 }
 
-export interface LoginResponse {
-	status: string;
+export interface LoginResponse  {
+	accessToken: string,
+	refreshToken: string
 }
 
 export interface RegisterRequest {
@@ -24,16 +25,24 @@ export interface RefreshTokenResponse {
 }
 
 export const authService = {
-	login: (data: Partial<LoginPayload>): Promise<LoginResponse> => {
+	login: (data: Partial<LoginPayload>): Promise<ResponseApi<LoginResponse>> => {
 		// //TODO: remove
 		// 	// Mock API: Giả lập thành công sau 1 giây
-		if (data.password === '1') {
-			return new Promise<{ status :'oke' }>((resolve, reject) => {
+		if (data.email === 'admin@gmail.com' && data.password === '1') {
+			const resmock: ResponseApi<LoginResponse> = {
+				isSuccess: true,
+				data: {
+					accessToken: '',
+					refreshToken: '',
+				},
+				error: null,
+			};
+			return new Promise<ResponseApi<LoginResponse>>((resolve, reject) => {
 				setTimeout(() => {
 					if (data.email === 'admin@gmail.com' && data.password === '1') {
-						//  thực hiện gọi localhost:3000/api/dev/mock-auth
+						console.log('Thực hiện gọi localhost:3000/api/dev/mock-auth');
 						fetch('/api/dev/mock-auth');
-						resolve({ status: 'oke' });
+						resolve(resmock);
 					} else {
 						reject(new Error('Invalid credentials'));
 					}
@@ -47,7 +56,7 @@ export const authService = {
 		if (data.password === '1') {
 			return new Promise<{ email: 'oke' }>((resolve, reject) => {
 				setTimeout(() => {
-					if ( data.password === '1') {
+					if (data.password === '1') {
 						//  thực hiện gọi localhost:3000/api/dev/mock-auth
 						fetch('/api/dev/mock-auth');
 						resolve({ email: 'oke' });
@@ -73,8 +82,8 @@ export const authService = {
 	getProfile() {
 		return undefined;
 	},
-	refreshToken: (): Promise<RefreshTokenResponse> =>{
-		console.log('refreshToken')
-		return apiClient.post('/auth/refresh-token')
+	refreshToken: (): Promise<RefreshTokenResponse> => {
+		console.log('refreshToken');
+		return apiClient.post('/auth/refresh-token');
 	},
 };
