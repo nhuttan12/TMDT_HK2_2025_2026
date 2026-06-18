@@ -1,12 +1,8 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Promotiions.Request;
 using api.Dtos.Promotiions.Response;
-using api.Models;
-using api.Models.Promotions;
-using api.Models.Utilities;
 using api.Repository.Promotions;
 using api.Utilities;
-using Azure.Core;
 
 namespace api.Services.Promotions
 {

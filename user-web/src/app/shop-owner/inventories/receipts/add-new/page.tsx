@@ -13,7 +13,7 @@ const emptyGoodsReceiptDetail: GoodsReceiptDetail = {
 	supplierID: '',
 	supplierName: '',
 	importDate: '',
-	importStatus: 'draft',
+	importStatus: 'pending',
 	batches: [],
 };
 

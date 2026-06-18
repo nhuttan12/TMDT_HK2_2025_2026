@@ -412,7 +412,8 @@ namespace api.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier")
@@ -420,7 +421,8 @@ namespace api.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
@@ -604,6 +606,10 @@ namespace api.Migrations
                         .HasColumnType("varchar(10)")
                         .HasColumnName("phone_number");
 
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
+
                     b.Property<string>("TaxCode")
                         .IsRequired()
                         .HasColumnType("varchar(13)")
@@ -616,6 +622,8 @@ namespace api.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
 
                     b.ToTable("SUPPLIERS", (string)null);
                 });
@@ -1333,6 +1341,17 @@ namespace api.Migrations
                     b.Navigation("Variant");
                 });
 
+            modelBuilder.Entity("api.Models.Inventory.Supplier", b =>
+                {
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("Suppliers")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shop");
+                });
+
             modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
                     b.HasOne("api.Models.Shops.Shop", "Shop")
@@ -1547,6 +1566,8 @@ namespace api.Migrations
                     b.Navigation("Invoices");
 
                     b.Navigation("Products");
+
+                    b.Navigation("Suppliers");
                 });
 
             modelBuilder.Entity("api.Models.User", b =>

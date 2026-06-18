@@ -55,14 +55,11 @@ namespace api.Models
         public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
         public ICollection<UserSavedCoupon> UserSavedCoupons { get; set; } = new HashSet<UserSavedCoupon>();
         public ICollection<Promotion> Promotions { get; set; } = new HashSet<Promotion>();
-<<<<<<< HEAD
         public ICollection<Coupon> Coupons { get; set; } = new HashSet<Coupon>();
-=======
        
         public User()
         {
         }
->>>>>>> d99159f8e07b36645b1e6cbf1abf708f8d96a5bf
 
         public User(Guid id, string email, string fullName, Role role, UserExternalLogin ux, UserDetail ud)
         {

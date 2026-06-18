@@ -4,14 +4,19 @@ using api.Exceptions;
 using api.Models;
 using api.Models.Jwts;
 using api.Repository;
+using api.Repository.BannerRepo;
 using api.Repository.Categories;
+using api.Repository.Coupons;
 using api.Repository.ProductRepo;
+using api.Repository.Promotions;
 using api.Repository.RoleRepo;
 using api.Repository.UserRepo;
 using api.Services.Auths;
 using api.Services.Banners;
 using api.Services.Categorys;
+using api.Services.Coupons;
 using api.Services.Products;
+using api.Services.Promotions;
 using api.Services.Users;
 using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
@@ -87,7 +92,6 @@ namespace api.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IAdminBannerService, AdminBannerService>();
             services.AddScoped<IUserBannerService, UserBannerService>();
             services.AddScoped<IBankingService, BankingService>();
@@ -95,6 +99,7 @@ namespace api.Extensions
             services.AddScoped<IUserCouponService, UserCouponService>();
             services.AddScoped<IUserPromotionService, UserPromotionService>();
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
+
             // Đăng ký Data Seeders
             services.AddScoped<IDataSeeder, CategorySeeder>();
             services.AddScoped<IDataSeeder, ShopSeeder>();

@@ -129,6 +129,8 @@
     <Build Include="dbo\StoredProcedures\Inventory\usp_CreateSupplier.sql" />
     <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsSupplierListPaging.sql" />
     <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsSupplierDetail.sql" />
+    <Build Include="dbo\StoredProcedures\Inventory\usp_CreateGoodsIssue.sql" />
+    <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsReceiptList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

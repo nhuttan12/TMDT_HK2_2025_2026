@@ -2,37 +2,37 @@
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateSupplierTabbleFields : Migration
+    public partial class UpdateGoodsReceiptTableFields : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "Name",
-                table: "SUPPLIERS",
-                newName: "name");
+                name: "Type",
+                table: "GOODS_RECEIPTS",
+                newName: "type");
 
             migrationBuilder.RenameColumn(
-                name: "Email",
-                table: "SUPPLIERS",
-                newName: "email");
+                name: "Status",
+                table: "GOODS_RECEIPTS",
+                newName: "status");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "name",
-                table: "SUPPLIERS",
-                newName: "Name");
+                name: "type",
+                table: "GOODS_RECEIPTS",
+                newName: "Type");
 
             migrationBuilder.RenameColumn(
-                name: "email",
-                table: "SUPPLIERS",
-                newName: "Email");
+                name: "status",
+                table: "GOODS_RECEIPTS",
+                newName: "Status");
         }
     }
 }

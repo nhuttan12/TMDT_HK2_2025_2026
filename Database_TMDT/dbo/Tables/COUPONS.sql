@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [dbo].[COUPONS] (
     [id]                  UNIQUEIDENTIFIER   NOT NULL,
+    [user_id]             UNIQUEIDENTIFIER   NOT NULL,
     [code]                VARCHAR (50)       NOT NULL,
     [name]                VARCHAR (255)      NOT NULL,
     [scope]               VARCHAR (20)       NOT NULL,
@@ -15,10 +16,11 @@
     [status]              BIT                NOT NULL,
     [created_at]          DATETIMEOFFSET (7) DEFAULT (getdate()) NOT NULL,
     [updated_at]          DATETIMEOFFSET (7) DEFAULT (getdate()) NOT NULL,
-    [user_id]             UNIQUEIDENTIFIER   DEFAULT ('00000000-0000-0000-0000-000000000000') NOT NULL,
     CONSTRAINT [PK_COUPONS] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_COUPONS_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 GO

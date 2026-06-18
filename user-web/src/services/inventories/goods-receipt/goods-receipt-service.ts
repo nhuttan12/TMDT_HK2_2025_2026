@@ -13,7 +13,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			totalBatches: 3, // Có 3 lô hàng khác nhau trong phiếu này
 			totalQuantity: 15, // Tổng cộng 15 chiếc điện thoại
 			totalAmount: 350000000, // 350 triệu VNĐ
-			status: 'draft',
+			status: 'completed',
 			createdAt: new Date('2026-03-21T08:30:00Z').toISOString(),
 		},
 		{
@@ -24,7 +24,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			totalBatches: 1, // Chỉ nhập 1 lô duy nhất
 			totalQuantity: 50, // Nhưng số lượng trong lô rất lớn
 			totalAmount: 1250000000, // 1 tỷ 250 triệu VNĐ
-			status: 'confirmed',
+			status: 'completed',
 			createdAt: new Date('2026-03-24T10:15:00Z').toISOString(),
 		},
 		{
@@ -35,7 +35,7 @@ export const getGoodsReceipts = async (): Promise<GoodsReceiptList[]> => {
 			totalBatches: 5,
 			totalQuantity: 100,
 			totalAmount: 2500000000,
-			status: 'cancelled',
+			status: 'completed',
 			createdAt: new Date('2026-03-25T11:00:00Z').toISOString(),
 		},
 	];

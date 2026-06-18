@@ -136,7 +136,7 @@ export const getProductBySupplierId = async (
     });
 };
 
-export const getSupplierBySupplierId = async (supplierId: string): Promise<Supplier> => {
+export const getSupplierDetailBySupplierId = async (supplierId: string): Promise<Supplier> => {
 	const mockSupplier: Supplier = {
 		id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đồng bộ đúng GUID của Công ty Bao bì Việt Nam
 		name: 'Công ty Cổ phần Bao bì Việt Nam',
