@@ -1,46 +1,51 @@
-import { NextResponse } from 'next/server';
-import apiServer from '@/lib/api-server';
-import { type ResponseApi, type LoginPayload } from '@/types/commom/ResponseApi';
-import { type AxiosResponse } from 'axios';
+// src/lib/api-client.ts
+import axios, { type AxiosResponse, type AxiosError } from 'axios';
+import { type ResponseApi } from '@/types/commom/ResponseApi';
 
-export async function POST(request: Request): Promise<NextResponse> {
-	try {
-		const body = (await request.json()) as LoginPayload;
-		const backendUrl = '/auth/login';
-		// Vỏ ngoài là AxiosResponse, ruột bên trong là ResponseApi
-		const axiosResponse = await apiServer.post<object, AxiosResponse<ResponseApi<object>>>(
-			backendUrl,
-			body,
-		);
+const apiClient = axios.create({
+	baseURL: '/api',
+	timeout: 10000,
+	withCredentials: true,
+	headers: { 'Content-Type': 'application/json' },
+});
 
-		// Bóc vỏ tại đây
-		const responseData = axiosResponse.data;
+apiClient.interceptors.response.use(
+	(response: AxiosResponse): AxiosResponse => {
+		return response;
+	},
+	async (error: AxiosError): Promise<never> => {
+		const status: number = error.response?.status || 500;
 
-		let httpStatus: number = 200;
-
-		if (!responseData.IsSuccess) {
-			if (responseData.Error?.Code === 'UNAUTHORIZED') {
-				httpStatus = 401;
-			} else {
-				httpStatus = 400;
-			}
+		if (status === 401 && typeof window !== 'undefined') {
+			window.location.href = '/login';
 		}
 
-		return NextResponse.json(responseData, { status: httpStatus });
-	} catch (error) {
-		const errorMessage: string =
-			error instanceof Error ? error.message : 'Unknown Next.js Error';
+		// SỬA TẠI ĐÂY: Trả về Reject để TanStack Query nhảy vào onError
+		if (error.response && error.response.data) {
+			return Promise.reject(error);
+		}
 
-		const fatalError: ResponseApi<null> = {
-			IsSuccess: false,
-			Value: null,
-			Error: {
-				Code: 'INTERNAL_API_ERROR',
-				Message: errorMessage,
-				ErrorType: 'NextJsRuntimeError',
-			},
+		// Lỗi mạng giả lập (Mất kết nối hoàn toàn)
+		const mockResponse: AxiosResponse = {
+			data: {
+				isSuccess: false,
+				data: null,
+				error: {
+					code: `CLIENT_HTTP_${status}`,
+					message: 'Không thể kết nối đến máy chủ Next.js',
+					errorType: 'NetworkError',
+				},
+			} as ResponseApi<null>,
+			status: status,
+			statusText: 'Network Error',
+			headers: {},
+			config: error.config!,
 		};
 
-		return NextResponse.json(fatalError, { status: 500 });
-	}
-}
+		// Gắn cái vỏ giả vào object error và reject nó
+		error.response = mockResponse;
+		return Promise.reject(error);
+	},
+);
+
+export default apiClient;

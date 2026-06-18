@@ -36,5 +36,13 @@ namespace api.Utilities
 
             return Regex.IsMatch(phoneNumber, pattern);
         }
+        public static Result<Object> ValidId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return Result<bool>.Failure(Error.Create("Id.Empty", "ID cannot be empty.", ErrorType.Validation));
+            }
+            return Result<bool>.Success(true);
+        }
     }
 }
