@@ -1,6 +1,6 @@
 import { UserModel } from '@/stores/auth.store';
 import apiClient from '@/lib/api-client';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../types/common/ResponseApi';
 
 export interface LoginPayload {
 	email: string;

@@ -29,14 +29,10 @@ export default function HomeContainer({
 	initialCoupons,
 }: HomeContainerProps): JSX.Element {
 	const { data: banners = [], isLoading: isLoadingBanners } = useHomeBannersQuery(initialBanners);
-	const { data: products = [], isLoading: isLoadingProducts } =
-		useProductsHomeQuery(initialProducts);
-	const { data: categories = [], isLoading: isLoadingCategories } =
-		useCategoriesQuery(initialCategories);
-	const { data: topSellingProducts = [], isLoading: isLoadingTopSelling } =
-		useTopSellingProductsQuery(initialTopSelling);
-	const { data: coupons = [], isLoading: isLoadingCoupons } =
-		usePlatformCouponsQuery(initialCoupons);
+	const { data: products = [], isLoading: isLoadingProducts } = useProductsHomeQuery(initialProducts);
+	const { data: categories = [], isLoading: isLoadingCategories } = useCategoriesQuery(initialCategories);
+	const { data: topSellingProducts = [], isLoading: isLoadingTopSelling } = useTopSellingProductsQuery(initialTopSelling);
+	const { data: coupons = [], isLoading: isLoadingCoupons } = usePlatformCouponsQuery(initialCoupons);
 	const claimMutation = useClaimCouponMutation();
 
 	const logic = useHomeBannerLogic();

@@ -1,7 +1,8 @@
 import ProductsContainer from '@/app/(app)/products/_components/products-container';
-import { getProductListPaging } from '@/services/products/user/product-service';
+import { getPageProducts } from '@/services/products/user/product-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
+import {PaginationParams} from "@/types/common/Pagination";
 
 export const metadata: Metadata = {
 	title: 'Danh sách sản phẩm',
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage(): Promise<JSX.Element> {
-	const products = await getProductListPaging();
-
+	const pageRequest: PaginationParams = {
+		pageSize :  12,
+		pageNumber: 1
+	}
+	const products = await getPageProducts(pageRequest);
+	console.log(products);
 	return <ProductsContainer initialProducts={products} />;
 }

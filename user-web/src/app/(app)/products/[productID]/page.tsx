@@ -1,7 +1,11 @@
 import { ProductDetail } from '@/types/products/user/ProductDetail';
-import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { JSX } from 'react';
-import { getProductDetailById, getRelatedProducts } from '@/services/products/user/product-service';
+import {
+	getProductDetailByIdCraw,
+	getProductDetailById,
+	getRelatedProductsCraw,
+	getRelatedProducts,
+} from '@/services/products/user/product-service';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import ProductDetailContainer from './_components/product-detail-container';
@@ -10,44 +14,49 @@ interface Props {
 	params: Promise<{ productId: string }>;
 }
 
+// 1. Tối ưu hóa SEO Metadata cho String ID
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const resolvedParams = await params;
-	const numericProductID: number = Number(resolvedParams.productId);
+	const productId: string = resolvedParams.productId;
 
-	// Nếu ID không hợp lệ, trả về SEO fallback
-	if (Number.isNaN(numericProductID) || numericProductID <= 0) {
+	// Cập nhật logic validate: Kiểm tra chuỗi rỗng thay vì NaN
+	if (!productId || productId.trim() === '') {
 		return {
 			title: 'Sản phẩm không tồn tại',
 		};
 	}
 
 	try {
-		const product: ProductDetail = await getProductDetailById(numericProductID);
+		// Truyền thẳng chuỗi productId vào Service
+		const product: ProductDetail = await getProductDetailByIdCraw(productId);
 
 		return {
 			title: `Chi tiết sản phẩm | ${product.name}`,
-			// Bạn có thể mở rộng thêm description, openGraph, keywords ở đây
 			description: `Mua ${product.name} chính hãng với giá tốt nhất.`,
 		};
 	} catch {
-		// Bắt lỗi trong trường hợp API sập hoặc không tìm thấy sản phẩm
 		return {
 			title: 'Sản phẩm không tồn tại',
 		};
 	}
 }
 
+// 2. Tối ưu hóa Server Component Render
 export default async function ProductListPage({ params }: Props): Promise<JSX.Element> {
 	const resolvedParams = await params;
-	const numericProductID = Number(resolvedParams.productId);
+	const productId: string = resolvedParams.productId;
 
-	if (Number.isNaN(numericProductID) || numericProductID <= 0) {
+	// Validate sớm để ngắt luồng nếu ID rỗng
+	if (!productId || productId.trim() === '') {
 		notFound();
 	}
 
-	const product = await getProductDetailById(numericProductID);
-	const relatedProducts = await getRelatedProducts(product.name);
+	// const product: ProductDetail = await getProductDetailByIdCraw(productId);
 
+	console.log(productId);
+	const product = await getProductDetailById(productId);
+	// Gọi Service liên quan (Cần đảm bảo backend có thể handle việc get theo tên hoặc truyền string ID)
+	const relatedProducts = await getRelatedProducts(productId);
 	return (
 		<ProductDetailContainer
 			product={product}

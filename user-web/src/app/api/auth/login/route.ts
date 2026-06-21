@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import apiServer from '@/lib/api-server';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../../../types/common/ResponseApi';
 
 export interface TokenData {
 	accessToken: string;

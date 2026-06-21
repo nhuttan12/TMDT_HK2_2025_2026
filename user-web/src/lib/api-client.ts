@@ -1,13 +1,45 @@
-// src/lib/api-client.ts
-import axios, { type AxiosResponse, type AxiosError } from 'axios';
-import { type ResponseApi } from '@/types/commom/ResponseApi';
+import axios, {
+	type AxiosError,
+	type AxiosInstance,
+	type AxiosResponse,
+	type InternalAxiosRequestConfig,
+} from 'axios';
+import { type ResponseApi } from '@/types/common/ResponseApi';
+import * as https from 'node:https';
 
-const apiClient = axios.create({
-	baseURL: '/api',
+const API_BASE_URL: string = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7087/api/';
+const isDevMode: boolean = process.env.NODE_ENV === 'development';
+
+const httpsAgent: https.Agent = new https.Agent({
+	rejectUnauthorized: !isDevMode,
+});
+
+export const apiClient: AxiosInstance = axios.create({
+	baseURL: API_BASE_URL,
 	timeout: 10000,
 	withCredentials: true,
-	headers: { 'Content-Type': 'application/json' },
+	httpsAgent: httpsAgent,
 });
+
+apiClient.interceptors.request.use(
+	(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+		// 1. Tự động xử lý Content-Type linh hoạt
+		// Nếu payload là FormData (ví dụ: upload file), Axios sẽ tự động set 'multipart/form-data' và gắn boundary.
+		if (config.data && !(config.data instanceof FormData)) {
+			config.headers.set('Content-Type', 'application/json');
+		}
+
+		// 2. Chống tấn công CSRF cho các phương thức Mutation
+		const method: string = config.method?.toUpperCase() || '';
+		if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+		}
+
+		return config;
+	},
+	(error: AxiosError): Promise<never> => {
+		return Promise.reject(error);
+	},
+);
 
 apiClient.interceptors.response.use(
 	(response: AxiosResponse): AxiosResponse => {
@@ -20,19 +52,17 @@ apiClient.interceptors.response.use(
 			window.location.href = '/login';
 		}
 
-		// SỬA TẠI ĐÂY: Trả về Reject để TanStack Query nhảy vào onError
 		if (error.response && error.response.data) {
 			return Promise.reject(error);
 		}
 
-		// Lỗi mạng giả lập (Mất kết nối hoàn toàn)
-		const mockResponse: AxiosResponse = {
+		error.response = {
 			data: {
 				isSuccess: false,
 				data: null,
 				error: {
 					code: `CLIENT_HTTP_${status}`,
-					message: 'Không thể kết nối đến máy chủ Next.js',
+					message: 'Không thể kết nối đến máy chủ .NET',
 					errorType: 'NetworkError',
 				},
 			} as ResponseApi<null>,
@@ -42,8 +72,6 @@ apiClient.interceptors.response.use(
 			config: error.config!,
 		};
 
-		// Gắn cái vỏ giả vào object error và reject nó
-		error.response = mockResponse;
 		return Promise.reject(error);
 	},
 );

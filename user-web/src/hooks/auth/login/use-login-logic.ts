@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState, Dispatch, SetStateAction, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../../types/common/ResponseApi';
 
 export interface LoginReturn {
 	loginWithGoogle: () => Promise<void>;

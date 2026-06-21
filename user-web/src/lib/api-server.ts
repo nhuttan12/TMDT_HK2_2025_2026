@@ -7,7 +7,7 @@ import axios, {
 	from 'axios';
 import { cookies } from 'next/headers';
 import { type ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import {type ResponseApi } from '@/types/commom/ResponseApi';
+import {type ResponseApi } from '../types/common/ResponseApi';
 
 if (process.env.NODE_ENV === 'development') {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
