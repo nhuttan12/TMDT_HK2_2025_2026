@@ -13,11 +13,11 @@ namespace api.Services.Products
 {
     public interface IProductService
     {
-        Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default);
+        Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default); 
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto fillterDto, CancellationToken cancellationToken = default);
-        Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
+        Task<Result<ProductDetailResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(Guid productId, PaginationRequestDto paginationDto, CancellationToken cancellationToken);
     }
     public class ProductService(
@@ -51,11 +51,11 @@ namespace api.Services.Products
             await unitOfWork.CommitAsync();
             return res;
         }
-        public async Task<Result<ProductResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductDetailResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default)
         {
             if (id == Guid.Empty)
             {
-                return Result<ProductResponseDto>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
+                return Result<ProductDetailResponseDto>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
             }
 
             if (queryDto is not null)
@@ -66,10 +66,10 @@ namespace api.Services.Products
 
             if (product == null)
             {
-                return Result<ProductResponseDto>.Failure(Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
+                return Result<ProductDetailResponseDto>.Failure(Error.Create("Product.NotFound", "Product not found.", ErrorType.NotFound));
             }
-            var productDto = mapper.Map<ProductResponseDto>(product);
-            return Result<ProductResponseDto>.Success(productDto);
+            var productDto = mapper.Map<ProductDetailResponseDto>(product);
+            return Result<ProductDetailResponseDto>.Success(productDto);
         }
         /**
          * fillter : name, category, price range, rating range, status
@@ -102,14 +102,14 @@ namespace api.Services.Products
                 cancellationToken);
 
             PagedResult<ProductResponseDto> pagedDtos = products.Map(product => new ProductResponseDto
-            (
-                Id: product.Id,
-                Name: product.Name,
-                Rating: product.Rating,
-                BasePrice: product.BasePrice,
-                ImageUrls: product.ImageUrls,
-                Status: product.Status.ToString(),         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
-                Variants: product.Variants.Select(v => new VariantResponseDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Rating = product.Rating,
+                BasePrice = product.BasePrice,
+                ImageUrls = product.ImageUrls,
+                Status = product.Status.ToString(),         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
+                Variants = product.Variants.Select(v => new VariantResponseDto
                 (
                  Id: v.Id,
                  Sku: v.Sku,
@@ -120,7 +120,7 @@ namespace api.Services.Products
                  Status: v.Status.ToString() // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
 
                 )).ToArray()
-            )); // Sử dụng Implicit Conversion đã cấu hình trong class PagedResult<ProductResponseDto>
+            }); // Sử dụng Implicit Conversion đã cấu hình trong class PagedResult<ProductResponseDto>
 
             // Sử dụng Implicit Conversion đã cấu hình trong class Result
             return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);

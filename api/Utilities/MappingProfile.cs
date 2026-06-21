@@ -9,6 +9,7 @@ using api.model.Products;
 using api.Models;
 using api.Models.Category;
 using api.Models.Products;
+using api.Models.Shops;
 using api.Models.Users;
 using AutoMapper;
 
@@ -73,6 +74,8 @@ namespace api.Utilities
                 .ForMember(dest => dest.CategoryId, opt => opt.Ignore());
             // product to dto
             CreateMap<Product, ProductResponseDto>();
+            CreateMap<Product, ProductDetailResponseDto>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Detail!.DescriptionHtml));
         }
 
         private void VariantMapping()
@@ -101,6 +104,8 @@ namespace api.Utilities
         private void ShopMapping()
         {
             CreateMap<RawShopAdmin, ShopAdmin>();
+
+            CreateMap<Shop, ShopDto>();
         }
     }
 }
