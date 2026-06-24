@@ -4,7 +4,7 @@ import { ProductDetailRawUser } from '@/types/products/user/ProductDetailRawUser
 import { ProductTierVariation } from '@/types/products/user/ProductTierVariation';
 import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
 import {
-	BackendPaginationData,
+	BackendPagedResult,
 	BackendProductItem,
 	BackendVariant,
 	ProductDetailBE,
@@ -134,7 +134,7 @@ export function mapBackendProductToUserCard(backendItem: BackendProductItem): Pr
 // 2. HÀM MAP TOÀN BỘ PHÂN TRANG (BackendPaginationData -> PaginationResponse)
 // ==========================================
 export function mapBackendPaginationToFrontend(
-	backendData: BackendPaginationData,
+	backendData: BackendPagedResult<BackendProductItem>,
 ): PaginationResponse<ProductUserCard> {
 	// Sử dụng arrow function bên trong phương thức của mảng, định nghĩa kiểu trả về tường minh
 	const mappedItems: ProductUserCard[] = backendData.items.map(

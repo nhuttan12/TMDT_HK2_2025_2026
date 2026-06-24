@@ -22,6 +22,5 @@ export default async function ProductsPage(): Promise<JSX.Element> {
 		pageNumber: 1
 	}
 	const products = await getPageProducts(pageRequest);
-	console.log(products);
 	return <ProductsContainer initialProducts={products} />;
 }

@@ -51,11 +51,8 @@ export default async function ProductListPage({ params }: Props): Promise<JSX.El
 		notFound();
 	}
 
-	// const product: ProductDetail = await getProductDetailByIdCraw(productId);
-
 	console.log(productId);
 	const product = await getProductDetailById(productId);
-	// Gọi Service liên quan (Cần đảm bảo backend có thể handle việc get theo tên hoặc truyền string ID)
 	const relatedProducts = await getRelatedProducts(productId);
 	return (
 		<ProductDetailContainer

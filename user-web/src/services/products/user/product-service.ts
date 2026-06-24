@@ -13,7 +13,11 @@ import {
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
 import { ResponseApi } from '@/types/common/ResponseApi';
-import { BackendPaginationData, ProductDetailBE } from '@/types/products/user/productBE';
+import {
+	BackendPagedResult,
+	BackendProductItem,
+	ProductDetailBE,
+} from '@/types/products/user/productBE';
 import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
 import apiClient from '@/lib/api-client';
 import { PaginationParams } from '@/types/common/Pagination';
@@ -834,9 +838,12 @@ export const getPageProducts = async (
 ): Promise<PaginationResponse<ProductUserCard>> => {
 	try {
 		// 1. Dùng apiServer gọi thẳng đến backend .NET
-		const response = await apiClient.get<ResponseApi<BackendPaginationData>>(`/products`, {
-			params: params,
-		});
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
+			`/products`,
+			{
+				params: params,
+			},
+		);
 
 		// 2. Kiểm tra dữ liệu an toàn
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
@@ -873,7 +880,7 @@ export const getRelatedProducts = async (
 	paginationRequest?: PaginationRequest,
 ): Promise<ProductUserCard[]> => {
 	try {
-		const response = await apiClient.get<ResponseApi<BackendPaginationData>>(
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
 			`/products/${productId}/related`,
 			{
 				params: paginationRequest,
@@ -897,7 +904,7 @@ export const getRelatedProducts = async (
 export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 	try {
 		// 1. Dùng apiServer gọi thẳng đến backend .NET
-		const response = await apiClient.get<ResponseApi<BackendPaginationData>>(
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
 			`/products`,
 			{
 				params : {

@@ -18,8 +18,8 @@ export interface BackendProductItem {
 	variants: BackendVariant[];
 }
 
-export interface BackendPaginationData {
-	items: BackendProductItem[];
+export interface BackendPagedResult<T> {
+	items: T[];
 	totalCount: number;
 	pageNumber: number;
 	pageSize: number;

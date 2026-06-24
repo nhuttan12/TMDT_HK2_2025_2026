@@ -1,4 +1,4 @@
-import { BackendPaginationData, BackendProductItem } from '@/types/products/user/productBE';
+import { BackendPagedResult, BackendProductItem } from '@/types/products/user/productBE';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
@@ -37,7 +37,7 @@ export function mapBackendToFrontendProduct(beProduct: BackendProductItem): Prod
  * Biến đổi cục Wrapper Phân trang
  */
 export function mapBackendToFrontendPagination(
-	beData: BackendPaginationData,
+	beData: BackendPagedResult,
 ): PaginationResponse<ProductUserCard> {
 	return {
 		data: beData.items.map(
