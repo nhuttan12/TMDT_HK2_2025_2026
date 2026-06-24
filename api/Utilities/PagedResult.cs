@@ -1,4 +1,6 @@
-﻿namespace api.Utilities
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace api.Utilities
 {
     public class PagedResult<T>
     {
@@ -17,5 +19,6 @@
             PageNumber = pageNumber;
             PageSize = pageSize;
         }   
+
     }
 }

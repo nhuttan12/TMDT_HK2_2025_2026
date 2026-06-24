@@ -50,6 +50,11 @@ namespace api.Database.Configurations
             builder.Property(v => v.ProductId)
                 .HasColumnName("product_id");
 
+            builder.HasOne(v => v.Product)
+                   .WithMany(p => p.Variants)
+                   .HasForeignKey(v => v.ProductId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             // INDEXING STRATEGY
             // 1. SKU phải duy nhất TRÊN TOÀN HỆ THỐNG để phục vụ quét mã vạch máy tít
             builder.HasIndex(v => v.Sku)

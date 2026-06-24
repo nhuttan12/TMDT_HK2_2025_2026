@@ -1,5 +1,6 @@
 ﻿using api.Database;
 using api.Models.Category;
+using api.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -9,7 +10,7 @@ namespace api.Repository.Categories
     {
         Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<Category?> GetByName(string name, CancellationToken ct = default);
-        Task<(IReadOnlyCollection<Category> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<PagedResult<Category>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
     public class CategoryRepo(MyAppDbContext _context) : ICategoryRepo
     {
@@ -43,22 +44,27 @@ namespace api.Repository.Categories
             return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
         }
 
-        public async Task<(IReadOnlyCollection<Category> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<PagedResult<Category>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             var query = _context.Categories.AsNoTracking();
 
             // Thực thi song song (tối ưu CPU & I/O) việc đếm tổng và lấy dữ liệu
-            var totalCountTask = query.CountAsync(cancellationToken);
+            var totalCount =await query.CountAsync(cancellationToken);
 
-            var itemsTask = query
+            var items = await query
                 .OrderBy(c => c.Name) // Luôn phải có OrderBy trước khi Skip/Take
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-            await Task.WhenAll(totalCountTask, itemsTask);
 
-            return (itemsTask.Result, totalCountTask.Result);
+            return new PagedResult<Category>
+            (
+                items,
+                totalCount,
+                pageNumber,
+                pageSize
+            );
         }
 
         public void Update(Category entity)

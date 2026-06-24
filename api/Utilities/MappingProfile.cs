@@ -1,12 +1,15 @@
-﻿using api.Dtos.Coupons.Response;
+﻿using api.Dtos.Carts.Response;
+using api.Dtos.Coupons.Response;
 using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
 using api.Dtos.Promotiions.Response;
 using api.Dtos.Shops.Response;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
+using api.Extensions;
 using api.model.Products;
 using api.Models;
+using api.Models.Cards;
 using api.Models.Category;
 using api.Models.Products;
 using api.Models.Shops;
@@ -28,7 +31,11 @@ namespace api.Utilities
             CouponMapping();
             PromotionMapping();
             ShopMapping();
+            CartMapping();
+            CartItemmapping();
 
+            CreateMap(typeof(PagedResult<>), typeof(PagedResult<>))
+            .ConvertUsing(typeof(PagedResultConverter<,>));
         }
 
         /**
@@ -107,5 +114,23 @@ namespace api.Utilities
 
             CreateMap<Shop, ShopDto>();
         }
-    }
+
+        private void CartMapping()
+        {
+            CreateMap<Cart,CartResponseDto>()
+                .ForMember(d => d.CartItems , o => o.MapFrom(src => src.Items));
+
+            CreateMap<CartResponseDto, Cart>()
+                .ForMember(d => d.Items, o => o.MapFrom(src => src.CartItems));
+        }
+        private void CartItemmapping()
+        {
+            CreateMap<CartItem, CartItemResponseDto>()
+                 .ForMember(d => d.ProductName, o => o.MapFrom(src => src.Variant.Product.Name))
+                 .ForMember(d => d.ImageUrl, o => o.MapFrom(src => src.Variant.ImageUrl))
+                 .ForMember(d => d.UnitPrice, o => o.MapFrom(src => src.Variant.CostPrice));
+
+            CreateMap<CartItemResponseDto, CartItem>();
+        }
+}
 }
