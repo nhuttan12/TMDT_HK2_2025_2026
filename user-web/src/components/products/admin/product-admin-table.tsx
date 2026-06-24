@@ -64,19 +64,6 @@ export default function ProductAdminTable({
 			),
 		},
 		{
-			key: 'slug',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Slug</span>
-					{renderSortIcon('slug')}
-				</div>
-			),
-			onHeaderClick: (): void => handleSort('slug'),
-			render: (row: ProductListInfoAdmin): JSX.Element => (
-				<span className='text-muted-foreground'>{row.slug}</span>
-			),
-		},
-		{
 			key: 'status',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>

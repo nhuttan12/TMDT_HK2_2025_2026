@@ -1,8 +1,9 @@
-﻿using api.Models.Inventory;
-using api.Models.Inventory.Enums;
+﻿using api.Models.Enums.Inventory;
+using api.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -26,8 +27,8 @@ namespace api.Database.Configurations
                 .HasColumnType("NVARCHAR(MAX)");
 
             var typeConverter = new ValueConverter<GoodsIssueType, string>(
-                type => type.ToString().ToLower(),
-                type => (GoodsIssueType)Enum.Parse(typeof(GoodsIssueType), type, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (GoodsIssueType)Enum.Parse(typeof(GoodsIssueType), v.Replace("_", ""), true)
             );
             builder.Property(goodsIssue => goodsIssue.GoodsIssueType)
                 .HasConversion(typeConverter)
@@ -43,9 +44,18 @@ namespace api.Database.Configurations
                 .HasColumnName("customer_id")
                 .IsRequired();
 
+            builder.Property(goodsIssue => goodsIssue.ShopId)
+                .HasColumnName("shop_id")
+                .IsRequired();
+
             builder.HasOne(goodsIssue => goodsIssue.Customer)
                 .WithMany(customer => customer.GoodsIssues)
                 .HasForeignKey(goodsIssue => goodsIssue.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(goodsIssue => goodsIssue.Shop)
+                .WithMany(shop => shop.GoodsIssues)
+                .HasForeignKey(goodsIssue => goodsIssue.ShopId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

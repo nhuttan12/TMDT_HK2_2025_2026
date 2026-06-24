@@ -43,7 +43,7 @@ export const getGoodsStockSummary = async (): Promise<GoodsStockSummaryItem[]> =
 	});
 };
 
-export const getProductInStock = async (): Promise<ProductInStock[]> => {
+export const getProductInStockPaging = async (): Promise<ProductInStock[]> => {
 	const mockProductInStock: ProductInStock[] = [
     {
         id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // GUID của bản ghi tồn kho
@@ -56,7 +56,6 @@ export const getProductInStock = async (): Promise<ProductInStock[]> => {
         stock: 1, 
         sales7d: 0,
         sales30d: 0,
-        supplierName: 'Công ty ABC',
     },
     {
         id: '2b3c4d5e-2222-4aaa-8bbb-222222222222',
@@ -69,7 +68,6 @@ export const getProductInStock = async (): Promise<ProductInStock[]> => {
         stock: 180, 
         sales7d: 0,
         sales30d: 1,
-        supplierName: 'Công ty XYZ',
     },
     {
         id: '3c4d5e6f-3333-4aaa-8bbb-333333333333',
@@ -82,7 +80,6 @@ export const getProductInStock = async (): Promise<ProductInStock[]> => {
         stock: 120, 
         sales7d: 2, 
         sales30d: 5, 
-        supplierName: 'Công ty TNHH một thành viên',
     },
 ];
 

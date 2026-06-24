@@ -9,7 +9,7 @@ BEGIN
 		u.phone AS Phone,
 		s.[description] AS [Description],
 		a.address_url AS [Address],
-		sl.logo_url AS Logo,
+		s.shop_logo AS Logo,
 		ub.bank_name AS BankName,
 		ub.account_name AS AccountName,
 		ub.account_number AS AccountNumber
@@ -22,8 +22,6 @@ BEGIN
 		ON a.user_id = s.id
 	LEFT JOIN USER_BANKINGS ub
 		ON ub.user_id = u.id
-	LEFT JOIN SHOP_LOGOS sl
-		ON sl.shop_id = s.id
 
 	WHERE s.system_status = 'approved'
 		AND s.id = @ShopId

@@ -1,5 +1,5 @@
 ﻿using api.model.Products;
-using api.Models.Inventory.Enums;
+using api.Models.Enums.Inventory;
 using api.Models.Products;
 
 namespace api.Models.Inventory

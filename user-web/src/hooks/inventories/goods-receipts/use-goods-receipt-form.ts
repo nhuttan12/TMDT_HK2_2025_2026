@@ -1,7 +1,7 @@
 'use client';
 
 import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
@@ -14,35 +14,28 @@ export interface UseGoodsReceiptFormProps {
 }
 
 export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptFormProps) {
-	const isView: boolean = formType === 'view';
-	const isCreate: boolean = formType === 'create';
+	const isView = formType === 'view';
+	const isCreate = formType === 'create';
 
 	const [form, setForm] = useState<GoodsReceiptDetail>(goodsReceipt);
 
 	// Trích xuất Store (Đã gom nhóm lại cho gọn)
-	const batches: GoodsReceiptBatch[] = useBatchReceiptStore((s: BatchReceiptStore) => s.batches);
-	const addBatch: (batch: GoodsReceiptBatch) => void = useBatchReceiptStore(
-		(s: BatchReceiptStore) => s.addBatch,
+	const batches = useBatchReceiptStore((s) => s.batches);
+	const addBatch = useBatchReceiptStore((s) => s.addBatch);
+	const updateBatch = useBatchReceiptStore((s) => s.updateBatch);
+	const generateId = useBatchReceiptStore((s) => s.generateId);
+	const batchItemsByBatchId = useBatchReceiptStore(
+		(s) => s.batchItemsByBatchId,
 	);
-	const updateBatch: (id: string, data: Partial<GoodsReceiptBatch>) => void =
-		useBatchReceiptStore((s: BatchReceiptStore) => s.updateBatch);
-	const generateId: () => string = useBatchReceiptStore((s: BatchReceiptStore) => s.generateId);
-	const batchItemsByBatchId: Record<string, BatchItemSerial[]> = useBatchReceiptStore(
-		(s: BatchReceiptStore) => s.batchItemsByBatchId,
+	const reset = useBatchReceiptStore((s) => s.reset);
+	const setBatches = useBatchReceiptStore(
+		(s) => s.setBatches,
 	);
-	const reset: () => void = useBatchReceiptStore((s: BatchReceiptStore) => s.reset);
-	const setBatches: (batches: GoodsReceiptBatch[]) => void = useBatchReceiptStore(
-		(s: BatchReceiptStore) => s.setBatches,
-	);
-	const draftKey: string | null = useBatchReceiptStore(
-		(s: BatchReceiptStore): string | null => s.draftKey,
-	);
-	const setDraftKey: (key: string) => void = useBatchReceiptStore(
-		(s: BatchReceiptStore) => s.setDraftKey,
-	);
+	const draftKey: string | null = useBatchReceiptStore((s): string | null => s.draftKey);
+	const setDraftKey: (key: string) => void = useBatchReceiptStore((s) => s.setDraftKey);
 
 	useEffect((): void => {
-		const currentKey: string = isCreate ? 'create-new' : `receipt-${goodsReceipt.id}`;
+		const currentKey = isCreate ? 'create-new' : `receipt-${goodsReceipt.id}`;
 
 		if (draftKey !== currentKey) {
 			if (isCreate) {
@@ -90,23 +83,21 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 		const id: string = generateId();
 		const newBatch: GoodsReceiptBatch = {
 			id: id,
-			isNew: true,
 			productId: product.id,
 			productName: product.name,
 			batchNumber: '',
 			quantity: 1,
-			expiredAt: '',
 			totalPrice: 0,
 		};
 		addBatch(newBatch);
 	};
 
-	const totalQuantity: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch): number => sum + i.quantity,
+	const totalQuantity = batches.reduce(
+		(sum, i) => sum + i.quantity,
 		0,
 	);
-	const totalAmount: number = batches.reduce(
-		(sum: number, i: GoodsReceiptBatch): number => sum + i.totalPrice,
+	const totalAmount = batches.reduce(
+		(sum, i) => sum + i.totalPrice,
 		0,
 	);
 

@@ -1,9 +1,13 @@
 ﻿using api.model.Products;
 using api.Models;
 using api.Models.Category;
+using api.Models.Enums.Products;
+using api.Models.Enums.Shops;
 using api.Models.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -61,6 +65,15 @@ namespace api.Database.Configurations
                 .HasColumnName("status")
                 .HasConversion<string>() // Lưu dưới dạng string để dễ đọc và tránh lỗi khi thay đổi enum
                 .HasMaxLength(50);
+
+            var SystemStatusConverter = new ValueConverter<EProductSystemStatus, string>(
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EProductSystemStatus)Enum.Parse(typeof(EProductSystemStatus), v.Replace("_", ""), true)
+            );
+            builder.Property(shop => shop.ProductSystemStatus)
+                .HasConversion(SystemStatusConverter)
+                .HasColumnName("system_status")
+                .HasColumnType("varchar(50)");
 
             // 3. Cấu hình Backing Field (Cực kỳ quan trọng)
             // Báo cho EF Core biết hãy map trực tiếp dữ liệu vào field '_variants' 

@@ -10,12 +10,24 @@
   <ItemGroup>
 	  <Content Remove="Database\Seeders\SeedData\Categories.json" />
 	  <Compile Remove="Database\Migrations\**" />
+	  <Compile Remove="Models\Coupons\Enums\**" />
+	  <Compile Remove="Models\Inventory\Enums\**" />
+	  <Compile Remove="Services\NewFolder\**" />
 	  <Compile Remove="StoredProcedures\**" />
 	  <Content Remove="Database\Migrations\**" />
+	  <Content Remove="Models\Coupons\Enums\**" />
+	  <Content Remove="Models\Inventory\Enums\**" />
+	  <Content Remove="Services\NewFolder\**" />
 	  <Content Remove="StoredProcedures\**" />
 	  <EmbeddedResource Remove="Database\Migrations\**" />
+	  <EmbeddedResource Remove="Models\Coupons\Enums\**" />
+	  <EmbeddedResource Remove="Models\Inventory\Enums\**" />
+	  <EmbeddedResource Remove="Services\NewFolder\**" />
 	  <EmbeddedResource Remove="StoredProcedures\**" />
 	  <None Remove="Database\Migrations\**" />
+	  <None Remove="Models\Coupons\Enums\**" />
+	  <None Remove="Models\Inventory\Enums\**" />
+	  <None Remove="Services\NewFolder\**" />
 	  <None Remove="StoredProcedures\**" />
   </ItemGroup>
 
@@ -26,6 +38,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageReference Include="Dapper" Version="2.1.79" />
     <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0" />

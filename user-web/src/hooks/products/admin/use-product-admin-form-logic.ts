@@ -81,7 +81,6 @@ export function useProductAdminFormLogic({
 			(prev: ProductDetailInfoAdmin): ProductDetailInfoAdmin => ({
 				...prev,
 				[name]: value,
-				slug: name === 'name' ? generateSlug(value) : prev.slug,
 			}),
 		);
 	};

@@ -927,7 +927,7 @@ namespace api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("rating");
 
-                    b.Property<string>("ShopLogos")
+                    b.Property<string>("ShopLogo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -936,7 +936,7 @@ namespace api.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("status");
 
-                    b.Property<string>("SystemStatus")
+                    b.Property<string>("ProductSystemStatus")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("system_status");

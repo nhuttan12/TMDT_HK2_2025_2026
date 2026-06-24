@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getProductInStock } from '@/services/inventories/stocks/goods-stock-service';
+import { getProductInStockPaging } from '@/services/inventories/stocks/goods-stock-service';
 import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 
 export function useProductInStockQuery(
@@ -7,7 +7,7 @@ export function useProductInStockQuery(
 ): UseQueryResult<ProductInStock[], Error> {
 	return useQuery({
 		queryKey: ['product-in-stock'],
-		queryFn: getProductInStock,
+		queryFn: getProductInStockPaging,
 		// Lấy data từ Server làm vốn ban đầu
 		initialData: initialData,
 		// Sau đó nó sẽ tự động chạy ngầm để lấy data mới nhất (nếu cần)

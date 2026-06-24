@@ -1,4 +1,4 @@
-﻿using api.Models.Coupons.Enums;
+﻿using api.Models.Enums.Coupons;
 
 namespace api.Models.Coupons
 {

@@ -25,5 +25,5 @@ CREATE NONCLUSTERED INDEX [IX_Variants_ProductId]
 
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Variants_Sku]
-    ON [dbo].[Variants]([Sku] ASC);
+    ON [dbo].[VARIANTS]([sku] ASC);
 

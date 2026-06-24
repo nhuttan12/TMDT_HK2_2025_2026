@@ -7,6 +7,7 @@ using api.Repository;
 using api.Repository.BannerRepo;
 using api.Repository.Categories;
 using api.Repository.Coupons;
+using api.Repository.Inventory;
 using api.Repository.ProductRepo;
 using api.Repository.Promotions;
 using api.Repository.RoleRepo;
@@ -15,6 +16,7 @@ using api.Services.Auths;
 using api.Services.Banners;
 using api.Services.Categorys;
 using api.Services.Coupons;
+using api.Services.Inventory;
 using api.Services.Products;
 using api.Services.Promotions;
 using api.Services.Users;
@@ -80,6 +82,7 @@ namespace api.Extensions
             services.AddScoped<IUserCouponRepository, UserCouponRepository>();
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped<IAdminPromotionRepository, AdminPromotionRepository>();
+            services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
 
             return services;
         }
@@ -99,6 +102,7 @@ namespace api.Extensions
             services.AddScoped<IUserCouponService, UserCouponService>();
             services.AddScoped<IUserPromotionService, UserPromotionService>();
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
+            services.AddScoped<IGoodsReceiptService, GoodsReceiptService>();
 
             // Đăng ký Data Seeders
             services.AddScoped<IDataSeeder, CategorySeeder>();

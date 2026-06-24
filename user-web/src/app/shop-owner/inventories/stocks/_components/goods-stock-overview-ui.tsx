@@ -89,7 +89,7 @@ export default function GoodsStockOverviewUi({
 			{/* Phần Nội dung: Dùng grid chia 5 cột và divide-x để tạo đường kẻ dọc */}
 			<div className='grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x bg-white'>
 				{goodsStockSummary.map(
-					(item: GoodsStockSummaryItem): JSX.Element => (
+					(item): JSX.Element => (
 						<div
 							key={item.id}
 							className='flex flex-col items-center justify-center p-6 text-center hover:bg-slate-50 transition-colors'

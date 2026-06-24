@@ -10,8 +10,6 @@ function mapBatchToDto(batch: GoodsReceiptBatch): CreateGoodsReceiptBatchDto {
 		productId: batch.productId,
 		batchNumber: batch.batchNumber,
 		quantity: batch.quantity,
-		manufacturedAt: batch.manufacturedAt,
-		expiredAt: batch.expiredAt,
 		serialNumbers: undefined
 	};
 }
@@ -36,7 +34,6 @@ function mapBatchToUpdateDto(
 		productId: batch.productId,
 		quantity: batch.quantity,
 		batchNumber: batch.batchNumber,
-		expiredAt: batch.expiredAt,
 		serialNumber: undefined
 	};
 }

@@ -37,7 +37,7 @@ export function GoodsReceiptDetailUi({
 		{
 			key: 'batchNumber',
 			header: 'Mã lô',
-			render: (item: GoodsReceiptBatch): JSX.Element => (
+			render: (item): JSX.Element => (
 				<Input
 					value={item.batchNumber}
 					disabled={isView}
@@ -50,38 +50,9 @@ export function GoodsReceiptDetailUi({
 		{
 			key: 'quantity',
 			header: 'Số lượng',
-			render: (item: GoodsReceiptBatch): JSX.Element => (
+			render: (item): JSX.Element => (
 				<span className='text-slate-700 font-medium'>{item.quantity}</span>
 			),
-		},
-		// {
-		// 	key: 'totalPrice',
-		// 	header: 'Tổng giá nhập',
-		// 	render: (item: GoodsReceiptBatch): string =>
-		// 		(item.quantity * item.unitPrice).toLocaleString() + ' ₫',
-		// },
-		{
-			key: 'expiredAt',
-			header: 'Ngày hết hạn',
-			render: (item: GoodsReceiptBatch): JSX.Element => {
-				// Ép kiểu an toàn: Cắt lấy phần 'YYYY-MM-DD' từ chuỗi ISO
-				// Ví dụ: '2026-05-12T...Z'.split('T')[0] => '2026-05-12'
-				const dateValueForInput = item.expiredAt ? item.expiredAt.split('T')[0] : '';
-
-				return (
-					<Input
-						type='date'
-						value={dateValueForInput} // Nhét chuỗi YYYY-MM-DD vào đây
-						disabled={isView}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-							// e.target.value của thẻ type="date" mặc định trả ra 'YYYY-MM-DD'
-							// Nếu backend của bạn cần full ISO, bạn có thể nối thêm đuôi giờ vào
-							// Ví dụ: const isoString = new Date(e.target.value).toISOString();
-							updateBatch(item.id, { expiredAt: e.target.value });
-						}}
-					/>
-				);
-			},
 		},
 	];
 
@@ -99,9 +70,7 @@ export function GoodsReceiptDetailUi({
 					<Input
 						value={form.code}
 						disabled={isView}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-							updateReceiptField('code', e.target.value)
-						}
+						onChange={(e) => updateReceiptField('code', e.target.value)}
 					/>
 				</Field>
 
@@ -115,9 +84,7 @@ export function GoodsReceiptDetailUi({
 					<Input
 						value={form.supplierName}
 						disabled={isView}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-							updateReceiptField('supplierName', e.target.value)
-						}
+						onChange={(e) => updateReceiptField('supplierName', e.target.value)}
 					/>
 				</Field>
 
@@ -126,9 +93,7 @@ export function GoodsReceiptDetailUi({
 						type='date'
 						value={formatDateForInput(form.importDate)}
 						disabled={isView}
-						onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-							updateReceiptField('importDate', e.target.value)
-						}
+						onChange={(e) => updateReceiptField('importDate', e.target.value)}
 					/>
 				</Field>
 			</div>
@@ -138,7 +103,7 @@ export function GoodsReceiptDetailUi({
 					<RichTextEditor
 						value={form?.note || ''}
 						disabled={isView}
-						onChange={(val: string): void => updateReceiptField('note', val)}
+						onChange={(val) => updateReceiptField('note', val)}
 					/>
 				</Field>
 			</div>
@@ -158,9 +123,9 @@ export function GoodsReceiptDetailUi({
 				<DataTable<GoodsReceiptBatch>
 					data={batches}
 					columns={itemColumns}
-					getRowKey={(item: GoodsReceiptBatch): string => item.id}
-					onRowClick={(row: GoodsReceiptBatch): void => {
-						handleRedirectToBatchDetail(row.id, row.isNew ? 'create' : 'view');
+					getRowKey={(item) => item.id}
+					onRowClick={(row) => {
+						handleRedirectToBatchDetail(row.id, isCreate ? 'create' : 'view');
 					}}
 				/>
 			</div>

@@ -19,12 +19,12 @@
     @OutUserId UNIQUEIDENTIFIER OUTPUT
 AS
 BEGIN
-	IF EXISTS (SELECT 1 FROM Users WHERE Email = @Email)
+	IF EXISTS (SELECT 1 FROM USERS WHERE email = @Email)
     BEGIN
         ;THROW 50001, 'Email này đã được đăng ký. Vui lòng sử dụng email khác.', 1;
     END
 
-    IF @Phone IS NOT NULL AND EXISTS (SELECT 1 FROM Users WHERE Phone = @Phone)
+    IF @Phone IS NOT NULL AND EXISTS (SELECT 1 FROM USERS WHERE phone = @Phone)
     BEGIN
         ;THROW 50002, 'Số điện thoại này đã được đăng ký. Vui lòng sử dụng số điện thoại khác.', 1;
     END
@@ -37,7 +37,7 @@ BEGIN
         DECLARE @CurrentTimeUtc DATETIME = GETUTCDATE();
 
         DECLARE @RoleId INT;
-        SELECT @RoleId = id FROM ROLES WHERE Name = 'shop-owner';
+        SELECT @RoleId = id FROM ROLES WHERE [name] = 'shop-owner';
 
         -- A. TẠO USER
         INSERT INTO USERS (

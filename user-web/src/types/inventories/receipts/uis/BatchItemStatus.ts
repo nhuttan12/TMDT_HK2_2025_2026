@@ -1,1 +1,0 @@
-export type BatchItemStatus = 'in_stock' | 'sold' | 'defective';

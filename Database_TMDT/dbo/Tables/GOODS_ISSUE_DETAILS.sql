@@ -7,7 +7,7 @@
     [created_at]    DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_GOODS_ISSUE_DETAILS] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_GOODS_ISSUE_DETAILS_GOODS_ISSUES_issue_id] FOREIGN KEY ([issue_id]) REFERENCES [dbo].[GOODS_ISSUES] ([id]),
-    CONSTRAINT [FK_GOODS_ISSUE_DETAILS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[Variants] ([Id])
+    CONSTRAINT [FK_GOODS_ISSUE_DETAILS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[VARIANTS] ([id])
 );
 
 

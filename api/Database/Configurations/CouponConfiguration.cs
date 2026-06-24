@@ -1,9 +1,9 @@
 ﻿using api.Models.Coupons;
-using api.Models.Coupons.Enums;
-using api.Models.Inventory.Enums;
+using api.Models.Enums.Coupons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -34,8 +34,8 @@ namespace api.Database.Configurations
                 .HasColumnName("name");
 
             var ScopeConverter = new ValueConverter<ECouponScope, string>(
-                type => type.ToString().ToLower(),
-                type => (ECouponScope)Enum.Parse(typeof(ECouponScope), type, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (ECouponScope)Enum.Parse(typeof(ECouponScope), v.Replace("_", ""), true)
             );
             builder.Property(c => c.Scope)
                 .HasConversion(ScopeConverter)
@@ -43,8 +43,8 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(20)");
 
             var CategoryConverter = new ValueConverter<ECouponCategory, string>(
-                type => type.ToString().ToLower(),
-                type => (ECouponCategory)Enum.Parse(typeof(ECouponCategory), type, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (ECouponCategory)Enum.Parse(typeof(ECouponCategory), v.Replace("_", ""), true)
             );
             builder.Property(c => c.Category)
                 .HasConversion(CategoryConverter)
@@ -52,8 +52,8 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(20)");
 
             var TypeConverter = new ValueConverter<ECouponType, string>(
-                type => type.ToString().ToLower(),
-                type => (ECouponType)Enum.Parse(typeof(ECouponType), type, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (ECouponType)Enum.Parse(typeof(ECouponType), v.Replace("_", ""), true)
             );
             builder.Property(c => c.Type)
                 .HasConversion(TypeConverter)

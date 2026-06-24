@@ -1,6 +1,6 @@
 import { create, StoreApi, UseBoundStore } from 'zustand';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { persist } from 'zustand/middleware';
 
 export interface BatchReceiptStore {
@@ -8,7 +8,7 @@ export interface BatchReceiptStore {
 	batches: GoodsReceiptBatch[];
 
 	// key = batchId
-	batchItemsByBatchId: Record<string, BatchItemSerial[]>;
+	batchItemsByBatchId: Record<string, BatchItem[]>;
 
 	// internal id generator
 	idCounter: number;
@@ -29,11 +29,11 @@ export interface BatchReceiptStore {
 	removeBatch: (id: string) => void;
 
 	// ===== Batch Items =====
-	addBatchItems: (batchId: string, items: BatchItemSerial[]) => void;
+	addBatchItems: (batchId: string, items: BatchItem[]) => void;
 
-	getBatchItems: (batchId: string) => BatchItemSerial[];
+	getBatchItems: (batchId: string) => BatchItem[];
 
-	updateBatchItem: (batchId: string, itemId: string, updates: Partial<BatchItemSerial>) => void;
+	updateBatchItem: (batchId: string, itemId: string, updates: Partial<BatchItem>) => void;
 
 	removeBatchItem: (batchId: string, itemId: string) => void;
 
@@ -96,7 +96,7 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 				},
 
 				// ===== Batch Items =====
-				addBatchItems: (batchId: string, items: BatchItemSerial[]): void => {
+				addBatchItems: (batchId: string, items: BatchItem[]): void => {
 					set((state: BatchReceiptStore) => {
 						return {
 							batchItemsByBatchId: {
@@ -107,20 +107,20 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 					});
 				},
 
-				getBatchItems: (batchId: string): BatchItemSerial[] => {
+				getBatchItems: (batchId: string): BatchItem[] => {
 					return get().batchItemsByBatchId[batchId] || [];
 				},
 
 				updateBatchItem: (
 					batchId: string,
 					itemId: string,
-					updates: Partial<BatchItemSerial>,
+					updates: Partial<BatchItem>,
 				): void => {
 					set((state: BatchReceiptStore) => ({
 						batchItemsByBatchId: {
 							...state.batchItemsByBatchId,
 							[batchId]: (state.batchItemsByBatchId[batchId] || []).map(
-								(item: BatchItemSerial): BatchItemSerial =>
+								(item: BatchItem): BatchItem =>
 									item.id === itemId ? { ...item, ...updates } : item,
 							),
 						},
@@ -132,7 +132,7 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 						batchItemsByBatchId: {
 							...state.batchItemsByBatchId,
 							[batchId]: (state.batchItemsByBatchId[batchId] || []).filter(
-								(item: BatchItemSerial): boolean => item.id !== itemId,
+								(item: BatchItem): boolean => item.id !== itemId,
 							),
 						},
 					}));

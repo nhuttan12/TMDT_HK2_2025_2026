@@ -1,7 +1,6 @@
-import { JSX } from 'react';
+import { getGoodsReceiptDetailByReceiptId } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
 import { Metadata } from 'next';
-import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
-import { getGoodsReceiptById } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
+import { JSX } from 'react';
 import { GoodsReceiptDetailContainer } from '../_components/goods-receipt-detail/goods-receipt-detail-container';
 
 export const metadata: Metadata = {
@@ -9,14 +8,14 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-	params: { receiptId: string }; // Giả sử route của bạn là [receiptId]
+    params: Promise<{ receiptId: string }>; 
 }
 
 export default async function Page({ params }: PageProps): Promise<JSX.Element> {
-    const receiptId = await params.receiptId;
+    const { receiptId } = await params;
 
 	// Gọi trực tiếp hàm Service trên Server để lấy initial data
-	const initialReceiptDetail = await getGoodsReceiptById(receiptId);
+	const initialReceiptDetail = await getGoodsReceiptDetailByReceiptId(receiptId);
 
 	return (
 		<GoodsReceiptDetailContainer

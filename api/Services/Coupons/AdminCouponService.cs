@@ -16,7 +16,7 @@ namespace api.Services.Coupons
         {
             var result = await couponRepository.CreateCouponAsync(userId, cancellationToken, request);
 
-            return result;
+            return Result<Guid>.Success(result);
         }
 
         public async Task<Result<CouponDetailResponse>> GetCouponDetailAsync(Guid userId, Guid couponId, CancellationToken cancellationToken)

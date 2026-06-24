@@ -4,14 +4,14 @@ import {
     useProductVariantListLogic
 } from '@/hooks/inventories/goods-receipts/use-product-variant-list-logic';
 import { useProductVariantsQuery } from '@/queries/inventories/goods-receipts/products/use-product-variants-query';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
 import { JSX } from 'react';
 import ProductVariantListInBatchUi from './product-variant-list-in-batch-ui';
 
 interface Props {
 	batchId: string;
-	productVariants: BatchItemSerial[];
+	productVariants: BatchItem[];
 	mode: ProductBatchReceiptFormType;
 }
 

@@ -137,8 +137,9 @@ namespace api.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("sku");
 
-                    b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset(7)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -340,9 +341,15 @@ namespace api.Migrations
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("note");
 
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ShopId");
 
                     b.ToTable("GOODS_ISSUES", (string)null);
                 });
@@ -410,6 +417,10 @@ namespace api.Migrations
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("note");
 
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -425,6 +436,8 @@ namespace api.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
 
                     b.HasIndex("SupplierId");
 
@@ -932,9 +945,10 @@ namespace api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("rating");
 
-                    b.Property<string>("ShopLogos")
+                    b.Property<string>("ShopLogo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("shop_logo");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1138,6 +1152,11 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("name");
 
+                    b.Property<string>("ProductSystemStatus")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("system_status");
+
                     b.Property<decimal>("Rating")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(3, 2)
@@ -1251,7 +1270,15 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("GoodsIssues")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("api.Models.Inventory.GoodsIssueDetail", b =>
@@ -1275,11 +1302,19 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Inventory.GoodsReceipt", b =>
                 {
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("GoodsReceipts")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("api.Models.Inventory.Supplier", "Supplier")
                         .WithMany("GoodsReceipts")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Shop");
 
                     b.Navigation("Supplier");
                 });
@@ -1563,6 +1598,10 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
                 {
+                    b.Navigation("GoodsIssues");
+
+                    b.Navigation("GoodsReceipts");
+
                     b.Navigation("Invoices");
 
                     b.Navigation("Products");

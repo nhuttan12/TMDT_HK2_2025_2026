@@ -11,7 +11,6 @@ BEGIN
 	SELECT @TotalItems = COUNT(1)
 	FROM SUPPLIERS s
 	WHERE s.id = @UserId
-	ORDER BY s.created_at DESC
 
 	SELECT 
 		s.id AS Id,
@@ -19,7 +18,7 @@ BEGIN
 		s.contact_name AS ContactName,
 		s.phone_number AS PhoneNumber,
 		s.email AS Email,
-		s.address AS Address,
+		s.[address] AS [Address],
 		s.tax_code AS TaxCode,
 		@TotalItems AS TotalItems
 	FROM SUPPLIERS s

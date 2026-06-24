@@ -5,28 +5,28 @@ import { useMemo, useState } from 'react';
 
 import { usePagination, UsePaginationReturn } from '@/hooks/share/use-pagination';
 import { useBatchReceiptStore } from '@/stores/batch-receipt.store';
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
 
 // 1. Khai báo Interface đầu vào
 export interface UseProductVariantListLogicProps {
 	batchId: string;
-	initialProductVariants?: BatchItemSerial[];
+	initialProductVariants?: BatchItem[];
 	totalPagesFromApi?: number;
 }
 
 // 2. Khai báo Interface trả về để Container và UI sử dụng
 export interface UseProductVariantListLogicReturn extends UsePaginationReturn {
-	displayData: BatchItemSerial[];
+	displayData: BatchItem[];
 	isModalOpen: boolean;
 	totalQuantity: number;
 	totalAmount: number;
 	totalPages: number;
 	setIsModalOpen: (open: boolean) => void;
 	handleSelectVariants: (variants: ProductVariantRow[]) => void;
-	handleUpdateItem: (itemId: string, fields: Partial<BatchItemSerial>) => void;
+	handleUpdateItem: (itemId: string, fields: Partial<BatchItem>) => void;
 	handleRemoveItem: (itemId: string) => void;
-	handleRedirectToDetail: (row: BatchItemSerial) => void;
+	handleRedirectToDetail: (row: BatchItem) => void;
 	handleRedirectToCreateBatchReceipt: () => void;
 }
 
@@ -42,31 +42,31 @@ export const useProductVariantListLogic = ({
 	const { currentPage, changePage } = usePagination();
 
 	// --- Zustand Store ---
-	const batchItems: BatchItemSerial[] = useBatchReceiptStore((s): BatchItemSerial[] => {
+	const batchItems: BatchItem[] = useBatchReceiptStore((s): BatchItem[] => {
 		if (batchId === undefined) return [];
 		return s.batchItemsByBatchId[batchId] ?? [];
 	});
 
 	const generateId = useBatchReceiptStore((s): (() => string) => s.generateId);
 	const addBatchItems = useBatchReceiptStore(
-		(s): ((batchId: string, items: BatchItemSerial[]) => void) => s.addBatchItems,
+		(s): ((batchId: string, items: BatchItem[]) => void) => s.addBatchItems,
 	);
 	const removeBatchItem = useBatchReceiptStore(
 		(s): ((batchId: string, itemId: string) => void) => s.removeBatchItem,
 	);
 	const updateBatchItem = useBatchReceiptStore(
-		(s): ((batchId: string, itemId: string, fields: Partial<BatchItemSerial>) => void) =>
+		(s): ((batchId: string, itemId: string, fields: Partial<BatchItem>) => void) =>
 			s.updateBatchItem,
 	);
 
 	// --- Logic Xử lý Dữ liệu hiển thị (Display Data) ---
-	const filteredInitialItems: BatchItemSerial[] = useMemo((): BatchItemSerial[] => {
-		return initialProductVariants.filter((item: BatchItemSerial): boolean => {
+	const filteredInitialItems: BatchItem[] = useMemo((): BatchItem[] => {
+		return initialProductVariants.filter((item: BatchItem): boolean => {
 			return item.batchId === batchId;
 		});
 	}, [initialProductVariants, batchId]);
 
-	const displayData: BatchItemSerial[] = useMemo((): BatchItemSerial[] => {
+	const displayData: BatchItem[] = useMemo((): BatchItem[] => {
 		return batchItems.length > 0 ? batchItems : filteredInitialItems;
 	}, [batchItems, filteredInitialItems]);
 
@@ -76,7 +76,7 @@ export const useProductVariantListLogic = ({
 
 	// Tính tổng tiền dựa trên giá nhập (costPrice). Ép kiểu an toàn bằng Number()
 	const totalAmount: number = useMemo((): number => {
-		return displayData.reduce((sum: number, item: BatchItemSerial): number => {
+		return displayData.reduce((sum: number, item: BatchItem): number => {
 			const price: number = Number(item.costPrice) || 0;
 			return sum + price;
 		}, 0);
@@ -84,19 +84,15 @@ export const useProductVariantListLogic = ({
 
 	// --- Logic Xử lý Sự kiện (Actions) ---
 	const handleSelectVariants = (variants: ProductVariantRow[]): void => {
-		const newItems: BatchItemSerial[] = variants.map(
-			(v: ProductVariantRow): BatchItemSerial => {
+		const newItems: BatchItem[] = variants.map(
+			(v: ProductVariantRow): BatchItem => {
 				return {
 					id: generateId(),
 					productId: '', // Lưu ý: Chỗ này productId có thể cần map nếu variant có chứa productId
 					batchId: batchId,
 					productVariantId: v.id,
 					productVariantName: v.name,
-					serialNumber: '',
 					costPrice: 0,
-					appearanceCondition: '',
-					status: 'in_stock',
-					importDate: new Date().toISOString(),
 				};
 			},
 		);
@@ -105,7 +101,7 @@ export const useProductVariantListLogic = ({
 		setIsModalOpen(false);
 	};
 
-	const handleUpdateItem = (itemId: string, fields: Partial<BatchItemSerial>): void => {
+	const handleUpdateItem = (itemId: string, fields: Partial<BatchItem>): void => {
 		updateBatchItem(batchId, itemId, fields);
 	};
 
@@ -113,7 +109,7 @@ export const useProductVariantListLogic = ({
 		removeBatchItem(batchId, itemId);
 	};
 
-	const handleRedirectToDetail = (row: BatchItemSerial): void => {
+	const handleRedirectToDetail = (row: BatchItem): void => {
 		router.push(`/shop-owner/products/${row.productId}/variant/${row.productVariantId}`);
 	};
 

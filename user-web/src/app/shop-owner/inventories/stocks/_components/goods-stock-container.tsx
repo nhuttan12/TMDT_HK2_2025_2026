@@ -28,9 +28,9 @@ export default function GoodsStockContainer({
 		useProductInStockQuery(initialProducts);
 
 	// 2. Gọi Logic Hook
-	const stockLogic: UseGoodsStockLogicReturn = useGoodsStockLogic();
+	const stockLogic = useGoodsStockLogic();
 
-	const isPageLoading: boolean = isSummaryLoading || isProductsLoading;
+	const isPageLoading = isSummaryLoading || isProductsLoading;
 
 	if (isPageLoading && (!summary || !products)) {
 		return <div className='p-4 text-gray-500'>Đang tải dữ liệu...</div>;

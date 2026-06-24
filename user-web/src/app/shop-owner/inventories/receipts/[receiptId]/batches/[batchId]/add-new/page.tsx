@@ -1,4 +1,4 @@
-import { BatchItemSerial } from '@/types/inventories/receipts/uis/BatchItemSerial';
+import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 import ProductVariantListInBatchContainer from '../_components/product-variant-list-in-batch-container';
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 	title: 'Nhập thêm sản phẩm vào lô hàng',
 };
 
-const mockBatchItemSerials: BatchItemSerial[] = [];
+const mockBatchItemSerials: BatchItem[] = [];
 
 interface Props {
 	params: {

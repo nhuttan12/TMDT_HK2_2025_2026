@@ -11,5 +11,4 @@ export interface ProductInStock {
 	stock: number;
 	sales7d: number;
 	sales30d: number;
-	supplierName: string;
 }

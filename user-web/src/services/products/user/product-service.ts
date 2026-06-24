@@ -123,7 +123,6 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 	const rawData: ProductDetailRawUser = {
 		id: 1,
 		name: 'Bonsai Tree Ecosystem',
-		slug: 'bonsai-tree-ecosystem',
 
 		supplierName: 'Terrafulness',
 

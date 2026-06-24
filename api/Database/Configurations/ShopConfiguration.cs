@@ -1,8 +1,9 @@
-﻿using api.Models.Shops;
-using api.Models.Shops.Enums;
+﻿using api.Models.Enums.Shops;
+using api.Models.Shops;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -27,8 +28,8 @@ namespace api.Database.Configurations
                 .HasColumnType("int");
 
             var StatusConverter = new ValueConverter<EShopStatus, string>(
-                status => status.ToString().ToLower(),
-                status => (EShopStatus)Enum.Parse(typeof(EShopStatus), status, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EShopStatus)Enum.Parse(typeof(EShopStatus), v.Replace("_", ""), true)
             );
             builder.Property(shop => shop.Status)
                 .HasConversion(StatusConverter)
@@ -36,8 +37,8 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(50)");
 
             var SystemStatusConverter = new ValueConverter<EShopSystemStatus, string>(
-                status => status.ToString().ToLower(),
-                status => (EShopSystemStatus)Enum.Parse(typeof(EShopSystemStatus), status, true)
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EShopSystemStatus)Enum.Parse(typeof(EShopSystemStatus), v.Replace("_", ""), true)
             );
             builder.Property(shop => shop.SystemStatus)
                 .HasConversion(SystemStatusConverter)
@@ -61,6 +62,10 @@ namespace api.Database.Configurations
                 .HasColumnName("updated_at")
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("GETUTCDATE()");
+
+            builder.Property(s => s.ShopLogo)
+                .HasColumnName("shop_logo")
+                .HasColumnType("nvarchar(max)");
 
             builder.HasOne(shop => shop.User)
                 .WithOne(user => user.Shop)

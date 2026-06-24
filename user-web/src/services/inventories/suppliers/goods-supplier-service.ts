@@ -55,20 +55,16 @@ export const getGoodsSupplierList = async (): Promise<Supplier[]> => {
 	return mockSuppliers;
 };
 
-export const getProductBySupplierId = async (
+export const getProductPagingBySupplierId = async (
     supplierId: string,
     { page = 1, limit = 10 }: PaginationRequest = {}
 ): Promise<PaginationResponse<ProductListInfoAdmin>> => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            // Có thể in supplierId ra console để test xem tham số truyền vào đúng chưa
-            // console.log("Fetching products for supplier:", supplierId);
-
             const mockProducts: ProductListInfoAdmin[] = [
                 {
                     id: '550e8400-e29b-41d4-a716-446655440000',
                     name: 'Bonsai Tree Ecosystem',
-                    slug: 'bonsai-tree-ecosystem',
                     image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
                     status: true,
                     systemStatus: 'approved',
@@ -78,7 +74,6 @@ export const getProductBySupplierId = async (
                 {
                     id: '123e4567-e89b-12d3-a456-426614174000',
                     name: 'Rainforest Moss Bowl',
-                    slug: 'rainforest-moss-bowl',
                     image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
                     status: true,
                     systemStatus: 'pending_approval',
@@ -88,7 +83,6 @@ export const getProductBySupplierId = async (
                 {
                     id: '987e6543-e21b-34d3-b456-426614174111',
                     name: 'Desert Succulent Oasis',
-                    slug: 'desert-succulent-oasis',
                     image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
                     status: false,
                     systemStatus: 'rejected',
@@ -98,7 +92,6 @@ export const getProductBySupplierId = async (
                 {
                     id: '111e2222-e33b-44d3-c456-426614174222',
                     name: 'Geometric Glass Terrarium',
-                    slug: 'geometric-glass-terrarium',
                     image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
                     status: true,
                     systemStatus: 'banned',
@@ -108,7 +101,6 @@ export const getProductBySupplierId = async (
                 {
                     id: '333e4444-e55b-66d3-d456-426614174333',
                     name: 'Fittonia Closed Bottle',
-                    slug: 'fittonia-closed-bottle',
                     image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
                     status: false,
                     systemStatus: 'approved',

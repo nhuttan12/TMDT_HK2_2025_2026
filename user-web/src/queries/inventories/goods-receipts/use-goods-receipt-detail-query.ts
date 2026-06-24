@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
-import { getGoodsReceiptById } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
+import { getGoodsReceiptDetailByReceiptId } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
 
 export interface UseGoodsReceiptDetailQueryProps {
 	id: string;
@@ -14,7 +14,7 @@ export const useGoodsReceiptDetailQuery = ({
 	return useQuery({
 		// Bắt buộc phải có id trong queryKey để cache không bị nhầm lẫn giữa các phiếu nhập khác nhau
 		queryKey: ['goods-receipt-detail', id],
-		queryFn: (): Promise<GoodsReceiptDetail> => getGoodsReceiptById(id),
+		queryFn: (): Promise<GoodsReceiptDetail> => getGoodsReceiptDetailByReceiptId(id),
 		initialData: initialData,
 		enabled: !!id,
 	});

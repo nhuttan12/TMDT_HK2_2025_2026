@@ -17,7 +17,6 @@ interface GoodsStockTableProps extends UseGoodsStockLogicReturn {
 export default function GoodsStockTableUi({
 	products,
 	handleViewVariant,
-	handleEditVariant,
 	handleSort,
 	renderSortIcon,
 	currentPage,
@@ -114,17 +113,6 @@ export default function GoodsStockTableUi({
 			render: (row: ProductInStock): JSX.Element => (
 				<span>{row.sales30d.toLocaleString()}</span>
 			),
-		},
-		{
-			key: 'supplierName',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Nhà cung cấp</span>
-					{renderSortIcon('supplierName')}
-				</div>
-			),
-			onHeaderClick: (): void => handleSort('supplierName'),
-			render: (row: ProductInStock): JSX.Element => <span>{row.supplierName}</span>,
 		},
 	];
 
