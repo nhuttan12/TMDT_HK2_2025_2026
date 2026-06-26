@@ -20,7 +20,7 @@ namespace api.Models.Inventory
         public GoodsReceiptBatch Batch { get; private set; }
 
         public int RemainingQuantity { get; private set; }
-        public InventoryBatchStockStatus Status { get; private set; }
+        public EInventoryBatchStockStatus Status { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
     }

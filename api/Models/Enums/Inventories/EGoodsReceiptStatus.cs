@@ -1,6 +1,6 @@
 ﻿namespace api.Models.Enums.Inventory
 {
-    public enum GoodsReceiptStatus
+    public enum EGoodsReceiptStatus
     {
         Pending,
         Completed

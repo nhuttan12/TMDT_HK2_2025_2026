@@ -42,7 +42,9 @@ export const useGoodsReceiptDetailLogic = ({
 	const navigationLogic = useGoodsReceiptNavigationLogic();
 
 	const handleRedirectToBatchDetailWithFormId = (batchId: string, mode: AdminFormType): void => {
-		navigationLogic.handleRedirectToBatchDetail(formLogic.form.id, batchId, mode);
+        console.log('handleRedirectToBatchDetailWithFormId', batchId, mode);
+
+        navigationLogic.handleRedirectToBatchDetail(formLogic.form.id, batchId, mode);
 	};
 
 	return {

@@ -23,9 +23,9 @@ namespace api.Database.Configurations
                 .IsRequired()
                 .HasColumnName("remaining_quantity");
 
-            var typeConverter = new ValueConverter<InventoryBatchStockStatus, string>(
+            var typeConverter = new ValueConverter<EInventoryBatchStockStatus, string>(
                 v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
-                v => (InventoryBatchStockStatus)Enum.Parse(typeof(InventoryBatchStockStatus), v.Replace("_", ""), true)
+                v => (EInventoryBatchStockStatus)Enum.Parse(typeof(EInventoryBatchStockStatus), v.Replace("_", ""), true)
             );
             builder.Property(inventoryBatchStock => inventoryBatchStock.Status)
                 .HasConversion(typeConverter)

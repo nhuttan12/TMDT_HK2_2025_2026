@@ -1,4 +1,4 @@
-﻿namespace api.Dtos.Inventory
+﻿namespace api.Dtos.Inventory.Response
 {
     public record GoodsReceiptDetailResponse
     {

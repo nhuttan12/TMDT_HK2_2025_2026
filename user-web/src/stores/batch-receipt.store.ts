@@ -2,6 +2,7 @@ import { create, StoreApi, UseBoundStore } from 'zustand';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { persist } from 'zustand/middleware';
+import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 
 export interface BatchReceiptStore {
 	// ===== State =====
@@ -14,6 +15,8 @@ export interface BatchReceiptStore {
 	idCounter: number;
 
 	draftKey: string | null;
+
+	receiptForm: GoodsReceiptDetail | null;
 
 	setDraftKey: (key: string | null) => void;
 
@@ -39,6 +42,13 @@ export interface BatchReceiptStore {
 
 	clearBatchItems: (batchId: string) => void;
 
+	// ===== Receipt =====
+	initReceiptForm: (form: GoodsReceiptDetail) => void;
+	updateReceiptFieldStore: <K extends keyof GoodsReceiptDetail>(
+		key: K,
+		value: GoodsReceiptDetail[K],
+	) => void;
+
 	// ===== Reset =====
 	reset: () => void;
 }
@@ -51,6 +61,8 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 				batches: [],
 				batchItemsByBatchId: {},
 				idCounter: 1,
+
+				receiptForm: null,
 
 				// ===== ID Generator =====
 				generateId: (): string => {
@@ -147,12 +159,41 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 					}));
 				},
 
+				initReceiptForm: (form: GoodsReceiptDetail): void => {
+					set({ receiptForm: form });
+				},
+
+				updateReceiptFieldStore: <K extends keyof GoodsReceiptDetail>(
+					key: K,
+					value: GoodsReceiptDetail[K],
+				): void => {
+					set((state: BatchReceiptStore) => {
+						const currentForm =
+							state.receiptForm ||
+							({
+								id: crypto.randomUUID(),
+								code: '',
+								supplierID: '',
+								supplierName: '',
+								importDate: new Date().toISOString(),
+								importStatus: 'pending',
+								batches: [],
+								note: '',
+							} as GoodsReceiptDetail);
+
+						return {
+							receiptForm: { ...currentForm, [key]: value },
+						};
+					});
+				},
+
 				// ===== Reset toàn bộ receipt =====
 				reset: (): void => {
 					set({
 						batches: [],
 						batchItemsByBatchId: {},
 						idCounter: 1,
+						receiptForm: null,
 					});
 				},
 			}),

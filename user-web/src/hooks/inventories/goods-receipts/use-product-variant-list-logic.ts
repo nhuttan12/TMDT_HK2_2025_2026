@@ -48,6 +48,7 @@ export const useProductVariantListLogic = ({
 	});
 
 	const generateId = useBatchReceiptStore((s): (() => string) => s.generateId);
+    const batches = useBatchReceiptStore((s) => s.batches);
 	const addBatchItems = useBatchReceiptStore(
 		(s): ((batchId: string, items: BatchItem[]) => void) => s.addBatchItems,
 	);
@@ -58,6 +59,8 @@ export const useProductVariantListLogic = ({
 		(s): ((batchId: string, itemId: string, fields: Partial<BatchItem>) => void) =>
 			s.updateBatchItem,
 	);
+	const getBatchItems = useBatchReceiptStore((s) => s.getBatchItems);
+	const updateBatch = useBatchReceiptStore((s) => s.updateBatch);
 
 	// --- Logic Xử lý Dữ liệu hiển thị (Display Data) ---
 	const filteredInitialItems: BatchItem[] = useMemo((): BatchItem[] => {
@@ -70,7 +73,7 @@ export const useProductVariantListLogic = ({
 		return batchItems.length > 0 ? batchItems : filteredInitialItems;
 	}, [batchItems, filteredInitialItems]);
 
-	// Vì mỗi row là 1 Serial, số lượng chính là độ dài mảng. 
+	// Vì mỗi row là 1 Serial, số lượng chính là độ dài mảng.
 	// Nếu sau này bạn gộp nhóm lại có trường quantity, thì dùng reduce.
 	const totalQuantity: number = displayData.length;
 
@@ -84,18 +87,19 @@ export const useProductVariantListLogic = ({
 
 	// --- Logic Xử lý Sự kiện (Actions) ---
 	const handleSelectVariants = (variants: ProductVariantRow[]): void => {
-		const newItems: BatchItem[] = variants.map(
-			(v: ProductVariantRow): BatchItem => {
-				return {
-					id: generateId(),
-					productId: '', // Lưu ý: Chỗ này productId có thể cần map nếu variant có chứa productId
-					batchId: batchId,
-					productVariantId: v.id,
-					productVariantName: v.name,
-					costPrice: 0,
-				};
-			},
-		);
+		const parentBatch = batches.find((b) => b.id === batchId);
+		const parentProductId = parentBatch?.productId || '';
+
+		const newItems: BatchItem[] = variants.map((v: ProductVariantRow): BatchItem => {
+			return {
+				id: generateId(),
+				productId: parentProductId,
+				batchId: batchId,
+				productVariantId: v.id,
+				productVariantName: v.name,
+				costPrice: 0,
+			};
+		});
 
 		addBatchItems(batchId, newItems);
 		setIsModalOpen(false);
@@ -114,7 +118,21 @@ export const useProductVariantListLogic = ({
 	};
 
 	const handleRedirectToCreateBatchReceipt = (): void => {
-		router.push('/shop-owner/inventories/receipts/add-new');
+		const currentItems = getBatchItems(batchId);
+
+		const calculatedQuantity = currentItems.length;
+
+		const calculatedTotalPrice = currentItems.reduce(
+			(sum, item) => sum + (item.costPrice || 0),
+			0,
+		);
+
+		updateBatch(batchId, {
+			quantity: calculatedQuantity,
+			totalPrice: calculatedTotalPrice,
+		});
+
+		router.back();
 	};
 
 	return {

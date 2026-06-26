@@ -12,14 +12,24 @@ import { formatDateForInput } from '@/utils/shared/date';
 import { ChangeEvent, JSX } from 'react';
 import { ProductSelectionGoodsReceiptModal } from '../product-selection-goods-receipt-modal';
 import GoodsReceiptStatusBadge from './goods-receipt-status-badge';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
+import { SupplierOption } from '@/types/inventories/suppliers/SupplierOption';
 
 // Extends trực tiếp Interface, chỉ khai báo thêm data tĩnh
 interface GoodsReceiptDetailUiProps extends UseGoodsReceiptDetailLogicReturn {
 	products: ProductForGoodsReceipt[];
+	supplierOptions?: SupplierOption[];
 }
 
 export function GoodsReceiptDetailUi({
 	form,
+	supplierOptions = [],
 	batches,
 	isView,
 	isCreate,
@@ -39,10 +49,10 @@ export function GoodsReceiptDetailUi({
 			header: 'Mã lô',
 			render: (item): JSX.Element => (
 				<Input
-					value={item.batchNumber}
+					value={item.batchCode}
 					disabled={isView}
 					onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-						updateBatch(item.id, { batchNumber: e.target.value });
+						updateBatch(item.id, { batchCode: e.target.value });
 					}}
 				/>
 			),
@@ -52,6 +62,13 @@ export function GoodsReceiptDetailUi({
 			header: 'Số lượng',
 			render: (item): JSX.Element => (
 				<span className='text-slate-700 font-medium'>{item.quantity}</span>
+			),
+		},
+		{
+			key: 'totalPrice',
+			header: 'Tổng tiền',
+			render: (item): JSX.Element => (
+				<span className='text-slate-700 font-medium'>{item.totalPrice}</span>
 			),
 		},
 	];
@@ -81,11 +98,41 @@ export function GoodsReceiptDetailUi({
 				</Field>
 
 				<Field label='Nhà cung cấp'>
-					<Input
-						value={form.supplierName}
-						disabled={isView}
-						onChange={(e) => updateReceiptField('supplierName', e.target.value)}
-					/>
+					{isView ? (
+						<Input
+							value={form.supplierName}
+							disabled={isView}
+							onChange={(e) => updateReceiptField('supplierName', e.target.value)}
+						/>
+					) : (
+						<Select
+							value={form.supplierID}
+							onValueChange={(selectedId) => {
+								const selectedSupplier = supplierOptions.find(
+									(s) => s.id === selectedId,
+								);
+
+								if (selectedSupplier) {
+									updateReceiptField('supplierID', selectedSupplier.id);
+									updateReceiptField('supplierName', selectedSupplier.name);
+								}
+							}}
+						>
+							<SelectTrigger>
+								<SelectValue placeholder='Chọn nhà cung cấp' />
+							</SelectTrigger>
+							<SelectContent>
+								{supplierOptions.map((supplier) => (
+									<SelectItem
+										key={supplier.id}
+										value={supplier.id}
+									>
+										{supplier.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
 				</Field>
 
 				<Field label='Ngày nhập'>

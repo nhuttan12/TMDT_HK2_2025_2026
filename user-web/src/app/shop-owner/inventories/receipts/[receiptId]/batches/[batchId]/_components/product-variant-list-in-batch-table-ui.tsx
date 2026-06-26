@@ -15,7 +15,7 @@ interface Props {
 	mode: ProductBatchReceiptFormType;
 	onUpdate: (id: string, fields: Partial<BatchItem>) => void;
 	onRemove: (id: string) => void;
-	onRedirect: (row: BatchItem) => void;
+	onRedirect?: (row: BatchItem) => void;
 }
 
 export function ProductVariantListInBatchTableUI({

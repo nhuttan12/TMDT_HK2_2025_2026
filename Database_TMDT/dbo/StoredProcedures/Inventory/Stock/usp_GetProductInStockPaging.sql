@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[usp_GetProductInStockPaging]
-	@ProductId UNIQUEIDENTIFIER,
+	@ShopId UNIQUEIDENTIFIER,
 	@PageNumber INT,
 	@PageSize INT
 AS
@@ -35,6 +35,10 @@ BEGIN
 		ON v.id = ibs.variant_id
 	INNER JOIN PRODUCTS p
 		ON v.product_id = p.id
+	INNER JOIN SHOPS s
+		ON p.shop_id = s.id
+
+	WHERE s.id = @ShopId
 		
 	ORDER BY p.created_at DESC
 

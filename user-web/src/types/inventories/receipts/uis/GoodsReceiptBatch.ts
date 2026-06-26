@@ -5,7 +5,7 @@ export interface GoodsReceiptBatch {
 	productId: string;
 	productName: string;
 
-	batchNumber: string;
+	batchCode: string;
 	quantity: number;
 	totalPrice: number;
 }

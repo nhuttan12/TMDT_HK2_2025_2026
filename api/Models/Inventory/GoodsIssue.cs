@@ -15,12 +15,12 @@ namespace api.Models.Inventory
 
         public string Code { get; private set; }
         public string Note { get; private set; }
-        public GoodsIssueType GoodsIssueType { get; private set; }
+        public EGoodsIssueType GoodsIssueType { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
 
         public ICollection<GoodsIssueDetail> GoodsIssueDetails { get; private set; } = new HashSet<GoodsIssueDetail>();
 
-        public GoodsIssue(Guid id, Guid customerId, string code, string note, GoodsIssueType goodsIssueType, DateTimeOffset createdAt)
+        public GoodsIssue(Guid id, Guid customerId, string code, string note, EGoodsIssueType goodsIssueType, DateTimeOffset createdAt)
         {
             Id = id;
             CustomerId = customerId;

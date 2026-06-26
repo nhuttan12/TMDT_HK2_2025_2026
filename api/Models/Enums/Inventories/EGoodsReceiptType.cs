@@ -1,6 +1,6 @@
 ﻿namespace api.Models.Enums.Inventory
 {
-    public enum GoodsReceiptType
+    public enum EGoodsReceiptType
     {
         Receipt,
         Return

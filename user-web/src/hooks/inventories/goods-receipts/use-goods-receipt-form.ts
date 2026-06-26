@@ -1,11 +1,11 @@
 'use client';
 
-import { BatchReceiptStore, useBatchReceiptStore } from '@/stores/batch-receipt.store';
-import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
+import { useBatchReceiptStore } from '@/stores/batch-receipt.store';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { mapToGoodsReceiptRequest } from '@/utils/inventories/receipts/mappers/receipts';
 import { SyntheticEvent, useEffect, useState } from 'react';
 
 export interface UseGoodsReceiptFormProps {
@@ -17,22 +17,34 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 	const isView = formType === 'view';
 	const isCreate = formType === 'create';
 
-	const [form, setForm] = useState<GoodsReceiptDetail>(goodsReceipt);
+	const [form, setForm] = useState<GoodsReceiptDetail>(() => {
+		if (isCreate) {
+			return {
+				...goodsReceipt,
+				id: goodsReceipt.id || crypto.randomUUID(),
+				importDate: goodsReceipt?.importDate || new Date().toISOString(),
+				importStatus: goodsReceipt?.importStatus || 'pending',
+				code: goodsReceipt?.code || '',
+				note: goodsReceipt?.note || '',
+			};
+		}
 
-	// Trích xuất Store (Đã gom nhóm lại cho gọn)
+		return goodsReceipt;
+	});
+
+	const receiptForm = useBatchReceiptStore((s) => s.receiptForm);
+	const initReceiptForm = useBatchReceiptStore((s) => s.initReceiptForm);
+	const updateReceiptFieldStore = useBatchReceiptStore((s) => s.updateReceiptFieldStore);
 	const batches = useBatchReceiptStore((s) => s.batches);
 	const addBatch = useBatchReceiptStore((s) => s.addBatch);
 	const updateBatch = useBatchReceiptStore((s) => s.updateBatch);
 	const generateId = useBatchReceiptStore((s) => s.generateId);
-	const batchItemsByBatchId = useBatchReceiptStore(
-		(s) => s.batchItemsByBatchId,
-	);
+	const batchItemsByBatchId = useBatchReceiptStore((s) => s.batchItemsByBatchId);
 	const reset = useBatchReceiptStore((s) => s.reset);
-	const setBatches = useBatchReceiptStore(
-		(s) => s.setBatches,
-	);
 	const draftKey: string | null = useBatchReceiptStore((s): string | null => s.draftKey);
 	const setDraftKey: (key: string) => void = useBatchReceiptStore((s) => s.setDraftKey);
+
+	const formToRender: GoodsReceiptDetail = receiptForm || goodsReceipt;
 
 	useEffect((): void => {
 		const currentKey = isCreate ? 'create-new' : `receipt-${goodsReceipt.id}`;
@@ -40,8 +52,17 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 		if (draftKey !== currentKey) {
 			if (isCreate) {
 				reset();
+
+				initReceiptForm({
+					...goodsReceipt,
+					id: crypto.randomUUID(),
+					importDate: new Date().toISOString(),
+					importStatus: 'pending',
+					code: '',
+					note: '',
+				});
 			} else {
-				setBatches(goodsReceipt.batches ?? []);
+				initReceiptForm(goodsReceipt);
 			}
 			setDraftKey(currentKey);
 		}
@@ -51,9 +72,9 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 		draftKey,
 		isCreate,
 		reset,
-		setBatches,
 		setDraftKey,
-		goodsReceipt.batches,
+		goodsReceipt,
+		initReceiptForm,
 	]);
 
 	// Helper function dùng từ khóa function
@@ -61,20 +82,17 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 		key: K,
 		value: GoodsReceiptDetail[K],
 	): void {
-		setForm((prev: GoodsReceiptDetail): GoodsReceiptDetail => ({ ...prev, [key]: value }));
+		updateReceiptFieldStore(key, value);
 	}
 
 	// Handler dùng arrow function
 	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 
-		const payload: GoodsReceiptDetail = {
-			...form,
-			batches: batches.map((batch: GoodsReceiptBatch) => ({
-				...batch,
-				items: batchItemsByBatchId[batch.id] || [],
-			})),
-		};
+		const latestStore = useBatchReceiptStore.getState();
+		const latestForm = latestStore.receiptForm || formToRender;
+
+		const payload = mapToGoodsReceiptRequest(latestForm, latestStore.batchItemsByBatchId);
 
 		console.log('Submit:', payload);
 	};
@@ -85,24 +103,18 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 			id: id,
 			productId: product.id,
 			productName: product.name,
-			batchNumber: '',
+			batchCode: '',
 			quantity: 1,
 			totalPrice: 0,
 		};
 		addBatch(newBatch);
 	};
 
-	const totalQuantity = batches.reduce(
-		(sum, i) => sum + i.quantity,
-		0,
-	);
-	const totalAmount = batches.reduce(
-		(sum, i) => sum + i.totalPrice,
-		0,
-	);
+	const totalQuantity = batches.reduce((sum, i) => sum + i.quantity, 0);
+	const totalAmount = batches.reduce((sum, i) => sum + i.totalPrice, 0);
 
 	return {
-		form,
+		form: formToRender,
 		batches,
 		isView,
 		isCreate,

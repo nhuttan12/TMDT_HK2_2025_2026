@@ -75,6 +75,7 @@
     <Folder Include="dbo\StoredProcedures\Inventory\GoodsReceipt" />
     <Folder Include="dbo\StoredProcedures\Inventory\Stock" />
     <Folder Include="dbo\StoredProcedures\Inventory\Supplier" />
+    <Folder Include="dbo\UserDefinedTypes\Inventories" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCH_VARIANTS.sql" />
@@ -100,7 +101,7 @@
     <Build Include="dbo\StoredProcedures\Banners\usp_BulkUpdateBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetAdminBannersPaging.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_CreatePromotion.sql" />
-    <Build Include="dbo\UserDefinedTypes\Banners\BannerInsertType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Banners\udt_BannerInsertType.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
     <Build Include="dbo\StoredProcedures\Users\usp_AddUserBankings.sql" />
     <Build Include="dbo\StoredProcedures\Users\usp_UpdateUserBanking.sql" />
@@ -140,6 +141,11 @@
     <Build Include="dbo\StoredProcedures\Inventory\Supplier\usp_GetProductPagingBySupplierId.sql" />
     <Build Include="dbo\StoredProcedures\Inventory\Stock\usp_GetProductInStockPaging.sql" />
     <Build Include="dbo\StoredProcedures\Inventory\GoodsReceipt\usp_GetProductListInBatchPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventory\Stock\usp_GetProductInStockByVariantNamePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventory\GoodsReceipt\usp_GetGoodsReceiptByCodePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventory\Supplier\usp_GetSupplierByShopId.sql" />
+    <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatch.sql" />
+    <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatchVariant.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
@@ -148,14 +154,17 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\UserDefinedTypes\Promotions\ProductPromotionType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Promotions\udt_ProductPromotionType.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\UserDefinedTypes\Users\UserBankingInsertType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Users\udt_UserBankingInsertType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Compare_SP_Only.scmp" />
     <None Include="Compare_DB_Structure_Only.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Database_TMDT.refactorlog" />
   </ItemGroup>
   <Import Project="$(NETCoreTargetsPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="'$(NetCoreBuild)' == 'true'" />
   <Target Name="BeforeBuild">

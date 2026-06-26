@@ -1,4 +1,5 @@
-﻿using api.Services.Inventory;
+﻿using api.Dtos.Inventory.Requests;
+using api.Services.Inventory;
 using api.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,24 @@ namespace api.Controllers.Inventory
                 userId.Value, 
                 receiptId,
                 cancellationToken);
+
+            return HandleResult(result);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Shop")]
+        public async Task<IActionResult> CreateGoodsReceipt(
+            [FromBody] CreateGoodsReceiptRequest request, 
+            CancellationToken cancellationToken)
+        {
+            var shopId = AuthenticatedUserId;
+
+            if (shopId == null)
+            {
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
+            }
+
+            var result = await goodsReceiptService.CreateGoodsReceiptAsync(shopId.Value, request, cancellationToken);
 
             return HandleResult(result);
         }

@@ -21,7 +21,7 @@ export const getGoodsReceiptDetailByReceiptId = async (id: string): Promise<Good
 				id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // Chuyển sang GUID string
 				productId: '550e8400-e29b-41d4-a716-446655440101', // Chuyển sang GUID string
 				productName: 'Bể Kính Đa Giác (Size L)',
-				batchNumber: 'BATCH-GLS-001',
+				batchCode: 'BATCH-GLS-001',
 				quantity: 10,
 				totalPrice: 15000000,
 			},
@@ -29,7 +29,7 @@ export const getGoodsReceiptDetailByReceiptId = async (id: string): Promise<Good
 				id: '2b3c4d5e-2222-4aaa-8bbb-222222222222', // Chuyển sang GUID string
 				productId: '550e8400-e29b-41d4-a716-446655440102', // Chuyển sang GUID string
 				productName: 'Đèn LED Quang Phổ Rộng 15W',
-				batchNumber: 'BATCH-LED-002',
+				batchCode: 'BATCH-LED-002',
 				quantity: 5,
 				totalPrice: 1750000,
 			},

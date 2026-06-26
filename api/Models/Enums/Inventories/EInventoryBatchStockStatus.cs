@@ -1,6 +1,6 @@
 ﻿namespace api.Models.Enums.Inventory
 {
-    public enum InventoryBatchStockStatus
+    public enum EInventoryBatchStockStatus
     {
         Active, 
         Defective, 

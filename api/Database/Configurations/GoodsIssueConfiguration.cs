@@ -26,9 +26,9 @@ namespace api.Database.Configurations
                 .HasColumnName("note")
                 .HasColumnType("NVARCHAR(MAX)");
 
-            var typeConverter = new ValueConverter<GoodsIssueType, string>(
+            var typeConverter = new ValueConverter<EGoodsIssueType, string>(
                 v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
-                v => (GoodsIssueType)Enum.Parse(typeof(GoodsIssueType), v.Replace("_", ""), true)
+                v => (EGoodsIssueType)Enum.Parse(typeof(EGoodsIssueType), v.Replace("_", ""), true)
             );
             builder.Property(goodsIssue => goodsIssue.GoodsIssueType)
                 .HasConversion(typeConverter)

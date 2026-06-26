@@ -30,9 +30,9 @@ namespace api.Database.Configurations
                 .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset");
 
-            var typeConverter = new ValueConverter<GoodsReceiptType, string>(
+            var typeConverter = new ValueConverter<EGoodsReceiptType, string>(
                 v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
-                v => (GoodsReceiptType)Enum.Parse(typeof(GoodsReceiptType), v.Replace("_", ""), true)
+                v => (EGoodsReceiptType)Enum.Parse(typeof(EGoodsReceiptType), v.Replace("_", ""), true)
             );
             builder.Property(goodsReceipt => goodsReceipt.Type)
                 .HasConversion(typeConverter)
@@ -40,9 +40,9 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(50)")
                 .IsRequired();
 
-            var statusConverter = new ValueConverter<GoodsReceiptStatus, string>(
+            var statusConverter = new ValueConverter<EGoodsReceiptStatus, string>(
                 v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
-                v => (GoodsReceiptStatus)Enum.Parse(typeof(GoodsReceiptStatus), v.Replace("_", ""), true)
+                v => (EGoodsReceiptStatus)Enum.Parse(typeof(EGoodsReceiptStatus), v.Replace("_", ""), true)
             );
             builder.Property(goodsReceipt => goodsReceipt.Status)
                 .HasConversion(statusConverter)

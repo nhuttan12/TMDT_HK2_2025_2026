@@ -15,8 +15,8 @@ namespace api.Models.Inventory
 
         public string Code { get; private set; }
         public string Note { get; private set; }
-        public GoodsReceiptType Type { get; private set; }
-        public GoodsReceiptStatus Status { get; private set; }
+        public EGoodsReceiptType Type { get; private set; }
+        public EGoodsReceiptStatus Status { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
 
         public ICollection<GoodsReceiptBatch> GoodsReceiptBatch { get; private set; } = new HashSet<GoodsReceiptBatch>();
