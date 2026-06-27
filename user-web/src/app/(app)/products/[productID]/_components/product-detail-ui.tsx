@@ -2,45 +2,52 @@
 
 import CommentItem from '@/components/products/user/comment-item';
 import { ProductDetailCarousel } from '@/components/products/user/product-detail-carousel';
-import Rating from '@/components/products/user/rating';
 import ReadMoreHtml from '@/components/products/user/read-more-html';
 import { Button } from '@/components/ui/button';
-import { ProductDetailLogicReturn } from '@/hooks/products/user/use-product-detail-logic';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
 import { Separator } from '@radix-ui/react-separator';
 import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { JSX } from 'react';
 
-interface ProductDetailUiProps extends ProductDetailLogicReturn {
+// Cập nhật lại định nghĩa Props để truyền nhận biến thể trực tiếp
+interface ProductDetailUiProps {
 	product: ProductDetail;
 	relatedProducts: ProductUserCard[];
+	quantity: number;
+	selectedVariant: ProductVariantUser | null;
+	displayPrice: string;
+	displayImage: string;
+	currentStock: number;
+	handleVariantSelect: (variant: ProductVariantUser) => void; // Thay thế cho handleOptionSelect
+	handleIncreaseQuantity: () => void;
+	handleDecreaseQuantity: () => void;
+	handleAddToCart: () => void;
+	handleBuyNow: () => void;
 }
 
 export function ProductDetailUi({
 	product,
 	relatedProducts,
 	quantity,
-	selectedOptions,
 	selectedVariant,
 	displayPrice,
 	displayImage,
 	currentStock,
-	handleOptionSelect,
+	handleVariantSelect,
 	handleIncreaseQuantity,
 	handleDecreaseQuantity,
 	handleAddToCart,
 	handleBuyNow,
-	checkIsOptionDisabled,
 }: ProductDetailUiProps): JSX.Element {
-	const isFullySelected = !selectedOptions.includes(-1);
+	const isFullySelected = !!selectedVariant;
 	const isActionDisabled = !isFullySelected || !selectedVariant?.isActive || currentStock === 0;
 
-	// Xử lý mảng an toàn ngay từ đầu
-	const safeTierVariations = product.tierVariations || [];
 	const safeReviews = product.reviews || [];
+	const safeVariants = product.variants || [];
 
 	return (
 		<div className='bg-white w-full px-10 py-10 mt-10 rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.06)]'>
@@ -62,15 +69,7 @@ export function ProductDetailUi({
 						<ProductDetailCarousel products={relatedProducts || []} />
 					</div>
 
-					{/*<div>*/}
-					{/*	<h1 className='font-bold text-2xl! pb-4'>*/}
-					{/*		<strong>Đánh giá sản phẩm</strong>*/}
-					{/*	</h1>*/}
-					{/*	<Rating rating={product.rating || 0} />*/}
-					{/*</div>*/}
-
 					<div>
-						{/* Đã bọc an toàn safeReviews */}
 						{safeReviews.map(
 							(comment): JSX.Element => (
 								<CommentItem
@@ -95,75 +94,47 @@ export function ProductDetailUi({
 							</Link>
 						</div>
 					</div>
-
 					<h3 className='text-2xl font-semibold leading-tight'>{product.name}</h3>
-
 					<div className='text-sm text-muted-foreground'>
 						Mã sản phẩm:{' '}
 						<span className='font-medium'>
 							{selectedVariant ? selectedVariant.sku : product.id}
 						</span>
 					</div>
-
 					<div className='text-3xl font-bold text-red-600'>{displayPrice}</div>
-
 					<Separator />
+					{/* KHU VỰC CHỌN PHÂN LOẠI SẢN PHẨM (HIỂN THỊ THEO VARIANTS - SỬ DỤNG SKU LÀM TÊN) */}
+					<div className='flex flex-col gap-3'>
+						<span className='font-medium text-sm text-gray-700'>
+							Chọn phân loại hàng
+						</span>
+						<div className='flex flex-wrap gap-3'>
+							{safeVariants.map((variant): JSX.Element => {
+								const isSelected = selectedVariant?.id === variant.id;
+								const isDisabled = !variant.isActive || variant.stock === 0;
 
-					{/* KHU VỰC CHỌN PHÂN LOẠI SẢN PHẨM */}
-					<div className='flex flex-col gap-6'>
-						{/* Đã bọc an toàn safeTierVariations */}
-						{safeTierVariations.map(
-							(tier, tierIndex): JSX.Element => (
-								<div
-									key={tier.name}
-									className='flex flex-col gap-3'
-								>
-									<span className='font-medium text-sm text-gray-700'>
-										{tier.name}
-									</span>
-									<div className='flex flex-wrap gap-3'>
-										{(tier.options || []).map(
-											(option, optionIndex): JSX.Element => {
-												const isSelected =
-													selectedOptions[tierIndex] === optionIndex;
-
-												const isDisabled = checkIsOptionDisabled(
-													tierIndex,
-													optionIndex,
-												);
-
-												return (
-													<Button
-														key={option}
-														variant={isSelected ? 'default' : 'outline'}
-														disabled={isDisabled}
-														onClick={() =>
-															handleOptionSelect(
-																tierIndex,
-																optionIndex,
-															)
-														}
-														className={`rounded-sm transition-all ${
-															isDisabled
-																? 'opacity-40 cursor-not-allowed border-dashed bg-slate-50 text-slate-400'
-																: isSelected
-																	? 'border-orange-500 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:text-orange-600 cursor-pointer'
-																	: 'hover:border-orange-500 hover:text-orange-500 cursor-pointer'
-														}`}
-													>
-														{option}
-													</Button>
-												);
-											},
-										)}
-									</div>
-								</div>
-							),
-						)}
+								return (
+									<Button
+										key={variant.id}
+										variant={isSelected ? 'default' : 'outline'}
+										disabled={isDisabled}
+										onClick={() => handleVariantSelect(variant)}
+										className={`rounded-sm transition-all ${
+											isDisabled
+												? 'opacity-40 cursor-not-allowed border-dashed bg-slate-50 text-slate-400'
+												: isSelected
+													? 'border-orange-500 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:text-orange-600 cursor-pointer'
+													: 'hover:border-orange-500 hover:text-orange-500 cursor-pointer'
+										}`}
+									>
+										{variant.sku}
+									</Button>
+								);
+							})}
+						</div>
 					</div>
-
-					{/* ... Phần Số lượng và Nút mua hàng giữ nguyên như cũ ... */}
-					<div className='flex items-center gap-6'>
+					{/* KHU VỰC SỐ LƯỢNG */}
+					<div className='flex items-center gap-6 mt-4'>
 						<div className='flex items-center border rounded-sm overflow-hidden w-fit'>
 							<Button
 								variant='ghost'
@@ -198,7 +169,7 @@ export function ProductDetailUi({
 								: 'Vui lòng chọn phân loại hàng'}
 						</div>
 					</div>
-
+					{/* CÁC NÚT MUA HÀNG */}
 					<div className='flex flex-col gap-4 mt-4'>
 						<Button
 							variant='outline'
@@ -217,9 +188,7 @@ export function ProductDetailUi({
 							MUA NGAY
 						</Button>
 					</div>
-
 					<Separator />
-
 					<div className='grid gap-4 text-sm text-muted-foreground sm:grid-cols-2'>
 						<div className='flex items-center gap-2'>
 							<Truck size={18} /> Giao hàng nội thành 4 giờ

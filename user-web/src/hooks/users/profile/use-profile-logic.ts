@@ -2,6 +2,8 @@
 
 import { useState, useEffect, SyntheticEvent } from 'react';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
+import { UserService } from '@/services/users/user/profile-service';
+import apiClient from '@/lib/api-client';
 
 export interface ProfileLogicReturn {
 	formData: UserProfileInfo;
@@ -23,6 +25,7 @@ const defaultFormData: UserProfileInfo = {
 export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 	const [formData, setFormData] = useState<UserProfileInfo>(defaultFormData);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+	const userService = new UserService(apiClient);
 
 	// Đồng bộ dữ liệu từ API vào Local Form State
 	useEffect(() => {
@@ -46,7 +49,8 @@ export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 			// TODO: Gọi Mutation Hook để gửi formData lên server lưu lại
 			console.log('Dữ liệu chuẩn bị cập nhật:', formData);
 
-			await new Promise((resolve) => setTimeout(resolve, 1000)); // Giả lập loading
+			// await new Promise((resolve) => setTimeout(resolve, 1000)); // Giả lập loading
+			await userService.updateProfile(formData);
 			// TODO: Hiển thị Toast thành công
 		} catch (error) {
 			console.error('Lỗi cập nhật:', error);

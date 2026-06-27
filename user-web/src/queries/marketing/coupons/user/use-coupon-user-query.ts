@@ -44,7 +44,7 @@ export const useClaimCouponMutation = () => {
 			// để reload lại danh sách ví voucher của user.
 		},
 		onError: (error) => {
-			// Xử lý lỗi (ví dụ: mã đã hết hạn, user chưa _login)
+			// Xử lý lỗi (ví dụ: mã đã hết hạn, user chưa login)
 			// toast.error('Lưu mã thất bại. Vui lòng thử lại.');
 			alert('Lưu mã thất bại.');
 		},

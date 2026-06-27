@@ -5,9 +5,12 @@ namespace api.Dtos.Users.Responses
     public class UserInfoDTO
     {
         public Guid Id { get; set; }
+        public String FullName { get; set; } = string.Empty;
+
         public required string Email { get; set; }
         public string? Phone { get; set; }
-        public required string Role { get; set; }
+        //public required string Role { get; set; }
+        public ICollection<string>? Address { get; set;} = new HashSet<string>();
         public DateOnly? DateOfBirth { get; set; }
         public DateTimeOffset? CreateAt { get; set; }
         public DateTimeOffset? UpdateAt { get; set; }

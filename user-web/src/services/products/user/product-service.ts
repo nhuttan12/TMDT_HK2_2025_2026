@@ -868,7 +868,9 @@ export const getProductDetailById = async (productId: string): Promise<ProductDe
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return getProductDetailByIdCraw(productId);
 		}
-		return mapProductDetailBeToFe(response.data.data);
+		const res = mapProductDetailBeToFe(response.data.data);
+		console.log(res);
+		return res
 	} catch (error: unknown) {
 		return getProductDetailByIdCraw(productId);
 	}
@@ -906,11 +908,11 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
 			`/products`,
 			{
-				params : {
-					pageSize : 8,
-					pageNumber: 1
-				}
-			}
+				params: {
+					pageSize: 8,
+					pageNumber: 1,
+				},
+			},
 		);
 		// 2. Kiểm tra dữ liệu an toàn
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
@@ -926,3 +928,26 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 		return getTopSellingProductsCraw();
 	}
 };
+
+
+export const getProductsHome = async (): Promise<ProductUserCard[]> => {
+	try{
+		const params : PaginationParams = {
+			pageNumber : 3,
+			pageSize : 24,
+		}
+		const response = await apiClient.get(
+			`/products`,
+			{
+				params : params
+			}
+		);
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			return [];
+		}
+		console.log(response.data.data)
+		return mapBackendToFrontendPagination(response.data.data).data;
+	}catch{
+		return getProductsHomeCraw();
+	}
+}

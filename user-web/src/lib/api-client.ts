@@ -49,7 +49,7 @@ apiClient.interceptors.response.use(
 		const status: number = error.response?.status || 500;
 
 		if (status === 401 && typeof window !== 'undefined') {
-			window.location.href = '/_login';
+			window.location.href = '/login';
 		}
 
 		if (error.response && error.response.data) {

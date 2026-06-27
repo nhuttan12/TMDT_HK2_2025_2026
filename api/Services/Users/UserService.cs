@@ -88,6 +88,14 @@ namespace api.Services.Users
                 return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
             }
             var dto = mapper.Map<UserInfoDTO>(user);
+            var address = await repo.GetAddressById(id, ct);
+            if(address is not null )
+            {
+                foreach (var addressDTO in address)
+                {
+                    dto.Address!.Add(addressDTO.AddressUrl);
+                }
+            }
             return Result<UserInfoDTO>.Success(dto);
 
         }

@@ -30,15 +30,6 @@ export const convertRawUserToProductDetail = (rawData: ProductDetailRawUser): Pr
 		}
 	});
 
-	// 3. Hình thành mảng TierVariations cho UI
-	const tierVariations: ProductTierVariation[] = tierOptions
-		.map(
-			(options: string[], index: number): ProductTierVariation => ({
-				name: index === 0 ? 'Kích thước' : 'Phân loại', // Hardcode hoặc có thể tự động lấy từ config
-				options: options,
-			}),
-		)
-		.filter((tier: ProductTierVariation): boolean => tier.options.length > 0);
 
 	// 4. Map Admin Variant thành User Variant (Sử dụng mảng Index)
 	const userVariants: ProductVariantUser[] = rawData.productVariants.map(
@@ -55,8 +46,8 @@ export const convertRawUserToProductDetail = (rawData: ProductDetailRawUser): Pr
 				sku: variant.sku,
 				tierIndex: tierIndex,
 				price: variant.salePrice,
-				stock: variant.quantity,
-				isActive: variant.quantity > 0, // Cập nhật isActive dựa trên kho
+				stock: 100,
+				isActive: variant.quantity > 0,
 				image: variant.image,
 			};
 		},
@@ -84,7 +75,6 @@ export const convertRawUserToProductDetail = (rawData: ProductDetailRawUser): Pr
 		// Trích xuất mảng ảnh dạng chuỗi và sắp xếp theo order
 		images: rawData.images.sort((a, b) => a.order - b.order).map((img) => img.imageUrl || ''),
 
-		tierVariations: tierVariations,
 		variants: userVariants,
 		reviews: rawData.reviews,
 	};
@@ -198,11 +188,10 @@ export function mapProductDetailBeToFe(data: BackEndProductDetail): ProductDetai
 				// originalPrice: variant.costPrice,
 				// image: variant.imageUrl,
 				// status: variant.status,
-				tierIndex: [0,1],
-				stock: 10,
+				tierIndex: [0, 1],
+				stock: variant.quantityInStock,
 				isActive: true,
 				image: variant.imageUrl,
-
 			};
 		},
 	);
@@ -219,7 +208,6 @@ export function mapProductDetailBeToFe(data: BackEndProductDetail): ProductDetai
 		minPrice: minPrice,
 		maxPrice: maxPrice,
 		images: data.imageUrls, // Đổi imageUrls -> images
-		tierVariations: [], // Mock rỗng do BE JSON chưa support mảng này
 		variants: variantsMapped,
 		reviews: [], // Mock rỗng do BE JSON chưa support reviews
 	};

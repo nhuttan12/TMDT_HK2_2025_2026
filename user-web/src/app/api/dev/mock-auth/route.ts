@@ -7,7 +7,7 @@ export async function GET() {
 	}
 
 	const response = NextResponse.json({
-		message: 'Mock _login successful',
+		message: 'Mock login successful',
 		user: { id: '1', name: 'Le Thanh Tam', role: 'admin' },
 	});
 

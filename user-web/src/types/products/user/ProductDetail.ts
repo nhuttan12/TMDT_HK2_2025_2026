@@ -22,7 +22,6 @@ export interface ProductDetail {
 	images: string[];
 
 	// Nhúng hệ thống phân loại vào
-	tierVariations: ProductTierVariation[];
 	variants: ProductVariantUser[];
 
 	reviews: Review[];

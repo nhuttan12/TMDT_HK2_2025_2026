@@ -102,16 +102,34 @@ namespace api.Models
         {
             if (!string.IsNullOrEmpty(phoneNumber))
             {
-                if(!ValidDataUtil.IsValidPhone(phoneNumber))
+                if (!ValidDataUtil.IsValidPhone(phoneNumber))
                     return Result<bool>.Failure(Error.Create("InvalidPhone", "Invalid phone number format.", ErrorType.Validation));
                 this.Phone = phoneNumber;
             }
 
-            if (!string.IsNullOrEmpty(fullname)) FullName = fullname;
+            if (!string.IsNullOrEmpty(fullname))
+                FullName = fullname;
 
-            if (!string.IsNullOrEmpty(avatarUrl)) 
+            if (!string.IsNullOrEmpty(avatarUrl))
                 UserDetail!.AvatarUrl = avatarUrl;
-            if (addresses != null && addresses.Any()) Addresses = new HashSet<Address>(addresses.Select(a => Address.Create(userId, a)));
+
+            // Cập nhật địa chỉ: Chỉ thêm những địa chỉ chưa tồn tại
+            if (addresses != null && addresses.Any())
+            {
+                // Đảm bảo Addresses không bị null trước khi thao tác
+                Addresses ??= new HashSet<Address>();
+
+                // Lấy danh sách các chuỗi địa chỉ hiện tại đang có để so sánh.
+                var existingAddressStrings = Addresses.Select(a => a.AddressUrl).ToHashSet();
+
+                foreach (var newAddress in addresses)
+                {
+                    if (!string.IsNullOrWhiteSpace(newAddress) && !existingAddressStrings.Contains(newAddress))
+                    {
+                        Addresses.Add(Address.Create(userId, newAddress));
+                    }
+                }
+            }
 
             return Result<bool>.Success(true);
         }

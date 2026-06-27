@@ -6,6 +6,7 @@ export interface BackendVariant {
 	sellPrice: number;
 	imageUrl: string;
 	status: string;
+	quantityInStock: number;
 }
 
 export interface BackendProductItem {
