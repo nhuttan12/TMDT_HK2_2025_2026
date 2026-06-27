@@ -66,7 +66,6 @@ export const authService = {
 				}, 1000);
 			});
 		}
-		console.log(data);
 
 		return apiClient.post('/auth/register', data);
 	},

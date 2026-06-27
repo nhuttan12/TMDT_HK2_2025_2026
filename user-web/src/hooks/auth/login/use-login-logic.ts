@@ -40,7 +40,6 @@ export function useLoginLogic(): LoginReturn {
 
 		// 3. Khi thành công
 		onSuccess: (data: ResponseApi<LoginResponse>) => {
-			console.log(data);
 			// Cập nhật Zustand Store
 			const user = {
 				username: formData.email,

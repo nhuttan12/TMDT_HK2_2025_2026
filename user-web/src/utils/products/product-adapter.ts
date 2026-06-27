@@ -7,7 +7,7 @@ import {
 	BackendPagedResult,
 	BackendProductItem,
 	BackendVariant,
-	ProductDetailBE,
+	BackEndProductDetail,
 } from '@/types/products/user/productBE';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
@@ -159,7 +159,7 @@ export function mapBackendPaginationToFrontend(
  * Map dữ liệu Product Detail từ Backend Model sang Frontend Model.
  * Hàm này thường được gọi ngay sau khi nhận response từ service data layer.
  */
-export function mapProductDetailBeToFe(data: ProductDetailBE): ProductDetail {
+export function mapProductDetailBeToFe(data: BackEndProductDetail): ProductDetail {
 	// 1. Tính toán khoảng giá từ danh sách biến thể (variants)
 	const variantPrices: number[] = data.variants.map((v: BackendVariant): number => v.sellPrice);
 

@@ -28,20 +28,20 @@ export interface BackendPagedResult<T> {
 	hasPreviousPage: boolean;
 }
 
-export interface ShopBE {
+export interface BackEndShop {
 	id: string;
 	name: string;
 	shopLogos: string;
 }
 
 
-export interface ProductDetailBE {
+export interface BackEndProductDetail {
 	id: string;
 	name: string;
 	basePrice: number;
 	rating: number;
 	status: string;
-	shop: ShopBE;
+	shop: BackEndShop;
 	description: string;
 	imageUrls: string[];
 	variants: BackendVariant[];

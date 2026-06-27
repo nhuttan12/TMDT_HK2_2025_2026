@@ -37,7 +37,7 @@ export function mapBackendToFrontendProduct(beProduct: BackendProductItem): Prod
  * Biến đổi cục Wrapper Phân trang
  */
 export function mapBackendToFrontendPagination(
-	beData: BackendPagedResult,
+	beData: BackendPagedResult<BackendProductItem>,
 ): PaginationResponse<ProductUserCard> {
 	return {
 		data: beData.items.map(

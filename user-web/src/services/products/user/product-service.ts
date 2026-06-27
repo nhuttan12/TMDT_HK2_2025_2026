@@ -16,7 +16,7 @@ import { ResponseApi } from '@/types/common/ResponseApi';
 import {
 	BackendPagedResult,
 	BackendProductItem,
-	ProductDetailBE,
+	BackEndProductDetail,
 } from '@/types/products/user/productBE';
 import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
 import apiClient from '@/lib/api-client';
@@ -862,13 +862,12 @@ export const getPageProducts = async (
 
 export const getProductDetailById = async (productId: string): Promise<ProductDetail> => {
 	try {
-		const response = await apiClient.get<ResponseApi<ProductDetailBE>>(
+		const response = await apiClient.get<ResponseApi<BackEndProductDetail>>(
 			`/products/${productId}`,
 		);
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return getProductDetailByIdCraw(productId);
 		}
-		console.log(response.data);
 		return mapProductDetailBeToFe(response.data.data);
 	} catch (error: unknown) {
 		return getProductDetailByIdCraw(productId);
@@ -918,10 +917,9 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 			// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
 			return getTopSellingProductsCraw();
 		}
-		const res : PaginationResponse<ProductUserCard> =mapBackendPaginationToFrontend(response.data.data);
+		const res : PaginationResponse<ProductUserCard> = mapBackendPaginationToFrontend(response.data.data);
 		// 3. Đưa qua hàm map để bóc tách vỏ .NET và gọt giũa lại thành ProductUserCard
 		// (Sử dụng hàm mapBackendToFrontendPagination bạn đã tạo ở lượt trước)
-		console.log(res);
 		return res.data;
 	} catch (error: unknown) {
 		console.log('error getTopSellingProducts');

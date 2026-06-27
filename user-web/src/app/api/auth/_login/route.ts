@@ -1,4 +1,4 @@
-// src/app/api/auth/login/route.ts
+// src/app/api/auth/_login/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import apiServer from '@/lib/api-server';
@@ -17,7 +17,7 @@ export interface LoginPayload {
 export async function POST(request: Request): Promise<NextResponse> {
 	try {
 		const body = (await request.json()) as LoginPayload;
-		const backendUrl = '/auth/login';
+		const backendUrl = '/auth/_login';
 
 		// 1. Gọi .NET Backend để lấy Token
 		const response = await apiServer.post(backendUrl, body);
@@ -34,7 +34,6 @@ export async function POST(request: Request): Promise<NextResponse> {
 		const nextResponse = NextResponse.json(responseData, { status: httpStatus });
 
 		// 3. THỰC HIỆN GHI HTTPONLY COOKIE KHI THÀNH CÔNG
-			console.log(responseData.data);
 		if (responseData.isSuccess && responseData.data) {
 			const { accessToken, refreshToken } = responseData.data;
 			const cookieStore = await cookies();
