@@ -1,6 +1,6 @@
 import { UserModel } from '@/stores/auth.store';
 import apiClient from '@/lib/api-client';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../types/common/ResponseApi';
 
 export interface LoginPayload {
 	email: string;
@@ -66,7 +66,6 @@ export const authService = {
 				}, 1000);
 			});
 		}
-		console.log(data);
 
 		return apiClient.post('/auth/register', data);
 	},

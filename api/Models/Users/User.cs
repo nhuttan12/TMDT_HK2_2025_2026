@@ -82,7 +82,7 @@ namespace api.Models
         public static Result<User> Create(Guid id, string email, string fullName, Role role, string provider, String providerKey)
         {
             if (!ValidDataUtil.IsValidEmail(email))
-                return Result<User>.Failure(Error.Create("", "Invalid email format.", ErrorType.Validation));
+                return Result<User>.Failure(Error.Create("Auth.Email", "Invalid email format.", ErrorType.Validation));
            
             UserExternalLogin ux = UserExternalLogin.Create(id,provider, providerKey);
             UserDetail ud = UserDetail.Create();

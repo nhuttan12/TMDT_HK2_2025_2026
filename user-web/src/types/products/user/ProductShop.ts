@@ -1,5 +1,5 @@
 export interface ProductShop {
-	id: number;
+	id: string;
 	shopName: string;
 	shopSlug: string;
 }

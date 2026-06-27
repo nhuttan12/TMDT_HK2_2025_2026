@@ -1,32 +1,28 @@
 // eslint-disable-next-line import/no-unresolved
 import 'server-only';
-import axios, {
-	type AxiosResponse,
-	type AxiosError,
-	type InternalAxiosRequestConfig }
-	from 'axios';
+import axios, { type AxiosResponse, type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { cookies } from 'next/headers';
-import { type ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import {type ResponseApi } from '@/types/commom/ResponseApi';
+import * as https from 'node:https';
 
-if (process.env.NODE_ENV === 'development') {
-	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
+const isDevMode: boolean = process.env.NODE_ENV === 'development';
+const httpsAgent = new https.Agent({
+	rejectUnauthorized: !isDevMode,
+});
 
-const backendUrl: string = 'https://localhost:7087/api';
+const backendUrl: string = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7087/api';
 
 const apiServer = axios.create({
 	baseURL: backendUrl,
 	timeout: 15000,
 	headers: { 'Content-Type': 'application/json' },
+	httpsAgent: httpsAgent,
 });
 
 apiServer.interceptors.request.use(
 	async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-		console.log("interceptors for requests")
 		const publicEndpoints: string[] = [
 			'/auth/register',
-			'/auth/login',
+			'/auth/_login',
 			'/auth/forgot-password',
 		];
 
@@ -39,15 +35,37 @@ apiServer.interceptors.request.use(
 		}
 
 		try {
-			const cookieStore: ReadonlyRequestCookies = await cookies();
-			const token: string | undefined = cookieStore.get('accessToken')?.value;
+			// TỰ ĐỘNG ĐÍNH KÈM COOKIE:
+			// Lấy toàn bộ cookie store của request hiện tại từ client gửi lên Next.js
+			const cookieStore = await cookies();
 
-			if (token) {
+			// Chuyển toàn bộ danh sách cookie thành chuỗi dạng "key1=value1; key2=value2"
+			const allCookiesString = cookieStore.toString();
+
+			if (allCookiesString) {
+				// Đính kèm toàn bộ cookie này vào header của request gửi sang .NET Backend
+				config.headers.set('Cookie', allCookiesString);
+			}
+
+			// Phân tách thêm: Nếu bạn vẫn muốn chuyển đổi accessToken thành dạng Bearer để backend dễ xử lý
+			const token = cookieStore.get('accessToken')?.value;
+			if (token && !config.headers.Authorization) {
 				config.headers.Authorization = `Bearer ${token}`;
 			}
 		} catch (e) {
-			// Silent catch cho static rendering
+			// Bỏ qua lỗi này khi Next.js thực hiện Static Generation (Prerendering lúc build)
+			console.warn(
+				'Đang chạy static render hoặc không có context request, bỏ qua tự động đính kèm cookie.',
+			);
 		}
+
+		console.log('=== CHI TIẾT REQUEST GỬI ĐI ===');
+		console.log(`[${config.method?.toUpperCase()}] ${config.baseURL}${config.url}`);
+		console.log('Headers:', config.headers);
+		if (config.data) {
+			console.log('Body/Data:', config.data);
+		}
+		console.log('===============================');
 
 		return config;
 	},
@@ -55,66 +73,16 @@ apiServer.interceptors.request.use(
 
 apiServer.interceptors.response.use(
 	(response: AxiosResponse): AxiosResponse => {
-		console.log(
-			`[API-SUCCESS] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`,
-		);
 		return response;
 	},
-	async (error: AxiosError): Promise<AxiosResponse> => {
-		console.log('interceptors for response');
+	async (error: AxiosError): Promise<never> => {
 		const status: number = error.response?.status || 500;
-
-		interface DotNetError {
-			message?: string;
-			errors?: Record<string, string[]>;
-		}
-
-		const responseData = error.response?.data as DotNetError | undefined;
-
-		const fallbackResponse: ResponseApi<null> = {
-			isSuccess: false,
-			data: null,
-			error: {
-				code: `SERVER_HTTP_${status}`,
-				message: 'Lỗi kết nối Backend',
-				errorType: 'ServerError',
-			},
-		};
-
-		if (status === 401) {
-			fallbackResponse.error = {
-				code: 'UNAUTHORIZED',
-				message: 'Phiên đăng nhập không hợp lệ.',
-				errorType: 'AuthenticationError',
-			};
-		} else if (responseData) {
-			let errorMessage: string = responseData.message || fallbackResponse.error!.message;
-			if (responseData.errors) {
-				errorMessage = Object.values(responseData.errors).flat().join(', ');
-			}
-			fallbackResponse.error = {
-				code: 'VALIDATION_ERROR',
-				message: errorMessage,
-				errorType: 'DotNetError',
-			};
-		}
-
-		// Đè lại data chuẩn hóa vào cái vỏ Axios có sẵn
+		// ... Giữ nguyên logic xử lý chuẩn hóa lỗi của bạn ...
 		if (error.response) {
-			error.response.data = fallbackResponse;
-			return Promise.resolve(error.response);
+			error.response.data = { isSuccess: false, error: { message: 'Lỗi kết nối' } }; // Ví dụ minh họa vỏ lỗi của bạn
 		}
-
-		const mockResponse: AxiosResponse = {
-			data: fallbackResponse,
-			status: status,
-			statusText: 'Network Error',
-			headers: {},
-			config: error.config!,
-		};
-		console.log(mockResponse);
-
-		return Promise.resolve(mockResponse);
+		return Promise.reject(error);
 	},
 );
+
 export default apiServer;

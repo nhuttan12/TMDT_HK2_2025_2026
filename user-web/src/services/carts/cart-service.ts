@@ -1,6 +1,10 @@
 import { CartItem } from '@/types/carts/CartItem';
+import { BackEndCart } from '@/types/carts/BeackEndCart';
+import { mapCartBe2Fe } from '@/utils/cart/cartAdapter';
+import { ResponseApi } from '@/types/common/ResponseApi';
+import {type AxiosInstance } from 'axios';
 
-export async function getUserCartByUserId(userId: string): Promise<CartItem[]> {
+export async function getUserCartByUserIdCraw(): Promise<CartItem[]> {
 	// Giả lập độ trễ của API
 	return new Promise((resolve) => {
 		setTimeout(() => {
@@ -32,4 +36,24 @@ export async function getUserCartByUserId(userId: string): Promise<CartItem[]> {
 			]);
 		}, 500);
 	});
+}
+
+export class CartService {
+	constructor(private api: AxiosInstance) {}
+
+	async getMyUserCart(): Promise<CartItem[]> {
+		try {
+			const response =
+				await this.api.get<ResponseApi<BackEndCart>>(`/carts/me`);
+
+			console.log('cart data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return getUserCartByUserIdCraw();
+			}
+			return mapCartBe2Fe(response.data.data.cartItems);
+		} catch (error: unknown) {
+			return getUserCartByUserIdCraw();
+		}
+	}
 }

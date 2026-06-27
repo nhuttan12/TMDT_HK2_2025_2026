@@ -36,6 +36,8 @@ namespace api.Repository.ProductRepo
             return await query
                 .AsNoTracking() // Tối ưu cho truy vấn chỉ đọc
                 .Include(p => p.Variants)
+                .Include(p => p.Shop)
+                .Include(p => p.Detail)
                 .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
         public async Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto? filterDto, CancellationToken cancellationToken)

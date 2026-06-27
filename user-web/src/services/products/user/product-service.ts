@@ -5,10 +5,26 @@ import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { Review } from '@/types/products/user/Review';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
-import { convertRawUserToProductDetail } from '@/utils/products/product-adapter';
+import {
+	convertRawUserToProductDetail,
+	mapBackendPaginationToFrontend,
+	mapBackendProductToUserCard, mapProductDetailBeToFe,
+} from '@/utils/products/product-adapter';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
-export const getProductDetailById = async (productId: number): Promise<ProductDetail> => {
+import { ResponseApi } from '@/types/common/ResponseApi';
+import {
+	BackendPagedResult,
+	BackendProductItem,
+	BackEndProductDetail,
+} from '@/types/products/user/productBE';
+import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
+import apiClient from '@/lib/api-client';
+import { PaginationParams } from '@/types/common/Pagination';
+
+// craw data
+
+export const getProductDetailByIdCraw = async (productId: string): Promise<ProductDetail> => {
 	const reviews: Review[] = [
 		{
 			id: 'cmt-001',
@@ -115,7 +131,7 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 	];
 
 	const shop: ProductShop = {
-		id: 88,
+		id: "88",
 		shopName: 'GreenSpace Official',
 		shopSlug: 'greenspace-official',
 	};
@@ -283,7 +299,7 @@ export const getProductDetailById = async (productId: number): Promise<ProductDe
 	return convertRawUserToProductDetail(rawData);
 };
 
-export const getRelatedProducts = async (categoryName: string): Promise<ProductUserCard[]> => {
+export const getRelatedProductsCraw = async (categoryName: string): Promise<ProductUserCard[]> => {
 	const relatedProducts: ProductUserCard[] = [
 		{
 			id: 2,
@@ -335,7 +351,7 @@ export const getRelatedProducts = async (categoryName: string): Promise<ProductU
 	return relatedProducts;
 };
 
-export const getProductsHome = async (): Promise<ProductUserCard[]> => {
+export const getProductsHomeCraw = async (): Promise<ProductUserCard[]> => {
 	const products: ProductUserCard[] = [
 		{
 			id: 7,
@@ -522,7 +538,7 @@ export const getProductsHome = async (): Promise<ProductUserCard[]> => {
 	return products;
 };
 
-export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
+export const getTopSellingProductsCraw = async (): Promise<ProductUserCard[]> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve([
@@ -602,211 +618,311 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 		}, 600);
 	});
 };
-
-export const getProductListPaging = async ({
-    page = 1,
-    limit = 10,
+// craw data
+export const getProductListPagingCraw = async ({
+	page = 1,
+	limit = 10,
 }: PaginationRequest = {}): Promise<PaginationResponse<ProductUserCard>> => {
 	return new Promise((resolve) => {
-        setTimeout(() => {
-            const products: ProductUserCard[] = [
-                {
-                    id: 7,
-                    name: 'Bể Terrarium Trụ Tròn Size M (Kèm Đèn)',
-                    image: 'https://cdn.hstatic.net/products/200000968796/cao_7_acd749099ceb4f6aa01a3fe1aca37890.png',
-                    price: 550000,
-                    isInWishlist: true,
-                    rating: 4.9,
-                    discount: 10,
-                },
-                {
-                    id: 8,
-                    name: 'Cây Cẩm Nhung Fittonia Đỏ Chậu Nhỏ',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-015__1__9a93238e4b604c918e65941527286733.png',
-                    price: 35000,
-                    isInWishlist: false,
-                    rating: 4.7,
-                    discount: 0,
-                },
-                {
-                    id: 9,
-                    name: 'Combo Rêu Nhung, Dương Xỉ, Đất Nền Tự Setup',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-015__2__297a7cdae0e7481c8a82971aad9a7750.png',
-                    price: 150000,
-                    isInWishlist: false,
-                    rating: 4.8,
-                    discount: 5,
-                },
-                {
-                    id: 10,
-                    name: 'Bình Xịt Phun Sương Mini Bằng Đồng Cao Cấp',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-015__6__7f6dcd819fcc4c99b2beed47477926e1.png',
-                    price: 85000,
-                    isInWishlist: false,
-                    rating: 4.6,
-                    discount: 0,
-                },
-                {
-                    id: 11,
-                    name: 'Đá Trầm Tích Vụn Rải Đường Mòn Terrarium (500g)',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-015__3__eb5511ad6edf4a279b55a95220ec179d.png',
-                    price: 25000,
-                    isInWishlist: true,
-                    rating: 4.5,
-                    discount: 0,
-                },
-                {
-                    id: 12,
-                    name: 'Paludarium - Bể Thủy Sinh Bán Cạn Độc Bản',
-                    image: 'https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?q=80&w=800',
-                    price: 1250000,
-                    isInWishlist: false,
-                    rating: 5.0,
-                    discount: 15,
-                },
-                {
-                    id: 13,
-                    name: 'Lọc Thác Bể Thủy Sinh Mini SoBo',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 110000,
-                    isInWishlist: true,
-                    rating: 4.4,
-                    discount: 0,
-                },
-                {
-                    id: 14,
-                    name: 'Đèn Chiếu Điểm Spotlight Hồ Thủy Sinh Rọi Cây',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___4__8de9057e82334ecb84a81d2f45452153.png',
-                    price: 220000,
-                    isInWishlist: false,
-                    rating: 4.8,
-                    discount: 10,
-                },
-                {
-                    id: 15,
-                    name: 'Bể Kính Đa Giác Geometric Khung Đồng Vàng',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 320000,
-                    isInWishlist: false,
-                    rating: 4.9,
-                    discount: 15,
-                },
-                {
-                    id: 16,
-                    name: 'Rêu Sừng Hươu Xanh Mướt (Hộp 15x15cm)',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 55000,
-                    isInWishlist: true,
-                    rating: 4.8,
-                    discount: 0,
-                },
-                {
-                    id: 17,
-                    name: 'Tiểu Cảnh Bonsai Mini Gỗ Lũa Tự Nhiên',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 850000,
-                    isInWishlist: false,
-                    rating: 5.0,
-                    discount: 20,
-                },
-                {
-                    id: 18,
-                    name: 'Combo Cây Cắt Cắm Thủy Sinh Dễ Trồng',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 120000,
-                    isInWishlist: false,
-                    rating: 4.6,
-                    discount: 0,
-                },
-                {
-                    id: 19,
-                    name: 'Bình Cầu Thủy Tinh Trồng Sen Đá Trong Suốt',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 185000,
-                    isInWishlist: true,
-                    rating: 4.7,
-                    discount: 10,
-                },
-                {
-                    id: 20,
-                    name: 'Bộ Kéo Cắt Nhíp Gắp Aquascape Chuyên Dụng',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 250000,
-                    isInWishlist: false,
-                    rating: 4.9,
-                    discount: 5,
-                },
-                {
-                    id: 21,
-                    name: 'Bóng Đèn LED Quang Phổ Trồng Cây Trong Nhà',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 190000,
-                    isInWishlist: true,
-                    rating: 4.8,
-                    discount: 0,
-                },
-                {
-                    id: 22,
-                    name: 'Đất Nền Trộn Sẵn Phù Hợp Mọi Loại Terrarium',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 65000,
-                    isInWishlist: false,
-                    rating: 4.5,
-                    discount: 0,
-                },
-                {
-                    id: 23,
-                    name: 'Cây Dương Xỉ Lá Me Rủ Xanh Tốt',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 45000,
-                    isInWishlist: false,
-                    rating: 4.7,
-                    discount: 10,
-                },
-                {
-                    id: 24,
-                    name: 'Bình Lọ Thủy Tinh Nắp Bần Làm Terrarium Kín',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 155000,
-                    isInWishlist: true,
-                    rating: 4.9,
-                    discount: 0,
-                },
-                {
-                    id: 25,
-                    name: 'Sỏi Cuội Trắng Tự Nhiên Trang Trí (Túi 1kg)',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 30000,
-                    isInWishlist: false,
-                    rating: 4.6,
-                    discount: 0,
-                },
-                {
-                    id: 26,
-                    name: 'Combo 3 Chậu Sen Đá Size Mini Dễ Thương',
-                    image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
-                    price: 99000,
-                    isInWishlist: false,
-                    rating: 4.8,
-                    discount: 12,
-                },
-            ];
+		setTimeout(() => {
+			const products: ProductUserCard[] = [
+				{
+					id: 7,
+					name: 'Bể Terrarium Trụ Tròn Size M (Kèm Đèn)',
+					image: 'https://cdn.hstatic.net/products/200000968796/cao_7_acd749099ceb4f6aa01a3fe1aca37890.png',
+					price: 550000,
+					isInWishlist: true,
+					rating: 4.9,
+					discount: 10,
+				},
+				{
+					id: 8,
+					name: 'Cây Cẩm Nhung Fittonia Đỏ Chậu Nhỏ',
+					image: 'https://product.hstatic.net/200000968796/product/tf-015__1__9a93238e4b604c918e65941527286733.png',
+					price: 35000,
+					isInWishlist: false,
+					rating: 4.7,
+					discount: 0,
+				},
+				{
+					id: 9,
+					name: 'Combo Rêu Nhung, Dương Xỉ, Đất Nền Tự Setup',
+					image: 'https://product.hstatic.net/200000968796/product/tf-015__2__297a7cdae0e7481c8a82971aad9a7750.png',
+					price: 150000,
+					isInWishlist: false,
+					rating: 4.8,
+					discount: 5,
+				},
+				{
+					id: 10,
+					name: 'Bình Xịt Phun Sương Mini Bằng Đồng Cao Cấp',
+					image: 'https://product.hstatic.net/200000968796/product/tf-015__6__7f6dcd819fcc4c99b2beed47477926e1.png',
+					price: 85000,
+					isInWishlist: false,
+					rating: 4.6,
+					discount: 0,
+				},
+				{
+					id: 11,
+					name: 'Đá Trầm Tích Vụn Rải Đường Mòn Terrarium (500g)',
+					image: 'https://product.hstatic.net/200000968796/product/tf-015__3__eb5511ad6edf4a279b55a95220ec179d.png',
+					price: 25000,
+					isInWishlist: true,
+					rating: 4.5,
+					discount: 0,
+				},
+				{
+					id: 12,
+					name: 'Paludarium - Bể Thủy Sinh Bán Cạn Độc Bản',
+					image: 'https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?q=80&w=800',
+					price: 1250000,
+					isInWishlist: false,
+					rating: 5.0,
+					discount: 15,
+				},
+				{
+					id: 13,
+					name: 'Lọc Thác Bể Thủy Sinh Mini SoBo',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 110000,
+					isInWishlist: true,
+					rating: 4.4,
+					discount: 0,
+				},
+				{
+					id: 14,
+					name: 'Đèn Chiếu Điểm Spotlight Hồ Thủy Sinh Rọi Cây',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___4__8de9057e82334ecb84a81d2f45452153.png',
+					price: 220000,
+					isInWishlist: false,
+					rating: 4.8,
+					discount: 10,
+				},
+				{
+					id: 15,
+					name: 'Bể Kính Đa Giác Geometric Khung Đồng Vàng',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 320000,
+					isInWishlist: false,
+					rating: 4.9,
+					discount: 15,
+				},
+				{
+					id: 16,
+					name: 'Rêu Sừng Hươu Xanh Mướt (Hộp 15x15cm)',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 55000,
+					isInWishlist: true,
+					rating: 4.8,
+					discount: 0,
+				},
+				{
+					id: 17,
+					name: 'Tiểu Cảnh Bonsai Mini Gỗ Lũa Tự Nhiên',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 850000,
+					isInWishlist: false,
+					rating: 5.0,
+					discount: 20,
+				},
+				{
+					id: 18,
+					name: 'Combo Cây Cắt Cắm Thủy Sinh Dễ Trồng',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 120000,
+					isInWishlist: false,
+					rating: 4.6,
+					discount: 0,
+				},
+				{
+					id: 19,
+					name: 'Bình Cầu Thủy Tinh Trồng Sen Đá Trong Suốt',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 185000,
+					isInWishlist: true,
+					rating: 4.7,
+					discount: 10,
+				},
+				{
+					id: 20,
+					name: 'Bộ Kéo Cắt Nhíp Gắp Aquascape Chuyên Dụng',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 250000,
+					isInWishlist: false,
+					rating: 4.9,
+					discount: 5,
+				},
+				{
+					id: 21,
+					name: 'Bóng Đèn LED Quang Phổ Trồng Cây Trong Nhà',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 190000,
+					isInWishlist: true,
+					rating: 4.8,
+					discount: 0,
+				},
+				{
+					id: 22,
+					name: 'Đất Nền Trộn Sẵn Phù Hợp Mọi Loại Terrarium',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 65000,
+					isInWishlist: false,
+					rating: 4.5,
+					discount: 0,
+				},
+				{
+					id: 23,
+					name: 'Cây Dương Xỉ Lá Me Rủ Xanh Tốt',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 45000,
+					isInWishlist: false,
+					rating: 4.7,
+					discount: 10,
+				},
+				{
+					id: 24,
+					name: 'Bình Lọ Thủy Tinh Nắp Bần Làm Terrarium Kín',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 155000,
+					isInWishlist: true,
+					rating: 4.9,
+					discount: 0,
+				},
+				{
+					id: 25,
+					name: 'Sỏi Cuội Trắng Tự Nhiên Trang Trí (Túi 1kg)',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 30000,
+					isInWishlist: false,
+					rating: 4.6,
+					discount: 0,
+				},
+				{
+					id: 26,
+					name: 'Combo 3 Chậu Sen Đá Size Mini Dễ Thương',
+					image: 'https://product.hstatic.net/200000968796/product/tf-039__1800_x_1800_px___2__3d78652d979b451298fc085ccb4e12d3.png',
+					price: 99000,
+					isInWishlist: false,
+					rating: 4.8,
+					discount: 12,
+				},
+			];
 
-            // Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang thực tế)
-            const startIndex = (page - 1) * limit;
-            const endIndex = startIndex + limit;
-            const paginatedProducts = products.slice(startIndex, endIndex);
+			// Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang thực tế)
+			const startIndex = (page - 1) * limit;
+			const endIndex = startIndex + limit;
+			const paginatedProducts = products.slice(startIndex, endIndex);
 
-            // Bọc lại trong cấu trúc PaginationResponse
-            resolve({
-                data: paginatedProducts,
-                meta: {
-                    totalItems: products.length, // 20 sản phẩm
-                    totalPages: Math.ceil(products.length / limit), // Ví dụ limit=10 thì ra 2 trang
-                    currentPage: page,
-                    itemsPerPage: limit
-                }
-            });
-        }, 500); // Thêm setTimeout 500ms giả lập độ trễ mạng
-    });
+			// Bọc lại trong cấu trúc PaginationResponse
+			resolve({
+				data: paginatedProducts,
+				meta: {
+					totalItems: products.length, // 20 sản phẩm
+					totalPages: Math.ceil(products.length / limit), // Ví dụ limit=10 thì ra 2 trang
+					currentPage: page,
+					itemsPerPage: limit,
+				},
+			});
+		}, 500); // Thêm setTimeout 500ms giả lập độ trễ mạng
+	});
+};
+
+// get data
+
+/**
+ * Hàm lấy danh sách sản phẩm phân trang dành cho Server Component
+ * @param params
+ */
+export const getPageProducts = async (
+	params: PaginationParams
+): Promise<PaginationResponse<ProductUserCard>> => {
+	try {
+		// 1. Dùng apiServer gọi thẳng đến backend .NET
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
+			`/products`,
+			{
+				params: params,
+			},
+		);
+
+		// 2. Kiểm tra dữ liệu an toàn
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+			return await getProductListPagingCraw();
+		}
+
+		// 3. Đưa qua hàm map để bóc tách vỏ .NET và gọt giũa lại thành ProductUserCard
+		// (Sử dụng hàm mapBackendToFrontendPagination bạn đã tạo ở lượt trước)
+		return mapBackendToFrontendPagination(response.data.data);
+	} catch (error: unknown) {
+		console.error('[SERVICE-ERROR] Lỗi gọi danh sách sản phẩm:', error);
+		return await getProductListPagingCraw();
+	}
+};
+
+export const getProductDetailById = async (productId: string): Promise<ProductDetail> => {
+	try {
+		const response = await apiClient.get<ResponseApi<BackEndProductDetail>>(
+			`/products/${productId}`,
+		);
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			return getProductDetailByIdCraw(productId);
+		}
+		return mapProductDetailBeToFe(response.data.data);
+	} catch (error: unknown) {
+		return getProductDetailByIdCraw(productId);
+	}
+};
+
+export const getRelatedProducts = async (
+	productId: string,
+	paginationRequest?: PaginationRequest,
+): Promise<ProductUserCard[]> => {
+	try {
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
+			`/products/${productId}/related`,
+			{
+				params: paginationRequest,
+			},
+		);
+		if (
+			response === null ||
+			!response.data ||
+			!response.data.isSuccess ||
+			!response.data.data
+		) {
+			return [];
+		}
+		return mapBackendPaginationToFrontend(response.data.data).data;
+	} catch (error: unknown) {
+		console.log('error getRelated product');
+		return getRelatedProductsCraw(productId);
+	}
+};
+
+export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
+	try {
+		// 1. Dùng apiServer gọi thẳng đến backend .NET
+		const response = await apiClient.get<ResponseApi<BackendPagedResult<BackendProductItem>>>(
+			`/products`,
+			{
+				params : {
+					pageSize : 8,
+					pageNumber: 1
+				}
+			}
+		);
+		// 2. Kiểm tra dữ liệu an toàn
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+			return getTopSellingProductsCraw();
+		}
+		const res : PaginationResponse<ProductUserCard> = mapBackendPaginationToFrontend(response.data.data);
+		// 3. Đưa qua hàm map để bóc tách vỏ .NET và gọt giũa lại thành ProductUserCard
+		// (Sử dụng hàm mapBackendToFrontendPagination bạn đã tạo ở lượt trước)
+		return res.data;
+	} catch (error: unknown) {
+		console.log('error getTopSellingProducts');
+		return getTopSellingProductsCraw();
+	}
 };

@@ -4,7 +4,7 @@ import { ProductVariantUser } from './ProductVariantUser';
 import { ProductShop } from './ProductShop';
 
 export interface ProductDetail {
-	id: number;
+	id: string;
 	name: string;
 	brand: string;
 	description: string;
@@ -27,3 +27,4 @@ export interface ProductDetail {
 
 	reviews: Review[];
 }
+

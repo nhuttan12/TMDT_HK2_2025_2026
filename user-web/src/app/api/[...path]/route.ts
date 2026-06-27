@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import apiServer from '@/lib/api-server';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../../types/common/ResponseApi';
 
 // Định nghĩa kiểu dữ liệu cho Params theo chuẩn Next.js mới
 interface ProxyRouteProps {
