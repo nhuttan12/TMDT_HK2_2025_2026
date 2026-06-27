@@ -11,17 +11,9 @@ namespace api.Services.Inventory
     {
         public async Task<Result<Guid>> CreateGoodsReceiptAsync(Guid shopId, CreateGoodsReceiptRequest request, CancellationToken cancellationToken)
         {
-            var rowsAffected = await goodsReceiptRepository.CreateGoodsReceiptAsync(shopId, request, cancellationToken);
+            var result = await goodsReceiptRepository.CreateGoodsReceiptAsync(shopId, request, cancellationToken);
 
-            if (rowsAffected <= 0)
-            {
-                return Result<Guid>.Failure(new Error(
-                    "Database.Error",
-                    "Không thể tạo phiếu nhập kho, vui lòng thử lại.",
-                    ErrorType.Failure));
-            }
-
-            return Result<Guid>.Success(request.Id);
+            return Result<Guid>.Success(result);
         }
 
         public async Task<Result<GoodsReceiptDetailResponse>> GetReceiptDetailAsync(

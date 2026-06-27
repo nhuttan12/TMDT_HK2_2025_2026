@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Database;
 
@@ -11,9 +12,11 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260626093928_UpdateInvoiceItemsField")]
+    partial class UpdateInvoiceItemsField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -701,8 +704,7 @@ namespace api.Migrations
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("invoice_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("PriceAtPurchase")
                         .HasColumnType("decimal(18,2)")

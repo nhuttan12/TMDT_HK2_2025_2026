@@ -39,11 +39,13 @@ namespace api.Database.Configurations
             // 3. Cấu hình các thuộc tính cơ bản
             // Kiểu tiền tệ bắt buộc phải khai báo precision (độ chính xác), không để EF tự suy luận gây mất mát dữ liệu
             builder.Property(i => i.TotalAmount)
+                .HasColumnName("total_amount")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
             // Status đã là 'byte' trong C#, EF Core sẽ tự map thành 'tinyint' trong SQL Server.
             builder.Property(i => i.Status)
+                .HasColumnName("status")
                 .IsRequired();
 
             builder.Property(i => i.CouponId)

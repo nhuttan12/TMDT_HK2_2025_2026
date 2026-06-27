@@ -19,18 +19,21 @@ BEGIN
 		AND (@ProductName = '' OR p.[name] LIKE '%' + @ProductName + '%');
 
 	SELECT 
-		ibs.id AS Id, 
-		ibs.product_id AS ProductId, 
-		ibs.variant_id AS VariantId, 
+		v.id AS Id, 
+		v.product_id AS ProductId, 
+		v.id AS VariantId, 
 		v.image_url AS ImageUrl, 
 		v.[name] AS [Name], 
 		v.sku AS Sku, 
+
 		CASE 
-			WHEN ibs.remaining_quantity < 10 THEN 'immediate'
-			WHEN ibs.remaining_quantity < 50 THEN 'early'
+			WHEN ISNULL(SUM(ibs.remaining_quantity), 0) < 10 THEN 'immediate'
+			WHEN ISNULL(SUM(ibs.remaining_quantity), 0) < 50 THEN 'early'
 			ELSE 'normal'
 		END AS ReplenishmentLevel,
-		SUM(ibs.remaining_quantity) AS Stock,
+
+		ISNULL(SUM(ibs.remaining_quantity), 0) AS Stock,
+
 		0 AS Sales7d, 
 		0 AS Sales30d, 
 		@TotalItems AS TotalItems
@@ -44,8 +47,8 @@ BEGIN
 		AND (@ProductName = '' OR p.[name] LIKE '%' + @ProductName + '%')
 		
 	GROUP BY 
-		v.product_id,
 		v.id,
+		v.product_id,
 		v.image_url,
 		v.[name],
 		v.sku,

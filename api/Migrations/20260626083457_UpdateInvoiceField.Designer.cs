@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Database;
 
@@ -11,9 +12,11 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260626083457_UpdateInvoiceField")]
+    partial class UpdateInvoiceField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -697,28 +700,22 @@ namespace api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("invoice_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("PriceAtPurchase")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("price_at_purchase");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("product_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("VariantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("variant_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
