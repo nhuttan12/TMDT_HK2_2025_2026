@@ -5,6 +5,7 @@ using api.Models;
 using api.Models.Jwts;
 using api.Repository;
 using api.Repository.BannerRepo;
+using api.Repository.CartRepo;
 using api.Repository.Categories;
 using api.Repository.Coupons;
 using api.Repository.Inventory;
@@ -14,6 +15,7 @@ using api.Repository.RoleRepo;
 using api.Repository.UserRepo;
 using api.Services.Auths;
 using api.Services.Banners;
+using api.Services.Carts;
 using api.Services.Categorys;
 using api.Services.Coupons;
 using api.Services.Inventory;
@@ -82,6 +84,7 @@ namespace api.Extensions
             services.AddScoped<IUserCouponRepository, UserCouponRepository>();
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped<IAdminPromotionRepository, AdminPromotionRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
 
             return services;
@@ -102,6 +105,7 @@ namespace api.Extensions
             services.AddScoped<IUserCouponService, UserCouponService>();
             services.AddScoped<IUserPromotionService, UserPromotionService>();
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<IGoodsReceiptService, GoodsReceiptService>();
 
             // Đăng ký Data Seeders

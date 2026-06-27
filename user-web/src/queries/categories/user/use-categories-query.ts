@@ -2,7 +2,7 @@
 
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { CategoryItem } from '@/types/categories/user/CategoryItem';
-import { getCategories } from '@/services/categories/user/category-service';
+import { getCategories, getCategoriesCraw } from '@/services/categories/user/category-service';
 
 export function useCategoriesQuery(
 	initialData?: CategoryItem[],

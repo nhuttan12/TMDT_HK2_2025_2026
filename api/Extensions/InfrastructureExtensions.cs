@@ -29,6 +29,7 @@ namespace api.Extensions
             {
                 cfg.AddMaps(typeof(Program).Assembly);
             });
+            services.AddTransient(typeof(PagedResultConverter<,>));
             // Đăng ký CORS nếu cần thiết (ví dụ: cho phép frontend truy cập API) 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
             services.AddCors(options =>

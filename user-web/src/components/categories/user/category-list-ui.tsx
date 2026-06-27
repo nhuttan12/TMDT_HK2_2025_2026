@@ -16,7 +16,7 @@ export default function CategoryListUi({ categories }: CategoryListUiProps): JSX
 				<h2 className='text-lg font-bold text-slate-800'>Danh mục sản phẩm</h2>
 			</div>
 
-			<div className='flex gap-4 pb-4 overflow-x-auto lg:grid lg:grid-cols-10 lg:gap-6 lg:overflow-visible lg:pb-0'>
+			<div className='flex gap-4 pb-4 overflow-x-auto lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:pb-0'>
 				{categories.map((category) => (
 					<Link
 						key={category.id}
@@ -24,8 +24,23 @@ export default function CategoryListUi({ categories }: CategoryListUiProps): JSX
 						className='flex flex-col items-center flex-shrink-0 w-20 gap-3 cursor-pointer group lg:w-auto'
 					>
 						{/* Khối Button / Icon ở trên */}
-						<div className='flex items-center justify-center w-14 h-14 transition-colors duration-300 rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white group-hover:shadow-md'>
-							{renderIcon(category.iconName)}
+						{/*<div className='flex items-center justify-center w-14 h-14 transition-colors duration-300 rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white group-hover:shadow-md'>*/}
+						{/*	{renderIcon(category.iconName)}*/}
+						{/*</div>*/}
+						<div className='relative shrink-0 w-42 h-24 overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 group-hover:shadow-md'>
+							{/* Fail Fast: Bảo vệ UI khỏi dữ liệu rỗng từ Backend */}
+							{category.iconName ? (
+								<img
+									src={category.iconName}
+									alt={category.name || 'Category Thumbnail'}
+									loading="lazy"
+									className='w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110'
+								/>
+							) : (
+								<div className='w-full h-full flex items-center justify-center bg-emerald-50 text-emerald-600 text-xs font-medium'>
+								N/A
+								</div>
+								)}
 						</div>
 
 						{/* Khối Text ở dưới */}

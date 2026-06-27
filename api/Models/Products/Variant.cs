@@ -1,4 +1,5 @@
 ﻿using api.Dtos.Products.Request;
+using api.model.Products;
 using api.Models.Inventory;
 using api.Utilities;
 using System;
@@ -16,6 +17,7 @@ public class Variant
 {
     public Guid Id { get; private set; }
     public Guid ProductId { get; private set; }
+    public Product Product { get; private set; } = default!;
     public string Sku { get; private set; } = string.Empty;
     public string Name { get; private set; } = string.Empty;
     public decimal CostPrice { get; private set; }

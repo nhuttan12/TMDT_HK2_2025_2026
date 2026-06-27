@@ -1,6 +1,7 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
+using api.Excepptions;
 using api.Models.Category;
 using api.Repository;
 using api.Repository.Categories;
@@ -96,14 +97,9 @@ namespace api.Services.Categorys
 
         public async Task<Result<PagedResult<CategoryResponseDto>>> GetAllAsync(PaginationRequestDto pagination, CancellationToken cancellationToken)
         {
-            var (items, totalCount) = await _categoryRepo.GetPagedAsync(pagination.PageNumber, pagination.PageSize, cancellationToken);
-
-            // Mapping sang DTO để giấu Entity khỏi Presentation Layer
-            var dtos = _mapper.Map<IReadOnlyCollection<CategoryResponseDto>>(items);
-
-            var pagedResult = new PagedResult<CategoryResponseDto>(dtos, totalCount, pagination.PageNumber, pagination.PageSize);
-
-            return Result<PagedResult<CategoryResponseDto>>.Success(pagedResult);
+            var pageResult = await _categoryRepo.GetPagedAsync(pagination.PageNumber, pagination.PageSize, cancellationToken);
+            var pageResutDto = _mapper.Map<PagedResult<CategoryResponseDto>>(pageResult);
+            return Result<PagedResult<CategoryResponseDto>>.Success(pageResutDto);
         }
 
         public async Task<Result<CategoryResponseDto>> GetByName(string name, CancellationToken cancellationToken)

@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260618072550_UpdateGoodsReceiptTableFields")]
-    partial class UpdateGoodsReceiptTableFields
+    [Migration("20260618100600_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

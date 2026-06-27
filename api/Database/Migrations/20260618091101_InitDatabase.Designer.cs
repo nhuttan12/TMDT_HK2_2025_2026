@@ -9,11 +9,11 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260618070720_UpdateSupplierToShopTable")]
-    partial class UpdateSupplierToShopTable
+    [Migration("20260618091101_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -415,7 +415,8 @@ namespace api.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier")
@@ -423,7 +424,8 @@ namespace api.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 

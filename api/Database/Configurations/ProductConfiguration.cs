@@ -88,11 +88,11 @@ namespace api.Database.Configurations
                 .HasPrecision(3, 2) // Tổng 3 chữ số, 2 chữ số thập phân (Ví dụ: 4.95)
                 .HasDefaultValue(0m); // Điểm mặc định khi mới tạo sản phẩm
 
-            // 1-N với Variant
-            builder.HasMany(p => p.Variants)
-                .WithOne() // Variant không có navigation property ngược lại Product
-                .HasForeignKey(v => v.ProductId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa Product -> Xóa luôn Variants (Database level)
+            //// 1-N với Variant
+            //builder.HasMany(p => p.Variants)
+            //    .WithOne() // Variant không có navigation property ngược lại Product
+            //    .HasForeignKey(v => v.ProductId)
+            //    .OnDelete(DeleteBehavior.Cascade); // Xóa Product -> Xóa luôn Variants (Database level)
 
             // 1-1 với ProductDetail
             builder.HasOne(p => p.Detail)

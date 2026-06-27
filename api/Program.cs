@@ -54,6 +54,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 // CORS middleware
 app.UseCors("AllowSpecificOrigin");
+
 // Authentication & Authorization middleware 
 // tự động kiểm tra token trong header của các request đến và xác thực người dùng dựa trên token đó
 app.UseAuthentication();

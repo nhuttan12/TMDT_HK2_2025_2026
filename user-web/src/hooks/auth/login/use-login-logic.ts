@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState, Dispatch, SetStateAction, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
-import { ResponseApi } from '@/types/commom/ResponseApi';
+import { ResponseApi } from '../../../types/common/ResponseApi';
 
 export interface LoginReturn {
 	loginWithGoogle: () => Promise<void>;
@@ -40,7 +40,6 @@ export function useLoginLogic(): LoginReturn {
 
 		// 3. Khi thành công
 		onSuccess: (data: ResponseApi<LoginResponse>) => {
-			console.log(data);
 			// Cập nhật Zustand Store
 			const user = {
 				username: formData.email,

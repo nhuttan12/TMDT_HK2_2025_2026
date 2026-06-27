@@ -62,22 +62,12 @@ export function ProductDetailUi({
 						<ProductDetailCarousel products={relatedProducts || []} />
 					</div>
 
-					<div>
-						<h1 className='font-bold text-2xl! pb-4'>
-							<strong>Mô tả sản phẩm</strong>
-						</h1>
-						<ReadMoreHtml
-							html={product.description || ''}
-							maxLines={10}
-						/>
-					</div>
-
-					<div>
-						<h1 className='font-bold text-2xl! pb-4'>
-							<strong>Đánh giá sản phẩm</strong>
-						</h1>
-						<Rating rating={product.rating || 0} />
-					</div>
+					{/*<div>*/}
+					{/*	<h1 className='font-bold text-2xl! pb-4'>*/}
+					{/*		<strong>Đánh giá sản phẩm</strong>*/}
+					{/*	</h1>*/}
+					{/*	<Rating rating={product.rating || 0} />*/}
+					{/*</div>*/}
 
 					<div>
 						{/* Đã bọc an toàn safeReviews */}
@@ -245,6 +235,15 @@ export function ProductDetailUi({
 						</div>
 					</div>
 				</div>
+			</div>
+			<div>
+				<h1 className='font-bold text-2xl! pb-4'>
+					<strong>Mô tả sản phẩm</strong>
+				</h1>
+				<ReadMoreHtml
+					html={product.description || ''}
+					maxLines={10}
+				/>
 			</div>
 		</div>
 	);
