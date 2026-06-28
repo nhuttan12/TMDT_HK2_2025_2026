@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,25 +42,6 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SUPPLIERS",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    name = table.Column<string>(type: "varchar(100)", nullable: false),
-                    tax_code = table.Column<string>(type: "varchar(13)", nullable: false),
-                    phone_number = table.Column<string>(type: "varchar(10)", nullable: false),
-                    email = table.Column<string>(type: "varchar(100)", nullable: false),
-                    contact_name = table.Column<string>(type: "varchar(100)", nullable: false),
-                    address = table.Column<string>(type: "varchar(100)", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SUPPLIERS", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "USERS",
                 columns: table => new
                 {
@@ -81,29 +62,6 @@ namespace api.Migrations
                         name: "FK_USERS_ROLES_role_id",
                         column: x => x.role_id,
                         principalTable: "ROLES",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GOODS_RECEIPTS",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    supplier_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    note = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GOODS_RECEIPTS", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_GOODS_RECEIPTS_SUPPLIERS_supplier_id",
-                        column: x => x.supplier_id,
-                        principalTable: "SUPPLIERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -323,29 +281,6 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GOODS_RECEIPT_BATCHES",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    goods_receipt_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    batch_code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    total_cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GOODS_RECEIPT_BATCHES", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_GOODS_RECEIPT_BATCHES_GOODS_RECEIPTS_goods_receipt_id",
-                        column: x => x.goods_receipt_id,
-                        principalTable: "GOODS_RECEIPTS",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "USER_SAVED_COUPONS",
                 columns: table => new
                 {
@@ -442,31 +377,29 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SHOP_SUPPLIERS",
+                name: "SUPPLIERS",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    status = table.Column<bool>(type: "bit", nullable: false),
-                    supplier_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    tax_code = table.Column<string>(type: "varchar(13)", nullable: false),
+                    phone_number = table.Column<string>(type: "varchar(10)", nullable: false),
+                    email = table.Column<string>(type: "varchar(100)", nullable: false),
+                    contact_name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    address = table.Column<string>(type: "varchar(100)", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SHOP_SUPPLIERS", x => x.id);
+                    table.PrimaryKey("PK_SUPPLIERS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_SHOP_SUPPLIERS_SHOPS_shop_id",
+                        name: "FK_SUPPLIERS_SHOPS_shop_id",
                         column: x => x.shop_id,
                         principalTable: "SHOPS",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SHOP_SUPPLIERS_SUPPLIERS_supplier_id",
-                        column: x => x.supplier_id,
-                        principalTable: "SUPPLIERS",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -591,6 +524,29 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GOODS_RECEIPTS",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    supplier_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    code = table.Column<string>(type: "varchar(50)", nullable: false),
+                    note = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    type = table.Column<string>(type: "varchar(50)", nullable: false),
+                    status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GOODS_RECEIPTS", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_GOODS_RECEIPTS_SUPPLIERS_supplier_id",
+                        column: x => x.supplier_id,
+                        principalTable: "SUPPLIERS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GOODS_ISSUE_DETAILS",
                 columns: table => new
                 {
@@ -614,6 +570,29 @@ namespace api.Migrations
                         name: "FK_GOODS_ISSUE_DETAILS_VARIANTS_variant_id",
                         column: x => x.variant_id,
                         principalTable: "VARIANTS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GOODS_RECEIPT_BATCHES",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    goods_receipt_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    batch_code = table.Column<string>(type: "varchar(50)", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    total_cost_price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GOODS_RECEIPT_BATCHES", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_GOODS_RECEIPT_BATCHES_GOODS_RECEIPTS_goods_receipt_id",
+                        column: x => x.goods_receipt_id,
+                        principalTable: "GOODS_RECEIPTS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -825,14 +804,9 @@ namespace api.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SHOP_SUPPLIERS_shop_id",
-                table: "SHOP_SUPPLIERS",
+                name: "IX_SUPPLIERS_shop_id",
+                table: "SUPPLIERS",
                 column: "shop_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SHOP_SUPPLIERS_supplier_id",
-                table: "SHOP_SUPPLIERS",
-                column: "supplier_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_BANKINGS_user_id",
@@ -901,9 +875,6 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "PRODUCT_PROMOTIONS");
-
-            migrationBuilder.DropTable(
-                name: "SHOP_SUPPLIERS");
 
             migrationBuilder.DropTable(
                 name: "USER_BANKINGS");

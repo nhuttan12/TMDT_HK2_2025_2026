@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260618070720_UpdateSupplierToShopTable")]
-    partial class UpdateSupplierToShopTable
+    [Migration("20260618100600_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -415,7 +415,8 @@ namespace api.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier")
@@ -423,7 +424,8 @@ namespace api.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
