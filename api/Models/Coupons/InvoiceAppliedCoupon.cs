@@ -9,8 +9,8 @@ namespace api.Models.Coupons
         public Guid InvoiceId { get; set; }
         public Invoice Invoice { get; set; }
 
-        public Guid CouponId { get; set; }
-        public Coupon Coupon { get; set; }
+        public Guid CouponId { get; set; } = Guid.Empty;
+        public Coupon Coupon { get; set; } 
 
         public decimal DiscountAmount { get; set; }
         public DateTimeOffset AppliedAt { get; set; }

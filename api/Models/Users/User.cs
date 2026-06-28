@@ -126,7 +126,7 @@ namespace api.Models
                 {
                     if (!string.IsNullOrWhiteSpace(newAddress) && !existingAddressStrings.Contains(newAddress))
                     {
-                        Addresses.Add(Address.Create(userId, newAddress));
+                        Addresses.Add(Address.Create(userId,Guid.NewGuid(), newAddress));
                     }
                 }
             }

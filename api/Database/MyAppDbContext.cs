@@ -42,6 +42,8 @@ namespace api.Database
         public DbSet<CartItem> CartItems { get; set; }
 
         public DbSet<InventoryBatchStock> InventoryBatchStock { get; set; }
+        public DbSet<Invoice> invoices { get; set; }
+        public DbSet<InvoiceItem> invoiceItems { get; set; }
 
 
 
