@@ -6,6 +6,7 @@ export interface BackEndCart {
 export interface BackEndCartItem {
 	productId: string;
 	variantId: string;
+	sku : string;
 	imageUrl: string;
 	unitPrice: number;
 	quantity: number;

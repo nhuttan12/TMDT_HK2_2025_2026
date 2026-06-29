@@ -11,7 +11,7 @@ export function mapCartBe2Fe(data: BackEndCartItem[]): CartItem[] {
 
 		// Ép kiểu any phòng trường hợp interface BackEndCartItem chưa kịp bổ sung productName
 		name: (item as any).productName || 'Sản phẩm chưa có tên',
-
+		Sku : item.sku,
 		imageUrl: item.imageUrl,
 
 		// Map đúng từ trường unitPrice của Backend sang price của Frontend

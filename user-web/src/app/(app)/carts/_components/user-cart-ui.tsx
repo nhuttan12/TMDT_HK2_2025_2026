@@ -88,7 +88,14 @@ export function UserCartUi({
 									height={60}
 									className='rounded-md'
 								/>
-								<span className='font-medium'>{item.name}</span>
+								<div className='flex flex-col'>
+									<span className='font-medium text-sm sm:text-base'>
+										{item.name}
+									</span>
+									<span className='text-xs text-muted-foreground mt-1'>
+										SKU: {item.Sku}
+									</span>
+								</div>
 							</TableCell>
 
 							<TableCell>{item.price.toLocaleString('vi-VN')} ₫</TableCell>

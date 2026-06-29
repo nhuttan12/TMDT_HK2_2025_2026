@@ -5,7 +5,6 @@ import {
 } from '@/hooks/products/user/use-product-detail-logic';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { JSX } from 'react';
 import { ProductDetailUi } from './product-detail-ui';
 
 interface Props {

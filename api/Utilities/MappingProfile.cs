@@ -127,6 +127,7 @@ namespace api.Utilities
         {
             CreateMap<CartItem, CartItemResponseDto>()
                  .ForMember(d => d.ProductId, o => o.MapFrom(src => src.Variant.Product.Id))
+                 .ForMember(d => d.Sku, o => o.MapFrom(src => src.Variant.Sku))
                  .ForMember(d => d.ProductName, o => o.MapFrom(src => src.Variant.Product.Name))
                  .ForMember(d => d.ImageUrl, o => o.MapFrom(src => src.Variant.ImageUrl))
                  .ForMember(d => d.UnitPrice, o => o.MapFrom(src => src.Variant.CostPrice));

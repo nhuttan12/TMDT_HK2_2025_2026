@@ -5,6 +5,9 @@ import { useCheckoutStore } from '@/stores/checkout.store';
 import { CartItem } from '@/types/carts/CartItem';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { CartService } from '@/services/carts/cart-service';
+import apiClient from '@/lib/api-client';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface CartLogicReturn {
 	selectedIds: string[];
@@ -20,7 +23,7 @@ export interface CartLogicReturn {
 export function useCartLogic(cartItems: CartItem[]): CartLogicReturn {
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const router = useRouter();
-
+	const queryClient = useQueryClient();
 	const setCheckoutItems = useCheckoutStore((s) => s.setItems); // Thay any bằng kiểu thực tế của store
 	const updateQuantity = useCartStore((s) => s.updateQuantity);
 	const removeItem = useCartStore((s) => s.removeItem);
@@ -45,15 +48,32 @@ export function useCartLogic(cartItems: CartItem[]): CartLogicReturn {
 			.reduce((sum: number, item: CartItem) => sum + item.price * item.quantity, 0);
 	}, [cartItems, selectedIds]);
 
-	const handleUpdateQuantity = (id: string, newQuantity: number): void => {
+	const handleUpdateQuantity =async (id: string, newQuantity: number): Promise<void> => {
 		if (newQuantity < 1) return;
-		// TODO: Nếu xài Tanstack Query làm source of truth, chỗ này nên mutate API rồi invalidate query.
-		// Tạm thời giữ nguyên việc gọi action từ store theo flow hiện tại của bạn.
-		updateQuantity(id, newQuantity);
+		try{
+			const cartService = new CartService(apiClient);
+			await cartService.addToCart(id, newQuantity);
+			updateQuantity(id, newQuantity);
+			await queryClient.invalidateQueries({
+				queryKey: ['cart-items'],
+			});
+		}catch(e){
+			throw e;
+		}
 	};
 
-	const handleRemoveItem = (id: string): void => {
-		removeItem(id);
+	const handleRemoveItem =async (id: string): Promise<void> => {
+		try{
+			const cartService = new CartService(apiClient);
+			await cartService.removeCartItem(id);
+
+			removeItem(id);
+			await queryClient.invalidateQueries({
+				queryKey: ['cart-items'], // Phải trùng khớp với key trong useCartQuery của bạn
+			});
+		}catch {
+			alert("xoa tb")
+		}
 	};
 
 	const handleCheckout = (): void => {

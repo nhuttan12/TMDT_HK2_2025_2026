@@ -7,6 +7,10 @@ import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { CartService } from '@/services/carts/cart-service';
+import apiClient from '@/lib/api-client';
+import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface ProductDetailLogicReturn {
 	quantity: number;
@@ -19,17 +23,18 @@ export interface ProductDetailLogicReturn {
 	handleDecreaseQuantity: () => void;
 	handleAddToCart: () => void;
 	handleBuyNow: () => void;
+	statusModal: UseStatusModalReturn;
 }
 
 export function useProductDetailLogic(product: ProductDetail): ProductDetailLogicReturn {
 	// 1. Kiểm tra xem sản phẩm có duy nhất 1 variant hay không
 	const defaultVariant = product.variants?.length === 1 ? product.variants[0] : null;
-
+	const statusModal: UseStatusModalReturn = useStatusModal();
 	// 2. Gán giá trị mặc định cho state dựa trên defaultVariant
 	const [selectedVariant, setSelectedVariant] = useState<ProductVariantUser | null>(
 		defaultVariant,
 	);
-
+	const queryClient = useQueryClient();
 	// Nếu variant duy nhất đã hết hàng thì số lượng mặc định là 0, ngược lại là 1
 	const [quantity, setQuantity] = useState<number>(
 		defaultVariant && defaultVariant.stock === 0 ? 0 : 1,
@@ -86,13 +91,15 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		return {
 			productId: selectedVariant.id,
 			name: `${product.name} - ${selectedVariant.sku}`,
+			Sku : selectedVariant.sku,
 			price: selectedVariant.price,
 			imageUrl: displayImage,
 			quantity: quantity,
 		};
 	};
 
-	const handleAddToCart = (): void => {
+	const handleAddToCart = async  (): Promise<void> => {
+
 		const item: CartItem | null = createCartItem();
 		if (!item) {
 			alert('Vui lòng chọn phân loại hàng');
@@ -102,10 +109,21 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 			alert('Sản phẩm đã hết hàng');
 			return;
 		}
+		try{
+			const cartService = new CartService(apiClient);
+			await cartService.addToCart(item.productId, item.quantity);
+			await queryClient.invalidateQueries({
+				queryKey: ['cart-items'], // Phải trùng khớp với key trong useCartQuery của bạn
+			});
+		}catch {
+			alert('Sản phẩm đã hết hàng');
+			return;
+		}
 		addItem(item);
+		statusModal.showInfo('thêm thành công');
 	};
 
-	const handleBuyNow = (): void => {
+	const handleBuyNow  = async  (): Promise<void> =>{
 		const item: CartItem | null = createCartItem();
 		if (!item) {
 			alert('Vui lòng chọn phân loại hàng');
@@ -130,5 +148,6 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 		handleDecreaseQuantity,
 		handleAddToCart,
 		handleBuyNow,
+		statusModal,
 	};
 }

@@ -12,6 +12,8 @@ import { Minus, Plus, ShieldCheck, Truck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { JSX } from 'react';
+import { UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { StatusModal } from '@/components/layout/share/status-modal';
 
 // Cập nhật lại định nghĩa Props để truyền nhận biến thể trực tiếp
 interface ProductDetailUiProps {
@@ -27,6 +29,7 @@ interface ProductDetailUiProps {
 	handleDecreaseQuantity: () => void;
 	handleAddToCart: () => void;
 	handleBuyNow: () => void;
+	statusModal: UseStatusModalReturn;
 }
 
 export function ProductDetailUi({
@@ -42,6 +45,7 @@ export function ProductDetailUi({
 	handleDecreaseQuantity,
 	handleAddToCart,
 	handleBuyNow,
+	statusModal,
 }: ProductDetailUiProps): JSX.Element {
 	const isFullySelected = !!selectedVariant;
 	const isActionDisabled = !isFullySelected || !selectedVariant?.isActive || currentStock === 0;
@@ -179,7 +183,12 @@ export function ProductDetailUi({
 						>
 							THÊM VÀO GIỎ
 						</Button>
-
+						<StatusModal
+							isOpen={statusModal.isOpen}
+							status={statusModal.status}
+							title={statusModal.message}
+							onClose={statusModal.closeModal}
+						/>
 						<Button
 							onClick={() => handleBuyNow()}
 							disabled={isActionDisabled}
