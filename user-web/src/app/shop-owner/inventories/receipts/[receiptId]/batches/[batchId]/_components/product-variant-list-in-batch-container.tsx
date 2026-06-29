@@ -8,10 +8,11 @@ import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { ProductBatchReceiptFormType } from '@/types/inventories/receipts/uis/ProductBatchReceiptFormType';
 import { JSX } from 'react';
 import ProductVariantListInBatchUi from './product-variant-list-in-batch-ui';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 
 interface Props {
 	batchId: string;
-	productVariants: BatchItem[];
+	productVariants: BackendPagedResult<BatchItem>;
 	mode: ProductBatchReceiptFormType;
 }
 
@@ -26,7 +27,7 @@ export default function ProductVariantListInBatchContainer({
 	// 2. Gọi Logic Hook duy nhất
 	const productVariantListLogic = useProductVariantListLogic({
 		batchId,
-		initialProductVariants: productVariants,
+		initialProductVariants: productVariants.items,
 		totalPagesFromApi: availableVariants?.meta.totalPages,
 	});
 

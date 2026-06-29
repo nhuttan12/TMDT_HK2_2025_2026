@@ -14,17 +14,18 @@ import { useProductsForGoodsReceiptQuery } from '@/queries/inventories/goods-rec
 import { useProductVariantsQuery } from '@/queries/inventories/goods-receipts/products/use-product-variants-query';
 import GoodsReceiptAdminUi from './goods-receipt-admin-ui';
 import GlobalLoading from '@/app/loading';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 
 interface GoodsReceiptAdminContainerProps {
-	initialReceipts: GoodsReceiptList[];
+	initialReceipts: BackendPagedResult<GoodsReceiptList>;
 }
 
 export default function GoodsReceiptAdminContainer({
 	initialReceipts,
 }: GoodsReceiptAdminContainerProps): JSX.Element {
 	// 1. Data Fetching (Lấy dữ liệu thô)
-	const { data: receipts = [] } = useGoodsReceiptsQuery({ initialData: initialReceipts });
-	const { data: products = [] } = useProductsForGoodsReceiptQuery();
+	const { data: receipts} = useGoodsReceiptsQuery({ initialData: initialReceipts });
+	const { data: products} = useProductsForGoodsReceiptQuery();
 	const {
 		data: variants,
 		isLoading: isVariantLoading,
@@ -36,6 +37,9 @@ export default function GoodsReceiptAdminContainer({
 	const navigationLogic = useGoodsReceiptNavigationLogic();
 	const sortLogic = useTableSort<GoodsReceiptSortField>();
 	const paginationLogic = usePagination();
+
+    const currentReceipt = receipts?.items ?? [];
+    const currentProduct = products ?? [];
 
 	const resolveVariant = variants?.data ?? [];
 
@@ -51,9 +55,10 @@ export default function GoodsReceiptAdminContainer({
 	return (
 		<GoodsReceiptAdminUi
 			// Dữ liệu độc lập
-			receipts={receipts}
-			products={products}
+			receipts={currentReceipt}
+			products={currentProduct}
 			variants={resolveVariant}
+            totalPages={receipts?.totalPages}
 			// Trải toàn bộ các state và action từ Hooks xuống
 			{...excelLogic}
 			{...navigationLogic}

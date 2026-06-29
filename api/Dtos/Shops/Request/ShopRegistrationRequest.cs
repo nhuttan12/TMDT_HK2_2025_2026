@@ -3,7 +3,7 @@
     public record ShopRegistrationRequest(
         string Email,
         string Phone,
-        string PasswordHash,
+        string Password,
         string ShopName,
         string Description,
         string AddressUrl,

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
-import { getProductVariants } from '@/services/inventories/goods-receipt/product-for-goods-receipt-service';
+import { getProductVariantListForSelectionGoodsReceiptMocking } from '@/services/inventories/goods-receipt/product-for-goods-receipt-selection-service';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 export const useProductVariantsQuery = (): UseQueryResult<
@@ -9,7 +9,7 @@ export const useProductVariantsQuery = (): UseQueryResult<
 > => {
 	return useQuery({
 		queryKey: ['product-variants'],
-		queryFn: getProductVariants,
+		queryFn: getProductVariantListForSelectionGoodsReceiptMocking,
 		staleTime: 5 * 60 * 1000,
 	});
 };

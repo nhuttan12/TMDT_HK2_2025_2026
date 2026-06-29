@@ -22,7 +22,7 @@ BEGIN
 		s.tax_code AS TaxCode,
 		@TotalItems AS TotalItems
 	FROM SUPPLIERS s
-	WHERE s.id = @UserId
+	WHERE s.shop_id = @UserId
 		
 	ORDER BY s.created_at DESC
 

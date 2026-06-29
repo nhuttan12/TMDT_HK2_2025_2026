@@ -147,6 +147,10 @@
     <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatch.sql" />
     <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatchVariant.sql" />
     <Build Include="dbo\StoredProcedures\Analyst\usp_GetRevenueChartByTime.sql" />
+    <Build Include="dbo\Tables\CARTS.sql" />
+    <Build Include="dbo\Tables\CART_ITEMS.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductSelectionForGoodsReceipt.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductVariantListForSelectionGoodsReceipt.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

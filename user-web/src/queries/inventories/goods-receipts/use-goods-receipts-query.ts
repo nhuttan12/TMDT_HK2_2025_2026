@@ -1,17 +1,23 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
+import {
+    GoodsReceiptService
+} from '@/services/inventories/goods-receipt/goods-receipt-service';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
-import { getGoodsReceipts } from '@/services/inventories/goods-receipt/goods-receipt-service';
+import { BackendPagedResult } from '@/types/products/user/productBE';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export interface UseGoodsReceiptsQueryProps {
-	initialData?: GoodsReceiptList[];
+	initialData?: BackendPagedResult<GoodsReceiptList>;
 }
 
 export const useGoodsReceiptsQuery = ({
 	initialData,
-}: UseGoodsReceiptsQueryProps): UseQueryResult<GoodsReceiptList[], Error> => {
+}: UseGoodsReceiptsQueryProps): UseQueryResult<BackendPagedResult<GoodsReceiptList>, Error> => {
+	const goodsService = new GoodsReceiptService(apiClient);
+
 	return useQuery({
 		queryKey: ['goods-receipts-list'],
-		queryFn: getGoodsReceipts,
+		queryFn: () => goodsService.getGoodsReceiptList(),
 		initialData: initialData, // Sử dụng dữ liệu từ Server Component ném xuống để SSR
 	});
 };

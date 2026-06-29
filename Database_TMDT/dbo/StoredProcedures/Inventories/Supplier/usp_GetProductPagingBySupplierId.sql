@@ -24,7 +24,6 @@ BEGIN
 		p.[name] AS [Name],
 		p.image_urls AS [ImageUrls],
 		p.[status] AS [Status],
-		p.system_status AS SystemStatus,
 		p.created_at AS CreatedAt,
 		p.updated_at AS UpdatedAt,
 		@TotalItems AS TotalItems

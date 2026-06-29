@@ -2,7 +2,7 @@
 {
     public enum EShopSystemStatus
     {
-        PendingAproval,
+        PendingApproval,
         Approved,
         Rejected,
     }

@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { use } from 'react';
-import { useAuthStore } from './stores/auth.store';
+import { NextResponse } from 'next/server';
 
-const PROTECTED_ROUTES = [ '/profile', '/orders'];
+const PROTECTED_ROUTES = [ '/profile', '/orders', '/shop', '/admin'];
 const AUTH_ROUTES = ['/_login', '/register'];
 
 export function proxy(request: NextRequest) {

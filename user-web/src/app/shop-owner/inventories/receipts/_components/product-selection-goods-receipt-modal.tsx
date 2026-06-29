@@ -97,7 +97,7 @@ export function ProductSelectionGoodsReceiptModal({
 									</div>
 								</div>
 								<div className='flex items-center gap-2'>
-									<Badge
+									{/* <Badge
 										className={
 											product.status
 												? 'bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700 dark:bg-green-950 dark:text-green-300 dark:hover:bg-green-950 dark:hover:text-green-300'
@@ -105,11 +105,11 @@ export function ProductSelectionGoodsReceiptModal({
 										}
 									>
 										{product.status ? 'Đang bán' : 'Ngừng bán'}
-									</Badge>
+									</Badge> */}
 									<Button
 										size='sm'
 										onClick={() => handleSelectProduct(product)}
-										disabled={!product.status}
+										// disabled={!product.status}
 										className='cursor-pointer'
 									>
 										Chọn

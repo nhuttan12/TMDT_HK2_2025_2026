@@ -15,7 +15,7 @@ namespace api.Controllers.Shops
         IShopAdminService shopAdminService
         ) : BaseController
     {
-        [HttpPost("/approve")]
+        [HttpPost("approve")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ApproveShop(
             [FromBody] Guid shopId,
@@ -26,7 +26,7 @@ namespace api.Controllers.Shops
             return HandleResult(result);
         }
 
-        [HttpGet("/approval-list")]
+        [HttpGet("approval-list")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetShopApprovalList(
             [FromQuery] PaginationRequestDto request,
@@ -37,7 +37,7 @@ namespace api.Controllers.Shops
             return HandleResult(result);
         }
 
-        [HttpGet("/detail")]
+        [HttpGet("detail")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetShopDetailInfo(
             [FromQuery] Guid shopId,
@@ -59,7 +59,7 @@ namespace api.Controllers.Shops
             return HandleResult(result);
         }
 
-        [HttpGet("/profile")]
+        [HttpGet("profile")]
         [Authorize(Roles = "Shop")]
         public async Task<IActionResult> GetShopProfile(CancellationToken cancellationToken)
         {

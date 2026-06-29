@@ -1,15 +1,17 @@
 ﻿CREATE TABLE [dbo].[GOODS_ISSUES] (
     [id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [customer_id] UNIQUEIDENTIFIER   NOT NULL,
+    [shop_id]     UNIQUEIDENTIFIER   NOT NULL,
     [code]        VARCHAR (50)       NOT NULL,
     [note]        NVARCHAR (MAX)     NOT NULL,
     [type]        VARCHAR (20)       NOT NULL,
     [created_at]  DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
-    [shop_id]     UNIQUEIDENTIFIER   DEFAULT ('00000000-0000-0000-0000-000000000000') NOT NULL,
     CONSTRAINT [PK_GOODS_ISSUES] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_GOODS_ISSUES_SHOPS_shop_id] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]),
     CONSTRAINT [FK_GOODS_ISSUES_USERS_customer_id] FOREIGN KEY ([customer_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 

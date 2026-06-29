@@ -37,12 +37,13 @@ BEGIN
         DECLARE @CurrentTimeUtc DATETIME = GETUTCDATE();
 
         DECLARE @RoleId INT;
-        SELECT @RoleId = id FROM ROLES WHERE [name] = 'shop-owner';
+        SELECT @RoleId = id FROM ROLES WHERE [name] = 'Shop';
 
         -- A. TẠO USER
         INSERT INTO USERS (
             id, 
             email, 
+            full_name,
             phone, 
             password_hash, 
             role_id, 
@@ -52,6 +53,7 @@ BEGIN
         VALUES (
             @OutUserId, 
             LOWER(LTRIM(RTRIM(@Email))), 
+            @ShopName,
             @Phone, 
             @PasswordHash, 
             @RoleId,
@@ -61,10 +63,11 @@ BEGIN
         -- B. TẠO SHOP
         INSERT INTO SHOPS (
             id, 
-            name, 
-            description, 
-            status, 
+            [name], 
+            [description], 
+            [status], 
             system_status, 
+            rating,
             created_at, 
             updated_at
         )
@@ -74,6 +77,7 @@ BEGIN
             @Description, 
             'closed', 
             'pending_approval',
+            0,
             @CurrentTime, 
             @CurrentTime
         );
@@ -101,6 +105,7 @@ BEGIN
             bank_name, 
             account_name, 
             account_number, 
+            [status],
             created_at, 
             updated_at
         )
@@ -110,6 +115,7 @@ BEGIN
             @BankName, 
             @AccountName, 
             @AccountNumber, 
+            1,
             @CurrentTime, 
             @CurrentTime
         );

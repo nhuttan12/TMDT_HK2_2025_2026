@@ -33,6 +33,7 @@ interface GoodsReceiptAdminUiProps
 	receipts: GoodsReceiptList[];
 	products: ProductForGoodsReceipt[];
 	variants: ProductVariantRow[];
+    totalPages?: number;
 }
 
 export default function GoodsReceiptAdminUi({
@@ -53,6 +54,7 @@ export default function GoodsReceiptAdminUi({
 	handleRedirectToAddNewReceiptDetail,
 	handleRedirectToReceiptDetail,
 	handleRedirectToEditReceiptDetail,
+    totalPages = 10
 }: GoodsReceiptAdminUiProps): JSX.Element {
 	return (
 		<div className='space-y-4'>
@@ -103,7 +105,7 @@ export default function GoodsReceiptAdminUi({
 
 			<Pagination
 				currentPage={currentPage}
-				totalPages={10}
+				totalPages={totalPages}
 				onPageChange={changePage}
 			/>
 		</div>

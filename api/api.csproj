@@ -9,31 +9,22 @@
 
   <ItemGroup>
 	  <Content Remove="Database\Seeders\SeedData\Categories.json" />
-	  <Compile Remove="Database\Migrations\**" />
 	  <Compile Remove="Models\Coupons\Enums\**" />
 	  <Compile Remove="Models\Inventory\Enums\**" />
 	  <Compile Remove="Services\NewFolder\**" />
 	  <Compile Remove="StoredProcedures\**" />
-	  <Content Remove="Database\Migrations\**" />
 	  <Content Remove="Models\Coupons\Enums\**" />
 	  <Content Remove="Models\Inventory\Enums\**" />
 	  <Content Remove="Services\NewFolder\**" />
 	  <Content Remove="StoredProcedures\**" />
-	  <EmbeddedResource Remove="Database\Migrations\**" />
 	  <EmbeddedResource Remove="Models\Coupons\Enums\**" />
 	  <EmbeddedResource Remove="Models\Inventory\Enums\**" />
 	  <EmbeddedResource Remove="Services\NewFolder\**" />
 	  <EmbeddedResource Remove="StoredProcedures\**" />
-	  <None Remove="Database\Migrations\**" />
 	  <None Remove="Models\Coupons\Enums\**" />
 	  <None Remove="Models\Inventory\Enums\**" />
 	  <None Remove="Services\NewFolder\**" />
 	  <None Remove="StoredProcedures\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Database\Migrations\20260618100600_InitDatabase.cs" />
-    <Compile Include="Database\Migrations\20260618100600_InitDatabase.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +51,11 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Models\Enums\Products\" />
   </ItemGroup>
 
 </Project>

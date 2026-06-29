@@ -34,7 +34,7 @@ namespace api.Controllers.Coupons
             return HandleResult(result);
         }
 
-        [HttpGet("/detail")]
+        [HttpGet("detail")]
         [Authorize(Roles = "Shop, Admin")]
         public async Task<IActionResult> GetShopCouponDetailAsync(
         [FromQuery] Guid couponId,

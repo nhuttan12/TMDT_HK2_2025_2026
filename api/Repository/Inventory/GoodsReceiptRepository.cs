@@ -1,40 +1,37 @@
-﻿using api.Dtos.Inventory.Requests;
+﻿using api.Dtos.Common;
+using api.Dtos.Inventory.Requests;
 using api.Dtos.Inventory.Response;
-using api.Models.Enums.Inventory;
+using api.Utilities;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Text.Json;
 
 namespace api.Repository.Inventory
 {
     public class GoodsReceiptRepository(
-        IStoredProcedureRepository storedProcedureRepository
+        IStoredProcedureRepository storedProcedureRepository,
+        IMapper mapper
         ) : IGoodsReceiptRepository
     {
         public async Task<Guid> CreateGoodsReceiptAsync(Guid shopId, CreateGoodsReceiptRequest request, CancellationToken cancellationToken)
         {
-            var batchesTable = new DataTable();
-            batchesTable.Columns.Add("product_id", typeof(Guid));
-            batchesTable.Columns.Add("batch_code", typeof(string));
-            batchesTable.Columns.Add("quantity", typeof(int));
-            batchesTable.Columns.Add("total_cost_price", typeof(decimal));
-
-            // Bảng Variants (Bỏ ID, bỏ batch_id, dùng batch_code làm cầu nối)
-            var variantsTable = new DataTable();
-            variantsTable.Columns.Add("batch_code", typeof(string));
-            variantsTable.Columns.Add("variant_id", typeof(Guid));
-            variantsTable.Columns.Add("cost_price", typeof(decimal));
-
-            foreach (var batch in request.Batches)
+            var batchesFlat = request.Batches.Select(b => new
             {
-                batchesTable.Rows.Add(batch.ProductId, batch.BatchCode, batch.Quantity, batch.TotalCostPrice);
+                product_id = b.ProductId,
+                batch_code = b.BatchCode,
+                quantity = b.Quantity,
+                total_cost_price = b.TotalCostPrice
+            });
 
-                foreach (var item in batch.Items)
-                {
-                    // Truyền BatchCode từ lô hàng cha xuống để map
-                    variantsTable.Rows.Add(batch.BatchCode, item.ProductVariantId, item.CostPrice);
-                }
-            }
+            var variantsFlat = request.Batches.SelectMany(b => b.Items.Select(item => new
+            {
+                batch_code = b.BatchCode,
+                variant_id = item.ProductVariantId,
+                cost_price = item.CostPrice
+            }));
+
+            var batchesTable = batchesFlat.ToDataTable();
+            var variantsTable = variantsFlat.ToDataTable();
 
             var outputIdParam = new SqlParameter("@inserted_id", SqlDbType.UniqueIdentifier)
             {
@@ -61,6 +58,100 @@ namespace api.Repository.Inventory
             }
 
             return Guid.Empty;
+        }
+
+        public async Task<PagedResult<GoodsReceiptPagingDtoResponse>> GetGoodsReceiptsByCodePagingAsync(Guid shopId, string code, PaginationRequestDto request, CancellationToken cancellationToken)
+        {
+            var parameters = new object[]
+            {
+                new SqlParameter("@ShopId", shopId),
+                new SqlParameter("@Code", string.IsNullOrWhiteSpace(code) ? DBNull.Value : code.Trim()),
+                new SqlParameter("@PageNumber", request.PageNumber),
+                new SqlParameter("@PageSize", request.PageSize)
+            };
+
+            // 2. Gọi SP thông qua Repository (Nhận về Raw DTO)
+            var rawItems = await storedProcedureRepository.QueryAsync<RawGoodsReceiptPagingDto>(
+                "usp_GetGoodsReceiptByCodePaging",
+                cancellationToken,
+                parameters);
+
+            // 3. Trích xuất TotalItems (từ dòng đầu tiên nếu có)
+            var totalItems = rawItems.FirstOrDefault()?.TotalItems ?? 0;
+
+            // 4. Map từ Raw list sang Response list bằng AutoMapper
+            var responseItems = mapper.Map<List<GoodsReceiptPagingDtoResponse>>(rawItems);
+
+            // 5. Đóng gói vào đối tượng phân trang và trả về
+            return new PagedResult<GoodsReceiptPagingDtoResponse>(responseItems, totalItems, request.PageNumber, request.PageSize);
+        }
+
+        public async Task<PagedResult<GoodsReceiptPagingDtoResponse>> GetGoodsReceiptsPagingAsync(Guid shopId, PaginationRequestDto request, CancellationToken cancellationToken)
+        {
+            var parameters = new object[]
+            {
+                new SqlParameter("@ShopId", shopId),
+                new SqlParameter("@PageNumber", request.PageNumber),
+                new SqlParameter("@PageSize", request.PageSize)
+            };
+
+            // 2. Gọi SP thông qua Repository (Nhận về Raw DTO)
+            var rawItems = await storedProcedureRepository.QueryAsync<RawGoodsReceiptPagingDto>(
+                "usp_GetGoodsReceiptPaging",
+                cancellationToken,
+                parameters);
+
+            // 3. Trích xuất TotalItems (từ dòng đầu tiên nếu có)
+            var totalItems = rawItems.FirstOrDefault()?.TotalItems ?? 0;
+
+            // 4. Map từ Raw list sang Response list bằng AutoMapper
+            var responseItems = mapper.Map<List<GoodsReceiptPagingDtoResponse>>(rawItems);
+
+            // 5. Đóng gói vào đối tượng phân trang và trả về
+            return new PagedResult<GoodsReceiptPagingDtoResponse>(responseItems, totalItems, request.PageNumber, request.PageSize);
+        }
+
+        public async Task<PagedResult<ProductBatchPagingDtoResponse>> GetProductListInBatchPagingAsync(GetProductListInBatchRequest request, PaginationRequestDto pagination, CancellationToken cancellationToken)
+        {
+            var parameters = new object[]
+            {
+                new SqlParameter("@BatchId", request.BatchId),
+                new SqlParameter("@ReceiptId", request.ReceiptId),
+                new SqlParameter("@PageNumber", pagination.PageNumber),
+                new SqlParameter("@PageSize", pagination.PageSize)
+            };
+
+            // 2. Gọi SP lấy dữ liệu thô
+            var rawItems = await storedProcedureRepository.QueryAsync<RawProductBatchPagingDto>(
+                "usp_GetProductListInBatchPaging",
+                cancellationToken,
+                parameters);
+
+            // 3. Trích xuất tổng số record phục vụ phân trang
+            var totalItems = rawItems.FirstOrDefault()?.TotalItems ?? 0;
+
+            // 4. Map sang định dạng Response (camelCase)
+            var responseItems = mapper.Map<List<ProductBatchPagingDtoResponse>>(rawItems);
+
+            // 5. Đóng gói kết quả
+            return new PagedResult<ProductBatchPagingDtoResponse>(responseItems, totalItems, pagination.PageNumber, pagination.PageSize);
+        }
+
+        public async Task<IEnumerable<ProductSelectionResponse>> GetProductSelectionForGoodsReceiptAsync(Guid shopId, CancellationToken cancellationToken = default)
+        {
+            var parameters = new object[]
+            {
+                new SqlParameter("@ShopId", shopId)
+            };
+
+            // 2. Gọi hàm QueryAsync đã được bọc sẵn từ interface
+            var result = await storedProcedureRepository.QueryAsync<ProductSelectionResponse>(
+                "usp_GetProductSelectionForGoodsReceipt",
+                cancellationToken,
+                parameters
+            );
+
+            return result;
         }
 
         public async Task<GoodsReceiptDetailResponse?> GetReceiptDetailAsync(Guid userId, Guid receiptId, CancellationToken cancellationToken)

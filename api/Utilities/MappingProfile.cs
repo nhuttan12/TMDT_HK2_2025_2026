@@ -1,5 +1,6 @@
 ﻿using api.Dtos.Carts.Response;
 using api.Dtos.Coupons.Response;
+using api.Dtos.Inventory.Response;
 using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
 using api.Dtos.Promotiions.Response;
@@ -33,6 +34,7 @@ namespace api.Utilities
             ShopMapping();
             CartMapping();
             CartItemmapping();
+            InventoryMapping();
 
             CreateMap(typeof(PagedResult<>), typeof(PagedResult<>))
             .ConvertUsing(typeof(PagedResultConverter<,>));
@@ -131,6 +133,16 @@ namespace api.Utilities
                  .ForMember(d => d.UnitPrice, o => o.MapFrom(src => src.Variant.CostPrice));
 
             CreateMap<CartItemResponseDto, CartItem>();
+        }
+
+        private void InventoryMapping()
+        {
+            CreateMap<RawGoodsReceiptPagingDto, GoodsReceiptPagingDtoResponse>();
+            CreateMap<RawProductBatchPagingDto, ProductBatchPagingDtoResponse>();
+            CreateMap<RawProductInStockDto, ProductInStockDtoResponse>();
+            CreateMap<RawGoodsSupplierDto, GoodsSupplierResponseDto>();
+            CreateMap<RawProductBySupplierId, ProductBySupplierIdResponse>();
+            CreateMap<RawSupplierOptionDto, SupplierOptionResponseDto>();
         }
 }
 }

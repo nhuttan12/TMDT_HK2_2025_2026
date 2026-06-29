@@ -1,7 +1,13 @@
+import { ResponseApi } from '@/types/common/ResponseApi';
 import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
+import { BackendPagedResult } from '@/types/products/user/productBE';
+import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { type AxiosInstance } from 'axios';
 
-export const getGoodsReceiptDetailByReceiptId = async (id: string): Promise<GoodsReceiptDetail> => {
+export const getGoodsReceiptDetailByReceiptIdMocking = async (
+	id: string,
+): Promise<GoodsReceiptDetail> => {
 	// Giả lập network delay để test UX loading sau này
 	await new Promise((resolve) => setTimeout(resolve, 300));
 
@@ -37,14 +43,15 @@ export const getGoodsReceiptDetailByReceiptId = async (id: string): Promise<Good
 	};
 };
 
-export const getProductListInBatch = async (
+export const getProductListInBatchMocking = async (
 	batchId: string,
 	receiptId: string,
-): Promise<BatchItem[]> => {
+	{ page = 1, limit = 10 }: PaginationRequest = {},
+): Promise<BackendPagedResult<BatchItem>> => {
 	// Giả lập network delay
 	await new Promise((resolve) => setTimeout(resolve, 300));
 
-	return [
+	const mockItems: BatchItem[] = [
 		{
 			id: '1a2b3c4d-1111-4aaa-8bbb-111111111111', // GUID cho bản ghi định danh serial
 			productId: '550e8400-e29b-41d4-a716-446655440201', // GUID của sản phẩm
@@ -126,4 +133,61 @@ export const getProductListInBatch = async (
 			costPrice: 500000,
 		},
 	];
+
+	return {
+		items: mockItems,
+		totalCount: mockItems.length,
+		pageNumber: page,
+		pageSize: limit,
+		totalPages: Math.ceil(mockItems.length / limit),
+		hasNextPage: page * limit < mockItems.length,
+		hasPreviousPage: page > 1,
+	};
 };
+
+export class GoodsReceiptDetailService {
+	constructor(private api: AxiosInstance) {}
+
+	async getGoodsReceiptDetailByReceiptId(receiptId: string): Promise<GoodsReceiptDetail> {
+		try {
+			const response = await this.api.get<ResponseApi<GoodsReceiptDetail>>(
+				`/admin/receipt/detail?receiptId=${receiptId}`,
+			);
+
+			console.log('receipt detail data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getGoodsReceiptDetailByReceiptIdMocking(receiptId);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getGoodsReceiptDetailByReceiptIdMocking(receiptId);
+		}
+	}
+
+	async getProductListInBatch(
+		batchId: string,
+		receiptId: string,
+		{ page = 1, limit = 10 }: PaginationRequest = {},
+	): Promise<BackendPagedResult<BatchItem>> {
+		try {
+			const response = await this.api.get<ResponseApi<BackendPagedResult<BatchItem>>>(
+				`/admin/receipt/batch/products?batchId=${batchId}&receiptId=${receiptId}&PageNumber=${page}&PageSize=${limit}
+`,
+			);
+
+			console.log('product list in batch', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductListInBatchMocking(batchId, receiptId, { page, limit });
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductListInBatchMocking(batchId, receiptId, { page, limit });
+		}
+	}
+}

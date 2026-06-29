@@ -12,6 +12,7 @@ using api.Repository.Inventory;
 using api.Repository.ProductRepo;
 using api.Repository.Promotions;
 using api.Repository.RoleRepo;
+using api.Repository.Shops;
 using api.Repository.UserRepo;
 using api.Services.Auths;
 using api.Services.Banners;
@@ -21,6 +22,7 @@ using api.Services.Coupons;
 using api.Services.Inventory;
 using api.Services.Products;
 using api.Services.Promotions;
+using api.Services.Shops;
 using api.Services.Users;
 using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
@@ -86,6 +88,10 @@ namespace api.Extensions
             services.AddScoped<IAdminPromotionRepository, AdminPromotionRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
+            services.AddScoped<IShopUserRepository, ShopUserRepository>();
+            services.AddScoped<IShopAdminRepository, ShopAdminRepository>();
+            services.AddScoped<IGoodsSupplierRepository, GoodsSupplierRepository>();
+            services.AddScoped<IGoodsStockRepository, GoodsStockRepository>();
 
             return services;
         }
@@ -107,6 +113,10 @@ namespace api.Extensions
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IGoodsReceiptService, GoodsReceiptService>();
+            services.AddScoped<IShopUserService, ShopUserService>();
+            services.AddScoped<IShopAdminService, ShopAdminService>();
+            services.AddScoped<IGoodsStockService, GoodsStockService>();
+            services.AddScoped<IGoodsSupplierService, GoodsSupplierService>();
 
             // Đăng ký Data Seeders
             services.AddScoped<IDataSeeder, CategorySeeder>();

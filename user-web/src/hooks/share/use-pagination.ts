@@ -1,7 +1,6 @@
 'use client';
 
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export interface UsePaginationReturn {
 	currentPage: number;
@@ -9,11 +8,11 @@ export interface UsePaginationReturn {
 }
 
 export function usePagination(totalPagesFromApi: number = 1): UsePaginationReturn {
-	const router: AppRouterInstance = useRouter();
-	const searchParams: ReadonlyURLSearchParams = useSearchParams();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 
-	const pageParam: number = Number(searchParams.get('page'));
-	let currentPage: number = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+	const pageParam = Number(searchParams.get('page'));
+	let currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
 	if (currentPage > totalPagesFromApi && totalPagesFromApi > 0) {
 		currentPage = totalPagesFromApi;

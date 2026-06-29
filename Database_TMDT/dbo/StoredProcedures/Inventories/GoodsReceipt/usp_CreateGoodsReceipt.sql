@@ -3,7 +3,6 @@
     @supplier_id UNIQUEIDENTIFIER,
     @shop_id UNIQUEIDENTIFIER,
     @import_date DATETIMEOFFSET,
-    @import_status VARCHAR(50),
     @note NVARCHAR(MAX),
     @batches [dbo].[udt_GoodsReceiptBatch] READONLY,
     @variants [dbo].[udt_GoodsReceiptBatchVariant] READONLY,

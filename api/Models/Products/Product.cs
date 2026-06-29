@@ -1,9 +1,4 @@
-﻿using api.Dtos.Products.Request;
-using api.Models;
-using api.Models.Category;
-using api.Models.Enums.Products;
-using api.Models.Enums.Shops;
-using api.Models.Inventory;
+﻿using api.Models.Inventory;
 using api.Models.Products;
 using api.Models.Promotions;
 using api.Models.Shops;
@@ -34,7 +29,6 @@ namespace api.model.Products
         public Shop Shop { get; private set; }
 
         public ProductDetail? Detail { get; private set; }
-        public EProductSystemStatus ProductSystemStatus { get; private set; }
 
         // Sử dụng Collection Expression của C# 12+ để tối ưu cấp phát
         private readonly HashSet<Variant> _variants = [];

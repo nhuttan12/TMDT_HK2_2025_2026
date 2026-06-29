@@ -4,9 +4,11 @@
     [sku]        VARCHAR (100)      NOT NULL,
     [image_url]  VARCHAR (500)      NOT NULL,
     [created_at] DATETIMEOFFSET (7) NOT NULL,
-    [updated_at] DATETIMEOFFSET (7) DEFAULT ('0001-01-01T00:00:00.0000000+00:00') NOT NULL,
+    [updated_at] DATETIMEOFFSET (7) NULL,
     CONSTRAINT [PK_CATEGORIES] PRIMARY KEY CLUSTERED ([id] ASC)
 );
+
+
 
 
 

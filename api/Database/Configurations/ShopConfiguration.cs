@@ -47,11 +47,13 @@ namespace api.Database.Configurations
 
             builder.Property(shop => shop.TaxCode)
                 .HasColumnName("tax_code")
-                .HasColumnType("nvarchar(50)");
+                .HasColumnType("nvarchar(50)")
+                .IsRequired(false);
 
             builder.Property(shop => shop.Description)
                 .HasColumnName("description")
-                .HasColumnType("NVARCHAR(MAX)");
+                .HasColumnType("NVARCHAR(MAX)")
+                .IsRequired(false);
 
             builder.Property(shop => shop.CreatedAt)
                 .HasColumnName("created_at")
@@ -65,7 +67,8 @@ namespace api.Database.Configurations
 
             builder.Property(s => s.ShopLogo)
                 .HasColumnName("shop_logo")
-                .HasColumnType("nvarchar(max)");
+                .HasColumnType("nvarchar(max)")
+                .IsRequired(false);
 
             builder.HasOne(shop => shop.User)
                 .WithOne(user => user.Shop)

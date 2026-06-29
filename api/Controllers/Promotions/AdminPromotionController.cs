@@ -25,7 +25,7 @@ namespace api.Controllers.Promotions
             return HandleResult(result);
         }
 
-        [HttpGet("/detail")]
+        [HttpGet("detail")]
         [Authorize(Roles = "Admin, Shop")]
         public async Task<IActionResult> GetPromotionDetail(
             [FromQuery] Guid promotionId,
