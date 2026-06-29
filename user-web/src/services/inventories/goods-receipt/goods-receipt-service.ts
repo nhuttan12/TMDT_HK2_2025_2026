@@ -1,4 +1,5 @@
 import { ResponseApi } from '@/types/common/ResponseApi';
+import { CreateGoodsReceiptRequest } from '@/types/inventories/receipts/dtos/CreateGoodsReceiptRequest';
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { BackendPagedResult } from '@/types/products/user/productBE';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
@@ -62,10 +63,13 @@ export const getGoodsReceiptListMocking = async ({
 export class GoodsReceiptService {
 	constructor(private api: AxiosInstance) {}
 
-	async getGoodsReceiptList({ page = 1, limit = 10 }:PaginationRequest = {}): Promise<BackendPagedResult<GoodsReceiptList>> {
+	async getGoodsReceiptList({ page = 1, limit = 10 }: PaginationRequest = {}): Promise<
+		BackendPagedResult<GoodsReceiptList>
+	> {
 		try {
-			const response =
-				await this.api.get<ResponseApi<BackendPagedResult<GoodsReceiptList>>>(`/admin/receipt?PageNumber=${page}&PageSize=${limit}`);
+			const response = await this.api.get<ResponseApi<BackendPagedResult<GoodsReceiptList>>>(
+				`/admin/receipt?PageNumber=${page}&PageSize=${limit}`,
+			);
 
 			console.log('receipt data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
@@ -77,6 +81,22 @@ export class GoodsReceiptService {
 		} catch (error: unknown) {
 			console.error(error);
 			return await getGoodsReceiptListMocking();
+		}
+	}
+
+	async createGoodsReceipt(request: CreateGoodsReceiptRequest): Promise<string> {
+		try {
+			const response = await this.api.post<ResponseApi<string>>(`/admin/receipt`, request);
+
+			console.log('receipt data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return 'Đã tạo phiếu nhập thành công';
+			}
+            
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return 'Đã tạo phiếu nhập thành công';
 		}
 	}
 }

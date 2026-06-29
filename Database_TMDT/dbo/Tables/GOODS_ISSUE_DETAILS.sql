@@ -2,7 +2,7 @@
     [id]            UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [issue_id]      UNIQUEIDENTIFIER   NOT NULL,
     [variant_id]    UNIQUEIDENTIFIER   NOT NULL,
-    [Quantity]      INT                NOT NULL,
+    [quantity]      INT                NOT NULL,
     [selling_price] DECIMAL (18, 2)    NOT NULL,
     [created_at]    DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_GOODS_ISSUE_DETAILS] PRIMARY KEY CLUSTERED ([id] ASC),

@@ -151,6 +151,8 @@
     <Build Include="dbo\Tables\CART_ITEMS.sql" />
     <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductSelectionForGoodsReceipt.sql" />
     <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductVariantListForSelectionGoodsReceipt.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssuePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssueDetailByGoodsIssueId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">

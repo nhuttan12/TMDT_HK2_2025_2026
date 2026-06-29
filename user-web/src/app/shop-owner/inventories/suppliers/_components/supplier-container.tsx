@@ -3,30 +3,32 @@
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import Pagination from '@/components/layout/share/pagination';
 import {
-    useSupplierListLogic,
-    UseSupplierListLogicReturn,
+    useSupplierListLogic
 } from '@/hooks/inventories/suppliers/use-supplier-list-logic';
 import { useGoodsSupplierQuery } from '@/queries/inventories/suppliers/use-goods-supplier-query';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { JSX } from 'react';
 import SupplierTable from './supplier-table';
 
 interface SuppliersContainerProps {
-	initialSuppliers: Supplier[];
+	initialSuppliers: BackendPagedResult<Supplier>;
 }
 
 export default function SuppliersContainer({
 	initialSuppliers,
 }: SuppliersContainerProps): JSX.Element {
 	// 1. Data Fetching
-	const { data: goods, isLoading: isProductsLoading } = useGoodsSupplierQuery(initialSuppliers);
+	const { data, isLoading: isProductsLoading } = useGoodsSupplierQuery(initialSuppliers);
 
 	// 2. Logic Hook
-	const logic: UseSupplierListLogicReturn = useSupplierListLogic();
+	const logic = useSupplierListLogic();
 
-	const isPageLoading: boolean = isProductsLoading;
+	const isPageLoading = isProductsLoading;
 
-	if (isPageLoading && !goods) {
+    const resolvedSuppliers = data?.items ?? [];
+
+	if (isPageLoading && !data) {
 		return <div className='p-4 text-gray-500'>Đang tải dữ liệu...</div>;
 	}
 
@@ -40,7 +42,7 @@ export default function SuppliersContainer({
 
 			{/* Table */}
 			<SupplierTable
-				suppliers={initialSuppliers}
+				suppliers={resolvedSuppliers}
 				{...logic}
 			/>
 

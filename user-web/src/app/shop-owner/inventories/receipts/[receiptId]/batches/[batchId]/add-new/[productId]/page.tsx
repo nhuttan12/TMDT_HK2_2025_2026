@@ -1,7 +1,7 @@
 import { BatchItem } from '@/types/inventories/receipts/uis/BatchItem';
 import { Metadata } from 'next';
 import { JSX } from 'react';
-import ProductVariantListInBatchContainer from '../_components/product-variant-list-in-batch-container';
+import ProductVariantListInBatchContainer from '../../_components/product-variant-list-in-batch-container';
 import { BackendPagedResult } from '@/types/products/user/productBE';
 
 export const metadata: Metadata = {
@@ -21,17 +21,19 @@ const mockBatchItemSerials: BackendPagedResult<BatchItem> = {
 interface Props {
 	params: {
 		batchId: string;
+        productId: string;
 	};
 }
 
 export default async function Page({ params }: Props): Promise<JSX.Element> {
-	const { batchId } = await params;
+	const { batchId, productId } = await params;
 
 	return (
 		<ProductVariantListInBatchContainer
 			batchId={batchId}
 			productVariants={mockBatchItemSerials}
 			mode={'create'}
+            productId={productId}
 		/>
 	);
 }

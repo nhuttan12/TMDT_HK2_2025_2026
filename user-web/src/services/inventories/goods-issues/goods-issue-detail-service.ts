@@ -59,8 +59,8 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 				items: [
 					{
 						id: 'e58ed763-928c-4155-bee9-fdbaaadc15f3', // Đã đổi sang GUID
-						productId: '550e8400-e29b-41d4-a716-446655440010', // Đã đổi sang GUID
-						productName: 'Bể Kính Chữ Nhật Ghép Keo Tàng Hình (100x40x40)',
+						variantId: '550e8400-e29b-41d4-a716-446655440010', // Đã đổi sang GUID
+						variantName: 'Bể Kính Chữ Nhật Ghép Keo Tàng Hình (100x40x40)',
 						sku: 'TANK-RECT-100',
 						quantity: 2,
 						unitPrice: 1850000,
@@ -71,8 +71,8 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 					},
 					{
 						id: 'bc7b2671-5085-40b9-a9a2-944a86f7df21', // Đã đổi sang GUID
-						productId: '550e8400-e29b-41d4-a716-446655440011', // Đã đổi sang GUID
-						productName: 'Đất Nền Trộn Sẵn Terrarium Soil (Bao 5kg)',
+						variantId: '550e8400-e29b-41d4-a716-446655440011', // Đã đổi sang GUID
+						variantName: 'Đất Nền Trộn Sẵn Terrarium Soil (Bao 5kg)',
 						sku: 'SOIL-TERRA-5KG',
 						quantity: 5,
 						unitPrice: 120000,
@@ -82,8 +82,8 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 					},
 					{
 						id: 'fa4109bd-7589-4e78-bad4-10672ce893bc', // Đã đổi sang GUID
-						productId: '550e8400-e29b-41d4-a716-446655440012', // Đã đổi sang GUID
-						productName: 'Đèn LED Rọi Cây Quang Phổ Rộng 10W',
+						variantId: '550e8400-e29b-41d4-a716-446655440012', // Đã đổi sang GUID
+						variantName: 'Đèn LED Rọi Cây Quang Phổ Rộng 10W',
 						sku: 'LED-SPOT-10W',
 						quantity: 4,
 						unitPrice: 250000,
@@ -93,8 +93,8 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 					},
 					{
 						id: 'c8e1467a-1234-4f01-a12b-d32109876543', // Đã đổi sang GUID
-						productId: '550e8400-e29b-41d4-a716-446655440013', // Đã đổi sang GUID
-						productName: 'Rêu Đầu Rìu Mảng Lớn (Khay 20x20cm)',
+						variantId: '550e8400-e29b-41d4-a716-446655440013', // Đã đổi sang GUID
+						variantName: 'Rêu Đầu Rìu Mảng Lớn (Khay 20x20cm)',
 						sku: 'MOSS-AXE-20',
 						quantity: 10,
 						unitPrice: 45000,
@@ -104,8 +104,8 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 					},
 					{
 						id: 'a9b2345c-6789-4e21-b34c-f98765432109', // Đã đổi sang GUID
-						productId: '550e8400-e29b-41d4-a716-446655440014', // Đã đổi sang GUID
-						productName: 'Đá Tai Mèo Setup Tiểu Cảnh (Bao 10kg)',
+						variantId: '550e8400-e29b-41d4-a716-446655440014', // Đã đổi sang GUID
+						variantName: 'Đá Tai Mèo Setup Tiểu Cảnh (Bao 10kg)',
 						sku: 'STONE-CAT-10KG',
 						quantity: 3,
 						unitPrice: 150000,

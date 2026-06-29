@@ -83,5 +83,28 @@ namespace api.Controllers.Inventory
 
             return HandleResult(result);
         }
+
+        [HttpGet("products")]
+        [Authorize(Roles = "Shop")]
+        public async Task<IActionResult> GetProductPagingBySupplierId(
+            [FromQuery] Guid supplierId,
+            [FromQuery] PaginationRequestDto pagination,
+            CancellationToken cancellationToken)
+        {
+            var shopId = AuthenticatedUserId;
+
+            if (shopId == null)
+            {
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
+            }
+
+            var result = await goodsSupplierService.GetProductPagingBySupplierId(
+                supplierId,
+                shopId.Value,
+                pagination,
+                cancellationToken);
+
+            return HandleResult(result);
+        }
     }
 }

@@ -5,7 +5,7 @@ import {
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-export const useProductVariantsSelectionQuery = (
+export const useProductVariantsInBatchQuery = (
 	productId: string,
 ): UseQueryResult<ProductVariantRow[], Error> => {
 	const productForGoodsReceiptService = new ProductForGoodsReceiptService(apiClient);
@@ -14,7 +14,6 @@ export const useProductVariantsSelectionQuery = (
 		queryKey: ['product-variants'],
 		queryFn: () =>
 			productForGoodsReceiptService.getProductVariantListForSelectionGoodsReceipt(productId),
-        enabled: !!productId,
 		staleTime: 5 * 60 * 1000,
 	});
 };

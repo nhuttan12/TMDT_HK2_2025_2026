@@ -18,5 +18,10 @@ namespace api.Services.Inventory
         Task<Result<IEnumerable<SupplierOptionResponseDto>>> GetSupplierOptionsAsync(
             Guid shopId,
             CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ProductBySupplierIdResponse>>> GetProductPagingBySupplierId(
+            Guid supplierId,
+            Guid shopId,
+            PaginationRequestDto pagination,
+            CancellationToken cancellationToken = default);
     }
 }

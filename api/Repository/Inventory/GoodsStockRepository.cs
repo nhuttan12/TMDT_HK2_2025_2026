@@ -76,36 +76,6 @@ namespace api.Repository.Inventory
             );
         }
 
-        public async Task<PagedResult<ProductBySupplierIdResponse>> GetProductPagingBySupplierId(Guid supplierId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken)
-        {
-            var parameters = new SqlParameter[]
-        {
-            new SqlParameter("@SupplierId", supplierId),
-            new SqlParameter("@ShopId", shopId),
-            new SqlParameter("@PageNumber", pageNumber),
-            new SqlParameter("@PageSize", pageSize)
-        };
-
-            var rawData = await storedProcedureRepository.QueryAsync<RawProductBySupplierId>(
-                "usp_GetProductPagingBySupplierId",
-                cancellationToken,
-                parameters
-            );
-
-            var rawList = rawData.ToList();
-
-            // Thực hiện mapping ngay tại repo để giấu kín RawProductDto khỏi tầng trên
-            var responseItems = mapper.Map<List<ProductBySupplierIdResponse>>(rawList);
-            int totalCount = rawList.FirstOrDefault()?.TotalItems ?? 0;
-
-            return new PagedResult<ProductBySupplierIdResponse>(
-                responseItems,
-                totalCount,
-                pageNumber,
-                pageSize
-            );
-        }
-
         public async Task<GoodsStockSummaryDto> GetStockSummaryAsync(Guid shopId, CancellationToken cancellationToken)
         {
             var parameters = new SqlParameter[]

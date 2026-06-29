@@ -154,6 +154,23 @@ namespace api.Repository.Inventory
             return result;
         }
 
+        public async Task<IEnumerable<ProductVariantSelectionResponse>> GetProductVariantSelectionAsync(Guid shopId, Guid productId, CancellationToken cancellationToken)
+        {
+            var parameters = new object[]
+            {
+                new SqlParameter("@ShopId", shopId),
+                new SqlParameter("@ProductId", productId)
+            };
+
+            var result = await storedProcedureRepository.QueryAsync<ProductVariantSelectionResponse>(
+                "usp_GetProductVariantListForSelectionGoodsReceipt",
+                cancellationToken,
+                parameters
+            );
+
+            return result;
+        }
+
         public async Task<GoodsReceiptDetailResponse?> GetReceiptDetailAsync(Guid userId, Guid receiptId, CancellationToken cancellationToken)
         {
             var parameters = new object[]

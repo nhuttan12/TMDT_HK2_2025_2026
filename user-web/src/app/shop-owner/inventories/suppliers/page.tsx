@@ -1,7 +1,9 @@
-import { JSX } from 'react';
+import { apiClient } from '@/lib/api-client';
+import {
+    GoodsSupplierService
+} from '@/services/inventories/suppliers/goods-supplier-service';
 import { Metadata } from 'next';
-import { Supplier } from '@/types/inventories/suppliers/Supplier';
-import { getGoodsSupplierList } from '@/services/inventories/suppliers/goods-supplier-service';
+import { JSX } from 'react';
 import SuppliersContainer from './_components/supplier-container';
 
 export const metadata: Metadata = {
@@ -9,7 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Page(): Promise<JSX.Element> {
-	const suppliers: Supplier[] = await getGoodsSupplierList();
+	const goodsSupplierService = new GoodsSupplierService(apiClient);
+
+	const suppliers = await goodsSupplierService.getGoodsSupplierListPaging();
 
 	return <SuppliersContainer initialSuppliers={suppliers} />;
 }

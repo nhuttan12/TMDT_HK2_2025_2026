@@ -1,13 +1,13 @@
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 
 export const getProductListInfoAdmin = async ({
 	page = 1,
 	limit = 10,
-}: PaginationRequest = {}): Promise<PaginationResponse<ProductListInfoAdmin>> => {
+}: PaginationRequest = {}): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			const mockProducts: ProductListInfoAdmin[] = [
@@ -58,20 +58,15 @@ export const getProductListInfoAdmin = async ({
 				},
 			];
 
-			// 1. Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang)
-			const startIndex = (page - 1) * limit;
-			const endIndex = startIndex + limit;
-			const paginatedProducts = mockProducts.slice(startIndex, endIndex);
-
 			// 2. Trả về cấu trúc PaginationResponse chuẩn
 			resolve({
-				data: paginatedProducts,
-				meta: {
-					totalItems: mockProducts.length,
-					totalPages: Math.ceil(mockProducts.length / limit),
-					currentPage: page,
-					itemsPerPage: limit,
-				},
+				items: mockProducts,
+				totalCount: mockProducts.length,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(mockProducts.length / limit),
+				hasNextPage: page * limit < mockProducts.length,
+				hasPreviousPage: page > 1,
 			});
 		}, 500); // Thêm độ trễ 500ms
 	});
@@ -80,7 +75,7 @@ export const getProductListInfoAdmin = async ({
 export const getProductApprovalListAdmin = async ({
 	page = 1,
 	limit = 10,
-}: PaginationRequest = {}): Promise<PaginationResponse<ProductListInfoAdmin>> => {
+}: PaginationRequest = {}): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			const mockProducts: ProductListInfoAdmin[] = [
@@ -131,20 +126,15 @@ export const getProductApprovalListAdmin = async ({
 				},
 			];
 
-			// 1. Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang)
-			const startIndex = (page - 1) * limit;
-			const endIndex = startIndex + limit;
-			const paginatedProducts = mockProducts.slice(startIndex, endIndex);
-
 			// 2. Trả về cấu trúc PaginationResponse chuẩn
 			resolve({
-				data: paginatedProducts,
-				meta: {
-					totalItems: mockProducts.length,
-					totalPages: Math.ceil(mockProducts.length / limit),
-					currentPage: page,
-					itemsPerPage: limit,
-				},
+				items: mockProducts,
+				totalCount: mockProducts.length,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(mockProducts.length / limit),
+				hasNextPage: page * limit < mockProducts.length,
+				hasPreviousPage: page > 1,
 			});
 		}, 500); // Thêm độ trễ 500ms
 	});
@@ -266,7 +256,7 @@ export async function getProductDetailAdminByProductId(
 export const getProductListInfoByShopId = async (
     userId: string, // Đã đổi sang string để phù hợp với định dạng GUID
     { page = 1, limit = 10 }: PaginationRequest = {}
-): Promise<PaginationResponse<ProductListInfoAdmin>> => {
+): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
     return new Promise((resolve) => {
         setTimeout(() => {
             const mockProducts: ProductListInfoAdmin[] = [
@@ -317,21 +307,16 @@ export const getProductListInfoByShopId = async (
                 },
             ];
 
-            // 1. Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang)
-            const startIndex = (page - 1) * limit;
-            const endIndex = startIndex + limit;
-            const paginatedProducts = mockProducts.slice(startIndex, endIndex);
-
-            // 2. Trả về cấu trúc PaginationResponse chuẩn
-            resolve({
-                data: paginatedProducts,
-                meta: {
-                    totalItems: mockProducts.length,
-                    totalPages: Math.ceil(mockProducts.length / limit),
-                    currentPage: page,
-                    itemsPerPage: limit,
-                },
-            });
+			// 2. Trả về cấu trúc PaginationResponse chuẩn
+			resolve({
+				items: mockProducts,
+				totalCount: mockProducts.length,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(mockProducts.length / limit),
+				hasNextPage: page * limit < mockProducts.length,
+				hasPreviousPage: page > 1,
+			});
         }, 500); // Giả lập độ trễ mạng 500ms
     });
 };

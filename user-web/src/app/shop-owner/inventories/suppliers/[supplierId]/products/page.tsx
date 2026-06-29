@@ -1,5 +1,6 @@
 import ProductAdminContainer from '@/components/products/admin/product-admin-container';
-import { getProductPagingBySupplierId } from '@/services/inventories/suppliers/goods-supplier-service';
+import { apiClient } from '@/lib/api-client';
+import { GoodsSupplierService } from '@/services/inventories/suppliers/goods-supplier-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 
@@ -25,7 +26,9 @@ export default async function SupplierProductsPage({
 	// 2. Fetch dữ liệu từ Server
 	const supplierName = 'Công ty TNHH Nhập khẩu Vina'; // Ví dụ: await fetchSupplierName(supplierId);
 
-	const products = await getProductPagingBySupplierId(supplierId);
+    const goodsSupplierService = new GoodsSupplierService(apiClient);
+
+	const products = await goodsSupplierService.getProductPagingBySupplierId(supplierId);
 
 	// 3. Render Container và truyền Props xuống
 	return (

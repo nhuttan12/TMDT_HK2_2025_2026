@@ -23,7 +23,7 @@ import { SupplierOption } from '@/types/inventories/suppliers/SupplierOption';
 
 // Extends trực tiếp Interface, chỉ khai báo thêm data tĩnh
 interface GoodsReceiptDetailUiProps extends UseGoodsReceiptDetailLogicReturn {
-	products: ProductForGoodsReceipt[];
+	productSelection: ProductForGoodsReceipt[];
 	supplierOptions?: SupplierOption[];
 }
 
@@ -35,7 +35,7 @@ export function GoodsReceiptDetailUi({
 	isCreate,
 	totalQuantity,
 	totalAmount,
-	products,
+	productSelection,
 	updateReceiptField,
 	handleSubmit,
 	handleProductSelection,
@@ -160,7 +160,7 @@ export function GoodsReceiptDetailUi({
 					<h2 className='font-bold text-lg'>Danh sách lô hàng</h2>
 					{isCreate && (
 						<ProductSelectionGoodsReceiptModal
-							products={products}
+							productSelection={productSelection}
 							onSelectProduct={handleProductSelection}
 							trigger={<Button className='cursor-pointer'>Thêm lô hàng mới</Button>}
 						/>

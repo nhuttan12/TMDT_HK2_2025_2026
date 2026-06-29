@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[usp_GetProductVariantListForSelectionGoodsReceipt]
-	@ShopId UNIQUEIDENTIFIER
+	@ShopId UNIQUEIDENTIFIER,
+	@ProductId UNIQUEIDENTIFIER
 AS
 BEGIN
 	SELECT 
@@ -9,5 +10,6 @@ BEGIN
 	FROM VARIANTS v
 	INNER JOIN PRODUCTS p ON p.id = v.product_id
 	WHERE p.shop_id = @ShopId
+		AND p.id = @ProductId
 		AND p.[status] = 1
 END

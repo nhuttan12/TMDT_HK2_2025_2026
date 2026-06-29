@@ -7,13 +7,14 @@ import { HelpCircle } from 'lucide-react';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import { ProductInStockFilterValues } from '@/types/inventories/stocks/ProductInStockFilterValues';
 import { FilterField } from '@/types/uis/FilterField';
+import { GoodsStockApiData } from '@/types/inventories/stocks/GoodsStockApiData';
 
 interface GoodsStockOverviewProps {
-	goodsStockSummary: GoodsStockSummaryItem[];
+	goodsStockApiData: GoodsStockApiData;
 }
 
 export default function GoodsStockOverviewUi({
-	goodsStockSummary,
+	goodsStockApiData
 }: GoodsStockOverviewProps): JSX.Element {
 	const productInStockFilterFields: FilterField<ProductInStockFilterValues>[] = [
 		{
@@ -72,6 +73,52 @@ export default function GoodsStockOverviewUi({
 			type: 'number',
 		},
 	];
+
+	const buildStockSummaryItems = (data?: GoodsStockApiData): GoodsStockSummaryItem[] => {
+		// Nếu API chưa gọi xong (data rỗng), mặc định value là 0
+		const d = data || {
+			availableProductQuantity: 0,
+			hiddenOrBlockedProductQuantity: 0,
+			outOfStockProductQuantity: 0,
+			lowStockProductQuantity: 0,
+			orderedVariant: 0,
+		};
+
+		return [
+			{
+				id: 'in-stock',
+				value: d.availableProductQuantity, // Bơm data vào đây
+				label: 'Phân loại còn hàng',
+				tooltipText: 'Các phân loại sản phẩm hiện đang có sẵn trong kho để bán.',
+			},
+			{
+				id: 'hidden-locked',
+				value: d.hiddenOrBlockedProductQuantity, // Bơm data vào đây
+				label: 'Phân loại đã ẩn & đã bị khóa',
+				tooltipText: 'Sản phẩm đã bị ẩn khỏi cửa hàng hoặc bị hệ thống khóa do vi phạm.',
+			},
+			{
+				id: 'out-of-stock',
+				value: d.outOfStockProductQuantity, // Bơm data vào đây
+				label: 'Phân loại hết hàng',
+				tooltipText: 'Sản phẩm có số lượng tồn kho bằng 0.',
+			},
+			{
+				id: 'low-stock',
+				value: d.lowStockProductQuantity, // Bơm data vào đây
+				label: 'Phân loại sắp hết hàng',
+				tooltipText: 'Sản phẩm có tồn kho dưới mức cảnh báo an toàn.',
+			},
+			{
+				id: 'ordered-sku',
+				value: d.orderedVariant, // Bơm data vào đây
+				label: 'SKU đặt hàng',
+				tooltipText: 'Số lượng SKU đang nằm trong các đơn đặt hàng chưa xử lý.',
+			},
+		];
+	};
+
+    const goodsStockSummary = buildStockSummaryItems(goodsStockApiData);
 
 	return (
 		<div className='space-y-4'>

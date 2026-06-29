@@ -143,6 +143,7 @@ namespace api.Utilities
             CreateMap<RawGoodsSupplierDto, GoodsSupplierResponseDto>();
             CreateMap<RawProductBySupplierId, ProductBySupplierIdResponse>();
             CreateMap<RawSupplierOptionDto, SupplierOptionResponseDto>();
+            CreateMap<RawGoodsIssue, GoodsIssueResponse>();
         }
 }
 }

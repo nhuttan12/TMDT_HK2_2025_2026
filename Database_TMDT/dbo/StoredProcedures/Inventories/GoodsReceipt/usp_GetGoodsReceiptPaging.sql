@@ -12,7 +12,7 @@ BEGIN
 	FROM GOODS_RECEIPTS gr
 	INNER JOIN SHOPS shops
 		ON gr.shop_id = shops.id
-	WHERE shops.id = @ShopId
+	WHERE shops.id = @ShopId;
 
 	SELECT 
 		gr.id AS Id,

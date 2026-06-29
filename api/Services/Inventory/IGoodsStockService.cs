@@ -16,10 +16,5 @@ namespace api.Services.Inventory
             Guid shopId,
             PaginationRequestDto pagination,
             CancellationToken cancellationToken = default);
-        Task<Result<PagedResult<ProductBySupplierIdResponse>>> GetProductPagingBySupplierId(
-            Guid supplierId,
-            Guid shopId,
-            PaginationRequestDto pagination,
-            CancellationToken cancellationToken = default);
     }
 }

@@ -12,6 +12,7 @@ import { JSX } from 'react';
 
 interface GoodsStockTableProps extends UseGoodsStockLogicReturn {
 	products: ProductInStock[];
+    totalPages?: number;
 }
 
 export default function GoodsStockTableUi({
@@ -21,6 +22,7 @@ export default function GoodsStockTableUi({
 	renderSortIcon,
 	currentPage,
 	changePage,
+    totalPages = 10
 }: GoodsStockTableProps): JSX.Element {
 	const replenishmentConfigs: Record<ReplenishmentLevel, string> = {
 		immediate:
@@ -141,7 +143,7 @@ export default function GoodsStockTableUi({
 			<div className='pb-5'>
 				<Pagination
 					currentPage={currentPage}
-					totalPages={10}
+					totalPages={totalPages}
 					onPageChange={changePage}
 				/>
 			</div>

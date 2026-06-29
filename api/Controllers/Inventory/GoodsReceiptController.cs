@@ -102,7 +102,7 @@ namespace api.Controllers.Inventory
             return HandleResult(result);
         }
 
-        [HttpGet("product/selection")]
+        [HttpGet("product-selection")]
         [Authorize(Roles = "Shop")]
         public async Task<IActionResult> GetProductSelectionForGoodsReceiptAsync(
             CancellationToken cancellationToken)
@@ -115,6 +115,24 @@ namespace api.Controllers.Inventory
             }
 
             var result = await goodsReceiptService.GetProductSelectionForGoodsReceiptAsync(shopId.Value, cancellationToken);
+
+            return HandleResult(result);
+        }
+
+        [HttpGet("variant-selection")]
+        [Authorize(Roles = "Shop")]
+        public async Task<IActionResult> GetProductVariantSelectionAsync(
+            [FromQuery] Guid productId,
+            CancellationToken cancellationToken)
+        {
+            var shopId = AuthenticatedUserId;
+
+            if (shopId == null)
+            {
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
+            }
+
+            var result = await goodsReceiptService.GetProductVariantSelectionAsync(shopId.Value, productId, cancellationToken);
 
             return HandleResult(result);
         }

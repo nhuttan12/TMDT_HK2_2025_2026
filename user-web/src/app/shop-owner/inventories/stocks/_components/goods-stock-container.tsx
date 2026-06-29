@@ -1,20 +1,20 @@
 'use client';
 
-import { JSX } from 'react';
-import { useGoodsStockSummaryQuery } from '@/queries/inventories/stocks/use-goods-stock-summary-query';
-import { GoodsStockSummaryItem } from '@/types/inventories/stocks/GoodsStockSummaryItem';
-import { useProductInStockQuery } from '@/queries/inventories/stocks/use-product-in-stock-query';
-import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
 import {
-	useGoodsStockLogic,
-	UseGoodsStockLogicReturn,
+    useGoodsStockLogic
 } from '@/hooks/inventories/stocks/use-goods-stock-logic';
+import { useGoodsStockSummaryQuery } from '@/queries/inventories/stocks/use-goods-stock-summary-query';
+import { useProductInStockQuery } from '@/queries/inventories/stocks/use-product-in-stock-query';
+import { GoodsStockApiData } from '@/types/inventories/stocks/GoodsStockApiData';
+import { ProductInStock } from '@/types/inventories/stocks/ProductInStock';
+import { BackendPagedResult } from '@/types/products/user/productBE';
+import { JSX } from 'react';
 import GoodsStockOverviewUi from './goods-stock-overview-ui';
 import GoodsStockTableUi from './goods-stock-table-ui';
 
 interface GoodsStockContainerProps {
-	initialSummary: GoodsStockSummaryItem[];
-	initialProducts: ProductInStock[];
+	initialSummary: GoodsStockApiData;
+	initialProducts: BackendPagedResult<ProductInStock>;
 }
 
 export default function GoodsStockContainer({
@@ -30,6 +30,8 @@ export default function GoodsStockContainer({
 	// 2. Gọi Logic Hook
 	const stockLogic = useGoodsStockLogic();
 
+    const currentProduct = products?.items ?? [];
+
 	const isPageLoading = isSummaryLoading || isProductsLoading;
 
 	if (isPageLoading && (!summary || !products)) {
@@ -38,9 +40,10 @@ export default function GoodsStockContainer({
 
 	return (
 		<>
-			<GoodsStockOverviewUi goodsStockSummary={summary ?? []} />
+			<GoodsStockOverviewUi goodsStockApiData={summary!} />
 			<GoodsStockTableUi
-				products={products ?? []}
+				products={currentProduct}
+                totalPages={products?.totalPages}
 				{...stockLogic}
 			/>
 		</>

@@ -75,7 +75,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 	};
 
 	const handleAddProductToForm = (selectedProduct: ProductForGoodsIssue): void => {
-		const isExist = form.items.some((item) => item.productId === selectedProduct.id);
+		const isExist = form.items.some((item) => item.variantId === selectedProduct.id);
 		if (isExist) {
 			alert('Sản phẩm này đã có trong danh sách xuất kho!');
 			return;
@@ -83,8 +83,8 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 
 		const newItem: GoodsIssueItem = {
 			id: Date.now().toString(),
-			productId: selectedProduct.id,
-			productName: selectedProduct.name,
+			variantId: selectedProduct.id,
+			variantName: selectedProduct.name,
 			sku: selectedProduct.sku,
 			serialNumber: selectedProduct.serialNumber,
 			quantity: 1,

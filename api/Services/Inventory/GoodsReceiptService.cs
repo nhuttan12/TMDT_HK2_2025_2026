@@ -45,6 +45,13 @@ namespace api.Services.Inventory
             return Result<IEnumerable<ProductSelectionResponse>>.Success(result);
         }
 
+        public async Task<Result<IEnumerable<ProductVariantSelectionResponse>>> GetProductVariantSelectionAsync(Guid shopId, Guid productId, CancellationToken cancellationToken)
+        {
+            var result = await goodsReceiptRepository.GetProductVariantSelectionAsync(shopId, productId, cancellationToken);
+
+            return Result<IEnumerable<ProductVariantSelectionResponse>>.Success(result);
+        }
+
         public async Task<Result<GoodsReceiptDetailResponse>> GetReceiptDetailAsync(
             Guid userId, Guid receiptId, CancellationToken cancellationToken)
         {

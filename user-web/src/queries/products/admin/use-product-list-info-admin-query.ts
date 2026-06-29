@@ -1,13 +1,13 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { getProductListInfoAdmin } from '@/services/products/admin/product-admin-service';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 
 export function useProductListInfoAdminQuery(
-	initialData?: PaginationResponse<ProductListInfoAdmin>,
+	initialData?: BackendPagedResult<ProductListInfoAdmin>,
 	request?: PaginationRequest,
-): UseQueryResult<PaginationResponse<ProductListInfoAdmin>, Error> {
+): UseQueryResult<BackendPagedResult<ProductListInfoAdmin>, Error> {
 	return useQuery({
 		queryKey: ['product-list-info-admin'],
 		queryFn: () => getProductListInfoAdmin({ page: request?.page, limit: request?.limit }),

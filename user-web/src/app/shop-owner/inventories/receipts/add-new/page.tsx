@@ -1,8 +1,9 @@
-import { JSX } from 'react';
-import { Metadata } from 'next';
+import { apiClient } from '@/lib/api-client';
+import { GoodsSupplierService } from '@/services/inventories/suppliers/goods-supplier-service';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
+import { Metadata } from 'next';
+import { JSX } from 'react';
 import { GoodsReceiptDetailContainer } from '../_components/goods-receipt-detail/goods-receipt-detail-container';
-import { getSupplierOptionsByShopId } from '@/services/inventories/suppliers/goods-supplier-service';
 
 export const metadata: Metadata = {
 	title: 'Quản lý chi tiết đơn nhập kho',
@@ -19,16 +20,16 @@ const emptyGoodsReceiptDetail: GoodsReceiptDetail = {
 };
 
 export default async function Page(): Promise<JSX.Element> {
-	const supplierOptions = await getSupplierOptionsByShopId(
-		'e6a8b7c2-58cc-4b01-90e6-d701748f0851',
-	);
+    const goodsSupplierService = new GoodsSupplierService(apiClient);
+    
+	const supplierOptions = await goodsSupplierService.getSupplierOptionsByShopId();
 
 	return (
 		<GoodsReceiptDetailContainer
 			key={'create'}
 			formType={'create'}
 			goodsReceipt={emptyGoodsReceiptDetail}
-            supplierOptions={supplierOptions}
+			supplierOptions={supplierOptions}
 		/>
 	);
 }

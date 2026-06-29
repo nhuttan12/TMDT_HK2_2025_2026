@@ -13,5 +13,6 @@ namespace api.Repository.Inventory
         Task<PagedResult<GoodsReceiptPagingDtoResponse>> GetGoodsReceiptsByCodePagingAsync(Guid shopId, string code, PaginationRequestDto request, CancellationToken cancellationToken);
         Task<PagedResult<ProductBatchPagingDtoResponse>> GetProductListInBatchPagingAsync(GetProductListInBatchRequest request, PaginationRequestDto pagination, CancellationToken cancellationToken);
         Task<IEnumerable<ProductSelectionResponse>> GetProductSelectionForGoodsReceiptAsync(Guid shopId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ProductVariantSelectionResponse>> GetProductVariantSelectionAsync(Guid shopId, Guid productId, CancellationToken cancellationToken);
     }
 }

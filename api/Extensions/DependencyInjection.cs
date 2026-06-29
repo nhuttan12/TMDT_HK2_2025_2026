@@ -92,6 +92,7 @@ namespace api.Extensions
             services.AddScoped<IShopAdminRepository, ShopAdminRepository>();
             services.AddScoped<IGoodsSupplierRepository, GoodsSupplierRepository>();
             services.AddScoped<IGoodsStockRepository, GoodsStockRepository>();
+            services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
 
             return services;
         }
@@ -117,6 +118,7 @@ namespace api.Extensions
             services.AddScoped<IShopAdminService, ShopAdminService>();
             services.AddScoped<IGoodsStockService, GoodsStockService>();
             services.AddScoped<IGoodsSupplierService, GoodsSupplierService>();
+            services.AddScoped<IGoodsIssueService, GoodsIssueService>();
 
             // Đăng ký Data Seeders
             services.AddScoped<IDataSeeder, CategorySeeder>();

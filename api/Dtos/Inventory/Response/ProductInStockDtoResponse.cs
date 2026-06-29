@@ -13,16 +13,16 @@ namespace api.Dtos.Inventory.Response
         [JsonPropertyName("variantId")]
         public Guid VariantId { get; set; }
 
-        [JsonPropertyName("imageUrl")]
+        [JsonPropertyName("image")]
         public string? ImageUrl { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("sku")]
+        [JsonPropertyName("variantSku")]
         public string Sku { get; set; } = string.Empty;
 
-        [JsonPropertyName("replenishmentLevel")]
+        [JsonPropertyName("replenishment")]
         public string ReplenishmentLevel { get; set; } = string.Empty;
 
         [JsonPropertyName("stock")]

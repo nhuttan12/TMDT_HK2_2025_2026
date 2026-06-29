@@ -3,13 +3,13 @@
 import { useProductAdminLogic } from '@/hooks/products/admin/use-product-admin-logic';
 import { useProductListInfoAdminQuery } from '@/queries/products/admin/use-product-list-info-admin-query';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { AppRole } from '@/types/uis/AppRole';
 import { JSX } from 'react';
 import ProductAdminUi from './product-admin-ui';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 interface ProductAdminContainerProps {
-	initialProducts: PaginationResponse<ProductListInfoAdmin>;
+	initialProducts: BackendPagedResult<ProductListInfoAdmin>;
 	role: AppRole;
 	productApproval?: boolean;
 	addLabel?: string;
@@ -28,14 +28,13 @@ export default function ProductAdminContainer({
 	// 1. Data Source
 	const { data, isLoading: isProductsLoading } = useProductListInfoAdminQuery(initialProducts);
 
-	const currentProduct = data?.data || initialProducts.data;
-	const currentMeta = data?.meta || initialProducts.meta;
+	const currentProduct = data?.items || initialProducts.items;
 
 	// 2. Logic Hook
 	const logic = useProductAdminLogic({
 		role,
 		productApproval,
-		totalPage: currentMeta.totalPages,
+		totalPage: data?.totalPages || initialProducts.totalPages,
 	});
 
 	const isPageLoading = isProductsLoading;

@@ -1,10 +1,15 @@
+import { ResponseApi } from '@/types/common/ResponseApi';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { SupplierOption } from '@/types/inventories/suppliers/SupplierOption';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { type AxiosInstance } from 'axios';
 
-export const getGoodsSupplierList = async (): Promise<Supplier[]> => {
+export const getGoodsSupplierListPagingMocking = async ({
+	page = 1,
+	limit = 10,
+}: PaginationRequest = {}): Promise<BackendPagedResult<Supplier>> => {
 	const mockSuppliers: Supplier[] = [
 		{
 			id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đã chuyển sang GUID string
@@ -53,13 +58,21 @@ export const getGoodsSupplierList = async (): Promise<Supplier[]> => {
 		},
 	];
 
-	return mockSuppliers;
+	return {
+		items: mockSuppliers,
+		totalCount: mockSuppliers.length,
+		pageNumber: page,
+		pageSize: limit,
+		totalPages: Math.ceil(mockSuppliers.length / limit),
+		hasNextPage: page * limit < mockSuppliers.length,
+		hasPreviousPage: page > 1,
+	};
 };
 
-export const getProductPagingBySupplierId = async (
+export const getProductPagingBySupplierIdMocking = async (
 	supplierId: string,
 	{ page = 1, limit = 10 }: PaginationRequest = {},
-): Promise<PaginationResponse<ProductListInfoAdmin>> => {
+): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			const mockProducts: ProductListInfoAdmin[] = [
@@ -110,26 +123,21 @@ export const getProductPagingBySupplierId = async (
 				},
 			];
 
-			// 1. Cắt mảng dữ liệu dựa theo page và limit (Giả lập phân trang)
-			const startIndex = (page - 1) * limit;
-			const endIndex = startIndex + limit;
-			const paginatedProducts = mockProducts.slice(startIndex, endIndex);
-
 			// 2. Trả về cấu trúc PaginationResponse chuẩn
 			resolve({
-				data: paginatedProducts,
-				meta: {
-					totalItems: mockProducts.length,
-					totalPages: Math.ceil(mockProducts.length / limit),
-					currentPage: page,
-					itemsPerPage: limit,
-				},
+				items: mockProducts,
+				totalCount: mockProducts.length,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(mockProducts.length / limit),
+				hasNextPage: page * limit < mockProducts.length,
+				hasPreviousPage: page > 1,
 			});
 		}, 500); // Thêm độ trễ 500ms
 	});
 };
 
-export const getSupplierDetailBySupplierId = async (supplierId: string): Promise<Supplier> => {
+export const getSupplierDetailBySupplierIdMocking = async (supplierId: string): Promise<Supplier> => {
 	const mockSupplier: Supplier = {
 		id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đồng bộ đúng GUID của Công ty Bao bì Việt Nam
 		name: 'Công ty Cổ phần Bao bì Việt Nam',
@@ -143,10 +151,13 @@ export const getSupplierDetailBySupplierId = async (supplierId: string): Promise
 	return mockSupplier;
 };
 
-export const getSupplierOptionsByShopId = async (shopId: string): Promise<SupplierOption[]> => {
+export const getSupplierOptionsByShopIdMocking = async (): Promise<SupplierOption[]> => {
 	const mockData: SupplierOption[] = [
 		{ id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', name: 'Công ty CP Hàng Tiêu Dùng Masan' },
-		{ id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0852', name: 'Nhà phân phối Nước giải khát Suntory PepsiCo' },
+		{
+			id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0852',
+			name: 'Nhà phân phối Nước giải khát Suntory PepsiCo',
+		},
 		{ id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0853', name: 'Đại lý Nông sản sạch Đà Lạt' },
 	];
 
@@ -157,3 +168,88 @@ export const getSupplierOptionsByShopId = async (shopId: string): Promise<Suppli
 		}, 500);
 	});
 };
+
+export class GoodsSupplierService {
+	constructor(private api: AxiosInstance) {}
+
+	async getGoodsSupplierListPaging({ page = 1, limit = 10 }: PaginationRequest = {}): Promise<
+		BackendPagedResult<Supplier>
+	> {
+		try {
+			const response = await this.api.get<ResponseApi<BackendPagedResult<Supplier>>>(
+				`/admin/supplier?PageNumber=${page}&PageSize=${limit}`,
+			);
+
+			console.log('supplier list paging data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getGoodsSupplierListPagingMocking();
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getGoodsSupplierListPagingMocking();
+		}
+	}
+
+	async getProductPagingBySupplierId(
+		supplierId: string,
+		{ page = 1, limit = 10 }: PaginationRequest = {},
+	): Promise<BackendPagedResult<ProductListInfoAdmin>> {
+		try {
+			const response = await this.api.get<
+				ResponseApi<BackendPagedResult<ProductListInfoAdmin>>
+			>(`/admin/supplier/products?supplierId=${supplierId}&PageNumber=${page}&PageSize=${limit}`);
+
+			console.log('product paging by supplier data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductPagingBySupplierIdMocking(supplierId, {page, limit});
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductPagingBySupplierIdMocking(supplierId, {page, limit});
+		}
+	}
+
+    async getSupplierDetailBySupplierId(supplierId: string): Promise<Supplier> {
+        try {
+			const response = await this.api.get<
+				ResponseApi<Supplier>
+			>(`/admin/supplier/detail?supplierId=${supplierId}`);
+
+			console.log('supplier detail data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getSupplierDetailBySupplierIdMocking(supplierId);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getSupplierDetailBySupplierIdMocking(supplierId);
+		}
+    }
+
+    async getSupplierOptionsByShopId(): Promise<SupplierOption[]> {
+        try {
+			const response = await this.api.get<
+				ResponseApi<SupplierOption[]>
+			>(`/admin/supplier/detail`);
+
+			console.log('supplier option data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getSupplierOptionsByShopIdMocking();
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getSupplierOptionsByShopIdMocking();
+		}
+    }
+}

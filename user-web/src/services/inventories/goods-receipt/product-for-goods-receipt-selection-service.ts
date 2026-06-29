@@ -1,9 +1,6 @@
 import { ResponseApi } from '@/types/common/ResponseApi';
-import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
-import { BackendPagedResult } from '@/types/products/user/productBE';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { type AxiosInstance } from 'axios';
 
 export const getProductSelectionForGoodsReceiptMocking = async (): Promise<
@@ -53,90 +50,103 @@ export const getProductSelectionForGoodsReceiptMocking = async (): Promise<
 	];
 };
 
-export const getProductVariantListForSelectionGoodsReceiptMocking = async (): Promise<
-	PaginationResponse<ProductVariantRow>
-> => {
-	return {
-		data: [
-			{
-				id: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-				name: 'Bình Terrarium Kín - Rừng Nhiệt Đới - Size L',
-				sku: 'TER-CL-TROP-L',
-			},
-			{
-				id: '2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e',
-				name: 'Bình Terrarium Kín - Rừng Nhiệt Đới - Size M',
-				sku: 'TER-CL-TROP-M',
-			},
-			{
-				id: '3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f',
-				name: 'Bình Terrarium Mở - Sa Mạc Tiên Rồng - Size S',
-				sku: 'TER-OP-DES-S',
-			},
-			{
-				id: '4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a',
-				name: 'Bể Paludarium - Thác Nước Bán Cạn - Size XL',
-				sku: 'PAL-WATERFALL-XL',
-			},
-			{
-				id: '5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b',
-				name: 'Bể Paludarium - Rừng Trầm Tích - Size L',
-				sku: 'PAL-ROCK-L',
-			},
-			{
-				id: '6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c',
-				name: 'Bình Kính Đa Giác - Giọt Nước Bonsai - Size M',
-				sku: 'GEO-DROP-BON-M',
-			},
-			{
-				id: '7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d',
-				name: 'Bình Kính Đa Giác - Kim Cương - Size S',
-				sku: 'GEO-DIA-S',
-			},
-			{
-				id: '8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e',
-				name: 'Bình Terrarium Kín - Đồi Rêu Cổ Tích - Size S',
-				sku: 'TER-CL-MOSS-S',
-			},
-			{
-				id: '9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f',
-				name: 'Bình Terrarium Kín - Đồi Rêu Cổ Tích - Size M',
-				sku: 'TER-CL-MOSS-M',
-			},
-			{
-				id: '0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a',
-				name: 'Bình Terrarium Mở - Tiểu Cảnh Suối Nước - Size L',
-				sku: 'TER-OP-STREAM-L',
-			},
-		],
-		meta: {
-			currentPage: 1,
-			totalItems: 10,
-			itemsPerPage: 10,
-			totalPages: 1,
+export const getProductVariantListForSelectionGoodsReceiptMocking = async (
+	productId: string,
+): Promise<ProductVariantRow[]> => {
+	return [
+		{
+			id: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+			name: 'Bình Terrarium Kín - Rừng Nhiệt Đới - Size L',
+			sku: 'TER-CL-TROP-L',
 		},
-	};
+		{
+			id: '2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e',
+			name: 'Bình Terrarium Kín - Rừng Nhiệt Đới - Size M',
+			sku: 'TER-CL-TROP-M',
+		},
+		{
+			id: '3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f',
+			name: 'Bình Terrarium Mở - Sa Mạc Tiên Rồng - Size S',
+			sku: 'TER-OP-DES-S',
+		},
+		{
+			id: '4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a',
+			name: 'Bể Paludarium - Thác Nước Bán Cạn - Size XL',
+			sku: 'PAL-WATERFALL-XL',
+		},
+		{
+			id: '5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b',
+			name: 'Bể Paludarium - Rừng Trầm Tích - Size L',
+			sku: 'PAL-ROCK-L',
+		},
+		{
+			id: '6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c',
+			name: 'Bình Kính Đa Giác - Giọt Nước Bonsai - Size M',
+			sku: 'GEO-DROP-BON-M',
+		},
+		{
+			id: '7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d',
+			name: 'Bình Kính Đa Giác - Kim Cương - Size S',
+			sku: 'GEO-DIA-S',
+		},
+		{
+			id: '8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e',
+			name: 'Bình Terrarium Kín - Đồi Rêu Cổ Tích - Size S',
+			sku: 'TER-CL-MOSS-S',
+		},
+		{
+			id: '9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f',
+			name: 'Bình Terrarium Kín - Đồi Rêu Cổ Tích - Size M',
+			sku: 'TER-CL-MOSS-M',
+		},
+		{
+			id: '0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a',
+			name: 'Bình Terrarium Mở - Tiểu Cảnh Suối Nước - Size L',
+			sku: 'TER-OP-STREAM-L',
+		},
+	];
 };
 
-// export class ProductForGoodsReceiptService {
-// 	constructor(private api: AxiosInstance) {}
+export class ProductForGoodsReceiptService {
+	constructor(private api: AxiosInstance) {}
 
-// 	async getProductsForGoodsReceipt(): Promise<GoodsReceiptList[]> {
-// 		try {
-// 			const response = await this.api.get<ResponseApi<GoodsReceiptList[]>>(
-// 				`/admin/receipt?PageNumber=${page}&PageSize=${limit}`,
-// 			);
+	async getProductsSelectionForGoodsReceipt(): Promise<ProductForGoodsReceipt[]> {
+		try {
+			const response = await this.api.get<ResponseApi<ProductForGoodsReceipt[]>>(
+				`/admin/receipt/product-selection`,
+			);
 
-// 			console.log('receipt data', response.data.data);
-// 			if (!response.data || !response.data.isSuccess || !response.data.data) {
-// 				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
-// 				return await getProductsForGoodsReceiptMocking();
-// 			}
+			console.log('product selection data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductSelectionForGoodsReceiptMocking();
+			}
 
-// 			return response.data.data;
-// 		} catch (error: unknown) {
-// 			console.error(error);
-// 			return await getProductsForGoodsReceiptMocking();
-// 		}
-// 	}
-// }
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductSelectionForGoodsReceiptMocking();
+		}
+	}
+
+	async getProductVariantListForSelectionGoodsReceipt(
+		productId: string,
+	): Promise<ProductVariantRow[]> {
+		try {
+			const response = await this.api.get<ResponseApi<ProductVariantRow[]>>(
+				`/admin/receipt/variant-selection?productId=${productId}`,
+			);
+
+			console.log('variant selection data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductVariantListForSelectionGoodsReceiptMocking(productId);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductVariantListForSelectionGoodsReceiptMocking(productId);
+		}
+	}
+}

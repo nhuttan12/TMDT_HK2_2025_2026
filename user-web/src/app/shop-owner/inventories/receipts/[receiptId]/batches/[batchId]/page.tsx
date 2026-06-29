@@ -1,11 +1,10 @@
+import apiServer from '@/lib/api-server';
 import {
-	getProductListInBatchMocking,
-	GoodsReceiptDetailService,
+    GoodsReceiptDetailService
 } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 import ProductVariantListInBatchContainer from './_components/product-variant-list-in-batch-container';
-import apiServer from '@/lib/api-server';
 
 export const metadata: Metadata = {
 	title: 'Sản phẩm trong lô hàng',

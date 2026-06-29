@@ -42,7 +42,7 @@ export function GoodsReceiptDetailContainer({
 	// 4. Render UI bằng Spread props
 	return (
 		<GoodsReceiptDetailUi
-			products={products}
+			productSelection={products}
             supplierOptions={supplierOptions}
 			{...detailLogic}
 		/>

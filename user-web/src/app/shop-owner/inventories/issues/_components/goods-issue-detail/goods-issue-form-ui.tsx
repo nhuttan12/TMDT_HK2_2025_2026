@@ -44,7 +44,7 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 			render: function (item: GoodsIssueItem): JSX.Element {
 				return (
 					<div>
-						<p className='font-medium'>{item.productName}</p>
+						<p className='font-medium'>{item.variantName}</p>
 						<p className='text-xs text-slate-500'>{item.sku}</p>
 					</div>
 				);
