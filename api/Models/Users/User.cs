@@ -109,9 +109,23 @@ namespace api.Models
 
             if (!string.IsNullOrEmpty(fullname))
                 FullName = fullname;
-
             if (!string.IsNullOrEmpty(avatarUrl))
-                UserDetail!.AvatarUrl = avatarUrl;
+            {
+                if (UserDetail == null)
+                {
+                    // Nếu chưa có UserDetail dưới DB, tiến hành tạo mới hoàn toàn (EF Core sẽ tự hiểu để chạy lệnh INSERT)
+                    UserDetail = new UserDetail
+                    {
+                        UserId = userId, // Hoặc Id tùy thuộc vào cách bạn đặt khóa ngoại
+                        AvatarUrl = avatarUrl
+                    };
+                }
+                else
+                {
+                    // Nếu đã có rồi, chỉ cần cập nhật trường AvatarUrl (EF Core sẽ chạy lệnh UPDATE)
+                    UserDetail.AvatarUrl = avatarUrl;
+                }
+            }
 
             // Cập nhật địa chỉ: Chỉ thêm những địa chỉ chưa tồn tại
             if (addresses != null && addresses.Any())
@@ -126,7 +140,7 @@ namespace api.Models
                 {
                     if (!string.IsNullOrWhiteSpace(newAddress) && !existingAddressStrings.Contains(newAddress))
                     {
-                        Addresses.Add(Address.Create(userId,Guid.NewGuid(), newAddress));
+                        Addresses.Add(Address.CreateForUser(userId, newAddress));
                     }
                 }
             }

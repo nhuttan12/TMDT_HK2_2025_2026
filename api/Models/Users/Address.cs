@@ -37,6 +37,23 @@ public class Address
             IsUsed = false
         };
     }
+    public static Address CreateForUser(Guid userId, string addressUrl)
+    {
+        // Fail Fast: Kiểm tra dữ liệu đầu vào ngay lập tức
+        if (userId == Guid.Empty)
+            throw new ArgumentException("UserId không hợp lệ.", nameof(userId));
+
+        if (string.IsNullOrWhiteSpace(addressUrl))
+            throw new ArgumentException("Địa chỉ không được để trống.", nameof(addressUrl));
+
+        return new Address
+        {
+            Id = Guid.Empty,
+            UserId = userId,
+            AddressUrl = addressUrl.Trim(),
+            IsUsed = false
+        };
+    }
 
     // Business Logic Method: Thay đổi trạng thái object một cách tường minh
     public void MarkAsUsed()
