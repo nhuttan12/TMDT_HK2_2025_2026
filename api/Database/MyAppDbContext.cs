@@ -43,7 +43,7 @@ namespace api.Database
 
         public DbSet<InventoryBatchStock> InventoryBatchStock { get; set; }
         public DbSet<Invoice> invoices { get; set; }
-        public DbSet<InvoiceItem> invoiceItems { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
 
 

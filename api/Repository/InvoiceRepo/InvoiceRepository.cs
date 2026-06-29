@@ -25,13 +25,30 @@ namespace api.Repository.InvoiceRepo
 
         public async Task<Invoice?> getByIdTracking(Guid invoiceId, CancellationToken cancellationToken)
         {
-            return await context.invoices
+            // Câu lệnh 1: Lấy Invoice gốc cùng với mối quan hệ Delivery -> Address
+            var invoice = await context.invoices
                 .Include(i => i.Delivery)
-                .Include(i => i.Delivery)
-                .Include(i => i.Items)
-                    .ThenInclude(ii => ii.Variant)
-                        .ThenInclude(iii => iii.Product)
+                    .ThenInclude(d => d.Address) // Chú ý chữ 'address' viết thường theo Entity class của bạn
                 .FirstOrDefaultAsync(i => i.Id == invoiceId, cancellationToken);
+
+            if (invoice is null) return null;
+
+            // Câu lệnh 2: Nạp danh sách Items và Variant vào Context (EF Core tự ráp vào biến 'invoice' ở trên)
+            await context.InvoiceItems
+                .Include(ii => ii.Variant)
+                .Where(ii => ii.InvoiceId == invoiceId)
+                .ToListAsync(cancellationToken);
+
+            // Câu lệnh 3: Nạp tiếp Product của các Variant đó (Nếu bạn cần dùng Product sâu bên trong)
+            // Lấy danh sách VariantId hiện tại đang có trên RAM của Invoice này
+            var variantIds = invoice.Items.Select(ii => ii.VariantId).Distinct().ToList();
+
+            await context.Variants
+                .Include(v => v.Product)
+                .Where(v => variantIds.Contains(v.Id))
+                .ToListAsync(cancellationToken);
+
+            return invoice; // Lúc này đối tượng 'invoice' đã được lấp đầy đủ dữ liệu một cách kỳ diệu!
         }
 
         public async Task<Invoice?> GetDetailAsync(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
@@ -39,6 +56,7 @@ namespace api.Repository.InvoiceRepo
             return await context.invoices
                 .AsNoTracking()
                 .Include(i => i.Delivery)
+                    .ThenInclude(i => i.Address)
                 .Include(i => i.Items)
                     .ThenInclude(ii => ii.Variant)
                         .ThenInclude(iii => iii.Product)
@@ -55,6 +73,7 @@ namespace api.Repository.InvoiceRepo
 
             var invoices = await context.invoices
                 .Include(i => i.Delivery)
+                    .ThenInclude(i => i.Address)
                 .AsNoTracking()
                 .Include(i => i.Items)
                     .ThenInclude(ii => ii.Variant)

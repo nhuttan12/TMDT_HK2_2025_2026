@@ -55,7 +55,7 @@ namespace api.Database.Configurations
               .OnDelete(DeleteBehavior.Cascade);
 
             // Cấu hình mối quan hệ với thực thể Address (Giả định Address có thể liên kết với nhiều Delivery)
-            builder.HasOne(d => d.address)
+            builder.HasOne(d => d.Address)
                 .WithMany() // Nếu bên class Address không có Navigation Property trỏ về tập hợp Deliveries
                 .HasForeignKey(d => d.AddressId)
                 .OnDelete(DeleteBehavior.Restrict); // Không được xóa địa chỉ nếu đang có đơn giao hàng liên kết

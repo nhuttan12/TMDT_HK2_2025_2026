@@ -2,6 +2,7 @@
 using api.Dtos.Invoice.Response;
 using api.Models;
 using api.Models.Orders;
+using api.Models.Payments;
 using api.Repository;
 using api.Repository.InvoiceRepo;
 using api.Repository.UserRepo;
@@ -12,9 +13,9 @@ namespace api.Services.Invoices
 {
     public interface IInvoiceService
     {
-        Task<Result<InvoiceResponseDto>> AddDeliveryToInvoice(Guid? userId, Guid invoiceId, AddDeliveryRequestDto request, CancellationToken cancellationToken);
-        Task<Result<InvoiceResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto requset, CancellationToken cancellationToken);
-        Task<Result<InvoiceResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
+        Task<Result<InvoiceDetailResponseDto>> AddDeliveryToInvoice(Guid? userId, Guid invoiceId, AddDeliveryRequestDto request, CancellationToken cancellationToken);
+        Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto requset, CancellationToken cancellationToken);
+        Task<Result<InvoiceDetailResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
         Task<Result<PagedResult<InvoiceResponseDto>>> GetListById(Guid? userId, CancellationToken cancellationToken);
     }
     public class InvoiceService(
@@ -25,23 +26,23 @@ namespace api.Services.Invoices
         IDeliveryRepository deliveryRepository,
         IInvoiceRepository repo) : IInvoiceService
     {
-        public async Task<Result<InvoiceResponseDto>> AddDeliveryToInvoice(
-      Guid? userId,
-      Guid invoiceId,
-      AddDeliveryRequestDto request,
-      CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDetailResponseDto>> AddDeliveryToInvoice(
+          Guid? userId,
+          Guid invoiceId,
+          AddDeliveryRequestDto request,
+          CancellationToken cancellationToken)
         {
             // 1. Kiểm tra UserId hợp lệ
             if (userId == null || userId == Guid.Empty)
             {
-                return Result<InvoiceResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Người dùng không hợp lệ.", ErrorType.Unauthorized));
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Người dùng không hợp lệ.", ErrorType.Unauthorized));
             }
 
             // 2. Lấy Invoice bằng hàm Tracking (Hoặc No-Tracking tùy bạn, vì ta sẽ gọi Update ở dưới nếu cần)
             Invoice iv = await repo.getByIdTracking(invoiceId, cancellationToken);
             if (iv is null)
             {
-                return Result<InvoiceResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Hóa đơn không tồn tại.", ErrorType.NotFound));
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Hóa đơn không tồn tại.", ErrorType.NotFound));
             }
 
             // 3. Xử lý logic thông tin người nhận
@@ -53,7 +54,7 @@ namespace api.Services.Invoices
                 User user = await userRepository.GetUserByIdAsync(userId.Value);
                 if (user is null)
                 {
-                    return Result<InvoiceResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Không tìm thấy thông tin tài khoản người dùng.", ErrorType.NotFound));
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Không tìm thấy thông tin tài khoản người dùng.", ErrorType.NotFound));
                 }
 
                 if (string.IsNullOrWhiteSpace(receiverName)) receiverName = user.FullName;
@@ -72,7 +73,7 @@ namespace api.Services.Invoices
             {
                 if (string.IsNullOrWhiteSpace(request.Address))
                 {
-                    return Result<InvoiceResponseDto>.Failure(Error.Create("Invoice.Add.Address", "Thông tin địa chỉ cụ thể không được để trống.", ErrorType.BadRequest));
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Address", "Thông tin địa chỉ cụ thể không được để trống.", ErrorType.BadRequest));
                 }
 
                 Guid newAddressId = idGenerator.NewId();
@@ -108,16 +109,16 @@ namespace api.Services.Invoices
             await unitOfWork.CommitAsync(cancellationToken);
 
             // Giữ nguyên cách return nguyên bản của bạn
-            return MapInvoiceToDto(iv);
+            return MapInvoiceToInvoiceDetailDto(iv);
         }
-        public async Task<Result<InvoiceResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto request, CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto request, CancellationToken cancellationToken)
         {
             Guid id = idGenerator.NewId();
             Invoice order = Invoice.Create(id, userId: userId);
 
             if (request == null || request.Items == null)
             {
-                return Result<InvoiceResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
             }
 
             var variantIds = request.Items.Select(x => x.VariantId).Distinct().ToList();
@@ -128,7 +129,7 @@ namespace api.Services.Invoices
                 // Bắt lỗi nếu VariantId truyền lên không có thật trong DB
                 if (!pricesDict.TryGetValue(item.VariantId, out var cost))
                 {
-                    return Result<InvoiceResponseDto>.Failure(Error.Create("invoice.request", "variant not found", ErrorType.BadRequest));
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "variant not found", ErrorType.BadRequest));
                 }
 
                 order.AddItem(item.ProductId, item.VariantId, item.Quantity, cost);
@@ -140,18 +141,18 @@ namespace api.Services.Invoices
 
             // Lấy lại order từ DB để map vào DTO (bao gồm Tên và Hình ảnh)
             var savedOrder = await repo.GetDetailAsync(userId, id, cancellationToken);
-            var res = MapInvoiceToDto(savedOrder!);
+            var res = MapInvoiceToInvoiceDetailDto(savedOrder!);
             return res;
         }
 
-        public async Task<Result<InvoiceResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
+        public async Task<Result<InvoiceDetailResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
         {
             if (invoiceId == Guid.Empty)
             {
-                return Result<InvoiceResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
             }
             var res = await repo.GetDetailAsync(userId, invoiceId, cancellationToken);
-            return MapInvoiceToDto(res);
+            return MapInvoiceToInvoiceDetailDto(res);
         }
 
         public async Task<Result<PagedResult<InvoiceResponseDto>>> GetListById(Guid? userId, CancellationToken cancellationToken)
@@ -165,7 +166,7 @@ namespace api.Services.Invoices
             logger.LogInformation("detail data: {res}", invoices.First().Items.ToString());
 
             var mappedDtos = invoices
-                .Select(MapInvoiceToDto)
+                .Select(MapInvoiceToInvoiceDto)
                 .Where(result => result.IsSuccess)
                 .Select(result => result.Value!)
                 .ToList();
@@ -179,11 +180,11 @@ namespace api.Services.Invoices
             ));
         }
 
-        private Result<InvoiceResponseDto> MapInvoiceToDto(Invoice invoice)
+        private Result<InvoiceDetailResponseDto> MapInvoiceToInvoiceDetailDto(Invoice invoice)
         {
             if (invoice == null)
             {
-                return Result<InvoiceResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
             }
             ICollection<InvoiceItemReponseDto> list = [];
             if (invoice.Items.Any())
@@ -202,21 +203,23 @@ namespace api.Services.Invoices
                     });
                 }
             }
-            string recipientName= null;
+            string recipientName = null;
             string recipientPhone = null;
             string address = null;
             decimal shippingFee = 0;
-            if (invoice.Delivery is not null) {
+            if (invoice.Delivery is not null)
+            {
                 recipientName = invoice.Delivery.ReceiverName;
                 recipientPhone = invoice.Delivery.ReceiverPhone;
-                address = invoice.Delivery.address.AddressUrl;
+                address = invoice.Delivery.Address.AddressUrl;
                 shippingFee = invoice.Delivery.ShippingFee;
             }
             decimal discountAmount = 0;
-            if (invoice.AppliedCoupon is not null) { 
+            if (invoice.AppliedCoupon is not null)
+            {
                 discountAmount = invoice.AppliedCoupon.DiscountAmount;
             }
-            var responseDto = new InvoiceResponseDto
+            var responseDto = new InvoiceDetailResponseDto
             {
                 Id = invoice.Id,
                 UserId = invoice.UserId,
@@ -232,11 +235,24 @@ namespace api.Services.Invoices
                 Address = address,
                 ShippingFee = shippingFee,
                 DiscountAmount = discountAmount,
-               
+
                 Items = list.Any() ? list : []
             };
 
-            return Result<InvoiceResponseDto>.Success(responseDto);
+            return Result<InvoiceDetailResponseDto>.Success(responseDto);
+        }
+
+        private Result<InvoiceResponseDto> MapInvoiceToInvoiceDto(Invoice invoice)
+        {
+            return new InvoiceResponseDto
+            {
+                Id = invoice.Id,
+                CreatedAt = invoice.CreatedAt,
+                Status = invoice.Status.ToString(),
+                PaymentMethod = PaymentMethod.CreditCard.ToString(),
+                TotalAmount = invoice.TotalAmount,
+                TotalItems = invoice.Items.Count,
+            };
         }
     }
 }

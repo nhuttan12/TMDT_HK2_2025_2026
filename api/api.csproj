@@ -9,19 +9,10 @@
 
   <ItemGroup>
 	  <Content Remove="Database\Seeders\SeedData\Categories.json" />
-	  <Compile Remove="Database\Migrations\**" />
 	  <Compile Remove="StoredProcedures\**" />
-	  <Content Remove="Database\Migrations\**" />
 	  <Content Remove="StoredProcedures\**" />
-	  <EmbeddedResource Remove="Database\Migrations\**" />
 	  <EmbeddedResource Remove="StoredProcedures\**" />
-	  <None Remove="Database\Migrations\**" />
 	  <None Remove="StoredProcedures\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Database\Migrations\20260618100600_InitDatabase.cs" />
-    <Compile Include="Database\Migrations\20260618100600_InitDatabase.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

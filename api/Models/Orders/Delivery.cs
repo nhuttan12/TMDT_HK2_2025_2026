@@ -8,7 +8,7 @@ namespace api.Models.Orders
         public Guid InvoiceId { get; private set; } 
         public Invoice Invoice { get; private set; }
         public Guid AddressId { get; private set; }   
-        public Address address { get; private set; }
+        public Address Address { get; private set; }
 
         public string ReceiverPhone { get; private set; }  
         public string ReceiverName { get; private set; }  
