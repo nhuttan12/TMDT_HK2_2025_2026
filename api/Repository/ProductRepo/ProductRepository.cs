@@ -1,6 +1,5 @@
 ﻿using api.Database;
 using api.Dtos.Products.Request;
-using api.Dtos.Products.Respones;
 using api.model.Products;
 using api.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,11 @@ namespace api.Repository.ProductRepo
         Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto filterDto, CancellationToken cancellationToken);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Product?> GetByIdWithShopAsync(Guid productId, CancellationToken cancellationToken = default);
+        Task<PagedResult<Product>> GetProductOfShopAsync(Guid shopId, int pageNumber, int pageSize, string sortBy, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<PagedResult<Product>> SearchProductsAsync(
+        ProductSearchRequestDto request,
+        CancellationToken cancellationToken);
     }
     public class ProductRepository : IProductRepository
     {
@@ -42,8 +45,7 @@ namespace api.Repository.ProductRepo
         }
         public async Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto? filterDto, CancellationToken cancellationToken)
         {
-
-            // 1. Khởi tạo query với AsNoTracking() cho mục đích Read-Only
+            // 1. Khởi tạo query với AsNoTracking() một lần duy nhất cho mục đích Read-Only
             var query = _context.Products.AsNoTracking();
 
             // 2. Xây dựng truy vấn động (Dynamic Filtering)
@@ -51,13 +53,14 @@ namespace api.Repository.ProductRepo
             {
                 if (!string.IsNullOrWhiteSpace(filterDto.Name))
                 {
-                    // Dùng EF.Functions.Like hoặc Contains tùy thuộc cấu hình SQL Collation
-                    query = query.Where(p => p.Name.Contains(filterDto.Name));
+                    var nameSearch = filterDto.Name.Trim();
+                    query = query.Where(p => p.Name.Contains(nameSearch));
                 }
 
-                if (filterDto.CategoryId.HasValue)
+                if (!string.IsNullOrWhiteSpace(filterDto.Category))
                 {
-                    query = query.Where(p => p.CategoryId == filterDto.CategoryId.Value);
+                    var categorySearch = filterDto.Category.Trim();
+                    query = query.Where(p => p.Category.Name.Contains(categorySearch));
                 }
 
                 if (filterDto.MinPrice.HasValue)
@@ -66,31 +69,37 @@ namespace api.Repository.ProductRepo
                 if (filterDto.MaxPrice.HasValue)
                     query = query.Where(p => p.BasePrice <= filterDto.MaxPrice.Value);
 
+                if (filterDto.MinRating.HasValue)
+                    query = query.Where(p => p.Rating >= filterDto.MinRating.Value);
+
+                if (filterDto.MaxRating.HasValue)
+                    query = query.Where(p => p.Rating <= filterDto.MaxRating.Value);
+
                 if (filterDto.Status.HasValue)
                     query = query.Where(p => p.Status == filterDto.Status.Value);
+
+                if (!string.IsNullOrWhiteSpace(filterDto.ShopName))
+                {
+                    // FIX LỖI: Trỏ đúng vào filterDto.ShopName thay vì filterDto.Name
+                    var shopSearch = filterDto.ShopName.Trim();
+                    query = query.Where(p => p.Shop.Name.Contains(shopSearch));
+                }
             }
 
-            // 3. Đếm tổng số lượng bản ghi (Cần thiết cho Pagination)
-            // Thực thi SQL Count (Chỉ đếm, không kéo dữ liệu)
+            // 3. Đếm tổng số lượng bản ghi sau khi lọc (Chỉ đếm, không kéo dữ liệu)
             var totalCount = await query.CountAsync(cancellationToken);
 
-            // 4. Áp dụng Phân trang (Skip & Take) và lấy dữ liệu
+            // 4. Áp dụng Phân trang (Skip & Take) và Eager Loading dữ liệu liên quan
             var items = await query
-                .AsNoTracking() // Đảm bảo không theo dõi để tối ưu hiệu suất cho truy vấn chỉ đọc
                 .Include(p => p.Variants)
-                .OrderByDescending(p => p.CreatedAt) // LUÔN LUÔN phải có OrderBy trước khi Skip/Take
+                .Include(p => p.Category)
+                .Include(p => p.Shop)
+                .OrderByDescending(p => p.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync(cancellationToken); // Thực thi SQL Select
+                .ToListAsync(cancellationToken);
 
-            // 5. Đóng gói vào đối tượng trả về
-            return new PagedResult<Product>
-            (
-                items,
-                totalCount,
-                pageNumber,
-                pageSize
-            );
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
         }
         public void Delete(Product entity)
         {
@@ -153,6 +162,78 @@ namespace api.Repository.ProductRepo
                 .AsNoTracking() // Tối ưu cho truy vấn chỉ đọc
                 .Include(p => p.Shop)
                 .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+        }
+
+        public async Task<PagedResult<Product>> GetProductOfShopAsync(
+          Guid shopId,
+          int pageNumber,
+          int pageSize,
+          string? sortBy,
+          CancellationToken cancellationToken)
+        {
+            // 1. Luôn LỌC THEO SHIOPID ĐẦU TIÊN để thu hẹp phạm vi quét index
+            var query = _context.Products
+                .AsNoTracking()
+                .Where(p => p.ShopId == shopId);
+
+            // 2. Tính tổng số lượng bản ghi sau khi đã lọc theo ShopId
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 3. Xử lý Dynamic Sorting dựa trên yêu cầu mới
+            query = sortBy?.ToLower() switch
+            {
+                "productnew" => query.OrderByDescending(p => p.CreatedAt),
+                "priceasc" => query.OrderBy(p => p.BasePrice),
+                "pricedesc" => query.OrderByDescending(p => p.BasePrice),
+                _ => query.OrderByDescending(p => p.CreatedAt) // Mặc định sắp xếp theo ngày tạo mới nhất
+            };
+
+            // 4. Áp dụng phân trang và Eager Loading các Variant
+            var items = await query
+                .Include(p => p.Variants)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<PagedResult<Product>> SearchProductsAsync(
+        ProductSearchRequestDto request,
+        CancellationToken cancellationToken)
+        {
+            // 1. Khởi tạo query read-only và Eager Loading các bảng liên quan cần tìm kiếm
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Shop)
+                .Include(p => p.Variants)
+                .AsQueryable();
+
+            // 2. Áp dụng bộ lọc tìm kiếm đa tiêu chí nếu có SearchTerm
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                var searchTerm = request.SearchTerm.Trim().ToLower();
+
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm) ||                     // Tên sản phẩm giống
+                    (p.Category != null && p.Category.Name.ToLower().Contains(searchTerm)) || // Tên Category giống
+                    (p.Shop != null && p.Shop.Name.ToLower().Contains(searchTerm)) ||         // Tên Shop giống
+                    p.Variants.Any(v => v.Sku.ToLower().Contains(searchTerm))    // Bất kỳ Variant nào có SKU giống
+                );
+            }
+
+            // 3. Tính tổng số lượng bản ghi thỏa mãn điều kiện tìm kiếm
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 4. Phân trang và lấy dữ liệu (Luôn OrderBy trước khi Skip/Take)
+            var items = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, request.PageNumber, request.PageSize);
         }
     }
 }

@@ -8,6 +8,11 @@ namespace api.Dtos.Users.Requests
         string? AvatarUrl,
 
         // Chuyển sang List để dễ dàng thao tác LINQ ở tầng Service
-        List<string>? Addresses
+        List<AddressUpdateDto>? Addresses
+    );
+
+    public record AddressUpdateDto(
+        Guid? Id, // Nếu null => Thêm mới (Create). Nếu có giá trị => Cập nhật (Update)
+        string AddressUrl
     );
 }

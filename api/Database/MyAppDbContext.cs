@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Api.Models.Users;
 using api.Models.Shops;
 using api.Models.Cards;
+using api.Models.Payments;
 namespace api.Database
 {
     public class MyAppDbContext : DbContext
@@ -42,8 +43,10 @@ namespace api.Database
         public DbSet<CartItem> CartItems { get; set; }
 
         public DbSet<InventoryBatchStock> InventoryBatchStock { get; set; }
-        public DbSet<Invoice> invoices { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+
 
 
 

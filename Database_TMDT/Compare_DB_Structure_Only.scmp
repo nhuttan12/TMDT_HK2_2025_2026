@@ -1298,5 +1298,21 @@
       <Name>dbo</Name>
       <Name>udt_UserBankingInsertType</Name>
     </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetGoodsIssueDetailByGoodsIssueId</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetGoodsIssuePaging</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetProductSelectionForGoodsReceipt</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetProductVariantListForSelectionGoodsReceipt</Name>
+    </SelectedItem>
   </ExcludedTargetElements>
 </SchemaComparison>

@@ -13,7 +13,7 @@ namespace api.Dtos.Invoice.Response
         public ICollection<InvoiceItemReponseDto> Items { get; init; } = [];
         public decimal TotalAmount { get; set; }
         public decimal FinalAmount { get; set; }
-        public InvoiceStatus Status { get; set; }
+        public string Status { get; set; }
 
 
         public string? RecipientName { get; set; } = string.Empty;

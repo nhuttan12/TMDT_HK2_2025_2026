@@ -40,7 +40,7 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationRequestDto paginationDto, [FromQuery] FilterProductQueryDto filterDto, CancellationToken cancellationToken = default)
         {
-            var products = await _service.GetAllProducts(paginationDto, filterDto, cancellationToken);
+            var products = await _service.GetAllProductsAsync(paginationDto, filterDto, cancellationToken);
             return HandleResult(products);
         }
         //[HttpGet("/category/{categoryId}")]
@@ -55,6 +55,37 @@ namespace api.Controllers
             var products = await _service.GetRelatedProducts(productId, paginationDto, cancellationToken);
             return HandleResult(products);
         }
+       
+        [HttpGet("{shopId}/shop")]
+        public async Task<IActionResult> GetProductOfShop(
+            [FromRoute] Guid shopId, 
+            [FromQuery] PaginationRequestDto paginationDto,
+            [FromQuery] ShopParams? param,
+            CancellationToken cancellationToken)
+        {
+            var products = await _service.GetProductOfShopAsync(shopId, paginationDto, param, cancellationToken);
+            return HandleResult(products);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] ProductSearchRequestDto request, CancellationToken cancellationToken)
+        {
+            var result = await _service.SearchProductsAsync(request, cancellationToken);
+
+            return HandleResult(result);
+        }
+
     }
     public record ProductQueryDto(string? detail);
+
+    public record ShopParams(string? SortBy = null);
+
+    // Định nghĩa các hằng số SortBy để tránh Magic String
+    public static class ProductSortOptions
+    {
+        public const string ProductNew = "productNew";
+        public const string PriceAsc = "priceAsc";
+        public const string PriceDesc = "priceDesc";
+    }
+
 }

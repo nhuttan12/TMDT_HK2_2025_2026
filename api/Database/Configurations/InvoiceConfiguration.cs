@@ -59,6 +59,10 @@ namespace api.Database.Configurations
                 .HasColumnName("delivery_id")
                 .IsRequired(false);
 
+            builder.Property(i => i.PaymentId)
+                .HasColumnName("payment_id")
+                .IsRequired(false);
+
             // 4. BẢO VỆ DOMAIN MODEL (Cực kỳ quan trọng)
             // Vì chúng ta dùng IReadOnlyCollection<InvoiceItem> Items và field private _items,
             // Cần nói cho EF Core biết cách gán dữ liệu vào field này khi query từ Database lên RAM.
@@ -80,6 +84,12 @@ namespace api.Database.Configurations
                 .WithMany(s => s.Invoices) // Shop có thể có nhiều Invoice, nhưng không cần Navigation Property trỏ ngược
                 .HasForeignKey(i => i.ShopId)
                 .OnDelete(DeleteBehavior.SetNull); // Nếu xóa Shop, giữ lại Invoice nhưng set ShopId thành Null
+
+            //builder.HasOne(i => i.Payment)
+            //    .WithOne(p => p.Invoice)
+            //    .HasForeignKey<Invoice>(i => i.PaymentId)
+            //    .OnDelete(DeleteBehavior.SetNull);
+
 
             //builder.HasOne(i => i.Delivery)
             //    .WithOne(d => d.Invoice)

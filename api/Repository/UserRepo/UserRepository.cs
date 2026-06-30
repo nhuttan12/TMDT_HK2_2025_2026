@@ -28,6 +28,7 @@ namespace api.Repository.UserRepo
             var query = FindAll(trackChanges); // Tái sử dụng FindAll để nhất quán logic
 
             return await query
+                .Include(u => u.Addresses)
                  .Include(u => u.UserDetail)
                  .Include(u => u.UserExternalLogin)
                  .FirstOrDefaultAsync(u => u.Id == id, ct);

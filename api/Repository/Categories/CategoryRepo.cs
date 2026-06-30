@@ -1,4 +1,6 @@
 ﻿using api.Database;
+using api.Dtos.Products.Respones;
+using api.Dtos.Shops.Response;
 using api.Models.Category;
 using api.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ namespace api.Repository.Categories
     {
         Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<Category?> GetByName(string name, CancellationToken ct = default);
+        Task<CategoryNameResponse> GetListNameCategory(CancellationToken cancellationToken);
         Task<PagedResult<Category>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
     public class CategoryRepo(MyAppDbContext _context) : ICategoryRepo
@@ -42,6 +45,15 @@ namespace api.Repository.Categories
         public async Task<Category?> GetByName(string name, CancellationToken ct = default)
         {
             return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
+        }
+
+        public async Task<CategoryNameResponse> GetListNameCategory(CancellationToken cancellationToken)
+        {
+            var res = await _context.Categories
+               .AsNoTracking()
+               .Select(s => new CategoryNameDto(s.Id, s.Name))
+               .ToListAsync(cancellationToken);
+            return new CategoryNameResponse(res);
         }
 
         public async Task<PagedResult<Category>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
