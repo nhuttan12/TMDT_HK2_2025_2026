@@ -12,13 +12,16 @@ namespace api.Database.Configurations
 
             builder.HasKey(ii => ii.Id);
             builder.Property(ii => ii.Id)
+                .HasColumnName("id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(ii => ii.Quantity)
+                .HasColumnName("quantity")
                 .IsRequired();
 
             builder.Property(ii => ii.PriceAtPurchase)
                 .HasColumnType("decimal(18,2)")
+                .HasColumnName("price_at_purchase")
                 .IsRequired();
 
             builder.HasOne(i => i.Variant)
@@ -27,8 +30,17 @@ namespace api.Database.Configurations
                    .OnDelete(DeleteBehavior.Restrict); // Defensive Programming: Ngăn chặn xóa Variant nếu đã có Invoice
 
             // Ràng buộc tính vẹn toàn
-            builder.Property(ii => ii.ProductId).IsRequired();
-            builder.Property(ii => ii.VariantId).IsRequired();
+            builder.Property(ii => ii.ProductId)
+                .HasColumnName("product_id")
+                .IsRequired();
+
+            builder.Property(ii => ii.VariantId)
+                .HasColumnName("variant_id")
+                .IsRequired();
+
+            builder.Property(ii => ii.InvoiceId)
+                .HasColumnName("invoice_id")
+                .IsRequired();
 
             // TỐI ƯU INDEX (Tránh Table Scan khi thống kê sản phẩm)
             // Phục vụ cho câu query "Tính tổng số lượng đã bán của Product A" mà không cần JOIN với bảng Orders

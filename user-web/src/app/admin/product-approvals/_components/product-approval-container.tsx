@@ -4,12 +4,12 @@ import ProductAdminUi from '@/components/products/admin/product-admin-ui';
 import { useProductAdminLogic } from '@/hooks/products/admin/use-product-admin-logic';
 import { useProductApprovalListQuery } from '@/queries/products/admin/use-product-approval-list-query';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { AppRole } from '@/types/uis/AppRole';
 import { JSX } from 'react';
 
 interface ProductAdminContainerProps {
-	initialProducts: PaginationResponse<ProductListInfoAdmin>;
+	initialProducts: BackendPagedResult<ProductListInfoAdmin>;
 	role: AppRole;
 	productApproval?: boolean;
 	addLabel?: string;
@@ -22,18 +22,20 @@ export default function ProductApprovalContainer({
 	addLabel,
 	role,
 	productApproval,
-    customTitle,
-    customDescription
+	customTitle,
+	customDescription,
 }: ProductAdminContainerProps): JSX.Element {
 	// 1. Data Source
-	const { data, isLoading: isProductsLoading } =
-		useProductApprovalListQuery(initialProducts);
+	const { data, isLoading: isProductsLoading } = useProductApprovalListQuery(initialProducts);
 
-    const currentProduct = data?.data || initialProducts.data;
-    const currentMeta = data?.meta || initialProducts.meta;
+	const currentProduct = data?.items || initialProducts.items;
 
 	// 2. Logic Hook
-	const logic = useProductAdminLogic({ role, productApproval, totalPage: currentMeta.totalPages });
+	const logic = useProductAdminLogic({
+		role,
+		productApproval,
+		totalPage: data?.totalPages || initialProducts.totalPages,
+	});
 
 	const isPageLoading = isProductsLoading;
 
@@ -47,8 +49,8 @@ export default function ProductApprovalContainer({
 			products={currentProduct}
 			addLabel={addLabel}
 			productApproval={productApproval}
-            customTitle={customTitle}
-            customDescription={customDescription}
+			customTitle={customTitle}
+			customDescription={customDescription}
 			{...logic}
 		/>
 	);

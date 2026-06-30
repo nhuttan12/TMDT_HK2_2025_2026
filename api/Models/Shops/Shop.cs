@@ -1,7 +1,7 @@
 ﻿using api.model.Products;
+using api.Models.Enums.Shops;
 using api.Models.Inventory;
 using api.Models.Orders;
-using api.Models.Shops.Enums;
 using api.Utilities;
 
 namespace api.Models.Shops
@@ -25,23 +25,25 @@ namespace api.Models.Shops
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
 
-        public string ShopLogos { get; private set; } = string.Empty;
+        public string ShopLogo { get; private set; } = string.Empty;
         public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
         public ICollection<Invoice> Invoices { get; private set; } = new HashSet<Invoice>();
         public ICollection<Supplier> Suppliers { get; private set; } = new HashSet<Supplier>();
+        public ICollection<GoodsReceipt> GoodsReceipts { get; private set; } = new HashSet<GoodsReceipt>();
+        public ICollection<GoodsIssue> GoodsIssues { get; private set; } = new HashSet<GoodsIssue>();
 
         protected Shop() { }
         public Shop(User user,  string name, string description, string shopLogos)
         {
             Id = user.Id;
             User = user;
-            Status = EShopStatus.ACTIVE;
-            SystemStatus = EShopSystemStatus.APPROVED;
+            Status = EShopStatus.Active;
+            SystemStatus = EShopSystemStatus.Approved;
             Rating = 0;
             Name = name;
             TaxCode = string.Empty;
             Description = description;
-            ShopLogos = shopLogos;
+            ShopLogo = shopLogos;
         }
         /// <summary>
         /// Factory method to create a new Shop instance with validation.

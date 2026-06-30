@@ -12,16 +12,17 @@ import { JSX } from 'react';
 
 interface GoodsStockTableProps extends UseGoodsStockLogicReturn {
 	products: ProductInStock[];
+    totalPages?: number;
 }
 
 export default function GoodsStockTableUi({
 	products,
 	handleViewVariant,
-	handleEditVariant,
 	handleSort,
 	renderSortIcon,
 	currentPage,
 	changePage,
+    totalPages = 10
 }: GoodsStockTableProps): JSX.Element {
 	const replenishmentConfigs: Record<ReplenishmentLevel, string> = {
 		immediate:
@@ -115,17 +116,6 @@ export default function GoodsStockTableUi({
 				<span>{row.sales30d.toLocaleString()}</span>
 			),
 		},
-		{
-			key: 'supplierName',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Nhà cung cấp</span>
-					{renderSortIcon('supplierName')}
-				</div>
-			),
-			onHeaderClick: (): void => handleSort('supplierName'),
-			render: (row: ProductInStock): JSX.Element => <span>{row.supplierName}</span>,
-		},
 	];
 
 	const getRowKey = (row: ProductInStock): string => {
@@ -153,7 +143,7 @@ export default function GoodsStockTableUi({
 			<div className='pb-5'>
 				<Pagination
 					currentPage={currentPage}
-					totalPages={10}
+					totalPages={totalPages}
 					onPageChange={changePage}
 				/>
 			</div>

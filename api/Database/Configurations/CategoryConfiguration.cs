@@ -40,6 +40,10 @@ namespace api.Database.Configurations
                 .IsRequired()
                 .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset(7)"); // Tận dụng tối đa độ chính xác của SQL Server
+
+            builder.Property(c => c.UpdatedAt)
+                .HasColumnName("updated_at")
+                .HasColumnType("datetimeoffset(7)"); // Tận dụng tối đa độ chính xác của SQL Server
         }
     }
 }

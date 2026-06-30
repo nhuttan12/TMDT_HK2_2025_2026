@@ -9,20 +9,24 @@ using api.Repository.BannerRepo;
 using api.Repository.CartRepo;
 using api.Repository.Categories;
 using api.Repository.Coupons;
+using api.Repository.Inventory;
 using api.Repository.InvoiceRepo;
 using api.Repository.ProductRepo;
 using api.Repository.Promotions;
 using api.Repository.RoleRepo;
+using api.Repository.Shops;
 using api.Repository.UserRepo;
 using api.Services.Auths;
 using api.Services.Banners;
 using api.Services.Carts;
 using api.Services.Categorys;
 using api.Services.Coupons;
+using api.Services.Inventory;
 using api.Services.Invoices;
 using api.Services.Mail;
 using api.Services.Products;
 using api.Services.Promotions;
+using api.Services.Shops;
 using api.Services.Users;
 using api.Utilities.Seeders;
 using Microsoft.AspNetCore.Identity;
@@ -89,6 +93,12 @@ namespace api.Extensions
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped<IAdminPromotionRepository, AdminPromotionRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
+            services.AddScoped<IShopUserRepository, ShopUserRepository>();
+            services.AddScoped<IShopAdminRepository, ShopAdminRepository>();
+            services.AddScoped<IGoodsSupplierRepository, GoodsSupplierRepository>();
+            services.AddScoped<IGoodsStockRepository, GoodsStockRepository>();
+            services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
             services.AddScoped <IInvoiceRepository, InvoiceRepository>();
             services.AddScoped <IDeliveryRepository, DeliveryRepository>();
 
@@ -111,6 +121,12 @@ namespace api.Extensions
             services.AddScoped<IUserPromotionService, UserPromotionService>();
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IGoodsReceiptService, GoodsReceiptService>();
+            services.AddScoped<IShopUserService, ShopUserService>();
+            services.AddScoped<IShopAdminService, ShopAdminService>();
+            services.AddScoped<IGoodsStockService, GoodsStockService>();
+            services.AddScoped<IGoodsSupplierService, GoodsSupplierService>();
+            services.AddScoped<IGoodsIssueService, GoodsIssueService>();
             services.AddScoped <IInvoiceService,InvoiceService>();
 
         

@@ -26,7 +26,7 @@ export interface UseGoodsReceiptDetailLogicReturn {
 	handleSubmit: (e: SyntheticEvent) => void;
 	handleProductSelection: (product: ProductForGoodsReceipt) => void;
 	updateBatch: (batchId: string, data: Partial<GoodsReceiptBatch>) => void;
-	handleRedirectToBatchDetail: (batchId: string, mode: AdminFormType) => void;
+	handleRedirectToBatchDetail: (batchId: string, productId: string, mode: AdminFormType) => void;
 	handleStartExcelFlow: () => void;
 	handleRedirectToAddNewReceiptDetail: () => void;
 	handleRedirectToEditReceiptDetail: (receiptId: string) => void;
@@ -41,8 +41,10 @@ export const useGoodsReceiptDetailLogic = ({
 	const excelLogic = useGoodsReceiptExcelLogic();
 	const navigationLogic = useGoodsReceiptNavigationLogic();
 
-	const handleRedirectToBatchDetailWithFormId = (batchId: string, mode: AdminFormType): void => {
-		navigationLogic.handleRedirectToBatchDetail(formLogic.form.id, batchId, mode);
+	const handleRedirectToBatchDetailWithFormId = (batchId: string, productId: string, mode: AdminFormType): void => {
+        console.log('handleRedirectToBatchDetailWithFormId', batchId, mode);
+
+        navigationLogic.handleRedirectToBatchDetail(formLogic.form.id, batchId, productId, mode);
 	};
 
 	return {

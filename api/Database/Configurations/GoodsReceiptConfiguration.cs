@@ -1,8 +1,9 @@
-﻿using api.Models.Inventory;
-using api.Models.Inventory.Enums;
+﻿using api.Models.Enums.Inventory;
+using api.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -29,9 +30,9 @@ namespace api.Database.Configurations
                 .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset");
 
-            var typeConverter = new ValueConverter<GoodsReceiptType, string>(
-                v => v.ToString().ToLower(),
-                v => (GoodsReceiptType)Enum.Parse(typeof(GoodsReceiptType), v, true)
+            var typeConverter = new ValueConverter<EGoodsReceiptType, string>(
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EGoodsReceiptType)Enum.Parse(typeof(EGoodsReceiptType), v.Replace("_", ""), true)
             );
             builder.Property(goodsReceipt => goodsReceipt.Type)
                 .HasConversion(typeConverter)
@@ -39,9 +40,9 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(50)")
                 .IsRequired();
 
-            var statusConverter = new ValueConverter<GoodsReceiptStatus, string>(
-                v => v.ToString().ToLower(),
-                v => (GoodsReceiptStatus)Enum.Parse(typeof(GoodsReceiptStatus), v, true)
+            var statusConverter = new ValueConverter<EGoodsReceiptStatus, string>(
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EGoodsReceiptStatus)Enum.Parse(typeof(EGoodsReceiptStatus), v.Replace("_", ""), true)
             );
             builder.Property(goodsReceipt => goodsReceipt.Status)
                 .HasConversion(statusConverter)
@@ -58,9 +59,18 @@ namespace api.Database.Configurations
                 .HasColumnName("supplier_id")
                 .IsRequired();
 
+            builder.Property(goodsReceipt => goodsReceipt.ShopId)
+                .HasColumnName("shop_id")
+                .IsRequired();
+
             builder.HasOne(goodsReceipt => goodsReceipt.Supplier)
                 .WithMany(supplier => supplier.GoodsReceipts)
                 .HasForeignKey(goodsReceipt => goodsReceipt.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(goodsReceipt => goodsReceipt.Shop)
+                .WithMany(shop => shop.GoodsReceipts)
+                .HasForeignKey(goodsReceipt => goodsReceipt.ShopId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

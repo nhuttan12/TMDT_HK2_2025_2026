@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="7c5761ed-2574-43d3-8371-2d5c0ab36ed9" ChangeDateTime="06/25/2026 08:52:44">
+    <Property Name="ElementName" Value="[dbo].[BannerInsertType]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[udt_BannerInsertType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc4f0120-3516-467a-be4d-e362b5a9a0dd" ChangeDateTime="06/25/2026 08:53:05">
+    <Property Name="ElementName" Value="[dbo].[ProductPromotionType]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[udt_ProductPromotionType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="571191cd-9833-4b37-a1b9-152858c9bdd8" ChangeDateTime="06/25/2026 08:53:23">
+    <Property Name="ElementName" Value="[dbo].[UserBankingInsertType]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[udt_UserBankingInsertType]" />
+  </Operation>
+</Operations>

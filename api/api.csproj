@@ -9,9 +9,13 @@
 
   <ItemGroup>
 	  <Content Remove="Database\Seeders\SeedData\Categories.json" />
+	  <Compile Remove="Database\Migrations\**" />
 	  <Compile Remove="StoredProcedures\**" />
+	  <Content Remove="Database\Migrations\**" />
 	  <Content Remove="StoredProcedures\**" />
+	  <EmbeddedResource Remove="Database\Migrations\**" />
 	  <EmbeddedResource Remove="StoredProcedures\**" />
+	  <None Remove="Database\Migrations\**" />
 	  <None Remove="StoredProcedures\**" />
   </ItemGroup>
 
@@ -22,6 +26,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageReference Include="Dapper" Version="2.1.79" />
     <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="MailKit" Version="4.17.0" />
@@ -40,15 +45,6 @@
     <PackageReference Include="MimeKit" Version="4.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Utilities\EmailTemplates\PasswordChangedTemplate.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Utilities\EmailTemplates\WelcomeTemplate.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[usp_BulkUpdateBanners]
 	@UserId UNIQUEIDENTIFIER,
-	@Banners dbo.[BannerInsertType] READONLY
+	@Banners dbo.[udt_BannerInsertType] READONLY
 AS
 BEGIN
 	SET NOCOUNT ON;

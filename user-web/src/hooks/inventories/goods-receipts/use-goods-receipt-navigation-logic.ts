@@ -5,7 +5,12 @@ import { useRouter } from 'next/navigation';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
 export interface UseGoodsReceiptNavigationLogicReturn {
-	handleRedirectToBatchDetail: (receiptId: string, batchId: string, mode: AdminFormType) => void;
+	handleRedirectToBatchDetail: (
+		receiptId: string,
+		batchId: string,
+		productId: string,
+		mode: AdminFormType,
+	) => void;
 	handleRedirectToAddNewReceiptDetail: () => void;
 	handleRedirectToEditReceiptDetail: (receiptId: string) => void;
 	handleRedirectToReceiptDetail: (receiptId: string) => void;
@@ -17,12 +22,13 @@ export const useGoodsReceiptNavigationLogic = (): UseGoodsReceiptNavigationLogic
 	const handleRedirectToBatchDetail = (
 		receiptId: string,
 		batchId: string,
+		productId: string,
 		mode: AdminFormType,
 	): void => {
 		const path: string =
 			mode === 'view'
 				? `/shop-owner/inventories/receipts/${receiptId}/batches/${batchId}`
-				: `/shop-owner/inventories/receipts/${receiptId}/batches/${batchId}/add-new`;
+				: `/shop-owner/inventories/receipts/${receiptId}/batches/${batchId}/add-new/${productId}`;
 		router.push(path);
 	};
 

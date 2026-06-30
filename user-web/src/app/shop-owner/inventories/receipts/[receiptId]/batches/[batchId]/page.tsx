@@ -1,6 +1,8 @@
-import { getProductListInBatch } from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
+import apiServer from '@/lib/api-server';
+import {
+    GoodsReceiptDetailService
+} from '@/services/inventories/goods-receipt/goods-receipt-detail-service';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { JSX } from 'react';
 import ProductVariantListInBatchContainer from './_components/product-variant-list-in-batch-container';
 
@@ -9,15 +11,18 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-	params: {
+	params: Promise<{
+		receiptId: string;
 		batchId: string;
-	};
+	}>;
 }
 
 export default async function Page({ params }: Props): Promise<JSX.Element> {
-	const { batchId } = await params;
+	const { receiptId, batchId } = await params;
 
-	const batchItems = await getProductListInBatch();
+	const receiptDetailService = new GoodsReceiptDetailService(apiServer);
+
+	const batchItems = await receiptDetailService.getProductListInBatch(batchId, receiptId);
 
 	return (
 		<ProductVariantListInBatchContainer

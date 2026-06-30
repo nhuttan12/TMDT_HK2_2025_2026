@@ -1,8 +1,9 @@
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { useCreateSupplierMutation } from '@/queries/inventories/suppliers/use-create-supplier-mutation';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { mapSupplierToCreateSupplierRequest } from '@/utils/inventories/suppliers/supplier-mapper';
 import { useRouter } from 'next/navigation';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 
 interface UseSupplierLogicProps {
 	formType: AdminFormType;
@@ -13,6 +14,7 @@ export interface UseSupplierFormLogicReturn {
 	form: Supplier;
 	isView: boolean;
 	isCreate: boolean;
+    isSubmitting: boolean;
 	handleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleTaxCodeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleContactNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -24,10 +26,12 @@ export interface UseSupplierFormLogicReturn {
 }
 
 export function useSupplierFormLogic(props: UseSupplierLogicProps): UseSupplierFormLogicReturn {
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 
-	const isView: boolean = props.formType === 'view';
-	const isCreate: boolean = props.formType === 'create';
+	const isView = props.formType === 'view';
+	const isCreate = props.formType === 'create';
+
+	const createMutation = useCreateSupplierMutation();
 
 	// Khởi tạo state cho form dựa trên dữ liệu truyền vào
 	const [form, setForm] = useState<Supplier>(props.supplier);
@@ -66,16 +70,24 @@ export function useSupplierFormLogic(props: UseSupplierLogicProps): UseSupplierF
 
 	// Hàm xử lý Submit Form (Có giả lập delay mạng)
 	const onFormSubmit = async (e: SyntheticEvent): Promise<void> => {
-		if (e) {
-			e.preventDefault();
-		}
+		e.preventDefault();
 
-		return new Promise<void>((resolve) => {
-			// Giả lập độ trễ mạng để test UI Loading/Modal
-			setTimeout(() => {
-				console.log('Dữ liệu Supplier chuẩn bị gửi đi:', form);
-				resolve();
-			}, 1500);
+        const request = mapSupplierToCreateSupplierRequest(form);
+
+		// Tránh bấm submit nhiều lần liên tục
+		if (createMutation.isPending) return;
+
+		// Gọi hàm mutate để bắt đầu gửi request
+		createMutation.mutate(request, {
+			onSuccess: (newSupplierId) => {
+				if (newSupplierId) {
+					console.log('Tạo thành công, ID mới:', newSupplierId);
+					router.push('/shop-owner/inventories/suppliers');
+				} else {
+					console.error('Tạo thất bại!');
+					router.push('/shop-owner/inventories/suppliers');
+				}
+			},
 		});
 	};
 
@@ -85,16 +97,17 @@ export function useSupplierFormLogic(props: UseSupplierLogicProps): UseSupplierF
 	};
 
 	return {
-		form: form,
-		isView: isView,
-		isCreate: isCreate,
-		handleNameChange: handleNameChange,
-		handleTaxCodeChange: handleTaxCodeChange,
-		handleContactNameChange: handleContactNameChange,
-		handlePhoneChange: handlePhoneChange,
-		handleEmailChange: handleEmailChange,
-		handleAddressChange: handleAddressChange,
-		onFormSubmit: onFormSubmit,
-		handleBack: handleBack,
+		form,
+		isView,
+		isCreate,
+        isSubmitting: createMutation.isPending,
+		handleNameChange,
+		handleTaxCodeChange,
+		handleContactNameChange,
+		handlePhoneChange,
+		handleEmailChange,
+		handleAddressChange,
+		onFormSubmit,
+		handleBack,
 	};
 }

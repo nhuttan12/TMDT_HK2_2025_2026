@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[VARIANTS] (
     [id]         UNIQUEIDENTIFIER NOT NULL,
-    [ProductId]  UNIQUEIDENTIFIER NOT NULL,
+    [product_id] UNIQUEIDENTIFIER NOT NULL,
     [sku]        VARCHAR (100)    NOT NULL,
     [name]       NVARCHAR (100)   NOT NULL,
     [cost_price] DECIMAL (18, 2)  NOT NULL,
@@ -8,8 +8,12 @@
     [image_url]  VARCHAR (500)    NOT NULL,
     [status]     INT              NOT NULL,
     CONSTRAINT [PK_VARIANTS] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_VARIANTS_PRODUCTS_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[PRODUCTS] ([id]) ON DELETE CASCADE
+    CONSTRAINT [FK_VARIANTS_PRODUCTS_product_id] FOREIGN KEY ([product_id]) REFERENCES [dbo].[PRODUCTS] ([id])
 );
+
+
+
+
 
 
 
@@ -20,7 +24,9 @@
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Variants_ProductId]
-    ON [dbo].[VARIANTS]([ProductId] ASC);
+    ON [dbo].[VARIANTS]([product_id] ASC);
+
+
 
 
 
@@ -29,5 +35,5 @@ CREATE NONCLUSTERED INDEX [IX_Variants_ProductId]
 
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Variants_Sku]
-    ON [dbo].[Variants]([Sku] ASC);
+    ON [dbo].[VARIANTS]([sku] ASC);
 

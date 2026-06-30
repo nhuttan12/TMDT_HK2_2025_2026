@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[usp_UpdateUserBanking]
 	@UserId UNIQUEIDENTIFIER,
-	@UserBankings dbo.[UserBankingInsertType] READONLY
+	@UserBankings dbo.[udt_UserBankingInsertType] READONLY
 AS
 BEGIN
 	BEGIN TRY

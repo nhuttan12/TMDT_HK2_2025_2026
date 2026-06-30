@@ -19,7 +19,7 @@ namespace api.Controllers.Banners
             return HandleResult(result);
         }
 
-        [HttpGet("/shop/{shopId}")]
+        [HttpGet("shop/{shopId}")]
         public async Task<IActionResult> GetShopBanners(
             [FromRoute] Guid shopId,
             CancellationToken cancellationToken)

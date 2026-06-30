@@ -1,6 +1,8 @@
 ﻿using api.Database;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace api.Repository
 {
@@ -30,6 +32,27 @@ namespace api.Repository
             return await _context.Database
                 .SqlQueryRaw<T>(commandText, parameters)
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<T?> QueryMultipleAsync<T>(string storedProcedureName, Func<SqlMapper.GridReader, Task<T>> mapFunc, CancellationToken cancellationToken = default, params object[] parameters)
+        {
+            // Mượn Connection của EF Core để xài cho Dapper
+            var connection = _context.Database.GetDbConnection();
+
+            // Đóng gói Parameter cho Dapper
+            var dynamicParameters = new DynamicParameters();
+            foreach (SqlParameter param in parameters)
+            {
+                dynamicParameters.Add(param.ParameterName, param.Value, param.DbType, param.Direction);
+            }
+
+            // Dùng Dapper gọi hàm và trả về hàm Map
+            using var multi = await connection.QueryMultipleAsync(
+                storedProcedureName,
+                dynamicParameters,
+                commandType: CommandType.StoredProcedure);
+
+            return await mapFunc(multi);
         }
 
         private IEnumerable<string> GetParameterNames(object[] parameters)

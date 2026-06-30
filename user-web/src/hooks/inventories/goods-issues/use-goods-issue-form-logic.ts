@@ -1,12 +1,10 @@
-import { SyntheticEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { GoodsIssueDetail } from '@/types/inventories/issues/uis/GoodsIssueDetail';
 import { GoodsIssueItem } from '@/types/inventories/issues/uis/GoodsIssueItem';
 import { ProductForGoodsIssue } from '@/types/inventories/issues/uis/ProductForGoodsIssue';
-import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
-import { useGoodsIssueMutation } from '@/queries/inventories/goods-issues/use-goods-issue-mutation';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
+import { useRouter } from 'next/navigation';
+import { SyntheticEvent, useState } from 'react';
 
 export interface UseGoodsIssueLogicProps {
 	formType: AdminFormType;
@@ -19,7 +17,6 @@ export interface GoodsIssueLogicReturn {
 	isCreate: boolean;
 	totalQuantity: number;
 	totalAmount: number;
-	products: ProductForGoodsIssue[];
 	statusModal: UseStatusModalReturn; // Gom toàn bộ trạng thái Modal vào đây
 	updateField: <K extends keyof GoodsIssueDetail>(key: K, value: GoodsIssueDetail[K]) => void;
 	handleUpdateItem: (id: string, fields: Partial<GoodsIssueItem>) => void;
@@ -30,7 +27,7 @@ export interface GoodsIssueLogicReturn {
 }
 
 export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIssueLogicReturn {
-	const router: AppRouterInstance = useRouter();
+	const router = useRouter();
 	const { formType, goodsIssue } = props;
 	const isView: boolean = formType === 'view';
 	const isCreate: boolean = formType === 'create';
@@ -38,15 +35,6 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 	const [form, setForm] = useState<GoodsIssueDetail>(goodsIssue);
 
 	const statusModal: UseStatusModalReturn = useStatusModal();
-
-	// Lấy supplierId từ form
-	const currentSupplierId = form.partner?.id || '';
-
-	// Gọi hook và truyền ID vào
-	const { supplierAndProductQuery, submitMutation } = useGoodsIssueMutation(currentSupplierId);
-
-	// Lấy data ra dùng cho Modal
-	const products: ProductForGoodsIssue[] = supplierAndProductQuery.data?.products || [];
 
 	const updateField = <K extends keyof GoodsIssueDetail>(
 		key: K,
@@ -75,7 +63,7 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 	};
 
 	const handleAddProductToForm = (selectedProduct: ProductForGoodsIssue): void => {
-		const isExist = form.items.some((item) => item.productId === selectedProduct.id);
+		const isExist = form.items.some((item) => item.variantId === selectedProduct.id);
 		if (isExist) {
 			alert('Sản phẩm này đã có trong danh sách xuất kho!');
 			return;
@@ -83,15 +71,12 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 
 		const newItem: GoodsIssueItem = {
 			id: Date.now().toString(),
-			productId: selectedProduct.id,
-			productName: selectedProduct.name,
+			variantId: selectedProduct.id,
+			variantName: selectedProduct.name,
 			sku: selectedProduct.sku,
-			serialNumber: selectedProduct.serialNumber,
 			quantity: 1,
 			unitPrice: 0,
 			totalPrice: 0,
-			batchNumber: '',
-			note: '',
 		};
 
 		updateField('items', [...form.items, newItem]);
@@ -102,7 +87,6 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 		e.preventDefault();
 		try {
 			statusModal.showLoading('Đang xử lý dữ liệu, vui lòng chờ...');
-			await submitMutation.mutateAsync({ data: form, isCreate });
 			statusModal.showSuccess(
 				isCreate ? 'Tạo phiếu xuất kho thành công!' : 'Cập nhật phiếu xuất kho thành công!',
 			);
@@ -132,7 +116,6 @@ export function useGoodsIssueFormLogic(props: UseGoodsIssueLogicProps): GoodsIss
 		isCreate: isCreate,
 		totalQuantity: totalQuantity,
 		totalAmount: totalAmount,
-		products: products,
 		statusModal: statusModal,
 		updateField: updateField,
 		handleUpdateItem: handleUpdateItem,

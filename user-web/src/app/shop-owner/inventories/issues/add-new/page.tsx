@@ -11,24 +11,11 @@ const mockGoodsIssueItems: GoodsIssueDetail = {
 	id: '',
 	code: '',
 	type: 'retail',
-	partner: {
-		id: '',
-		name: '',
-		type: 'customer',
-		phoneNumber: '',
-		address: '',
-	},
-	warehouseID: '',
-	createdBy: '',
-	createdByName: '',
-	exportDate: '',
-	status: 'draft',
 	note: '',
 	items: [],
 	totalQuantity: 0,
 	totalAmount: 0,
 	createdAt: '',
-	updatedAt: '',
 };
 
 export default function GoodsIssuePage(): JSX.Element {
