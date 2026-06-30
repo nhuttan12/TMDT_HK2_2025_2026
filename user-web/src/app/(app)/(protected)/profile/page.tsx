@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import ProfileContainer from './_components/profile-container';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
-import { getUserProfileCraw, UserService } from '@/services/users/user/profile-service';
+import { UserService } from '@/services/users/user/profile-service';
 import apiServer from '@/lib/api-server';
 
 export default async function ProfilePage(): Promise<JSX.Element> {

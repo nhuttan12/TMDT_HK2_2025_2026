@@ -1,6 +1,7 @@
 ﻿using api.Database;
 using api.Database.Interceptors;
 using api.Exceptions;
+using api.Extensions.EmailExtensions;
 using api.Models;
 using api.Models.Jwts;
 using api.Repository;
@@ -19,6 +20,7 @@ using api.Services.Carts;
 using api.Services.Categorys;
 using api.Services.Coupons;
 using api.Services.Invoices;
+using api.Services.Mail;
 using api.Services.Products;
 using api.Services.Promotions;
 using api.Services.Users;
@@ -61,7 +63,9 @@ namespace api.Extensions
                 options.AddInterceptors(interceptor);
             });
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
+            // email 
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.AddTransient<IMailService, MailService>();
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
@@ -108,6 +112,8 @@ namespace api.Extensions
             services.AddScoped<IAdminPromotionService, AdminPromotionService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped <IInvoiceService,InvoiceService>();
+
+        
            // Đăng ký Data Seeders
            services.AddScoped<IDataSeeder, CategorySeeder>();
             services.AddScoped<IDataSeeder, ShopSeeder>();
