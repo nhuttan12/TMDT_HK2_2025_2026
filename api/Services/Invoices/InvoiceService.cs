@@ -27,41 +27,42 @@ namespace api.Services.Invoices
         IInvoiceRepository repo) : IInvoiceService
     {
         public async Task<Result<InvoiceDetailResponseDto>> AddDeliveryToInvoice(
-          Guid? userId,
-          Guid invoiceId,
-          AddDeliveryRequestDto request,
-          CancellationToken cancellationToken)
+            Guid? userId,
+            Guid invoiceId,
+            AddDeliveryRequestDto request,
+            CancellationToken cancellationToken)
         {
-            // 1. Kiểm tra UserId hợp lệ
+            // 1. Kiểm tra UserId hợp lệ (Fail Fast)
             if (userId == null || userId == Guid.Empty)
             {
-                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Người dùng không hợp lệ.", ErrorType.Unauthorized));
+                return Result<InvoiceDetailResponseDto>.Failure(
+                    Error.Create("Invoice.Add.Delivery", "Người dùng không hợp lệ.", ErrorType.Unauthorized));
             }
 
-            // 2. Lấy Invoice bằng hàm Tracking (Hoặc No-Tracking tùy bạn, vì ta sẽ gọi Update ở dưới nếu cần)
             Invoice iv = await repo.getByIdTracking(invoiceId, cancellationToken);
             if (iv is null)
             {
-                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Hóa đơn không tồn tại.", ErrorType.NotFound));
+                return Result<InvoiceDetailResponseDto>.Failure(
+                    Error.Create("Invoice.Add.Delivery", "Hóa đơn không tồn tại.", ErrorType.NotFound));
             }
 
-            // 3. Xử lý logic thông tin người nhận
-            string receiverName = request.ReceiverName;
-            string receiverPhone = request.ReceiverPhone;
+            string receiverName = request.ReceiverName?.Trim() ?? string.Empty;
+            string receiverPhone = request.ReceiverPhone?.Trim() ?? string.Empty;
 
             if (string.IsNullOrWhiteSpace(receiverName) || string.IsNullOrWhiteSpace(receiverPhone))
             {
                 User user = await userRepository.GetUserByIdAsync(userId.Value);
                 if (user is null)
                 {
-                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Delivery", "Không tìm thấy thông tin tài khoản người dùng.", ErrorType.NotFound));
+                    return Result<InvoiceDetailResponseDto>.Failure(
+                        Error.Create("Invoice.Add.Delivery", "Không tìm thấy thông tin tài khoản người dùng.", ErrorType.NotFound));
                 }
 
                 if (string.IsNullOrWhiteSpace(receiverName)) receiverName = user.FullName;
                 if (string.IsNullOrWhiteSpace(receiverPhone)) receiverPhone = user.Phone;
             }
 
-            // 4. Xử lý logic Địa chỉ (Address)
+            // 4. Xử lý logic Địa chỉ (Address) - GIỮ NGUYÊN các hàm Repo của bạn
             Guid targetAddressId;
             Address ad = await deliveryRepository.GetAddressById(userId, request.AddressId, cancellationToken);
 
@@ -73,11 +74,12 @@ namespace api.Services.Invoices
             {
                 if (string.IsNullOrWhiteSpace(request.Address))
                 {
-                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.Add.Address", "Thông tin địa chỉ cụ thể không được để trống.", ErrorType.BadRequest));
+                    return Result<InvoiceDetailResponseDto>.Failure(
+                        Error.Create("Invoice.Add.Address", "Thông tin địa chỉ cụ thể không được để trống.", ErrorType.BadRequest));
                 }
 
                 Guid newAddressId = idGenerator.NewId();
-                Address adNew = Address.Create(userId.Value, newAddressId, request.Address);
+                Address adNew = Address.Create(userId.Value, newAddressId, request.Address.Trim());
 
                 deliveryRepository.AddAddress(adNew);
                 targetAddressId = newAddressId;
@@ -96,21 +98,18 @@ namespace api.Services.Invoices
                 shippingFee
             );
 
-            // 6. THAY ĐỔI CHÍNH: Thêm trực tiếp dòng dữ liệu vào bảng DELIVERY thông qua Repo vừa viết
             deliveryRepository.AddDelivery(d);
 
-            // 7. THAY ĐỔI CHÍNH: Chỉ cập nhật ID của delivery sang Invoice (Tránh truyền nguyên cây Object gây lỗi State)
             iv.SetDeliveryId(deliveryId, shippingFee);
 
-            // Nếu bạn đang tắt hoàn toàn Tracking ở bước trước, hãy un-comment dòng dưới đây:
+            // Nếu repo.getByIdTracking trả về một đối tượng bị ngắt tracking, ta chủ động update
             // repo.Update(iv);
 
-            // 8. Lưu vào Cơ sở dữ liệu (EF Core sẽ sinh lệnh INSERT cho Delivery trước rồi UPDATE cho Invoice sau)
             await unitOfWork.CommitAsync(cancellationToken);
 
-            // Giữ nguyên cách return nguyên bản của bạn
             return MapInvoiceToInvoiceDetailDto(iv);
         }
+
         public async Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto request, CancellationToken cancellationToken)
         {
             Guid id = idGenerator.NewId();
@@ -133,6 +132,27 @@ namespace api.Services.Invoices
                 }
 
                 order.AddItem(item.ProductId, item.VariantId, item.Quantity, cost);
+            }
+            if (request.DeliveryRequest != null)
+            {
+                //Delivery delivery = Delivery.Create
+                ////order.AddDelivery(request.newAddress);
+            }
+            else
+            {
+                User u = await userRepository.GetUserByIdAsync(userId.Value);
+                if(u is null)
+                {
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Unauthorized());
+                }
+                Address address = await repo.getAddressUsed();
+                if(address is null)
+                {
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.address", "khong co ia chi", ErrorType.BadRequest));
+                }
+                decimal shippngFee = 50000;
+                Delivery delivery = Delivery.CreateNoId(id, address.Id, u.FullName, u.Phone, shippngFee);
+                order.AddDelivery(delivery);
             }
 
             // Gọi các hàm chuẩn đã có hậu tố Async và nhận CancellationToken bên Repo

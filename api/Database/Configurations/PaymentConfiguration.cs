@@ -8,22 +8,18 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
-            // 1. Đặt tên bảng viết hoa đồng bộ với CARTS, INVOICES
             builder.ToTable("PAYMENTS");
 
-            // 2. Khóa chính (Primary Key) sử dụng cấu hình NEWSEQUENTIALID() giống Cart
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                 .HasColumnName("Id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            // 3. Khóa ngoại liên kết 1-1 với Invoice (Mối quan hệ chính giống HasOne trong Cart)
             builder.HasOne(p => p.Invoice)
-                .WithOne() // Nếu bên Invoice không tạo Navigation Property trỏ ngược về Payment
+                .WithOne()
                 .HasForeignKey<Payment>(p => p.InvoiceId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa Invoice thì xóa lịch sử thanh toán tương ứng
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 4. Các thuộc tính cơ bản
             builder.Property(p => p.TransactionId)
                 .HasColumnName("TransactionId")
                 .HasColumnType("varchar(255)")
@@ -34,10 +30,9 @@ namespace api.Database.Configurations
                 .HasColumnType("decimal(19,2)")
                 .IsRequired();
 
-            // Chuyển đổi Enum PaymentMethod thành String dưới DB
             builder.Property(p => p.PaymentMethod)
                 .HasColumnName("PaymentMethod")
-                .HasColumnType("varchar(255)")
+                .HasColumnType("varchar(50)") // 255 hơi dư thừa cho Enum, 50 là đủ
                 .HasConversion(
                     v => v.ToString(),
                     v => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), v)
@@ -49,9 +44,14 @@ namespace api.Database.Configurations
                 .HasColumnType("varchar(50)")
                 .IsRequired(false);
 
-            // Chuyển đổi Enum PaymentStatus thành String dưới DB
+            // Map thêm trường RawResponse
+            builder.Property(p => p.RawResponse)
+                .HasColumnName("RawResponse")
+                .HasColumnType("nvarchar(max)") // Lưu JSON nên dùng nvarchar(max)
+                .IsRequired(false);
+
             builder.Property(p => p.PaymentStatus)
-                .HasColumnName("Status") // Map đúng tên cột 'Status' theo sơ đồ ERD của bạn
+                .HasColumnName("Status")
                 .HasColumnType("varchar(50)")
                 .HasConversion(
                     v => v.ToString(),
@@ -59,15 +59,23 @@ namespace api.Database.Configurations
                 )
                 .IsRequired();
 
-            // 5. Cấu hình các cột thời gian sử dụng kiểu datetimeoffset giống như file Cart
             builder.Property(p => p.CreatedAt)
                 .HasColumnName("CreatedAt")
                 .HasColumnType("datetimeoffset")
                 .IsRequired();
 
-            // 6. Đánh Indexes tối ưu hiệu năng tìm kiếm
+            // Cấu hình cột UpdatedAt
+            builder.Property(p => p.UpdatedAt)
+                .HasColumnName("UpdatedAt")
+                .HasColumnType("datetimeoffset")
+                .IsRequired(false);
+
             builder.HasIndex(p => p.InvoiceId);
-            builder.HasIndex(p => p.TransactionId).IsUnique();
+
+            // FIX LỖI CRASH INDEX: Chỉ Unique những dòng có TransactionId khác NULL
+            builder.HasIndex(p => p.TransactionId)
+                   .IsUnique()
+                   .HasFilter("[TransactionId] IS NOT NULL");
         }
     }
 }

@@ -70,5 +70,31 @@ namespace api.Models.Orders
         {
             ShippingStatus = newStatus;
         }
+
+        internal static Delivery CreateNoId( Guid invoiceId, Guid addressId, string receiverName, string? receiverPhone, decimal shippingFee)
+        {
+            if (invoiceId == Guid.Empty) throw new ArgumentException("InvoiceId không hợp lệ.", nameof(invoiceId));
+            if (addressId == Guid.Empty) throw new ArgumentException("AddressId không hợp lệ.", nameof(addressId));
+
+            if (string.IsNullOrWhiteSpace(receiverPhone))
+                throw new ArgumentException("Số điện thoại không được để trống.", nameof(receiverPhone));
+
+            if (string.IsNullOrWhiteSpace(receiverName))
+                throw new ArgumentException("Tên người nhận không được để trống.", nameof(receiverName));
+
+            if (shippingFee < 0)
+                throw new ArgumentException("Phí vận chuyển không được âm.", nameof(shippingFee));
+
+            return new Delivery
+            {
+                Id = Guid.Empty,
+                InvoiceId = invoiceId,
+                AddressId = addressId,
+                ReceiverPhone = receiverPhone.Trim(),
+                ReceiverName = receiverName.Trim(),
+                ShippingFee = shippingFee,
+                ShippingStatus = DeliveryStatus.Pending
+            };
+        }
     }
 }

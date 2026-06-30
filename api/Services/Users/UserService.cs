@@ -3,6 +3,7 @@ using api.Database;
 using api.Dtos.Common;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
+using api.Extensions.MapExtention;
 using api.Models;
 using api.Models.Roles;
 using api.Models.Users;
@@ -87,22 +88,20 @@ namespace api.Services.Users
         }
         public async Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            var user = await repo.GetUserByIdAsync(id, ct: ct);
+            // 1. Chỉ gọi duy nhất 1 lần xuống DB, lấy lên toàn bộ thông tin gốc của Aggregate root
+            var user = await repo.GetUserByIdAsync(id,ct: ct);
+
+            // 2. Fail Fast nếu không tìm thấy dữ liệu
             if (user == null)
             {
-                return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
+                return Result<UserInfoDTO>.Failure(
+                    Error.Create("User.NotFound", $"No user found with id: {id}", ErrorType.NotFound));
             }
-            var dto = mapper.Map<UserInfoDTO>(user);
-            var address = await repo.GetAddressById(id, ct);
-            if(address is not null )
-            {
-                foreach (var addressDTO in address)
-                {
-                    dto.Address!.Add(addressDTO.AddressUrl);
-                }
-            }
-            return Result<UserInfoDTO>.Success(dto);
 
+            // 3. Thực hiện Mapping sạch sẽ, an toàn dữ liệu
+            var dto = user.ToResponseDto();
+
+            return Result<UserInfoDTO>.Success(dto);
         }
         public async Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default)
         {
@@ -111,7 +110,6 @@ namespace api.Services.Users
             var user = await repo.GetByEmailAsync(email, ct: ct);
             return user == null ? Result<User>.Failure(Error.Create("UserNotFound", "No user found with the provided email.", ErrorType.NotFound)) : Result<User>.Success(user);
         }
-        //**********************************************************************************
 
         public async Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
@@ -126,15 +124,15 @@ namespace api.Services.Users
 
         public async Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default)
         {
-            var user = await repo.GetUserByIdAsync(id, ct: ct);
+            var user = await repo.GetUserByIdAsync(id,trackChanges: true, ct: ct);
             if (user == null)
                 return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
             var updateResult = user.Update(userUpdateDto.Fullname, userUpdateDto.PhoneNumber, userUpdateDto.AvatarUrl, userUpdateDto.Addresses, id);
             if (!updateResult.IsSuccess)
                 return Result<UserInfoDTO>.Failure(updateResult.Error);
-            repo.Update(user);
+            //repo.Update(user);
             await unitOfWork.CommitAsync(ct);
-            return Result<UserInfoDTO>.Success(mapper.Map<UserInfoDTO>(user));
+            return Result<UserInfoDTO>.Success(user.ToResponseDto());
         }
 
         public async Task<Result<object>> ChangePasswordAsync(

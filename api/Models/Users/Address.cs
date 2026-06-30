@@ -16,6 +16,13 @@ public class Address
 
     // Constructor ẩn để ép buộc sử dụng Factory Method
     private Address() { }
+    private Address(Guid userId, string addressUrl, bool isUsed)
+    {
+        Id = Guid.CreateVersion7(); // Tối ưu hóa phân tán với UUIDv7 trong .NET 9
+        UserId = userId;
+        AddressUrl = addressUrl;
+        IsUsed = isUsed;
+    }
 
     /// <summary>
     /// Static Factory Method - Tuân thủ tư duy Defensive Programming
@@ -37,7 +44,7 @@ public class Address
             IsUsed = false
         };
     }
-    public static Address CreateForUser(Guid userId, string addressUrl)
+    public static Address CreateForUser(Guid userId, string addressUrl, bool isUsed = false)
     {
         // Fail Fast: Kiểm tra dữ liệu đầu vào ngay lập tức
         if (userId == Guid.Empty)
@@ -51,13 +58,20 @@ public class Address
             Id = Guid.Empty,
             UserId = userId,
             AddressUrl = addressUrl.Trim(),
-            IsUsed = false
+            IsUsed = isUsed
         };
     }
-
-    // Business Logic Method: Thay đổi trạng thái object một cách tường minh
-    public void MarkAsUsed()
+    public void UpdateUrl(string newUrl)
     {
-        IsUsed = true;
+        if (!string.IsNullOrWhiteSpace(newUrl) && AddressUrl != newUrl)
+        {
+            AddressUrl = newUrl;
+        }
     }
+
+    public void SetAsUsed(bool isUsed)
+    {
+        IsUsed = isUsed;
+    }
+   
 }

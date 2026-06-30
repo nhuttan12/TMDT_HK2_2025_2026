@@ -1,5 +1,6 @@
 ﻿using api.Models.Coupons;
 using api.Models.Enums;
+using api.Models.Payments;
 using api.Models.Shops;
 
 namespace api.Models.Orders
@@ -17,6 +18,8 @@ namespace api.Models.Orders
         public InvoiceAppliedCoupon? AppliedCoupon { get; private set; } = null;
         public Guid? DeliveryId { get; private set; }
         public Delivery? Delivery { get; private set; } = null;
+        public Guid? PaymentId { get; private set; }
+        public Payment Payment { get; private set; } = null;
         public ICollection<InvoiceAppliedCoupon> AppliedCoupons { get; private set; } = new HashSet<InvoiceAppliedCoupon>();
         public decimal TotalAmount { get; private set; }
         public decimal FinalAmount { get; private set; }
@@ -129,6 +132,21 @@ namespace api.Models.Orders
             }
             this.FinalAmount = Math.Max(0, this.FinalAmount);
 
+        }
+
+        // Thêm vào bên trong class Invoice (phía dưới các hàm RecalculateFinalAmount)
+        public void MarkAsPaid(Guid paymentId)
+        {
+            if (this.Status != InvoiceStatus.Pending)
+                throw new InvalidOperationException("Chỉ có thể thanh toán cho hóa đơn đang chờ xử lý.");
+
+            if (paymentId == Guid.Empty)
+                throw new ArgumentException("Mã thanh toán không hợp lệ.");
+
+            this.PaymentId = paymentId;
+            // 🛠️ CẦN ĐẢM BẢO: Trong Enum InvoiceStatus của bạn có trạng thái Paid (hoặc Completed)
+            this.Status = InvoiceStatus.Completed;
+            this.UpdatedAt = DateTimeOffset.UtcNow;
         }
     }
 
