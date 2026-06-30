@@ -19,7 +19,7 @@ BEGIN
         WHERE shop_id = @ShopId 
           AND created_at >= @StartDate 
           AND created_at < DATEADD(DAY, 1, @EndDate) 
-          AND status = 6 -- Completed
+          AND [status] = 3 -- Completed
         GROUP BY 
             FORMAT(created_at, 'dd/MM'),
             CAST(created_at AS DATE) 
@@ -37,7 +37,7 @@ BEGIN
         WHERE shop_id = @ShopId 
           AND created_at >= @StartDate 
           AND created_at < DATEADD(DAY, 1, @EndDate)
-          AND status = 6 -- Completed
+          AND [status] = 3 -- Completed
         GROUP BY 
             CONCAT(N'Tuần ', (DATEPART(DAY, created_at) - 1) / 7 + 1, ' T', DATEPART(MONTH, created_at)),
             DATEPART(YEAR, created_at), 
@@ -59,7 +59,7 @@ BEGIN
         WHERE shop_id = @ShopId 
           AND created_at >= @StartDate 
           AND created_at < DATEADD(DAY, 1, @EndDate)
-          AND status = 6 -- Completed
+          AND [status] = 3 -- Completed
         GROUP BY 
             CONCAT(N'Tháng ', DATEPART(MONTH, created_at)),
             DATEPART(YEAR, created_at),

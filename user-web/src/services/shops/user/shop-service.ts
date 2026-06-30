@@ -1,10 +1,11 @@
+import { PaginationParams } from '@/types/common/Pagination';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ShopPublicFilter } from '@/types/shops/user/ShopPublicFilter';
 import { ShopStorefront } from '@/types/shops/user/ShopStorefront';
-import apiClient from '@/lib/api-client';
-import apiServer from '@/lib/api-server';
+import { ShopUserCard } from '@/types/shops/user/ShopUserCard';
 
 export const getShopPublicInfoById = async (shopId: string): Promise<ShopStorefront> => {
 	return new Promise((resolve, reject) => {
@@ -256,7 +257,7 @@ export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]
 					name: 'Giảm 100K',
 					scope: 'shop',
 					shopId: shopId,
-                    status: 'active',
+					status: 'active',
 					category: 'discount',
 					discountType: 'fixed_amount',
 					discountValue: 100000,
@@ -274,7 +275,7 @@ export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]
 					name: 'Miễn phí vận chuyển',
 					scope: 'shop',
 					shopId: shopId,
-                    status: 'expired',
+					status: 'expired',
 					category: 'shipping', // Định danh đúng nhóm vận chuyển
 					discountType: 'fixed_amount',
 					discountValue: 30000,
@@ -289,4 +290,48 @@ export const getShopPublicCoupons = async (shopId: string): Promise<UserCoupon[]
 			]);
 		}, 600);
 	});
+};
+
+export const getShopListPagingMocking = async (
+	search: string,
+	pagination?: PaginationParams,
+): Promise<BackendPagedResult<ShopUserCard>> => {
+	// Giả lập độ trễ mạng 500ms
+	await new Promise((resolve) => setTimeout(resolve, 500));
+
+	const { pageNumber = 1, pageSize = 12 } = pagination || {};
+
+	const allMockShops: ShopUserCard[] = [
+		{
+			id: '019f16c8-d647-7cab-9d57-ef50fe06acd0',
+			name: 'Terrarium Kín',
+			description: 'Chuyên cung cấp bình kính',
+			totalProducts: 120,
+		},
+		{ id: '2', name: 'Tiệm Cây Xanh', description: 'Cây cảnh mini để bàn', totalProducts: 45 },
+		{ id: '3', name: 'Phụ kiện Setup', description: 'Đất nền, nhíp, rêu', totalProducts: 300 },
+	];
+
+	// Lọc kết quả theo từ khóa tìm kiếm (nếu có)
+	const filteredShops = allMockShops.filter((shop) =>
+		shop.name.toLowerCase().includes(search.toLowerCase()),
+	);
+
+	// Tính toán logic phân trang thực tế cho dữ liệu Mock
+	const totalCount = filteredShops.length;
+	const totalPages = Math.ceil(totalCount / pageSize) || 1;
+
+	// Cắt mảng để lấy đúng các item thuộc trang hiện tại
+	const pagedItems = filteredShops.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
+
+	// Trả ra đúng cấu trúc BackendPagedResult yêu cầu
+	return {
+		items: pagedItems,
+		totalCount,
+		pageNumber,
+		pageSize,
+		totalPages,
+		hasNextPage: pageNumber < totalPages,
+		hasPreviousPage: pageNumber > 1,
+	};
 };

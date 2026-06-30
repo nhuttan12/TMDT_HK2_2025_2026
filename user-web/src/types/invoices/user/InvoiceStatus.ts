@@ -1,9 +1,7 @@
 export type InvoiceStatus =
-	| 'pending_approval'
+	| 'unknown'
 	| 'pending'
-	| 'paid'
-	| 'shipping'
-	| 'delivered'
-	| 'cancelled'
+	| 'processing'
 	| 'completed'
-    | 'returned';
+	| 'cancelled'
+	| 'returned';

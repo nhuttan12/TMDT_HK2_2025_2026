@@ -13,7 +13,8 @@ export interface RevenueDashboardLogicReturn {
 export function useRevenueDashboardLogic(): RevenueDashboardLogicReturn {
 	// Ưu tiên suy luận kiểu dữ liệu (Type Inference) cho state nội bộ
 	const [dateRange, setDateRange] = useState({ start: '2026-06-19', end: '2026-06-25' });
-	const [selectedMonth, setSelectedMonth] = useState('2026-06');
+    const currentMonth = (new Date().getMonth() + 1).toString();
+    const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
 
 	const handleStartDateChange = (date: string): void => {
 		setDateRange((prev) => ({ ...prev, start: date }));

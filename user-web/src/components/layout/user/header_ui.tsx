@@ -2,8 +2,8 @@
 
 import { ListOrdered, LogOut, Search, ShoppingCart, Sprout, User } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { JSX, ReactNode } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { JSX, KeyboardEvent, ReactNode, useEffect, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import {
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
+import SwapValueBox from '../share/swap-value-box';
 
 /* ---------- Logo ---------- */
 
@@ -116,6 +117,62 @@ interface HeaderProps {
 export default function HeaderUi({ isAuthenticated }: HeaderProps) {
 	const pathname = usePathname();
 	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	// 2. Khởi tạo state cơ bản
+	const [searchScope, setSearchScope] = useState<string>('shop');
+	const [searchValue, setSearchValue] = useState<string>('');
+
+    const [prevPathname, setPrevPathname] = useState<string>(pathname);
+	const [prevSearchParams, setPrevSearchParams] = useState<string>(searchParams.toString());
+
+    // 3. Tự động đồng bộ trạng thái Ô chọn và Ô tìm kiếm dựa trên URL thực tế
+	if (pathname !== prevPathname || searchParams.toString() !== prevSearchParams) {
+		// Cập nhật lại mốc URL cũ để tránh vòng lặp vô hạn
+		setPrevPathname(pathname);
+		setPrevSearchParams(searchParams.toString());
+
+		// Đồng bộ searchScope dựa trên URL thực tế
+		if (pathname?.startsWith('/products')) {
+			setSearchScope('product');
+		} else if (pathname?.startsWith('/shops')) {
+			setSearchScope('shop');
+		}
+
+		// Đồng bộ từ khoá tìm kiếm từ URL thực tế
+		setSearchValue(searchParams.get('search') || '');
+	}
+
+	// Hàm mapping giá trị tiếng Việt từ SwapValueBox ra param tiếng Anh
+	const handleScopeChange = (val: string) => {
+		// val nhận được sẽ là "Cửa hàng" hoặc "Sản phẩm"
+		const scopeParam = val === 'Sản phẩm' ? 'product' : 'shop';
+		setSearchScope(scopeParam);
+	};
+
+	// Hàm đẩy query params lên URL
+	const executeSearch = () => {
+		const targetPath = searchScope === 'product' ? '/products' : '/shops';
+		
+		const params = new URLSearchParams();
+		// Nếu có chữ trong ô tìm kiếm thì mới đẩy param ?search= vào path mới
+		if (searchValue.trim()) {
+			params.set('search', searchValue.trim());
+		}
+
+		const queryString = params.toString();
+		const finalUrl = queryString ? `${targetPath}?${queryString}` : targetPath;
+
+		// Điều hướng sang trang đích (Ví dụ: /products?search=foam hoặc /shops)
+		router.push(finalUrl);
+	};
+
+	// Cho phép ấn Enter để tìm kiếm
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			executeSearch();
+		}
+	};
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-white'>
@@ -172,11 +229,26 @@ export default function HeaderUi({ isAuthenticated }: HeaderProps) {
 
 					{/* Right */}
 					<div className='ml-auto flex items-center gap-3'>
-						<div className='hidden sm:block'>
+						<div className='hidden sm:flex items-center gap-2'>
+							<SwapValueBox
+								valueA='Cửa hàng'
+								valueB='Sản phẩm'
+								initialValue={searchScope === 'product' ? 'Sản phẩm' : 'Cửa hàng'}
+								onChange={handleScopeChange}
+							/>
+
 							<InputGroup className='max-w-xs'>
-								<InputGroupInput placeholder='Search...' />
-								<InputGroupAddon>
-									<Search />
+								<InputGroupInput
+									placeholder='Tìm kiếm...'
+									value={searchValue}
+									onChange={(e) => setSearchValue(e.target.value)}
+									onKeyDown={handleKeyDown}
+								/>
+								<InputGroupAddon
+									className='cursor-pointer hover:bg-slate-100'
+									onClick={executeSearch}
+								>
+									<Search className='w-4 h-4' />
 								</InputGroupAddon>
 							</InputGroup>
 						</div>

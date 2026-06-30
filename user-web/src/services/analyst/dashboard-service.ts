@@ -12,9 +12,10 @@ export const getDashboardStats = async (
 	const mockData: DashboardStatsResponse = {
 		statusStructure: [
 			{ status: 'completed', count: 1250 },
-			{ status: 'shipping', count: 430 },
+			{ status: 'processing', count: 430 }, // Đổi từ 'shipping' sang 'processing'
 			{ status: 'pending', count: 210 },
 			{ status: 'cancelled', count: 55 },
+			{ status: 'returned', count: 12 }, // Có thể bổ sung thêm trạng thái trả hàng
 		],
 		gmvFluctuation: [
 			{ date: '2024-05-01T08:00:00Z', value: 15000000 },

@@ -35,17 +35,17 @@ export function InvoiceStatusSelect({
 			</SelectTrigger>
 
 			<SelectContent>
-				{status === 'pending_approval' ? (
+				{status === 'pending' ? (
 					<>
-						<SelectItem value='pending_approval'>Chờ duyệt</SelectItem>
-						<SelectItem value='pending'>Duyệt đơn</SelectItem>
+						<SelectItem value='pending'>Chờ xử lý</SelectItem>
+						<SelectItem value='processing'>Duyệt đơn (Đang xử lý)</SelectItem>
 						<SelectItem value='cancelled'>Huỷ đơn</SelectItem>
 					</>
 				) : (
 					<>
-						<SelectItem value='pending'>Chờ thanh toán</SelectItem>
-						<SelectItem value='paid'>Đã thanh toán</SelectItem>
+						<SelectItem value='processing'>Đang xử lý</SelectItem>
 						<SelectItem value='completed'>Hoàn tất</SelectItem>
+						<SelectItem value='returned'>Đã hoàn trả</SelectItem>
 						<SelectItem value='cancelled'>Đã huỷ</SelectItem>
 					</>
 				)}

@@ -39,6 +39,13 @@ export function RevenueDashboardUI({
 		fill: COLORS[index % COLORS.length],
 	}));
 
+    // Tính toán thời gian thực cho bộ chọn tháng
+    const currentYear = new Date().getFullYear();
+	const currentMonth = new Date().getMonth() + 1;
+
+    // Tạo mảng tuần tự từ tháng 1 đến tháng hiện tại (VD: [1, 2, 3, 4, 5, 6])
+    const availableMonths = Array.from({ length: currentMonth }, (_, i) => i + 1);
+
 	if (isLoading) {
 		return (
 			<div className='flex h-96 w-full items-center justify-center gap-2'>
@@ -98,8 +105,11 @@ export function RevenueDashboardUI({
 							<SelectValue placeholder='Chọn tháng' />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value='2026-06'>Tháng 06/2026</SelectItem>
-							<SelectItem value='2026-05'>Tháng 05/2026</SelectItem>
+							{availableMonths.map((month: number): JSX.Element => (
+								<SelectItem key={month} value={month.toString()}>
+									Tháng {month.toString().padStart(2, '0')}/{currentYear}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</div>

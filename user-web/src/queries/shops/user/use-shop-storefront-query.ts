@@ -1,8 +1,11 @@
-import { getShopPublicCoupons, getShopPublicProducts } from "@/services/shops/user/shop-storefront-service";
+import { getShopListPagingMocking, getShopPublicCoupons, getShopPublicProducts } from "@/services/shops/user/shop-service";
+import { PaginationParams } from "@/types/common/Pagination";
 import { UserCoupon } from "@/types/marketing/coupons/user/UserCoupon";
+import { BackendPagedResult } from "@/types/products/user/productBE";
 import { ProductUserCard } from "@/types/products/user/ProductUserCard";
 import { PaginationResponse } from "@/types/shared/PaginationResponse";
 import { ShopPublicFilter } from "@/types/shops/user/ShopPublicFilter";
+import { ShopUserCard } from "@/types/shops/user/ShopUserCard";
 import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export const useShopProductsQuery = (
@@ -39,3 +42,15 @@ export const useFollowShopMutation = () => {
 		},
 	});
 };
+
+export function useShopListQuery(
+    search: string,
+	pagination: PaginationParams
+): UseQueryResult<BackendPagedResult<ShopUserCard>, Error> {
+	return useQuery({
+		// QueryKey thay đổi khi params thay đổi để tự động re-fetch dữ liệu mới
+		queryKey: ['shop-list', search, pagination],
+		queryFn: () => getShopListPagingMocking(search, pagination),
+		staleTime: 1000 * 60 * 5, // Tối ưu hiệu năng: Cache dữ liệu trong vòng 5 phút
+	});
+}

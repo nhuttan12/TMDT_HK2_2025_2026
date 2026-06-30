@@ -1,23 +1,14 @@
-import { JSX } from 'react';
 import Image from 'next/image';
+import { JSX } from 'react';
 
+import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 
-import { formatDate } from '@/utils/shared/date';
-import { getUserRoleLabel } from '@/utils/users/user-role-label';
-import { UserRole } from '@/types/users/UserRole';
 import { UseUserAdminFormLogicReturn } from '@/hooks/users/admin/use-user-admin-form-logic';
+import { formatDate } from '@/utils/shared/date';
 
 // Kế thừa toàn bộ logic hook return
 type UserAdminFormUiProps = UseUserAdminFormLogicReturn;
@@ -26,9 +17,7 @@ export default function UserAdminFormUi({
 	form,
 	isView,
 	isCreate,
-	roles,
 	handleInputChange,
-	handleRoleChange,
 	handleStatusChange,
 	handleSubmit,
 }: UserAdminFormUiProps): JSX.Element {
@@ -80,31 +69,6 @@ export default function UserAdminFormUi({
 					onChange={handleInputChange}
 					disabled={isView}
 				/>
-			</div>
-
-			<div className='space-y-2'>
-				<Label>Vai trò</Label>
-				<Select
-					value={form.role}
-					onValueChange={handleRoleChange}
-					disabled={isView}
-				>
-					<SelectTrigger>
-						<SelectValue placeholder='Chọn vai trò' />
-					</SelectTrigger>
-					<SelectContent>
-						{roles.map(
-							(role: UserRole): JSX.Element => (
-								<SelectItem
-									key={role}
-									value={role}
-								>
-									{getUserRoleLabel(role)}
-								</SelectItem>
-							),
-						)}
-					</SelectContent>
-				</Select>
 			</div>
 
 			<div className='flex items-center gap-3'>

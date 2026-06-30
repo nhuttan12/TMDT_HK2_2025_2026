@@ -38,7 +38,7 @@ namespace api.Models.Payments
                 PaymentMethod = paymentMethod,
                 TransactionId = transactionId?.Trim(),
                 InformationCard = informationCard?.Trim(),
-                PaymentStatus = PaymentStatus.Pending, // Mặc định là Chờ thanh toán
+                PaymentStatus = PaymentStatus.Unpaid, // Mặc định là Chờ thanh toán
                 CreatedAt = DateTimeOffset.UtcNow
             };
         }
