@@ -1,37 +1,36 @@
 'use client';
 
-import { CartItem } from '@/types/carts/CartItem';
 import { useCheckoutStore } from '@/stores/checkout.store';
-import { useMemo } from 'react';
+import { CartItem } from '@/types/carts/CartItem';
 import { useRouter } from 'next/navigation';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useMemo } from 'react';
 
-export interface CheckoutLogicReturn {
+export interface OrderLogicReturn {
 	items: CartItem[];
 	total: number;
-	handleOrder: () => void;
+	handleCheckout: () => void;
 	handleBack: () => void;
 }
 
-export function useCheckoutPreviewLogic(): CheckoutLogicReturn {
-	const router: AppRouterInstance = useRouter();
+export function useOrderPreviewLogic(): OrderLogicReturn {
+	const router = useRouter();
 
-	const items: CartItem[] = useCheckoutStore((s): CartItem[] => s.items);
+	const items = useCheckoutStore((s): CartItem[] => s.items);
 
-	const total: number = useMemo((): number => {
+	const total = useMemo((): number => {
 		return items.reduce(
 			(sum: number, item: CartItem): number => sum + item.price * item.quantity,
 			0,
 		);
 	}, [items]);
 
-	const handleOrder = (): void => {
-		router.push('/orders/success');
+	const handleCheckout = (): void => {
+		router.push('/checkout');
 	};
 
 	const handleBack = (): void => {
 		router.back();
 	};
 
-	return { items: items, total: total, handleOrder: handleOrder, handleBack: handleBack };
+	return { items, total, handleCheckout, handleBack };
 }

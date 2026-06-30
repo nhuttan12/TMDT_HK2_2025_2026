@@ -12,9 +12,7 @@ export interface UseUserAdminFormLogicReturn {
 	form: UserDetailInfoAdmin;
 	isView: boolean;
 	isCreate: boolean;
-	roles: UserRole[];
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handleRoleChange: (value: string) => void;
 	handleStatusChange: (checked: boolean) => void;
 	handleSubmit: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void;
 }
@@ -27,23 +25,12 @@ export function useUserAdminFormLogic(
 	const isView: boolean = props.formType === 'view';
 	const isCreate: boolean = props.formType === 'create';
 
-	const roles: UserRole[] = ['admin', 'shop-owner', 'customer'];
-
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;
 		setForm(
 			(prev: UserDetailInfoAdmin): UserDetailInfoAdmin => ({
 				...prev,
 				[name]: value,
-			}),
-		);
-	};
-
-	const handleRoleChange = (value: string): void => {
-		setForm(
-			(prev: UserDetailInfoAdmin): UserDetailInfoAdmin => ({
-				...prev,
-				role: value as UserRole,
 			}),
 		);
 	};
@@ -63,13 +50,11 @@ export function useUserAdminFormLogic(
 	};
 
 	return {
-		form: form,
-		isView: isView,
-		isCreate: isCreate,
-		roles: roles,
-		handleInputChange: handleInputChange,
-		handleRoleChange: handleRoleChange,
-		handleStatusChange: handleStatusChange,
-		handleSubmit: handleSubmit,
+		form,
+		isView,
+		isCreate,
+		handleInputChange,
+		handleStatusChange,
+		handleSubmit,
 	};
 }

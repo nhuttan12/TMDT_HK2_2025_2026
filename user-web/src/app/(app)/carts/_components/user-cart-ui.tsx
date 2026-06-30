@@ -28,7 +28,7 @@ export function UserCartUi({
 	handleToggleSelectAll,
 	handleUpdateQuantity,
 	handleRemoveItem,
-	handleCheckout,
+	handlePreviewOrder,
 	handleRedirectProductDetail,
 }: UserCartUiProps): JSX.Element {
 	if (isLoading) {
@@ -164,7 +164,7 @@ export function UserCartUi({
 			<div className='mt-6 flex justify-end'>
 				<Button
 					disabled={!selectedIds.length}
-					onClick={() => handleCheckout()}
+					onClick={() => handlePreviewOrder()}
 				>
 					Thanh toán ({selectedIds.length})
 				</Button>

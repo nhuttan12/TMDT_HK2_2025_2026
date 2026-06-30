@@ -1,14 +1,12 @@
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 
 const INVOICE_STATUS_TEXT_CLASSES_COLOR: Record<InvoiceStatus, string> = {
-	pending_approval: 'text-orange-600 font-medium',
-	pending: 'text-yellow-600 font-medium',
-	paid: 'text-green-600 font-medium',
-	shipping: 'text-purple-600 font-medium',
-	delivered: 'text-teal-600 font-medium',
-	cancelled: 'text-red-600 font-medium',
-	completed: 'text-blue-600 font-medium',
-	returned: 'text-slate-600 font-medium',
+	unknown: 'text-gray-500 font-medium',    // Trạng thái không xác định (màu xám)
+	pending: 'text-yellow-600 font-medium',  // Chờ xử lý (giữ nguyên màu vàng)
+	processing: 'text-blue-600 font-medium', // Đang xử lý (dùng màu xanh dương)
+	completed: 'text-green-600 font-medium', // Hoàn tất (dùng màu xanh lá thay cho paid cũ)
+	cancelled: 'text-red-600 font-medium',   // Đã hủy (giữ nguyên màu đỏ)
+	returned: 'text-slate-600 font-medium',  // Đã hoàn trả (giữ nguyên màu xám đậm)
 };
 
 /**

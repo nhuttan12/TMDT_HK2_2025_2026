@@ -43,7 +43,7 @@ namespace api.Models.Payments
                 Amount = amount,
                 PaymentMethod = paymentMethod,
                 InformationCard = informationCard?.Trim(),
-                PaymentStatus = PaymentStatus.Unpaid,
+                PaymentStatus = PaymentStatus.Unpaid, // Mặc định là Chờ thanh toán
                 CreatedAt = DateTimeOffset.UtcNow
             };
         }

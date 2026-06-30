@@ -95,9 +95,6 @@ export default function UserAdminTable({
 					{renderSortIcon('role')}
 				</div>
 			),
-			render: (row: CustomerListAdmin): JSX.Element => (
-				<Badge variant='secondary'>{getUserRoleLabel(row.role)}</Badge>
-			),
 		},
 		{
 			key: 'status',

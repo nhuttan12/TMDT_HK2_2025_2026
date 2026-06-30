@@ -16,18 +16,28 @@ import { Label } from '@/components/ui/label';
 
 // Import Custom Hook vừa tạo (chỉnh lại đường dẫn cho đúng dự án của bạn)
 import { useProductFilterLogic } from '@/hooks/products/user/use-product-filter-logic';
+import { CategoryOption } from '@/types/products/user/CategoryOption';
+import { ShopOption } from '@/types/products/user/ShopOption';
 
-export default function ProductFilterSidebar(): JSX.Element {
+interface ProductFilterSidebarProps {
+	categories: CategoryOption[];
+	shops: ShopOption[];
+}
+
+export default function ProductFilterSidebar({
+	categories,
+	shops,
+}: ProductFilterSidebarProps): JSX.Element {
 	// Gọi Logic Hook và giải nén (destructure) toàn bộ Data + Actions
 	const {
 		localMinPrice,
 		localMaxPrice,
-		localRating,
-		localBrand,
+		localCategory,
+		localShopName,
 		setLocalMinPrice,
 		setLocalMaxPrice,
-		setLocalRating,
-		setLocalBrand,
+		setLocalCategory,
+		setLocalShopName,
 		applyFilterToUrl,
 		handleReset,
 	} = useProductFilterLogic();
@@ -39,7 +49,7 @@ export default function ProductFilterSidebar(): JSX.Element {
 			</div>
 
 			<div className='space-y-2'>
-				{/* Price */}
+				{/* Khoảng giá */}
 				<div className='space-y-3'>
 					<Label className='font-semibold'>Khoảng giá (VNĐ)</Label>
 					<div className='flex items-center gap-2'>
@@ -67,33 +77,44 @@ export default function ProductFilterSidebar(): JSX.Element {
 					</div>
 				</div>
 
-				{/* Rating */}
+				{/* Danh mục */}
 				<div className='space-y-3'>
-					<Label className='font-semibold'>Đánh giá</Label>
+					<Label className='font-semibold'>Danh mục</Label>
 					<Select
-						value={localRating ? String(localRating) : undefined}
-						onValueChange={(value: string): void => setLocalRating(Number(value))}
+						value={localCategory || undefined}
+						onValueChange={(value: string): void => setLocalCategory(value)}
 					>
 						<SelectTrigger>
-							<SelectValue placeholder='Chọn đánh giá' />
+							<SelectValue placeholder='Chọn danh mục' />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value='5'>5 sao</SelectItem>
-							<SelectItem value='4'>Từ 4 sao</SelectItem>
-							<SelectItem value='3'>Từ 3 sao</SelectItem>
+							{categories.map((category) => (
+								<SelectItem key={category.id} value={category.id}>
+									{category.name}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</div>
 
-				{/* Brand */}
+				{/* Tên cửa hàng */}
 				<div className='space-y-3'>
-					<Label className='font-semibold'>Thương hiệu</Label>
-					<Input
-						type='text'
-						value={localBrand}
-						onChange={(e): void => setLocalBrand(e.target.value)}
-						placeholder='Ví dụ: TerraCraft'
-					/>
+					<Label className='font-semibold'>Tên cửa hàng</Label>
+					<Select
+						value={localShopName || undefined}
+						onValueChange={(value: string): void => setLocalShopName(value)}
+					>
+						<SelectTrigger>
+							<SelectValue placeholder='Chọn cửa hàng' />
+						</SelectTrigger>
+						<SelectContent>
+							{shops.map((shop) => (
+								<SelectItem key={shop.id} value={shop.id}>
+									{shop.name}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 

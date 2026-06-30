@@ -1,17 +1,20 @@
+import { ProductFilterPayload } from '@/types/products/user/ProductFilterPayload';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export interface UseProductFilterLogicReturn {
 	localMinPrice: number | undefined;
 	localMaxPrice: number | undefined;
-	localRating: number | undefined;
-	localBrand: string;
+	localCategory: string;
+	localShopName: string;
 	setLocalMinPrice: (val: number | undefined) => void;
 	setLocalMaxPrice: (val: number | undefined) => void;
-	setLocalRating: (val: number | undefined) => void;
-	setLocalBrand: (val: string) => void;
+	setLocalCategory: (val: string) => void;
+	setLocalShopName: (val: string) => void;
 	applyFilterToUrl: () => void;
 	handleReset: () => void;
+
+    buildFilterRequest: () => ProductFilterPayload;
 }
 
 export const useProductFilterLogic = (): UseProductFilterLogicReturn => {
@@ -29,18 +32,17 @@ export const useProductFilterLogic = (): UseProductFilterLogicReturn => {
 		return val ? Number(val) : undefined;
 	});
 
-	const [localRating, setLocalRating] = useState<number | undefined>(() => {
-		const val = searchParams.get('rating');
-		return val ? Number(val) : undefined;
+	const [localCategory, setLocalCategory] = useState<string>(() => {
+		return searchParams.get('category') || '';
 	});
 
-	const [localBrand, setLocalBrand] = useState<string>(() => {
-		return searchParams.get('brand') || '';
+	const [localShopName, setLocalShopName] = useState<string>(() => {
+		return searchParams.get('shopName') || '';
 	});
 
-    const [prevSearchStr, setPrevSearchStr] = useState<string>(searchParams.toString());
+	const [prevSearchStr, setPrevSearchStr] = useState<string>(searchParams.toString());
 
-    if (searchParams.toString() !== prevSearchStr) {
+	if (searchParams.toString() !== prevSearchStr) {
 		// Cập nhật lại chuỗi cũ
 		setPrevSearchStr(searchParams.toString());
 
@@ -51,11 +53,9 @@ export const useProductFilterLogic = (): UseProductFilterLogicReturn => {
 		const maxP = searchParams.get('maxPrice');
 		setLocalMaxPrice(maxP ? Number(maxP) : undefined);
 
-		const rat = searchParams.get('rating');
-		setLocalRating(rat ? Number(rat) : undefined);
-
-		setLocalBrand(searchParams.get('brand') || '');
-	}   
+		setLocalCategory(searchParams.get('category') || '');
+		setLocalShopName(searchParams.get('shopName') || '');
+	}
 
 	// 3. Đẩy State hiện tại lên URL
 	const applyFilterToUrl = (): void => {
@@ -67,13 +67,30 @@ export const useProductFilterLogic = (): UseProductFilterLogicReturn => {
 		if (localMaxPrice !== undefined) params.set('maxPrice', String(localMaxPrice));
 		else params.delete('maxPrice');
 
-		if (localRating !== undefined) params.set('rating', String(localRating));
-		else params.delete('rating');
+		if (localCategory.trim()) params.set('category', localCategory.trim());
+		else params.delete('category');
 
-		if (localBrand.trim()) params.set('brand', localBrand.trim());
-		else params.delete('brand');
+		if (localShopName.trim()) params.set('shopName', localShopName.trim());
+		else params.delete('shopName');
 
 		router.push(`?${params.toString()}`);
+	};
+
+	const buildFilterRequest = (): ProductFilterPayload => {
+		const minP = searchParams.get('minPrice');
+		const maxP = searchParams.get('maxPrice');
+		const category = searchParams.get('category');
+		const shopName = searchParams.get('shopName');
+
+		// Tạo request object, loại bỏ các giá trị rỗng/null để payload gửi đi sạch sẽ
+		const payload: ProductFilterPayload = {};
+
+		if (minP) payload.MinPrice = Number(minP);
+		if (maxP) payload.MaxPrice = Number(maxP);
+		if (category) payload.Category = category;
+		if (shopName) payload.ShopName = shopName;
+
+		return payload;
 	};
 
 	// 4. Xóa bộ lọc
@@ -84,13 +101,14 @@ export const useProductFilterLogic = (): UseProductFilterLogicReturn => {
 	return {
 		localMinPrice,
 		localMaxPrice,
-		localRating,
-		localBrand,
+		localCategory,
+		localShopName,
 		setLocalMinPrice,
 		setLocalMaxPrice,
-		setLocalRating,
-		setLocalBrand,
+		setLocalCategory,
+		setLocalShopName,
 		applyFilterToUrl,
 		handleReset,
+        buildFilterRequest
 	};
 };

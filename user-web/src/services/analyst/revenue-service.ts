@@ -1,7 +1,9 @@
 import { CategoryRevenue } from '@/types/analyst/CategoryRevenue';
+import { GetRevenueByDayParams } from '@/types/analyst/GetRevenueByDayParams';
 import { RevenueChartItem } from '@/types/analyst/RevenueChartItem';
+import { type AxiosInstance } from 'axios';
 
-export async function getDailyRevenueData(
+export async function getDailyRevenueDataMocking(
 	startDate: string,
 	endDate: string,
 ): Promise<RevenueChartItem[]> {
@@ -40,11 +42,59 @@ export async function getDailyRevenueData(
 	];
 }
 
-export async function getCategoryRevenueData(month: string): Promise<CategoryRevenue[]> {
+export async function getCategoryRevenueDataMocking(month: string): Promise<CategoryRevenue[]> {
 	return [
-		{ categoryName: 'Điện tử & Tiện ích', revenue: 125000000, percentage: 45 },
-		{ categoryName: 'Thời trang & Phụ kiện', revenue: 83000000, percentage: 30 },
-		{ categoryName: 'Đồ gia dụng', revenue: 41500000, percentage: 15 },
-		{ categoryName: 'Mỹ phẩm & Chăm sóc cá nhân', revenue: 27800000, percentage: 10 },
+		{ categoryName: 'Cây thủy sinh & Rêu', revenue: 125000000, percentage: 45 },
+		{ categoryName: 'Bể kính & Phụ kiện', revenue: 83000000, percentage: 30 },
+		{ categoryName: 'Đèn & Hệ thống lọc', revenue: 41500000, percentage: 15 },
+		{ categoryName: 'Phân nền & Dinh dưỡng', revenue: 27800000, percentage: 10 },
 	];
+}
+
+export class AnalystService {
+	constructor(private api: AxiosInstance) {}
+
+	async getDailyRevenueData(request: GetRevenueByDayParams): Promise<RevenueChartItem[]> {
+		try {
+			const flatParams = {
+				...request,
+			};
+
+			const response = await this.api.get(`/admin/analyst/revenue-by-time`, {
+				params: flatParams,
+			});
+
+			console.log('receipt data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getDailyRevenueDataMocking(request.startDate, request.endDate);
+			}
+
+			return response.data.data;
+		} catch (error) {
+			console.error(error);
+			return await getDailyRevenueDataMocking(request.startDate, request.endDate);
+		}
+	}
+
+	async getCategoryRevenueData(month: string): Promise<CategoryRevenue[]> {
+		try {
+			const flatParams = {
+				month,
+			};
+
+			const response = await this.api.get(`/admin/analyst/category-revenue`, {
+				params: flatParams,
+			});
+
+			console.log('receipt data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getCategoryRevenueDataMocking(month);
+			}
+
+			return response.data.data;
+		} catch (error) {
+			console.error(error);
+			return await getCategoryRevenueDataMocking(month);
+		}
+	}
 }

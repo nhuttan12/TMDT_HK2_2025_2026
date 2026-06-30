@@ -8,7 +8,7 @@ interface Props {
 	onClick: (status: InvoiceStatus) => void;
 }
 
-const statuses: InvoiceStatus[] = ['pending_approval', 'pending', 'paid', 'completed', 'cancelled'];
+const statuses: InvoiceStatus[] = ['pending', 'processing', 'completed', 'cancelled', 'returned'];
 
 export default function InvoiceStatusButtonFilter({ currentStatus, onClick }: Props): JSX.Element {
 	return (

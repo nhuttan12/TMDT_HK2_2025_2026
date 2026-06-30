@@ -11,6 +11,7 @@ export interface UserInvoice {
 	totalAmount: number;
 	totalItems: number;
 }
+
 export interface BackEndUserInvoice {
 	id: string;
 	createdAt: string;

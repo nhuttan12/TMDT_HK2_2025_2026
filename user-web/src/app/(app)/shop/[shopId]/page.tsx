@@ -1,4 +1,4 @@
-import { getShopPublicInfoById } from '@/services/shops/user/shop-storefront-service';
+import { getShopPublicInfoById } from '@/services/shops/user/shop-service';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { JSX } from 'react';

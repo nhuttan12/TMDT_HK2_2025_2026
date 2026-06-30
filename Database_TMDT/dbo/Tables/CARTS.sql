@@ -1,11 +1,13 @@
 ﻿CREATE TABLE [dbo].[CARTS] (
     [Id]         UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [UserId]     UNIQUEIDENTIFIER   NOT NULL,
-    [deleted_at] DATETIMEOFFSET (7) NOT NULL,
-    [created_at] DATETIMEOFFSET (7) NULL,
+    [created_at] DATETIMEOFFSET (7) NOT NULL,
+    [update_at]  DATETIMEOFFSET (7) NULL,
     CONSTRAINT [PK_CARTS] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_CARTS_USERS_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 GO

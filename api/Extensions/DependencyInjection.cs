@@ -5,6 +5,7 @@ using api.Extensions.EmailExtensions;
 using api.Models;
 using api.Models.Jwts;
 using api.Repository;
+using api.Repository.Analyst;
 using api.Repository.BannerRepo;
 using api.Repository.CartRepo;
 using api.Repository.Categories;
@@ -16,6 +17,7 @@ using api.Repository.Promotions;
 using api.Repository.RoleRepo;
 using api.Repository.Shops;
 using api.Repository.UserRepo;
+using api.Services.Analyst;
 using api.Services.Auths;
 using api.Services.Banners;
 using api.Services.Carts;
@@ -101,8 +103,9 @@ namespace api.Extensions
             services.AddScoped<IGoodsSupplierRepository, GoodsSupplierRepository>();
             services.AddScoped<IGoodsStockRepository, GoodsStockRepository>();
             services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
-            services.AddScoped <IInvoiceRepository, InvoiceRepository>();
-            services.AddScoped <IDeliveryRepository, DeliveryRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+            services.AddScoped<IAnalystRepository, AnalystRepository>();
 
             return services;
         }
@@ -129,11 +132,12 @@ namespace api.Extensions
             services.AddScoped<IGoodsStockService, GoodsStockService>();
             services.AddScoped<IGoodsSupplierService, GoodsSupplierService>();
             services.AddScoped<IGoodsIssueService, GoodsIssueService>();
-            services.AddScoped <IInvoiceService,InvoiceService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IAnalystService, AnalystService>();
 
-        
-           // Đăng ký Data Seeders
-           services.AddScoped<IDataSeeder, CategorySeeder>();
+
+            // Đăng ký Data Seeders
+            services.AddScoped<IDataSeeder, CategorySeeder>();
             services.AddScoped<IDataSeeder, ShopSeeder>();
             services.AddScoped<IDataSeeder, ProductSeeder>();
 

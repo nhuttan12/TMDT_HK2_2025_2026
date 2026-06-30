@@ -1314,5 +1314,9 @@
       <Name>dbo</Name>
       <Name>usp_GetProductVariantListForSelectionGoodsReceipt</Name>
     </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=170.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+      <Name>dbo</Name>
+      <Name>usp_GetRevenueByProductCategoryInMonth</Name>
+    </SelectedItem>
   </ExcludedTargetElements>
 </SchemaComparison>

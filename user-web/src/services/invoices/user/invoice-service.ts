@@ -12,6 +12,9 @@ import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 import {InvoiceItem} from "@/types/invoices/user/InvoiceItem";
 import {ShippingStatus} from "@/types/invoices/user/ShippingStatus";
+import { RecipientInfo } from '@/types/invoices/user/RecipientInfo';
+import { PaymentInfo } from '@/types/invoices/user/PaymentInfo';
+import { mapBackendInvoiceStatus } from '@/utils/invoices/invoice-mapping';
 
 
 export async function getInvoiceDetailByInvoiceIdCraw(invoiceId: number | string): Promise<InvoiceDetail> {
@@ -86,7 +89,7 @@ export async function getUserInvoicesByUserIdCraw(
 				{
 					id: '550e8400-e29b-41d4-a716-446655440001',
 					createdAt: '2026-02-15T10:30:00',
-					status: 'paid',
+					status: 'completed', // Sửa từ 'paid' sang 'completed'
 					paymentMethod: 'bank_transfer',
 					totalAmount: 1250000,
 					totalItems: 3,
@@ -94,7 +97,7 @@ export async function getUserInvoicesByUserIdCraw(
 				{
 					id: '123e4567-e89b-12d3-a456-426614174002',
 					createdAt: '2026-02-14T14:12:00',
-					status: 'pending',
+					status: 'pending', // Giữ nguyên
 					paymentMethod: 'COD',
 					totalAmount: 780000,
 					totalItems: 2,
@@ -102,7 +105,7 @@ export async function getUserInvoicesByUserIdCraw(
 				{
 					id: '987e6543-e21b-34d3-b456-426614174003',
 					createdAt: '2026-02-12T09:45:00',
-					status: 'cancelled',
+					status: 'cancelled', // Giữ nguyên
 					paymentMethod: 'MoMo',
 					totalAmount: 450000,
 					totalItems: 1,
@@ -110,7 +113,7 @@ export async function getUserInvoicesByUserIdCraw(
 				{
 					id: '111e2222-e33b-44d3-c456-426614174004',
 					createdAt: '2026-02-10T16:20:00',
-					status: 'paid',
+					status: 'processing', // Sửa từ 'paid' sang 'processing'
 					paymentMethod: 'credit_card',
 					totalAmount: 2350000,
 					totalItems: 4,
@@ -118,7 +121,7 @@ export async function getUserInvoicesByUserIdCraw(
 				{
 					id: '333e4444-e55b-66d3-d456-426614174005',
 					createdAt: '2026-02-08T11:05:00',
-					status: 'paid',
+					status: 'returned', // Sửa từ 'paid' sang 'returned'
 					paymentMethod: 'bank_transfer',
 					totalAmount: 990000,
 					totalItems: 2,
@@ -138,7 +141,6 @@ export async function getUserInvoicesByUserIdCraw(
 		}, 500);
 	});
 }
-
 
 export class InvoiceService {
 	constructor(private api: AxiosInstance) {}
@@ -190,7 +192,7 @@ export function mapBackEndInvoiceToFe(
 			id: item.id,
 			createdAt: item.createdAt,
 			paymentMethod: mapPaymentMethod(item.paymentMethod),
-			status: mapInvoiceStatus(item.status),
+			status: mapBackendInvoiceStatus(item.status),
 			totalAmount: item.totalAmount,
 			totalItems: item.totalItems,
 		};
@@ -278,32 +280,6 @@ function mapPaymentMethod(backendMethod: string): PaymentMethod {
 	}
 }
 
-// Hàm chuyển đổi cho InvoiceStatus dựa trên Enum Backend của bạn
-function mapInvoiceStatus(backendStatus: string): InvoiceStatus {
-	switch (backendStatus) {
-		case 'AwaitingPayment':
-			return 'pending_approval'; // Hoặc trạng thái tương đương ở FE
-		case 'Pending':
-			return 'pending';
-		case 'Processing':
-			return 'pending'; // Map tùy theo logic hệ thống của bạn
-		case 'Shipped':
-			return 'shipping';
-		case 'Delivered':
-			return 'delivered';
-		case 'Completed':
-			return 'completed';
-		case 'Cancelled':
-			return 'cancelled';
-		case 'Returned':
-			return 'returned';
-		case 'DeliveryFailed':
-			return 'cancelled'; // Hoặc trạng thái phù hợp ở FE
-		default:
-			return 'pending'; // Giá trị mặc định
-	}
-}
-
 function GetShippingFee(status: number): ShippingStatus {
 	switch (status) {
 		case 1:
@@ -316,27 +292,55 @@ function GetShippingFee(status: number): ShippingStatus {
 			return 'delivered';
 	}
 }
-export function GetInvoiceStatus(status: number): InvoiceStatus {
-	switch (status) {
-		case 1: // AwaitingPayment
-			return 'pending_approval'; // Chờ thanh toán / duyệt
-		case 2: // Pending
-			return 'pending'; // Chờ xác nhận đơn
-		case 3: // Processing (Đang đóng gói)
-			return 'pending'; // Gom chung vào nhóm chờ xử lý ở FE hoặc tùy bạn quy định
-		case 4: // Shipped
-			return 'shipping'; // Đang giao hàng
-		case 5: // Delivered
-			return 'delivered'; // Đã giao hàng (chờ bấm nhận)
-		case 6: // Completed
-			return 'completed'; // Đơn hàng hoàn thành hoàn toàn
-		case 7: // Cancelled
-			return 'cancelled'; // Đã hủy đơn
-		case 8: // Returned
-			return 'returned'; // Trả hàng / Hoàn tiền
-		case 9: // DeliveryFailed
-			return 'cancelled'; // Giao thất bại, gom về luồng huỷ/hoàn hoặc xử lý riêng
-		default:
-			return 'pending';
-	}
-}
+
+// export function GetInvoiceStatus(status: number): InvoiceStatus {
+// 	switch (status) {
+// 		case 1: // AwaitingPayment
+// 			return 'pending_approval'; // Chờ thanh toán / duyệt
+// 		case 2: // Pending
+// 			return 'pending'; // Chờ xác nhận đơn
+// 		case 3: // Processing (Đang đóng gói)
+// 			return 'pending'; // Gom chung vào nhóm chờ xử lý ở FE hoặc tùy bạn quy định
+// 		case 4: // Shipped
+// 			return 'shipping'; // Đang giao hàng
+// 		case 5: // Delivered
+// 			return 'delivered'; // Đã giao hàng (chờ bấm nhận)
+// 		case 6: // Completed
+// 			return 'completed'; // Đơn hàng hoàn thành hoàn toàn
+// 		case 7: // Cancelled
+// 			return 'cancelled'; // Đã hủy đơn
+// 		case 8: // Returned
+// 			return 'returned'; // Trả hàng / Hoàn tiền
+// 		case 9: // DeliveryFailed
+// 			return 'cancelled'; // Giao thất bại, gom về luồng huỷ/hoàn hoặc xử lý riêng
+// 		default:
+// 			return 'pending';
+// 	}
+// }
+
+export const getRecipientInfoMocking = async (): Promise<RecipientInfo> => {
+    // Giả lập thời gian chờ phản hồi từ server (ví dụ: 500ms)
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                recipientName: "Nguyễn Văn A",
+                recipientPhone: "0901234567",
+                address: "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh"
+            });
+        }, 500);
+    });
+};
+
+export const getPaymentInfoMocking = async (): Promise<PaymentInfo> => {
+    // Giả lập thời gian chờ phản hồi từ server (ví dụ: 500ms)
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                totalAmount: 500000,     // Tổng tiền hàng: 500.000 ₫
+                shippingFee: 30000,      // Phí vận chuyển: 30.000 ₫
+                discountAmount: 50000,   // Giảm giá: 50.000 ₫
+                finalAmount: 480000      // Tổng thanh toán: 480.000 ₫
+            });
+        }, 500);
+    });
+};

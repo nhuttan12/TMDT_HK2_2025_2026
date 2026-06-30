@@ -1,14 +1,12 @@
 import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 
 const INVOICE_STATUS_LABEL: Record<InvoiceStatus, string> = {
-	pending_approval: 'Chờ phê duyệt',
-	pending: 'Chờ thanh toán',
-	paid: 'Đã thanh toán',
-	cancelled: 'Đã hủy',
-    delivered: 'Đã giao',
-    returned: 'Đã hoàn trả',
-    shipping: 'Đang giao',
+	unknown: 'Không xác định',
+	pending: 'Chờ xử lý',     
+	processing: 'Đang xử lý', 
 	completed: 'Hoàn tất',
+	cancelled: 'Đã hủy',
+	returned: 'Đã hoàn trả',
 };
 
 export function getInvoiceStatusLabel(status: InvoiceStatus): string {

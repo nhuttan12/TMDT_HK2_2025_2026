@@ -1,0 +1,3 @@
+interface CreateOrderRequest {
+    invoiceId: string;
+}

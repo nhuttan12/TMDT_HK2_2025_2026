@@ -134,7 +134,7 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 			return;
 		}
 		setCheckoutItems([item]);
-		router.push('/checkout');
+		router.push('/order-preview');
 	};
 
 	return {

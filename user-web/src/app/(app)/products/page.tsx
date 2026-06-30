@@ -1,8 +1,12 @@
 import ProductsContainer from '@/app/(app)/products/_components/products-container';
-import { getPageProducts } from '@/services/products/user/product-service';
+import {
+    getCategoryListNameForSelection,
+    getProductFilter,
+    getShopListNameForSelection,
+} from '@/services/products/user/product-service';
+import { PaginationParams } from '@/types/common/Pagination';
 import { Metadata } from 'next';
 import { JSX } from 'react';
-import {PaginationParams} from "@/types/common/Pagination";
 
 export const metadata: Metadata = {
 	title: 'Danh sách sản phẩm',
@@ -18,9 +22,21 @@ export const metadata: Metadata = {
 
 export default async function ProductsPage(): Promise<JSX.Element> {
 	const pageRequest: PaginationParams = {
-		pageSize :  12,
-		pageNumber: 1
-	}
-	const products = await getPageProducts(pageRequest);
-	return <ProductsContainer initialProducts={products} />;
+		pageSize: 12,
+		pageNumber: 1,
+	};
+	const products = await getProductFilter({}, pageRequest);
+
+	const [categoryData, shopData] = await Promise.all([
+		getCategoryListNameForSelection(),
+		getShopListNameForSelection(),
+	]);
+
+	return (
+		<ProductsContainer
+			initialProducts={products}
+			categoryOption={categoryData}
+			shopOption={shopData}
+		/>
+	);
 }
