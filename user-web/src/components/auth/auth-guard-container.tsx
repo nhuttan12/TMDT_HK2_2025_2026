@@ -11,7 +11,7 @@ let isGlobalHydrated = false;
 
 export function AuthGuardContainer({
 	children,
-	fallbackPath = '/_login',
+	fallbackPath = '/login',
 }: AuthGuardProps): React.JSX.Element {
 	const isAuthorized = useAuthStore((s) => s.isAuthenticated);
 	const _hasHydrated = useAuthStore((s) => s._hasHydrated);

@@ -11,3 +11,13 @@ export interface UserInvoice {
 	totalAmount: number;
 	totalItems: number;
 }
+export interface BackEndUserInvoice {
+	id: string;
+	createdAt: string;
+
+	status: string;
+	paymentMethod: string;
+
+	totalAmount: number;
+	totalItems: number;
+}

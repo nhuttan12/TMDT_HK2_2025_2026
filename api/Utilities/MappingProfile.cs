@@ -49,7 +49,6 @@ namespace api.Utilities
 
             // user to dto
             CreateMap<User, UserInfoDTO>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.UserExternalLogin, opt => opt.MapFrom(src => src.UserExternalLogin.Provider));
         }
         private void UserDetailMapping()
@@ -94,7 +93,8 @@ namespace api.Utilities
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductId, opt => opt.Ignore());
             // variant to dto
-            CreateMap<Variant, VariantResponseDto>();
+            CreateMap<Variant, VariantResponseDto>()
+                .ForCtorParam("QuantityInStock", opt => opt.MapFrom(src => 100));
         }
 
         private void CouponMapping()
@@ -126,6 +126,8 @@ namespace api.Utilities
         private void CartItemmapping()
         {
             CreateMap<CartItem, CartItemResponseDto>()
+                 .ForMember(d => d.ProductId, o => o.MapFrom(src => src.Variant.Product.Id))
+                 .ForMember(d => d.Sku, o => o.MapFrom(src => src.Variant.Sku))
                  .ForMember(d => d.ProductName, o => o.MapFrom(src => src.Variant.Product.Name))
                  .ForMember(d => d.ImageUrl, o => o.MapFrom(src => src.Variant.ImageUrl))
                  .ForMember(d => d.UnitPrice, o => o.MapFrom(src => src.Variant.CostPrice));

@@ -5,7 +5,7 @@ namespace Api.Models.Users;
 public class Address
 {
     // Sử dụng private set để đảm bảo tính đóng gói (Encapsulation)
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public string AddressUrl { get; private set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; private set; }
@@ -20,7 +20,7 @@ public class Address
     /// <summary>
     /// Static Factory Method - Tuân thủ tư duy Defensive Programming
     /// </summary>
-    public static Address Create(Guid userId, string addressUrl)
+    public static Address Create(Guid userId, Guid id, string addressUrl)
     {
         // Fail Fast: Kiểm tra dữ liệu đầu vào ngay lập tức
         if (userId == Guid.Empty)
@@ -31,6 +31,24 @@ public class Address
 
         return new Address
         {
+            Id = id,
+            UserId = userId,
+            AddressUrl = addressUrl.Trim(),
+            IsUsed = false
+        };
+    }
+    public static Address CreateForUser(Guid userId, string addressUrl)
+    {
+        // Fail Fast: Kiểm tra dữ liệu đầu vào ngay lập tức
+        if (userId == Guid.Empty)
+            throw new ArgumentException("UserId không hợp lệ.", nameof(userId));
+
+        if (string.IsNullOrWhiteSpace(addressUrl))
+            throw new ArgumentException("Địa chỉ không được để trống.", nameof(addressUrl));
+
+        return new Address
+        {
+            Id = Guid.Empty,
             UserId = userId,
             AddressUrl = addressUrl.Trim(),
             IsUsed = false

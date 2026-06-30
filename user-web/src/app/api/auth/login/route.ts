@@ -1,4 +1,4 @@
-// src/app/api/auth/_login/route.ts
+// src/app/api/auth/login/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import apiServer from '@/lib/api-server';
@@ -17,7 +17,7 @@ export interface LoginPayload {
 export async function POST(request: Request): Promise<NextResponse> {
 	try {
 		const body = (await request.json()) as LoginPayload;
-		const backendUrl = '/auth/_login';
+		const backendUrl = '/auth/login';
 
 		// 1. Gọi .NET Backend để lấy Token
 		const response = await apiServer.post(backendUrl, body);

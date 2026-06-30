@@ -8,7 +8,7 @@
         decimal CostPrice,
         decimal SellPrice,
         string ImageUrl,
-        string Status
-        //int QuantityInStock
+        string Status,
+        int QuantityInStock
     );
 }

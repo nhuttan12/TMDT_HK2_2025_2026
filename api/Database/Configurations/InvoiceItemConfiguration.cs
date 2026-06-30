@@ -21,6 +21,11 @@ namespace api.Database.Configurations
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
+            builder.HasOne(i => i.Variant)
+                   .WithMany() 
+                   .HasForeignKey(i => i.VariantId)
+                   .OnDelete(DeleteBehavior.Restrict); // Defensive Programming: Ngăn chặn xóa Variant nếu đã có Invoice
+
             // Ràng buộc tính vẹn toàn
             builder.Property(ii => ii.ProductId).IsRequired();
             builder.Property(ii => ii.VariantId).IsRequired();

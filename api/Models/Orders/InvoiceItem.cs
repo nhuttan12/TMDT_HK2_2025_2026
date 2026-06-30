@@ -1,4 +1,6 @@
-﻿namespace api.Models.Orders
+﻿using api.Models.Products;
+
+namespace api.Models.Orders
 {
     public class InvoiceItem
     {
@@ -7,7 +9,7 @@
 
         public Guid ProductId { get; private set; }
         public Guid VariantId { get; private set; }
-
+        public Variant Variant { get; private set; }
         public int Quantity { get; private set; }
         public decimal PriceAtPurchase { get; private set; }
 
@@ -24,5 +26,6 @@
             Quantity = quantity;
             PriceAtPurchase = priceAtPurchase;
         }
+       
     }
 }

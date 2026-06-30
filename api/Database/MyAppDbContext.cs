@@ -41,6 +41,10 @@ namespace api.Database
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
 
+        public DbSet<InventoryBatchStock> InventoryBatchStock { get; set; }
+        public DbSet<Invoice> invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

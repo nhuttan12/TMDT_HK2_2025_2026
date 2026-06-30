@@ -1,4 +1,4 @@
-'use client';
+
 
 import CheckoutPreviewContainer from '@/app/(app)/checkout/_components/checkout-preview-container';
 import { JSX } from 'react';

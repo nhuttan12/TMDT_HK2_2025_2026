@@ -1,5 +1,6 @@
 export interface InvoiceItem {
-	productId: number;
+	productId: number | string;
+	variantId: number | string;
 	productName: string;
 	imageUrl: string;
 	price: number;

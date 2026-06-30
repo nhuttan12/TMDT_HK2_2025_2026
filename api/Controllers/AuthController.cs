@@ -114,7 +114,7 @@ namespace api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest req, CancellationToken ct = default)
         {
-            var res = await _authService.RegisterAsync(req, ct);  
+            var res = await _authService.RegisterAsync(req, ct); 
             return HandleResult(res);
         }
 

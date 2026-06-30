@@ -108,7 +108,7 @@ namespace api.Services.Products
                 Rating = product.Rating,
                 BasePrice = product.BasePrice,
                 ImageUrls = product.ImageUrls,
-                Status = product.Status.ToString(),         // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
+                Status = product.Status.ToString(),
                 Variants = product.Variants.Select(v => new VariantResponseDto
                 (
                  Id: v.Id,
@@ -117,10 +117,10 @@ namespace api.Services.Products
                  CostPrice: v.CostPrice,
                  SellPrice: v.SellPrice,
                  ImageUrl: v.ImageUrl,
-                 Status: v.Status.ToString() // Trình biên dịch C# sẽ báo đỏ ngay nếu bạn gõ sai tên biến
-
+                 Status: v.Status.ToString(),
+                 QuantityInStock: 10
                 )).ToArray()
-            }); // Sử dụng Implicit Conversion đã cấu hình trong class PagedResult<ProductResponseDto>
+            }); 
 
             // Sử dụng Implicit Conversion đã cấu hình trong class Result
             return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);

@@ -2,10 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	Table,
 	TableBody,
-	TableCell,
-	TableHead,
 	TableHeader,
 	TableRow,
+	TableHead,
+	TableBody as TableBodyUi, // Đổi alias nhẹ để tránh trùng lặp nếu cần, hoặc giữ nguyên TableBody
+	TableCell,
 } from '@/components/ui/table';
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 import { JSX } from 'react';
@@ -36,7 +37,8 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 						<div>
 							<strong>Thanh toán:</strong>{' '}
-							{getPaymentMethodLabel(invoice.paymentMethod)}
+							{/* Đã FIX: invoice.paymentMethod -> invoice.payment.paymentMethod */}
+							{getPaymentMethodLabel(invoice.payment.paymentMethod)}
 						</div>
 
 						<div>
@@ -46,24 +48,28 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 						<div>
 							<strong>Trạng thái giao hàng:</strong>{' '}
-							<ShippingStatusBadge status={invoice.shippingStatus} />
+							{/* Đã FIX: invoice.shippingStatus -> invoice.delivery.shippingStatus */}
+							<ShippingStatusBadge status={invoice.delivery.shippingStatus} />
 						</div>
 					</div>
 
 					<div className='space-y-2'>
 						<div>
-							<strong>Mã vận đơn:</strong> {invoice.trackingCode}
+							{/* Đã FIX: invoice.trackingCode -> invoice.delivery.trackingCode */}
+							<strong>Mã vận đơn:</strong> {invoice.delivery.trackingCode}
 						</div>
 
 						<div>
+							{/* Đã FIX: invoice.estimatedDelivery -> invoice.delivery.estimatedDelivery */}
 							<strong>Dự kiến giao:</strong>{' '}
-							{new Date(invoice.estimatedDelivery).toLocaleDateString()}
+							{new Date(invoice.delivery.estimatedDelivery).toLocaleDateString()}
 						</div>
 
-						{invoice.paidAt && (
+						{/* Đã FIX: invoice.paidAt -> invoice.payment.paidAt */}
+						{invoice.payment.paidAt && (
 							<div>
 								<strong>Thanh toán lúc:</strong>{' '}
-								{new Date(invoice.paidAt).toLocaleString()}
+								{new Date(invoice.payment.paidAt).toLocaleString()}
 							</div>
 						)}
 
@@ -92,15 +98,18 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 				<CardContent className='space-y-2'>
 					<p>
-						<strong>Người nhận:</strong> {invoice.recipientName}
+						{/* Đã FIX: invoice.recipientName -> invoice.delivery.recipientName */}
+						<strong>Người nhận:</strong> {invoice.delivery.recipientName}
 					</p>
 
 					<p>
-						<strong>SĐT:</strong> {invoice.recipientPhone}
+						{/* Đã FIX: invoice.recipientPhone -> invoice.delivery.recipientPhone */}
+						<strong>SĐT:</strong> {invoice.delivery.recipientPhone}
 					</p>
 
 					<p>
-						<strong>Địa chỉ:</strong> {invoice.address}
+						{/* Đã FIX: invoice.address -> invoice.delivery.address */}
+						<strong>Địa chỉ:</strong> {invoice.delivery.address}
 					</p>
 				</CardContent>
 			</Card>
@@ -172,7 +181,8 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 					<div className='flex justify-between'>
 						<span>Phí vận chuyển</span>
-						<span>{invoice.shippingFee.toLocaleString()} đ</span>
+						{/* Đã FIX: invoice.shippingFee -> invoice.delivery.shippingFee */}
+						<span>{invoice.delivery.shippingFee.toLocaleString()} đ</span>
 					</div>
 
 					<div className='flex justify-between'>

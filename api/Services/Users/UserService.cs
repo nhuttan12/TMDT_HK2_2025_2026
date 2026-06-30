@@ -1,12 +1,15 @@
 ﻿using api.Controllers;
 using api.Database;
+using api.Dtos.Common;
 using api.Dtos.Users.Requests;
 using api.Dtos.Users.Responses;
 using api.Models;
 using api.Models.Roles;
+using api.Models.Users;
 using api.Repository;
 using api.Repository.UserRepo;
 using api.Services.Auths;
+using api.Services.Mail;
 using api.Utilities;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +30,11 @@ namespace api.Services.Users
     }
     public class UserService(
         MyAppDbContext context, 
+        ILogger<User> logger,
         IMapper mapper, 
         IAuthService authService, 
         IUserRepository repo, 
+        IMailService mailService,
         IIdGenerator idGenerator,
         IUnitOfWork unitOfWork) : IUserService
     {
@@ -88,6 +93,14 @@ namespace api.Services.Users
                 return Result<UserInfoDTO>.Failure(Error.Create("NoUser", $"No user found with id: {id}", ErrorType.NotFound));
             }
             var dto = mapper.Map<UserInfoDTO>(user);
+            var address = await repo.GetAddressById(id, ct);
+            if(address is not null )
+            {
+                foreach (var addressDTO in address)
+                {
+                    dto.Address!.Add(addressDTO.AddressUrl);
+                }
+            }
             return Result<UserInfoDTO>.Success(dto);
 
         }
@@ -152,8 +165,40 @@ namespace api.Services.Users
             // 5. Persistence: Sử dụng Unit of Work để đảm bảo Transaction
             repo.Update(user);
             await unitOfWork.CommitAsync(ct);
-
+            SendMailChangePassWord(user.Email, user.FullName);
             return Result<string>.Success("Password changed successfully.");
+        }
+
+
+        private void SendMailChangePassWord(string email, string name)
+        {
+            var placeholders = new Dictionary<string, string>
+        {
+            { "Username", name }, // Lấy từ User Entity trong DB
+            { "Email", email },
+            { "ChangedTime", DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss") + " UTC" },
+        };
+
+            var mailRequest = new HtmlMailRequestDto(
+                ToEmail: email,
+                Subject: "[Cảnh báo bảo mật] Mật khẩu của bạn đã được thay đổi",
+                TemplateName: "PasswordChangedTemplate.html",
+                TemplatePlaceholders: placeholders
+            );
+
+            // 4. Đẩy vào luồng ngầm (Fire-and-Forget) để tối ưu hiệu năng API
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await mailService.SendHtmlEmailAsync(mailRequest, CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Lỗi gửi mail cảnh báo đổi mật khẩu cho: {Email}", email);
+                }
+            });
+
         }
     }
 }

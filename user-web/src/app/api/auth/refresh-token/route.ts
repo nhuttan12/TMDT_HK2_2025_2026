@@ -4,7 +4,7 @@ import apiServer from '@/lib/api-server';
 export async function POST(request: Request) {
 	try {
 		// const body = await request.json();
-		// const backendUrl = '/auth/_login';
+		// const backendUrl = '/auth/login';
 		// console.log(request);
 		// const data = await apiServer.post(backendUrl, body);
 		// Trả về bất cứ thứ gì Backend trả về (any)

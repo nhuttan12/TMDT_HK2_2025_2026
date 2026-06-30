@@ -13,7 +13,7 @@ namespace api.Database.Configurations
             builder.HasKey(a => a.Id);
             builder.Property(a => a.Id)
                 .HasColumnName("id")
-                .UseIdentityColumn();
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(a => a.UserId)
                 .HasColumnName("user_id")
