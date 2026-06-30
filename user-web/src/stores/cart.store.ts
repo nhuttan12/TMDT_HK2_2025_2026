@@ -35,6 +35,7 @@ export const useCartStore = create<CartStore>()(
 						items: [...state.items, item],
 					};
 				});
+
 			},
 			removeItem: (productId: string): void => {
 				set((state: CartStore) => ({

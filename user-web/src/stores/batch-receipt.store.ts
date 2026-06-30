@@ -127,7 +127,7 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 								: null,
 						};
 					});
-				},k
+				},
 
 				// ===== Batch Items =====
 				addBatchItems: (batchId: string, items: BatchItem[]): void => {

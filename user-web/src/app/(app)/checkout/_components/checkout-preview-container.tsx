@@ -1,3 +1,4 @@
+'use client';
 import { JSX } from 'react';
 import CheckoutPreviewUI from '@/app/(app)/checkout/_components/checkout-preview-ui';
 import {
@@ -8,9 +9,5 @@ import {
 export default function CheckoutPreviewContainer(): JSX.Element {
 	const logic: CheckoutLogicReturn = useCheckoutPreviewLogic();
 
-	return (
-		<CheckoutPreviewUI
-			{...logic}
-		/>
-	);
+	return <CheckoutPreviewUI {...logic} />;
 }

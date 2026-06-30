@@ -1,6 +1,7 @@
 ﻿using api.Database;
 using api.Dtos.Users.Responses;
 using api.Models;
+using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -14,6 +15,7 @@ namespace api.Repository.UserRepo
 
         public Task<User?> GetByEmailAsync(string email, bool trackChanges = false, CancellationToken ct = default);
         Task UpdateAsync(User user, CancellationToken ct);
+        public Task<ICollection<Address>?> GetAddressById(Guid id, CancellationToken ct);
     }
     public class UserRepository(MyAppDbContext _context) : IUserRepository
     {
@@ -103,6 +105,11 @@ namespace api.Repository.UserRepo
             _context.Users.Remove(entity);
         }
 
-       
+        public async Task<ICollection< Address>?> GetAddressById(Guid id, CancellationToken ct)
+        {
+           return await _context.Address
+                .Where(u => u.UserId == id)
+                .ToListAsync(ct);
+    }
     }
 }

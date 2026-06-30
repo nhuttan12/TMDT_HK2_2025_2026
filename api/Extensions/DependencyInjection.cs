@@ -1,6 +1,7 @@
 ﻿using api.Database;
 using api.Database.Interceptors;
 using api.Exceptions;
+using api.Extensions.EmailExtensions;
 using api.Models;
 using api.Models.Jwts;
 using api.Repository;
@@ -9,6 +10,7 @@ using api.Repository.CartRepo;
 using api.Repository.Categories;
 using api.Repository.Coupons;
 using api.Repository.Inventory;
+using api.Repository.InvoiceRepo;
 using api.Repository.ProductRepo;
 using api.Repository.Promotions;
 using api.Repository.RoleRepo;
@@ -20,6 +22,8 @@ using api.Services.Carts;
 using api.Services.Categorys;
 using api.Services.Coupons;
 using api.Services.Inventory;
+using api.Services.Invoices;
+using api.Services.Mail;
 using api.Services.Products;
 using api.Services.Promotions;
 using api.Services.Shops;
@@ -63,7 +67,9 @@ namespace api.Extensions
                 options.AddInterceptors(interceptor);
             });
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
+            // email 
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.AddTransient<IMailService, MailService>();
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
@@ -93,6 +99,8 @@ namespace api.Extensions
             services.AddScoped<IGoodsSupplierRepository, GoodsSupplierRepository>();
             services.AddScoped<IGoodsStockRepository, GoodsStockRepository>();
             services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
+            services.AddScoped <IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped <IDeliveryRepository, DeliveryRepository>();
 
             return services;
         }
@@ -119,9 +127,11 @@ namespace api.Extensions
             services.AddScoped<IGoodsStockService, GoodsStockService>();
             services.AddScoped<IGoodsSupplierService, GoodsSupplierService>();
             services.AddScoped<IGoodsIssueService, GoodsIssueService>();
+            services.AddScoped <IInvoiceService,InvoiceService>();
 
-            // Đăng ký Data Seeders
-            services.AddScoped<IDataSeeder, CategorySeeder>();
+        
+           // Đăng ký Data Seeders
+           services.AddScoped<IDataSeeder, CategorySeeder>();
             services.AddScoped<IDataSeeder, ShopSeeder>();
             services.AddScoped<IDataSeeder, ProductSeeder>();
 

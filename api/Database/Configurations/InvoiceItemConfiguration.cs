@@ -24,6 +24,11 @@ namespace api.Database.Configurations
                 .HasColumnName("price_at_purchase")
                 .IsRequired();
 
+            builder.HasOne(i => i.Variant)
+                   .WithMany() 
+                   .HasForeignKey(i => i.VariantId)
+                   .OnDelete(DeleteBehavior.Restrict); // Defensive Programming: Ngăn chặn xóa Variant nếu đã có Invoice
+
             // Ràng buộc tính vẹn toàn
             builder.Property(ii => ii.ProductId)
                 .HasColumnName("product_id")

@@ -93,7 +93,7 @@ namespace api.Models.Cards
         internal void RemoveItem(Guid variantId)
         {
 
-            var cartitem = this._items.First(c => c.VariantId == variantId);
+            var cartitem = this._items.FirstOrDefault(c => c.VariantId == variantId);
             if(cartitem != null)
                 this._items.Remove(cartitem);
 

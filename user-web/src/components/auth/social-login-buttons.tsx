@@ -15,7 +15,7 @@ export default function SocialLoginButtons({
         onLoginClick?.(provider);
         if (provider === 'google') {
            const googleAuthUrl = '/api/auth/google';
-		   // TODO: add _login
+		   // TODO: add login
         } else if (provider === 'facebook') {
             // window.location.href = '/api/auth/facebook';
             alert(`Login with ${provider} clicked!`);

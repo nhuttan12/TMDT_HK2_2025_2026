@@ -11,7 +11,7 @@ export interface UseAuthGuardReturn {
   isAuthorized: boolean;
 }
 
-export function useAuthHandlerLogic(fallbackPath: string = "/_login"): UseAuthGuardReturn {
+export function useAuthHandlerLogic(fallbackPath: string = "/login"): UseAuthGuardReturn {
   const checkMe = authService.checkMe();
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);

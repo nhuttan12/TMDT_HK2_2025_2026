@@ -9,21 +9,13 @@
 
   <ItemGroup>
 	  <Content Remove="Database\Seeders\SeedData\Categories.json" />
-	  <Compile Remove="Models\Coupons\Enums\**" />
-	  <Compile Remove="Models\Inventory\Enums\**" />
-	  <Compile Remove="Services\NewFolder\**" />
+	  <Compile Remove="Database\Migrations\**" />
 	  <Compile Remove="StoredProcedures\**" />
-	  <Content Remove="Models\Coupons\Enums\**" />
-	  <Content Remove="Models\Inventory\Enums\**" />
-	  <Content Remove="Services\NewFolder\**" />
+	  <Content Remove="Database\Migrations\**" />
 	  <Content Remove="StoredProcedures\**" />
-	  <EmbeddedResource Remove="Models\Coupons\Enums\**" />
-	  <EmbeddedResource Remove="Models\Inventory\Enums\**" />
-	  <EmbeddedResource Remove="Services\NewFolder\**" />
+	  <EmbeddedResource Remove="Database\Migrations\**" />
 	  <EmbeddedResource Remove="StoredProcedures\**" />
-	  <None Remove="Models\Coupons\Enums\**" />
-	  <None Remove="Models\Inventory\Enums\**" />
-	  <None Remove="Services\NewFolder\**" />
+	  <None Remove="Database\Migrations\**" />
 	  <None Remove="StoredProcedures\**" />
   </ItemGroup>
 
@@ -37,6 +29,7 @@
     <PackageReference Include="Dapper" Version="2.1.79" />
     <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+    <PackageReference Include="MailKit" Version="4.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
@@ -49,13 +42,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MimeKit" Version="4.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Models\Enums\Products\" />
   </ItemGroup>
 
 </Project>

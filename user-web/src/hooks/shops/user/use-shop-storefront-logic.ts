@@ -19,7 +19,7 @@ export interface ShopStorefrontLogicReturn {
 export const useShopStorefrontLogic = (shopId: string): ShopStorefrontLogicReturn => {
 	// 1. Khởi tạo Phân trang
 	const [totalPages, setTotalPages] = useState<number>(0);
-	const { currentPage, changePage } = usePagination(totalPages);
+	const { currentPage, changePage } = usePagination();
 
 	// 2. Quản lý Bộ lọc (Chỉ giữ limit và sortBy, page lấy từ hook phân trang)
 	const [filterState, setFilterState] = useState<{

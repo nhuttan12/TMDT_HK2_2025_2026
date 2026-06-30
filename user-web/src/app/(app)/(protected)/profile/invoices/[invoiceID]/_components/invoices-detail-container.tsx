@@ -6,7 +6,7 @@ import { useInvoiceDetailQuery } from '@/queries/invoices/user/use-invoice-detai
 import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 
 interface InvoicesDetailContainerProps {
-	invoiceId: number;
+	invoiceId: number | string;
 	invoiceDetail: InvoiceDetail;
 }
 

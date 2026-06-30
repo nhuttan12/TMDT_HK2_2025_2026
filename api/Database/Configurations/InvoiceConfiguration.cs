@@ -42,6 +42,9 @@ namespace api.Database.Configurations
                 .HasColumnName("total_amount")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+            builder.Property(i => i.FinalAmount)
+             .HasColumnType("decimal(18,2)")
+             .IsRequired();
 
             // Status đã là 'byte' trong C#, EF Core sẽ tự map thành 'tinyint' trong SQL Server.
             builder.Property(i => i.Status)
@@ -51,6 +54,10 @@ namespace api.Database.Configurations
             builder.Property(i => i.CouponId)
                 .HasColumnName("coupon_id")
                 .IsRequired(false); // Cho phép Null
+
+            builder.Property(i => i.DeliveryId)
+                .HasColumnName("delivery_id")
+                .IsRequired(false);
 
             // 4. BẢO VỆ DOMAIN MODEL (Cực kỳ quan trọng)
             // Vì chúng ta dùng IReadOnlyCollection<InvoiceItem> Items và field private _items,
@@ -74,6 +81,10 @@ namespace api.Database.Configurations
                 .HasForeignKey(i => i.ShopId)
                 .OnDelete(DeleteBehavior.SetNull); // Nếu xóa Shop, giữ lại Invoice nhưng set ShopId thành Null
 
+            //builder.HasOne(i => i.Delivery)
+            //    .WithOne(d => d.Invoice)
+            //    .HasForeignKey<Invoice>(i => i.DeliveryId)
+            //    .OnDelete(DeleteBehavior.SetNull); // Xóa đơn giao hàng thì Invoice giữ nguyên thông tin gốc
             // 6. Đánh Index (Tối ưu hiệu năng tìm kiếm)
             // Thường xuyên query các đơn hàng theo trạng thái và thời gian tạo
             builder.HasIndex(i => new { i.Status, i.CreatedAt });

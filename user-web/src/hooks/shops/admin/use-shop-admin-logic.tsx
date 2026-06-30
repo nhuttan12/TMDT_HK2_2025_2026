@@ -42,7 +42,7 @@ export function useShopAdminLogic({
 	);
 
 	// Tích hợp hook phân trang của bạn
-	const pagination: UsePaginationReturn = usePagination(data?.meta.totalPages || 1);
+	const pagination: UsePaginationReturn = usePagination();
 
 	const handleRowClick = (shop: ShopAdmin) => {
 		router.push(`/admin/shops/list/${shop.id}`);

@@ -22,7 +22,7 @@ apiServer.interceptors.request.use(
 	async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
 		const publicEndpoints: string[] = [
 			'/auth/register',
-			'/auth/_login',
+			'/auth/login',
 			'/auth/forgot-password',
 		];
 

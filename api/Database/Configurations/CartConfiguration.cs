@@ -26,11 +26,11 @@ namespace api.Database.Configurations
                .UsePropertyAccessMode(PropertyAccessMode.Field);
 
             builder.Property(u => u.UpdatedAt)
-                .HasColumnName("created_at")
+                .HasColumnName("update_at")
                 .HasColumnType("datetimeoffset");
 
             builder.Property(u => u.CreatedAt)
-                .HasColumnName("deleted_at")
+                .HasColumnName("created_at")
                 .HasColumnType("datetimeoffset");
         }
     }

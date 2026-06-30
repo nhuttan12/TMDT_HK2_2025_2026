@@ -1,4 +1,5 @@
 ﻿using api.Controllers;
+using api.Dtos.Common;
 using api.Dtos.Users.Responses;
 using api.Exceptions;
 using api.Models;
@@ -7,6 +8,7 @@ using api.Models.Users;
 using api.Repository;
 using api.Repository.RoleRepo;
 using api.Repository.UserRepo;
+using api.Services.Mail;
 using api.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +34,7 @@ namespace api.Services.Auths
         IRoleRepo roleRepository,
         IUnitOfWork unitOfWork,
         IIdGenerator idGenerator,
+        IMailService mailService,
         ILogger<AuthService> logger) : IAuthService
     {
         private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
@@ -111,7 +114,7 @@ namespace api.Services.Auths
             // 5. Persistence`
             await _authRepo.AddAsync(newUser);
             await _unitOfWork.CommitAsync();
-
+            SendMail(newUser.Email, newUser.FullName);
             return Result<UserInfoDTO>.Success(_mapper.Map<UserInfoDTO>(newUser));
         }
         internal async Task<Result<Role>> GetDefaultRole(string roleName)
@@ -205,5 +208,32 @@ namespace api.Services.Auths
             return GenerateTokenResponse(user);
         }
 
+        private void SendMail(string email, string name)
+        {
+            var placeholders = new Dictionary<string, string>
+            {
+                { "Username", name },
+                { "Email", email },
+                { "ActivationTime", DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss") + " UTC" }
+            };
+            var mailRequest = new HtmlMailRequestDto(
+                ToEmail: email,
+                Subject: "Chào mừng bạn đã đăng ký tài khoản thành công!",
+                TemplateName: "WelcomeTemplate.html",
+                TemplatePlaceholders: placeholders
+            );
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    // Sử dụng CancellationToken.None độc lập để tránh việc client tắt trình duyệt làm chết tiến trình Mail
+                    await mailService.SendHtmlEmailAsync(mailRequest, CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Background email execution failed for User Email: {Email}", email);
+                }
+            }, CancellationToken.None);
+        }
     }
 }

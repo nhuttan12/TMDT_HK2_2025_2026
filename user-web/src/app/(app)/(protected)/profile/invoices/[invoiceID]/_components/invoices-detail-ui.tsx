@@ -56,29 +56,29 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 				<div className='grid md:grid-cols-2 gap-4 text-slate-600'>
 					<div>
 						<p className='font-medium text-slate-800'>Người nhận</p>
-						<p>{invoice.recipientName}</p>
+						<p>{invoice.delivery.recipientName}</p>
 					</div>
 
 					<div>
 						<p className='font-medium text-slate-800'>Số điện thoại</p>
-						<p>{invoice.recipientPhone}</p>
+						<p>{invoice.delivery.recipientPhone}</p>
 					</div>
 
 					<div className='md:col-span-2'>
 						<p className='font-medium text-slate-800'>Địa chỉ</p>
-						<p>{invoice.address}</p>
+						<p>{invoice.delivery.address}</p>
 					</div>
 
 					<div>
 						<p className='font-medium text-slate-800'>Phương thức thanh toán</p>
-						<p>{getPaymentMethodLabel(invoice.paymentMethod)}</p>
+						<p>{getPaymentMethodLabel(invoice.payment.paymentMethod)}</p>
 					</div>
 
 					<div>
 						<p className='font-medium text-slate-800'>Trạng thái vận chuyển</p>
 						<p>
-							{getShippingStatusLabel(invoice.shippingStatus) ??
-								invoice.shippingStatus ??
+							{getShippingStatusLabel(invoice.delivery.shippingStatus) ??
+								invoice.delivery.shippingStatus ??
 								'-'}
 						</p>
 					</div>
@@ -123,7 +123,7 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 
 					<div className='flex justify-between'>
 						<span>Phí vận chuyển</span>
-						<span>{formatMoney(invoice.shippingFee)}</span>
+						<span>{formatMoney(invoice.delivery.shippingFee)}</span>
 					</div>
 
 					<div className='flex justify-between text-red-500'>
@@ -141,19 +141,21 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 			</div>
 
 			{/* TRACKING */}
-			{invoice.trackingCode && (
+			{invoice.delivery.trackingCode && (
 				<div className='bg-white rounded-xl shadow-sm border border-slate-200 p-6'>
 					<h2 className='text-lg font-semibold text-slate-700 mb-4'>Theo dõi đơn hàng</h2>
 
 					<p className='text-slate-600'>
 						Mã vận đơn:{' '}
-						<span className='font-medium text-slate-800'>{invoice.trackingCode}</span>
+						<span className='font-medium text-slate-800'>
+							{invoice.delivery.trackingCode}
+						</span>
 					</p>
 
 					<p className='text-slate-600 mt-2'>
 						Dự kiến giao:{' '}
 						<span className='font-medium text-slate-800'>
-							{formatDateTimeWithBrackets(invoice.estimatedDelivery)}
+							{formatDateTimeWithBrackets(invoice.delivery.estimatedDelivery)}
 						</span>
 					</p>
 				</div>
