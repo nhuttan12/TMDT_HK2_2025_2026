@@ -1,4 +1,5 @@
-﻿using api.Dtos.Shops.Request;
+﻿using api.Dtos.Common;
+using api.Dtos.Shops.Request;
 using api.Services.Shops;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,12 +13,29 @@ namespace api.Controllers.Shops
         IShopUserService shopUserService
         ) : BaseController
     {
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterShopAsync(
             [FromBody] ShopRegistrationRequest request,
             CancellationToken cancellationToken)
         {
             var result = await shopUserService.RegisterShopAsync(request, cancellationToken);
+
+            return HandleResult(result);
+        }
+        [HttpGet("list-name")]
+        public async Task<IActionResult> GetListNameShop(
+           CancellationToken cancellationToken)
+        {
+            var result = await shopUserService.GetListNameShop(cancellationToken);
+
+            return HandleResult(result);
+        }
+        [HttpGet()]
+        public async Task<IActionResult> GetListShop(
+           [FromQuery] PaginationRequestDto paginationDto,
+           CancellationToken cancellationToken)
+        {
+            var result = await shopUserService.GetListShop(paginationDto,cancellationToken);
 
             return HandleResult(result);
         }

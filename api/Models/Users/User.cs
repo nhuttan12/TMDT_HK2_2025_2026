@@ -1,4 +1,5 @@
-﻿using api.Exceptions;
+﻿using api.Dtos.Users.Requests;
+using api.Exceptions;
 using api.Models.Banners;
 using api.Models.Common;
 using api.Models.Coupons;
@@ -98,49 +99,104 @@ namespace api.Models
             this.PasswordHash = hash;
         }
 
-        internal Result<bool> Update(string fullname, string phoneNumber, string? avatarUrl, List<string>? addresses, Guid userId)
+        internal Result<bool> Update(
+         string fullname,
+         string phoneNumber,
+         string? avatarUrl,
+         List<AddressUpdateDto>? addressInputs,
+         Guid userId)
         {
+            // 1. Validate SĐT (Fail Fast)
             if (!string.IsNullOrEmpty(phoneNumber))
             {
                 if (!ValidDataUtil.IsValidPhone(phoneNumber))
                     return Result<bool>.Failure(Error.Create("InvalidPhone", "Invalid phone number format.", ErrorType.Validation));
-                this.Phone = phoneNumber;
+                Phone = phoneNumber;
             }
 
             if (!string.IsNullOrEmpty(fullname))
                 FullName = fullname;
+
+            // 2. Xử lý Avatar / UserDetail
             if (!string.IsNullOrEmpty(avatarUrl))
             {
                 if (UserDetail == null)
                 {
-                    // Nếu chưa có UserDetail dưới DB, tiến hành tạo mới hoàn toàn (EF Core sẽ tự hiểu để chạy lệnh INSERT)
-                    UserDetail = new UserDetail
-                    {
-                        UserId = userId, // Hoặc Id tùy thuộc vào cách bạn đặt khóa ngoại
-                        AvatarUrl = avatarUrl
-                    };
+                    UserDetail = new UserDetail { UserId = userId, AvatarUrl = avatarUrl };
                 }
                 else
                 {
-                    // Nếu đã có rồi, chỉ cần cập nhật trường AvatarUrl (EF Core sẽ chạy lệnh UPDATE)
                     UserDetail.AvatarUrl = avatarUrl;
                 }
             }
 
-            // Cập nhật địa chỉ: Chỉ thêm những địa chỉ chưa tồn tại
-            if (addresses != null && addresses.Any())
+            // 3. Xử lý logic cập nhật ĐỊA CHỈ (Đã tích hợp cơ chế chống trùng lặp)
+            if (addressInputs != null && addressInputs.Any())
             {
-                // Đảm bảo Addresses không bị null trước khi thao tác
                 Addresses ??= new HashSet<Address>();
 
-                // Lấy danh sách các chuỗi địa chỉ hiện tại đang có để so sánh.
-                var existingAddressStrings = Addresses.Select(a => a.AddressUrl).ToHashSet();
+                // TỐI ƯU HIỆU NĂNG: Thu thập tất cả AddressUrl hiện tại vào HashSet để tìm kiếm với độ phức tạp O(1)
+                // Chuẩn hóa Trim và ToLower để tránh lệch pha chữ hoa/chữ thường hoặc khoảng trắng thừa
+                var existingUrls = Addresses
+                    .Select(a => a.AddressUrl.Trim().ToLower())
+                    .ToHashSet();
 
-                foreach (var newAddress in addresses)
+                // Cờ xác định xem User đã từng có địa chỉ hoạt động (IsUsed) nào chưa
+                bool hasAnyUsedAddress = Addresses.Any(a => a.IsUsed);
+
+                for (int i = 0; i < addressInputs.Count; i++)
                 {
-                    if (!string.IsNullOrWhiteSpace(newAddress) && !existingAddressStrings.Contains(newAddress))
+                    var input = addressInputs[i];
+                    if (string.IsNullOrWhiteSpace(input.AddressUrl)) continue;
+
+                    var normalizedInputUrl = input.AddressUrl.Trim().ToLower();
+
+                    // TRƯỜNG HỢP 1: Nếu có Id truyền lên => Logic CẬP NHẬT địa chỉ cũ
+                    if (input.Id.HasValue && input.Id.Value != Guid.Empty)
                     {
-                        Addresses.Add(Address.CreateForUser(userId, newAddress));
+                        var existingAddress = Addresses.FirstOrDefault(a => a.Id == input.Id.Value);
+                        if (existingAddress != null)
+                        {
+                            // Trước khi cập nhật địa chỉ cũ sang chuỗi mới, cần kiểm tra xem chuỗi mới này có bị trùng với một địa chỉ ĐANG CÓ KHÁC không
+                            if (existingAddress.AddressUrl.Trim().ToLower() != normalizedInputUrl &&
+                                existingUrls.Contains(normalizedInputUrl))
+                            {
+                                // Bỏ qua hoặc trả lỗi tùy bạn, ở đây chọn bỏ qua để an toàn hệ thống (Idempotent)
+                                continue;
+                            }
+
+                            // Cập nhật HashSet quản lý chuỗi cũ thành chuỗi mới
+                            existingUrls.Remove(existingAddress.AddressUrl.Trim().ToLower());
+                            existingUrls.Add(normalizedInputUrl);
+
+                            // Gọi internal method của Address để đổi dữ liệu chuỗi (Bảo toàn tính bao đóng)
+                            existingAddress.UpdateUrl(input.AddressUrl);
+                        }
+                    }
+                    // TRƯỜNG HỢP 2: Không có Id => Logic THÊM MỚI địa chỉ
+                    else
+                    {
+                        // PHÒNG VỆ CHỐNG TRÙNG: Nếu chuỗi nhập vào đã tồn tại trong DB/Danh sách hiện tại -> BỎ QUA KHÔNG THÊM
+                        if (existingUrls.Contains(normalizedInputUrl))
+                        {
+                            continue;
+                        }
+
+                        // Luật nghiệp vụ: Nếu là địa chỉ đầu tiên của tài khoản (cũ chưa có, và là phần tử hợp lệ đầu tiên)
+                        bool shouldBeUsed = !hasAnyUsedAddress;
+
+                        // Sử dụng Factory Method của thực thể Address
+                        var newAddress = Address.CreateForUser(userId, input.AddressUrl, shouldBeUsed);
+                        Addresses.Add(newAddress);
+
+                        // Thêm chuỗi vừa tạo mới vào HashSet phòng vệ để các vòng lặp sau của list input nếu trùng cũng sẽ bị chặn
+                        existingUrls.Add(normalizedInputUrl);
+
+                        // Nếu đã kích hoạt dùng địa chỉ đầu tiên này, bật cờ lên để các bản ghi sau không chiếm quyền IsUsed
+                        if (shouldBeUsed)
+                        {
+                            hasAnyUsedAddress = true;
+                        }
                     }
                 }
             }

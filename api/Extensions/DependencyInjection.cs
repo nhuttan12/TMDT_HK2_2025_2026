@@ -72,6 +72,8 @@ namespace api.Extensions
             // email 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddTransient<IMailService, MailService>();
+            // paypal
+            services.AddHttpClient<api.Services.Payment.PayPalService>();
             // dang ký global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();

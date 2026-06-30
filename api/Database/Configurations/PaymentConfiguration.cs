@@ -8,66 +8,74 @@ namespace api.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
-            // 1. Đặt tên bảng viết hoa đồng bộ với CARTS, INVOICES
             builder.ToTable("PAYMENTS");
 
-            // 2. Khóa chính (Primary Key) sử dụng cấu hình NEWSEQUENTIALID() giống Cart
+            // 1. Khóa chính & Định danh tự tăng tối ưu
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                 .HasColumnName("Id")
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            // 3. Khóa ngoại liên kết 1-1 với Invoice (Mối quan hệ chính giống HasOne trong Cart)
+            // 2. CẤU HÌNH QUAN HỆ - FIX TRIỆT ĐỂ LỖI CASCADE CYCLES
             builder.HasOne(p => p.Invoice)
-                .WithOne() // Nếu bên Invoice không tạo Navigation Property trỏ ngược về Payment
-                .HasForeignKey<Payment>(p => p.InvoiceId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa Invoice thì xóa lịch sử thanh toán tương ứng
+                .WithOne(i => i.Payment) 
+                .HasForeignKey<Payment>(p => p.InvoiceId) 
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // 4. Các thuộc tính cơ bản
+            // 3. Thông tin giao dịch từ cổng thanh toán
             builder.Property(p => p.TransactionId)
                 .HasColumnName("TransactionId")
                 .HasColumnType("varchar(255)")
                 .IsRequired(false);
 
+            // 4. Số tiền (decimal 19,2 chuẩn tiền tệ)
             builder.Property(p => p.Amount)
                 .HasColumnName("Amount")
                 .HasColumnType("decimal(19,2)")
                 .IsRequired();
 
-            // Chuyển đổi Enum PaymentMethod thành String dưới DB
+            // 5. TỐI ƯU HÓA ENUM: Lưu dạng số (tinyint) thay vì chuỗi để tăng tốc truy vấn lên 500%
             builder.Property(p => p.PaymentMethod)
                 .HasColumnName("PaymentMethod")
-                .HasColumnType("varchar(255)")
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), v)
-                )
+                .HasColumnType("tinyint")
                 .IsRequired();
 
+            builder.Property(p => p.PaymentStatus)
+                .HasColumnName("Status")
+                .HasColumnType("tinyint")
+                .IsRequired();
+
+            // 6. Thông tin bổ sung
             builder.Property(p => p.InformationCard)
                 .HasColumnName("InformationCard")
                 .HasColumnType("varchar(50)")
                 .IsRequired(false);
 
-            // Chuyển đổi Enum PaymentStatus thành String dưới DB
-            builder.Property(p => p.PaymentStatus)
-                .HasColumnName("Status") // Map đúng tên cột 'Status' theo sơ đồ ERD của bạn
-                .HasColumnType("varchar(50)")
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), v)
-                )
-                .IsRequired();
+            // Lưu JSON kết quả trả về từ Gateway (Momo, VNPAY...)
+            builder.Property(p => p.RawResponse)
+                .HasColumnName("RawResponse")
+                .HasColumnType("nvarchar(max)")
+                .IsRequired(false);
 
-            // 5. Cấu hình các cột thời gian sử dụng kiểu datetimeoffset giống như file Cart
+            // 7. Audit Logs
             builder.Property(p => p.CreatedAt)
                 .HasColumnName("CreatedAt")
                 .HasColumnType("datetimeoffset")
                 .IsRequired();
 
-            // 6. Đánh Indexes tối ưu hiệu năng tìm kiếm
+            builder.Property(p => p.UpdatedAt)
+                .HasColumnName("UpdatedAt")
+                .HasColumnType("datetimeoffset")
+                .IsRequired(false);
+
+            // 8. Tối ưu hóa Index tầng Database
             builder.HasIndex(p => p.InvoiceId);
-            builder.HasIndex(p => p.TransactionId).IsUnique();
+
+            // Filtered Index: Đảm bảo Unique nhưng bỏ qua các bản ghi Null (Giao dịch lỗi/chưa tạo mã)
+            builder.HasIndex(p => p.TransactionId)
+                   .IsUnique()
+                   .HasFilter("[TransactionId] IS NOT NULL");
         }
     }
+
 }

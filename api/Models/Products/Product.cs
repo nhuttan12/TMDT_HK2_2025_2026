@@ -1,4 +1,5 @@
-﻿using api.Models.Inventory;
+﻿using api.Models.Category;
+using api.Models.Inventory;
 using api.Models.Products;
 using api.Models.Promotions;
 using api.Models.Shops;
@@ -24,7 +25,7 @@ namespace api.model.Products
         public IReadOnlyCollection<string> ImageUrls => _imageUrls;
         public ProductStatus Status { get; private set; } = ProductStatus.Approved;
         public Guid CategoryId { get; private set; }
-
+        public Category Category { get; private set; }
         public Guid ShopId { get; private set; }
         public Shop Shop { get; private set; }
 

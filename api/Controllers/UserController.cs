@@ -1,4 +1,5 @@
-﻿using api.Dtos.Users.Requests;
+﻿using api.Dtos.Common;
+using api.Dtos.Users.Requests;
 using api.Services.Users;
 using api.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +41,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAll([FromQuery] UserParameters query)
+        public async Task<IActionResult> GetAll([FromQuery] PaginationRequestDto query)
         {
             var users = await UserService.GetAllAsync(query);
             return HandleResult(users);

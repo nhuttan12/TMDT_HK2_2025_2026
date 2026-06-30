@@ -343,6 +343,7 @@ namespace api.Migrations
                     shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     coupon_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     delivery_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    payment_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     total_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FinalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     status = table.Column<byte>(type: "tinyint", nullable: false),
@@ -378,14 +379,14 @@ namespace api.Migrations
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     category_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false),
+                    updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset(7)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PRODUCTS", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Products_Categories",
+                        name: "FK_Products_Categories_CategoryId",
                         column: x => x.category_id,
                         principalTable: "CATEGORIES",
                         principalColumn: "id",
@@ -394,12 +395,6 @@ namespace api.Migrations
                         name: "FK_Products_Shops_ShopId",
                         column: x => x.shop_id,
                         principalTable: "SHOPS",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_Users_ShopId",
-                        column: x => x.shop_id,
-                        principalTable: "USERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -500,10 +495,12 @@ namespace api.Migrations
                     InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TransactionId = table.Column<string>(type: "varchar(255)", nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(19,2)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "varchar(255)", nullable: false),
+                    PaymentMethod = table.Column<byte>(type: "tinyint", nullable: false),
                     InformationCard = table.Column<string>(type: "varchar(50)", nullable: true),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    RawResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -513,7 +510,7 @@ namespace api.Migrations
                         column: x => x.InvoiceId,
                         principalTable: "INVOICES",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -978,7 +975,7 @@ namespace api.Migrations
                 column: "category_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PRODUCTS_name",
+                name: "IX_Products_Name",
                 table: "PRODUCTS",
                 column: "name");
 

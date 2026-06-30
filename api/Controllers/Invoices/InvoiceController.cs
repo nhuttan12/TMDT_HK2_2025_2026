@@ -20,7 +20,6 @@ namespace api.Controllers.Invoices
             var res = await service.CreateInvoice(userId, requset, cancellationToken);
             return HandleResult(res);
         }
-
         [HttpGet("me")]
         public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
         {

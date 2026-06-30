@@ -776,6 +776,10 @@ namespace api.Migrations
                     b.Property<decimal>("FinalAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("payment_id");
+
                     b.Property<Guid?>("ShopId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("shop_id");
@@ -871,19 +875,25 @@ namespace api.Migrations
                     b.Property<Guid>("InvoiceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
+                    b.Property<byte>("PaymentMethod")
+                        .HasColumnType("tinyint")
                         .HasColumnName("PaymentMethod");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
+                    b.Property<byte>("PaymentStatus")
+                        .HasColumnType("tinyint")
                         .HasColumnName("Status");
+
+                    b.Property<string>("RawResponse")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RawResponse");
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("varchar(255)")
                         .HasColumnName("TransactionId");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
 
@@ -1310,10 +1320,10 @@ namespace api.Migrations
                         .HasColumnName("category_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset")
+                        .HasColumnType("datetimeoffset(7)")
                         .HasColumnName("created_at");
 
-                    b.PrimitiveCollection<string>("ImageUrls")
+                    b.Property<string>("ImageUrls")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("image_urls");
@@ -1342,7 +1352,7 @@ namespace api.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset")
+                        .HasColumnType("datetimeoffset(7)")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
@@ -1350,7 +1360,8 @@ namespace api.Migrations
                     b.HasIndex("CategoryId")
                         .HasDatabaseName("IX_Products_CategoryId");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Products_Name");
 
                     b.HasIndex("ShopId")
                         .HasDatabaseName("IX_Products_ShopId");
@@ -1645,9 +1656,9 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Payments.Payment", b =>
                 {
                     b.HasOne("api.Models.Orders.Invoice", "Invoice")
-                        .WithOne()
+                        .WithOne("Payment")
                         .HasForeignKey("api.Models.Payments.Payment", "InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Invoice");
@@ -1762,12 +1773,12 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.model.Products.Product", b =>
                 {
-                    b.HasOne("api.Models.Category.Category", null)
+                    b.HasOne("api.Models.Category.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_Products_Categories");
+                        .HasConstraintName("FK_Products_Categories_CategoryId");
 
                     b.HasOne("api.Models.Shops.Shop", "Shop")
                         .WithMany("Products")
@@ -1776,12 +1787,7 @@ namespace api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Products_Shops_ShopId");
 
-                    b.HasOne("api.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Products_Users_ShopId");
+                    b.Navigation("Category");
 
                     b.Navigation("Shop");
                 });
@@ -1830,6 +1836,9 @@ namespace api.Migrations
                     b.Navigation("Delivery");
 
                     b.Navigation("Items");
+
+                    b.Navigation("Payment")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>

@@ -1,6 +1,7 @@
 ﻿using api.Database;
 using api.Models.Orders;
 using api.Models.Products;
+using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository.InvoiceRepo
@@ -13,6 +14,7 @@ namespace api.Repository.InvoiceRepo
         Task<IReadOnlyCollection<Invoice>> GetListByUserIdAsync(Guid? userId, CancellationToken cancellationToken);
         void Update(Invoice order);
         Task<Dictionary<Guid, decimal>> GetVariantPricesAsync(IEnumerable<Guid> variantIds, CancellationToken cancellationToken);
+        Task<Address> getAddressUsed();
     }
     public class InvoiceRepository(MyAppDbContext context) : IInvoiceRepository
     {
@@ -20,13 +22,19 @@ namespace api.Repository.InvoiceRepo
         {
             // Truyền CancellationToken vào mọi thao tác I/O
             // Chú ý: Ở file DbContext, property nên được viết hoa là 'Invoices' theo chuẩn PascalCase
-            await context.invoices.AddAsync(order, cancellationToken);
+            await context.Invoices.AddAsync(order, cancellationToken);
+        }
+
+        public async Task<Address> getAddressUsed()
+        {
+            return await context.Address.AsNoTracking()
+                 .FirstOrDefaultAsync(a => a.IsUsed);
         }
 
         public async Task<Invoice?> getByIdTracking(Guid invoiceId, CancellationToken cancellationToken)
         {
             // Câu lệnh 1: Lấy Invoice gốc cùng với mối quan hệ Delivery -> Address
-            var invoice = await context.invoices
+            var invoice = await context.Invoices
                 .Include(i => i.Delivery)
                     .ThenInclude(d => d.Address) // Chú ý chữ 'address' viết thường theo Entity class của bạn
                 .FirstOrDefaultAsync(i => i.Id == invoiceId, cancellationToken);
@@ -53,7 +61,7 @@ namespace api.Repository.InvoiceRepo
 
         public async Task<Invoice?> GetDetailAsync(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
         {
-            return await context.invoices
+            return await context.Invoices
                 .AsNoTracking()
                 .Include(i => i.Delivery)
                     .ThenInclude(i => i.Address)
@@ -71,7 +79,7 @@ namespace api.Repository.InvoiceRepo
                 return [];
             }
 
-            var invoices = await context.invoices
+            var invoices = await context.Invoices
                 .Include(i => i.Delivery)
                     .ThenInclude(i => i.Address)
                 .AsNoTracking()
@@ -96,7 +104,7 @@ namespace api.Repository.InvoiceRepo
         {
             // Khi dùng AsNoTracking ở tầng Service, hàm này sẽ attach thực thể lại 
             // và đánh dấu trạng thái là Modified để EF Core sinh lệnh UPDATE khi Commit
-            context.invoices.Update(order);
+            context.Invoices.Update(order);
         }
     }
 }

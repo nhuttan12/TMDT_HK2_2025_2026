@@ -45,6 +45,13 @@ namespace api.Controllers
             var result = await _categoryService.DeleteAsync(id, cancellationToken);
             return HandleResult(result);
         }
+
+        [HttpGet("list-name")]
+        public async Task<IActionResult> GetListNameCategory( CancellationToken cancellationToken = default)
+        {
+            var result = await _categoryService.GetListNameCategory( cancellationToken);
+            return HandleResult(result);
+        }
     }
 
 
