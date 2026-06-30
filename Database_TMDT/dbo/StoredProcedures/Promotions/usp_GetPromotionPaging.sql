@@ -11,7 +11,7 @@ BEGIN
 	SELECT @TotalItems = COUNT(1)
 	FROM PROMOTIONS p
 	WHERE p.user_id = @UserId
-		AND p.status = 1
+		AND p.[status] = 'Approved'
 
 	SELECT 
 		p.id As Id, 
@@ -25,7 +25,7 @@ BEGIN
 	FROM PROMOTIONS p
 
 	WHERE p.user_id = @UserId
-		AND p.status = 1
+		AND p.[status] = 'Approved'
 
 	ORDER BY p.created_at DESC
 

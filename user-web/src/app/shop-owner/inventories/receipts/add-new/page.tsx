@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api-client';
+import apiServer from '@/lib/api-server';
 import { GoodsSupplierService } from '@/services/inventories/suppliers/goods-supplier-service';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { Metadata } from 'next';
@@ -20,7 +20,7 @@ const emptyGoodsReceiptDetail: GoodsReceiptDetail = {
 };
 
 export default async function Page(): Promise<JSX.Element> {
-    const goodsSupplierService = new GoodsSupplierService(apiClient);
+    const goodsSupplierService = new GoodsSupplierService(apiServer);
     
 	const supplierOptions = await goodsSupplierService.getSupplierOptionsByShopId();
 

@@ -1,4 +1,5 @@
 import { ResponseApi } from '@/types/common/ResponseApi';
+import { CreateSupplierRequestDto } from '@/types/inventories/suppliers/CreateSupplierRequest';
 import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { SupplierOption } from '@/types/inventories/suppliers/SupplierOption';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
@@ -137,7 +138,9 @@ export const getProductPagingBySupplierIdMocking = async (
 	});
 };
 
-export const getSupplierDetailBySupplierIdMocking = async (supplierId: string): Promise<Supplier> => {
+export const getSupplierDetailBySupplierIdMocking = async (
+	supplierId: string,
+): Promise<Supplier> => {
 	const mockSupplier: Supplier = {
 		id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đồng bộ đúng GUID của Công ty Bao bì Việt Nam
 		name: 'Công ty Cổ phần Bao bì Việt Nam',
@@ -200,26 +203,28 @@ export class GoodsSupplierService {
 		try {
 			const response = await this.api.get<
 				ResponseApi<BackendPagedResult<ProductListInfoAdmin>>
-			>(`/admin/supplier/products?supplierId=${supplierId}&PageNumber=${page}&PageSize=${limit}`);
+			>(
+				`/admin/supplier/products?supplierId=${supplierId}&PageNumber=${page}&PageSize=${limit}`,
+			);
 
 			console.log('product paging by supplier data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
 				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
-				return await getProductPagingBySupplierIdMocking(supplierId, {page, limit});
+				return await getProductPagingBySupplierIdMocking(supplierId, { page, limit });
 			}
 
 			return response.data.data;
 		} catch (error: unknown) {
 			console.error(error);
-			return await getProductPagingBySupplierIdMocking(supplierId, {page, limit});
+			return await getProductPagingBySupplierIdMocking(supplierId, { page, limit });
 		}
 	}
 
-    async getSupplierDetailBySupplierId(supplierId: string): Promise<Supplier> {
-        try {
-			const response = await this.api.get<
-				ResponseApi<Supplier>
-			>(`/admin/supplier/detail?supplierId=${supplierId}`);
+	async getSupplierDetailBySupplierId(supplierId: string): Promise<Supplier> {
+		try {
+			const response = await this.api.get<ResponseApi<Supplier>>(
+				`/admin/supplier/detail?supplierId=${supplierId}`,
+			);
 
 			console.log('supplier detail data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
@@ -232,13 +237,12 @@ export class GoodsSupplierService {
 			console.error(error);
 			return await getSupplierDetailBySupplierIdMocking(supplierId);
 		}
-    }
+	}
 
-    async getSupplierOptionsByShopId(): Promise<SupplierOption[]> {
-        try {
-			const response = await this.api.get<
-				ResponseApi<SupplierOption[]>
-			>(`/admin/supplier/detail`);
+	async getSupplierOptionsByShopId(): Promise<SupplierOption[]> {
+		try {
+			const response =
+				await this.api.get<ResponseApi<SupplierOption[]>>(`/admin/supplier/drop-down`);
 
 			console.log('supplier option data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
@@ -251,5 +255,21 @@ export class GoodsSupplierService {
 			console.error(error);
 			return await getSupplierOptionsByShopIdMocking();
 		}
-    }
+	}
+
+	async createSupplier(supplier: CreateSupplierRequestDto): Promise<string> {
+		try {
+			const response = await this.api.post<ResponseApi<string>>(`/admin/supplier`, supplier);
+
+			console.log('supplier data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return '';
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return '';
+		}
+	}
 }

@@ -1,18 +1,18 @@
-import { apiClient } from '@/lib/api-client';
+import apiServer from '@/lib/api-server';
 import { GoodsSupplierService } from '@/services/inventories/suppliers/goods-supplier-service';
-import { Supplier } from '@/types/inventories/suppliers/Supplier';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 import SupplierFormContainer from './_components/supplier-form-container';
 
 interface SupplierProductsPageProps {
-	params: {
+	params: Promise<{
 		supplierId: string;
-	};
+	}>;
 }
 
 export async function generateMetadata({ params }: SupplierProductsPageProps): Promise<Metadata> {
-	return {
+	const { supplierId } = await params;
+    return {
 		title: 'Chỉnh sửa thông tin nhà cung cấp',
 	};
 }
@@ -20,15 +20,11 @@ export async function generateMetadata({ params }: SupplierProductsPageProps): P
 export default async function SupplierProductsPage({
 	params,
 }: SupplierProductsPageProps): Promise<JSX.Element> {
-	// 1. Lấy ID từ URL và chuyển sang dạng số
-	const supplierId = params.supplierId;
+    const { supplierId } = await params;
 
-	// 2. Fetch dữ liệu từ Server
-	const supplierName = 'Công ty TNHH Nhập khẩu Vina'; // Ví dụ: await fetchSupplierName(supplierId);
+    const goodsSupplierService = new GoodsSupplierService(apiServer);
 
-    const goodsSupplierService = new GoodsSupplierService(apiClient);
-
-	const supplier: Supplier = await goodsSupplierService.getSupplierDetailBySupplierId(supplierId);
+	const supplier = await goodsSupplierService.getSupplierDetailBySupplierId(supplierId);
 
 	// 3. Render Container và truyền Props xuống
 	return (

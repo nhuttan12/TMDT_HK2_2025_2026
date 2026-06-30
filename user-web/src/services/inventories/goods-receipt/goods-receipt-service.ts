@@ -86,6 +86,8 @@ export class GoodsReceiptService {
 
 	async createGoodsReceipt(request: CreateGoodsReceiptRequest): Promise<string> {
 		try {
+            console.log('create receipt request', request);
+
 			const response = await this.api.post<ResponseApi<string>>(`/admin/receipt`, request);
 
 			console.log('receipt data', response.data.data);

@@ -76,21 +76,38 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 				},
 
 				// ===== Batch =====
-				setBatches: (batches: GoodsReceiptBatch[]): void => set({ batches }),
-
-				addBatch: (batch: GoodsReceiptBatch): void => {
+				setBatches: (batches: GoodsReceiptBatch[]): void => {
 					set((state: BatchReceiptStore) => ({
-						batches: [...state.batches, batch],
+						batches,
+						receiptForm: state.receiptForm ? { ...state.receiptForm, batches } : null,
 					}));
 				},
 
+				addBatch: (batch: GoodsReceiptBatch): void => {
+					set((state: BatchReceiptStore) => {
+						const nextBatches = [...state.batches, batch];
+						return {
+							batches: nextBatches,
+							receiptForm: state.receiptForm
+								? { ...state.receiptForm, batches: nextBatches }
+								: null,
+						};
+					});
+				},
+
 				updateBatch: (id: string, updates: Partial<GoodsReceiptBatch>): void => {
-					set((state: BatchReceiptStore) => ({
-						batches: state.batches.map(
+					set((state: BatchReceiptStore) => {
+						const nextBatches = state.batches.map(
 							(b: GoodsReceiptBatch): GoodsReceiptBatch =>
 								b.id === id ? { ...b, ...updates } : b,
-						),
-					}));
+						);
+						return {
+							batches: nextBatches,
+							receiptForm: state.receiptForm
+								? { ...state.receiptForm, batches: nextBatches }
+								: null,
+						};
+					});
 				},
 
 				removeBatch: (id: string): void => {
@@ -98,14 +115,19 @@ export const useBatchReceiptStore: UseBoundStore<StoreApi<BatchReceiptStore>> =
 						const newBatchItems = { ...state.batchItemsByBatchId };
 						delete newBatchItems[id];
 
+						const nextBatches = state.batches.filter(
+							(b: GoodsReceiptBatch): boolean => b.id !== id,
+						);
+
 						return {
-							batches: state.batches.filter(
-								(b: GoodsReceiptBatch): boolean => b.id !== id,
-							),
+							batches: nextBatches,
 							batchItemsByBatchId: newBatchItems,
+							receiptForm: state.receiptForm
+								? { ...state.receiptForm, batches: nextBatches }
+								: null,
 						};
 					});
-				},
+				},k
 
 				// ===== Batch Items =====
 				addBatchItems: (batchId: string, items: BatchItem[]): void => {

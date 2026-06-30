@@ -24,13 +24,16 @@ export default function GoodsStockContainer({
 	// 1. Fetching Data
 	const { data: summary, isLoading: isSummaryLoading } =
 		useGoodsStockSummaryQuery(initialSummary);
-	const { data: products, isLoading: isProductsLoading } =
-		useProductInStockQuery(initialProducts);
 
 	// 2. Gọi Logic Hook
 	const stockLogic = useGoodsStockLogic();
 
+	const { data: products, isLoading: isProductsLoading } =
+		useProductInStockQuery(initialProducts, stockLogic.currentPage);
+
     const currentProduct = products?.items ?? [];
+
+    console.log('🔗 Page hiện tại đang là:', stockLogic.currentPage);
 
 	const isPageLoading = isSummaryLoading || isProductsLoading;
 

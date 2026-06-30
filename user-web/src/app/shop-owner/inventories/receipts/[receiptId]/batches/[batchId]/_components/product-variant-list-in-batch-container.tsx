@@ -21,10 +21,10 @@ export default function ProductVariantListInBatchContainer({
 	mode,
 	productId,
 }: Props): JSX.Element {
+	const targetProductId = productId ?? productVariants?.items?.[0]?.productId ?? '';
+
 	// 1. Data Fetching
-	const { data: availableVariants } = useProductVariantsSelectionQuery(
-		productId ?? productVariants.items[0].productId,
-	);
+	const { data: availableVariants } = useProductVariantsSelectionQuery(targetProductId);
 
 	// 2. Gọi Logic Hook duy nhất
 	const productVariantListLogic = useProductVariantListLogic({

@@ -17,6 +17,7 @@ export interface UseSupplierListLogicReturn {
 	handleTriggerDelete: (row: Supplier) => void;
 	handleConfirmDelete: () => void;
 	handleCancelDelete: () => void;
+    handleAddSupplier: () => void;
 	modal: UseStatusModalReturn;
 }
 
@@ -60,16 +61,21 @@ export function useSupplierListLogic(): UseSupplierListLogicReturn {
 		modal.closeModal();
 	};
 
+    const handleAddSupplier = (): void => {
+        router.push('/shop-owner/inventories/suppliers/add-new');
+    };
+
 	return {
-		currentPage: currentPage,
-		changePage: changePage,
-		handleSort: handleSort,
-		renderSortIcon: renderSortIcon,
-		handleViewSupplier: handleViewSupplier,
-		handleEditSupplier: handleEditSupplier,
-		handleTriggerDelete: handleTriggerDelete,
-		handleConfirmDelete: handleConfirmDelete,
-		handleCancelDelete: handleCancelDelete,
+		currentPage,
+		changePage,
+		handleSort,
+		renderSortIcon,
+		handleViewSupplier,
+		handleEditSupplier,
+		handleTriggerDelete,
+		handleConfirmDelete,
+		handleCancelDelete,
+        handleAddSupplier,
 		modal: modal,
 	};
 }

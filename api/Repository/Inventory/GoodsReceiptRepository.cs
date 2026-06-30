@@ -15,7 +15,9 @@ namespace api.Repository.Inventory
     {
         public async Task<Guid> CreateGoodsReceiptAsync(Guid shopId, CreateGoodsReceiptRequest request, CancellationToken cancellationToken)
         {
-            var batchesFlat = request.Batches.Select(b => new
+            Console.WriteLine($"[TEST 1] C# hứng được từ Frontend: {request.Batches?.Count ?? -1} lô hàng");
+
+            var batchesFlat = request.Batches.Select(b => new GoodsReceiptBatchTableType
             {
                 product_id = b.ProductId,
                 batch_code = b.BatchCode,
@@ -23,7 +25,7 @@ namespace api.Repository.Inventory
                 total_cost_price = b.TotalCostPrice
             });
 
-            var variantsFlat = request.Batches.SelectMany(b => b.Items.Select(item => new
+            var variantsFlat = request.Batches.SelectMany(b => b.Items.Select(item => new GoodsReceiptBatchVariantTableType
             {
                 batch_code = b.BatchCode,
                 variant_id = item.ProductVariantId,
@@ -31,7 +33,15 @@ namespace api.Repository.Inventory
             }));
 
             var batchesTable = batchesFlat.ToDataTable();
+            Console.WriteLine($"[TEST 2] Sau khi ToDataTable có: {batchesTable.Rows.Count} dòng");
+
+            var colNames = batchesTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName);
+            Console.WriteLine(">>> THỨ TỰ CỘT BATCH THỰC SỰ LÀ: " + string.Join(" -> ", colNames));
+
             var variantsTable = variantsFlat.ToDataTable();
+
+            var colNames2 = variantsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName);
+            Console.WriteLine(">>> THỨ TỰ CỘT BATCH THỰC SỰ LÀ: " + string.Join(" -> ", colNames2));
 
             var outputIdParam = new SqlParameter("@inserted_id", SqlDbType.UniqueIdentifier)
             {

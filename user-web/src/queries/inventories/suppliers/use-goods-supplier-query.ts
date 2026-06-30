@@ -10,6 +10,7 @@ export function useGoodsSupplierQuery(
 	{ page = 1, limit = 10 }: PaginationRequest = {},
 ): UseQueryResult<BackendPagedResult<Supplier>, Error> {
 	const goodsSupplierService = new GoodsSupplierService(apiClient);
+    
 	return useQuery({
 		queryKey: ['goods-supplier'],
 		queryFn: () => goodsSupplierService.getGoodsSupplierListPaging({ page, limit }),

@@ -81,17 +81,6 @@ export function GoodsIssueAdminUi({
 			render: (row) => getGoodsIssueTypeLabel(row.type),
 		},
 		{
-			key: 'exportDate',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Ngày xuất</span>
-					{renderSortIcon('exportDate')}
-				</div>
-			),
-			onHeaderClick: () => handleSort('exportDate'),
-			render: (row) => formatDateTimeWithBrackets(row.exportDate),
-		},
-		{
 			key: 'totalQuantity',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
@@ -123,17 +112,6 @@ export function GoodsIssueAdminUi({
 			),
 			onHeaderClick: () => handleSort('createdAt'),
 			render: (row) => formatDateTimeWithBrackets(row.createdAt),
-		},
-		{
-			key: 'status',
-			header: (
-				<div className='flex items-center gap-1 cursor-pointer select-none'>
-					<span>Trạng thái</span>
-					{renderSortIcon('status')}
-				</div>
-			),
-			onHeaderClick: () => handleSort('status'),
-			render: (row) => <GoodsIssueStatusBadge status={row.status} />,
 		},
 	];
 

@@ -5,6 +5,7 @@ using api.Utilities;
 using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace api.Controllers.Inventory
 {

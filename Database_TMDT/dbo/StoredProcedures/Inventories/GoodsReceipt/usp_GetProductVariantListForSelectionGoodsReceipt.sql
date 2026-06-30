@@ -11,5 +11,5 @@ BEGIN
 	INNER JOIN PRODUCTS p ON p.id = v.product_id
 	WHERE p.shop_id = @ShopId
 		AND p.id = @ProductId
-		AND p.[status] = 1
+		AND p.[status] = 'Approved';
 END

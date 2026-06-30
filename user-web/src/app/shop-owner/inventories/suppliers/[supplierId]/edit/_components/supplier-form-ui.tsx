@@ -13,6 +13,7 @@ export default function SupplierFormUi({
 	form,
 	isView,
 	isCreate,
+	isSubmitting,
 	handleNameChange,
 	handleTaxCodeChange,
 	handleContactNameChange,
@@ -38,6 +39,7 @@ export default function SupplierFormUi({
 					<Button
 						type='button'
 						variant='outline'
+						disabled={isSubmitting}
 						onClick={(): void => handleBack()}
 						className='cursor-pointer'
 					>
@@ -46,9 +48,10 @@ export default function SupplierFormUi({
 					{!isView && (
 						<Button
 							type='submit'
+							disabled={isSubmitting}
 							className='cursor-pointer'
 						>
-							{isCreate ? 'Thêm mới' : 'Cập nhật'}
+							{isSubmitting ? 'Đang lưu...' : isCreate ? 'Thêm mới' : 'Cập nhật'}
 						</Button>
 					)}
 				</div>

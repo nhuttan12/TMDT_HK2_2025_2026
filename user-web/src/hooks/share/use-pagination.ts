@@ -7,16 +7,12 @@ export interface UsePaginationReturn {
 	changePage: (page: number) => void;
 }
 
-export function usePagination(totalPagesFromApi: number = 1): UsePaginationReturn {
+export function usePagination(): UsePaginationReturn {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
 	const pageParam = Number(searchParams.get('page'));
-	let currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-
-	if (currentPage > totalPagesFromApi && totalPagesFromApi > 0) {
-		currentPage = totalPagesFromApi;
-	}
+	const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
 	const changePage = (page: number): void => {
 		//guard
@@ -36,7 +32,7 @@ export function usePagination(totalPagesFromApi: number = 1): UsePaginationRetur
 	};
 
 	return {
-		currentPage: currentPage,
-		changePage: changePage,
+		currentPage,
+		changePage,
 	};
 }

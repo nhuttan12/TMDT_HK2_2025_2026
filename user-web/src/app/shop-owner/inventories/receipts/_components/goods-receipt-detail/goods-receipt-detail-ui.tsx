@@ -172,7 +172,11 @@ export function GoodsReceiptDetailUi({
 					columns={itemColumns}
 					getRowKey={(item) => item.id}
 					onRowClick={(row) => {
-						handleRedirectToBatchDetail(row.id, isCreate ? 'create' : 'view');
+						handleRedirectToBatchDetail(
+							row.id,
+							row.productId,
+							isCreate ? 'create' : 'view',
+						);
 					}}
 				/>
 			</div>

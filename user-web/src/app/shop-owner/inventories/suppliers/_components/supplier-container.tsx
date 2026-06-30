@@ -38,6 +38,8 @@ export default function SuppliersContainer({
 			<AdminTableHeader
 				title={'Danh sách nhà cung cấp'}
 				description={'Quản lý thông tin nhà cung cấp'}
+                addLabel={'Thêm nhà cung cấp mới'}
+                onAdd={logic.handleAddSupplier}
 			/>
 
 			{/* Table */}

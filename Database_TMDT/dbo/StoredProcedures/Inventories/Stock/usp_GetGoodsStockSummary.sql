@@ -32,12 +32,12 @@ BEGIN
 		-- Có hàng: Tồn kho > 0 và trạng thái sản phẩm đang hiển thị, được duyệt
 		@AvailableProductQuantity = ISNULL(SUM(
 			CASE WHEN TotalStock > 0 
-				AND ProductStatus = 1
+				AND ProductStatus = 'Approved'
 				THEN 1 ELSE 0 END), 0),
 		
 		-- Bị ẩn/Khóa: Do shop tự ẩn hoặc do hệ thống khóa
 		@HiddenOrBlockedProductQuantity = ISNULL(SUM(
-			CASE WHEN ProductStatus = 3
+			CASE WHEN ProductStatus = 'Banned'
 				THEN 1 ELSE 0 END), 0),
 		
 		-- Hết hàng: Tổng tồn kho <= 0

@@ -1,11 +1,13 @@
 'use client';
 
+import { useCreateGoodsReceiptMutation } from '@/queries/inventories/goods-receipts/use-create-goods-receipt-mutation';
 import { useBatchReceiptStore } from '@/stores/batch-receipt.store';
 import { GoodsReceiptBatch } from '@/types/inventories/receipts/uis/GoodsReceiptBatch';
 import { GoodsReceiptDetail } from '@/types/inventories/receipts/uis/GoodsReceiptDetail';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { mapToGoodsReceiptRequest } from '@/utils/inventories/receipts/mappers/receipts';
+import { useRouter } from 'next/navigation';
 import { SyntheticEvent, useEffect, useState } from 'react';
 
 export interface UseGoodsReceiptFormProps {
@@ -14,6 +16,8 @@ export interface UseGoodsReceiptFormProps {
 }
 
 export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptFormProps) {
+    const router = useRouter();
+    
 	const isView = formType === 'view';
 	const isCreate = formType === 'create';
 
@@ -45,6 +49,8 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 	const setDraftKey: (key: string) => void = useBatchReceiptStore((s) => s.setDraftKey);
 
 	const formToRender: GoodsReceiptDetail = receiptForm || goodsReceipt;
+
+	const createReceiptMutation = useCreateGoodsReceiptMutation();
 
 	useEffect((): void => {
 		const currentKey = isCreate ? 'create-new' : `receipt-${goodsReceipt.id}`;
@@ -89,12 +95,28 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 
+		if (createReceiptMutation.isPending) return;
+
 		const latestStore = useBatchReceiptStore.getState();
 		const latestForm = latestStore.receiptForm || formToRender;
 
+        console.log('latestForm', latestForm);
+        console.log('latestStore', latestStore);
+
 		const payload = mapToGoodsReceiptRequest(latestForm, latestStore.batchItemsByBatchId);
 
-		console.log('Submit:', payload);
+        console.log('payload', payload);
+        
+        createReceiptMutation.mutate(payload, {
+            onSuccess: (newId) => {
+                console.log('Tạo thành công phiếu nhập, ID:', newId);
+                router.push('/shop-owner/inventories/receipts');
+            },
+            onError: (error) => {
+                console.error(error);
+                alert('Tạo phiếu nhập kho thất bại. Vui lòng kiểm tra lại dữ liệu!');
+            }
+        });
 	};
 
 	const handleProductSelection = (product: ProductForGoodsReceipt): void => {

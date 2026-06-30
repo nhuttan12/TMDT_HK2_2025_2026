@@ -17,6 +17,6 @@ namespace api.Dtos.Inventory.Requests
         public decimal CostPrice { get; set; }
 
         [JsonPropertyName("productId")]
-        public string? ProductId { get; set; }
+        public string ProductId { get; set; }
     }
 }

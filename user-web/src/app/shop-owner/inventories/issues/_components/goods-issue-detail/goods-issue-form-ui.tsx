@@ -1,41 +1,39 @@
-import { ChangeEvent, JSX } from 'react';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
+import { DataTable } from '@/components/layout/admin/data-table';
 import Field from '@/components/layout/admin/field';
+import RichTextEditor from '@/components/layout/admin/rich-text-editor';
+import { StatusModal } from '@/components/layout/share/status-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Column } from '@/types/uis/Column';
+import { GoodsIssueLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-form-logic';
 import { GoodsIssueItem } from '@/types/inventories/issues/uis/GoodsIssueItem';
-import RichTextEditor from '@/components/layout/admin/rich-text-editor';
-import { DataTable } from '@/components/layout/admin/data-table';
-import { getPartnerTypeLabel } from '@/utils/inventories/issues/partner-type-label';
+import { Column } from '@/types/uis/Column';
 import { getGoodsIssueTypeLabel } from '@/utils/inventories/issues/goods-issue-type-label';
-import { formatDateForInput } from '@/utils/shared/date';
-import { StatusModal } from '@/components/layout/share/status-modal';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import { Trash } from 'lucide-react';
-import { GoodsIssueLogicReturn } from '@/hooks/inventories/goods-issues/use-goods-issue-form-logic';
-import GoodsIssueStatusBadge from '../goods-issue-status-badge';
+import { ChangeEvent, JSX } from 'react';
 import { ProductSelectionGoodsIssueModal } from './product-selection-goods-issue-modal';
+import { ProductForGoodsIssue } from '@/types/inventories/issues/uis/ProductForGoodsIssue';
 
-type GoodsIssueFormUiProps = GoodsIssueLogicReturn;
+interface GoodsIssueFormUiProps extends GoodsIssueLogicReturn {
+    productSelection: ProductForGoodsIssue[]
+}
 
-export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
-	const {
-		form,
-		isView,
-		isCreate,
-		totalQuantity,
-		totalAmount,
-		products,
-		statusModal,
-		updateField,
-		handleUpdateItem,
-		handleRemoveItem,
-		handleAddProductToForm,
-		onFormSubmit,
-		handleBack,
-	} = props;
-
+export function GoodsIssueFormUi({
+    productSelection,
+	form,
+	isView,
+	isCreate,
+	totalQuantity,
+	totalAmount,
+	statusModal,
+	updateField,
+	handleUpdateItem,
+	handleRemoveItem,
+	handleAddProductToForm,
+	onFormSubmit,
+	handleBack,
+}: GoodsIssueFormUiProps): JSX.Element {
 	// Định nghĩa cấu trúc cột hiển thị ngay trong UI Component
 	const itemColumns: Column<GoodsIssueItem>[] = [
 		{
@@ -130,34 +128,6 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 							className='bg-slate-50 font-mono'
 						/>
 					</Field>
-
-					<Field label='Trạng thái'>
-						<div className='py-2'>
-							<GoodsIssueStatusBadge status={form.status} />
-						</div>
-					</Field>
-
-					<Field label={getPartnerTypeLabel(form.partner.type)}>
-						<Input
-							value={form.partner?.name || ''}
-							placeholder={`Chọn ${getPartnerTypeLabel(form.partner.type)}...`}
-							disabled={isView}
-							onChange={function (e: ChangeEvent<HTMLInputElement>): void {
-								updateField('partner', { ...form.partner, name: e.target.value });
-							}}
-						/>
-					</Field>
-
-					<Field label='Ngày xuất kho'>
-						<Input
-							type='date'
-							value={formatDateForInput(form.exportDate)}
-							disabled={isView}
-							onChange={function (e: ChangeEvent<HTMLInputElement>): void {
-								updateField('exportDate', e.target.value);
-							}}
-						/>
-					</Field>
 				</div>
 
 				<div className='mt-6'>
@@ -177,7 +147,7 @@ export function GoodsIssueFormUi(props: GoodsIssueFormUiProps): JSX.Element {
 						<h2 className='font-bold text-lg'>Danh sách sản phẩm phân loại xuất kho</h2>
 						{!isView && (
 							<ProductSelectionGoodsIssueModal
-								products={products}
+								productSelection={productSelection}
 								onSelectProduct={handleAddProductToForm}
 								trigger={
 									<Button className='cursor-pointer'>+ Thêm sản phẩm</Button>

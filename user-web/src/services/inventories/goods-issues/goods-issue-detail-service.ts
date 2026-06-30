@@ -43,18 +43,6 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 				id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', // Đã đổi sang GUID (Thay cho ID số 1 truyền vào)
 				code: 'PXK-20260403-001',
 				type: 'wholesale',
-				partner: {
-					id: 'e6a8b7c2-58cc-4b01-90e6-d701748f0851', // Đã đổi sang GUID
-					name: 'Công ty TNHH Cảnh Quan Xanh (GreenScape)',
-					type: 'customer',
-					phoneNumber: '02838445566',
-					address: '123 Đường Cây Kiểng, Phường Bình An, Quận 2, TP.HCM',
-				},
-				warehouseID: '7b233a01-5242-4f3b-8531-180a3a7800ab', // Đã đổi sang GUID
-				createdBy: 'f47ac10b-58cc-4372-a567-0e02b2c3d479', // Đã đổi sang GUID (Tài khoản của nhân viên)
-				createdByName: 'Phạm Nhựt Tân',
-				exportDate: '2026-04-03T16:30:00.000Z',
-				status: 'confirmed',
 				note: 'Xuất vật tư thi công dự án vách ngăn Terrarium cho sảnh tòa nhà Vincom',
 				items: [
 					{
@@ -65,9 +53,6 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 						quantity: 2,
 						unitPrice: 1850000,
 						totalPrice: 3700000,
-						batchNumber: 'BATCH-GLS-0426',
-						serialNumber: 'TANK-100-001, TANK-100-002',
-						note: 'Hàng dễ vỡ, bọc xốp cẩn thận',
 					},
 					{
 						id: 'bc7b2671-5085-40b9-a9a2-944a86f7df21', // Đã đổi sang GUID
@@ -77,8 +62,6 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 						quantity: 5,
 						unitPrice: 120000,
 						totalPrice: 600000,
-						batchNumber: 'BATCH-SOIL-0326',
-						note: 'Hàng khô',
 					},
 					{
 						id: 'fa4109bd-7589-4e78-bad4-10672ce893bc', // Đã đổi sang GUID
@@ -88,8 +71,6 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 						quantity: 4,
 						unitPrice: 250000,
 						totalPrice: 1000000,
-						batchNumber: 'BATCH-LED-0126',
-						serialNumber: 'LED-099, LED-100, LED-101, LED-102',
 					},
 					{
 						id: 'c8e1467a-1234-4f01-a12b-d32109876543', // Đã đổi sang GUID
@@ -99,8 +80,6 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 						quantity: 10,
 						unitPrice: 45000,
 						totalPrice: 450000,
-						batchNumber: 'BATCH-MOSS-0426',
-						note: 'Hàng sống, cần giữ ẩm khi vận chuyển',
 					},
 					{
 						id: 'a9b2345c-6789-4e21-b34c-f98765432109', // Đã đổi sang GUID
@@ -110,14 +89,12 @@ export async function getGoodsIssueById(id: string): Promise<GoodsIssueDetail> {
 						quantity: 3,
 						unitPrice: 150000,
 						totalPrice: 450000,
-						batchNumber: 'BATCH-STONE-0226',
 					},
 				],
 				// Giữ nguyên kiểu number cho các trường tính toán tổng khối lượng tài sản
 				totalQuantity: 24,
 				totalAmount: 6200000,
 				createdAt: '2026-04-03T08:00:00.000Z',
-				updatedAt: '2026-04-03T09:30:00.000Z',
 			});
 		}, 500);
 	});

@@ -7,5 +7,5 @@ BEGIN
 		p.[name] AS [Name]
 	FROM PRODUCTS p
 	WHERE p.shop_id = @ShopId
-		AND p.[status] = 1
+		AND p.[status] = 'Approved';
 END

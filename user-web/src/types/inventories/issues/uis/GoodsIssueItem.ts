@@ -9,6 +9,4 @@ export interface GoodsIssueItem {
 	unitPrice: number;
 
 	totalPrice: number; // = quantity * unitPrice
-
-	batchNumber?: string;
 }

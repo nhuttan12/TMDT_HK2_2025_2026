@@ -6,13 +6,15 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useProductInStockQuery(
 	initialData?: BackendPagedResult<ProductInStock>,
+	page: number = 1,
 ): UseQueryResult<BackendPagedResult<ProductInStock>, Error> {
-    const goodsStockService = new GoodsStockService(apiClient);
+	const goodsStockService = new GoodsStockService(apiClient);
+    
 	return useQuery({
-		queryKey: ['product-in-stock'],
-		queryFn: ()=> goodsStockService.getProductInStockPaging(),
+		queryKey: ['product-in-stock', page],
+		queryFn: () => goodsStockService.getProductInStockPaging({ page }),
 		// Lấy data từ Server làm vốn ban đầu
-		initialData: initialData,
+		initialData: initialData?.pageNumber === page ? initialData : undefined,
 		// Sau đó nó sẽ tự động chạy ngầm để lấy data mới nhất (nếu cần)
 		staleTime: 1000 * 60 * 5, // Dữ liệu cũ sau 5 phút
 	});
