@@ -57,6 +57,7 @@ namespace api.Utilities.Seeders
 
                 var id = idGenerator.NewId();
                 var result = User.Create(id, shopDto.Email, shopDto.Name, role, User.LOCAL_KEY, User.LOCAL_PROVIDER);
+                result!.Value!.UpdatePassword("12345");
 
                 if (result.IsFailure)
                 {

@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[INVOICE_ITEMS] (
+﻿CREATE TABLE [dbo].[INVOICE_ITEMS] (
     [id]                UNIQUEIDENTIFIER DEFAULT (newsequentialid()) NOT NULL,
     [invoice_id]        UNIQUEIDENTIFIER NOT NULL,
     [product_id]        UNIQUEIDENTIFIER NOT NULL,
@@ -6,8 +6,11 @@ CREATE TABLE [dbo].[INVOICE_ITEMS] (
     [quantity]          INT              NOT NULL,
     [price_at_purchase] DECIMAL (18, 2)  NOT NULL,
     CONSTRAINT [PK_INVOICE_ITEMS] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_INVOICE_ITEMS_INVOICES_invoice_id] FOREIGN KEY ([invoice_id]) REFERENCES [dbo].[INVOICES] ([id]) ON DELETE CASCADE
+    CONSTRAINT [FK_INVOICE_ITEMS_INVOICES_invoice_id] FOREIGN KEY ([invoice_id]) REFERENCES [dbo].[INVOICES] ([id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_INVOICE_ITEMS_VARIANTS_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[VARIANTS] ([id])
 );
+
+
 
 
 

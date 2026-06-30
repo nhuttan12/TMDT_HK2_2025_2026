@@ -8,19 +8,22 @@ import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import {
 	convertRawUserToProductDetail,
 	mapBackendPaginationToFrontend,
-	mapBackendProductToUserCard, mapProductDetailBeToFe,
+	mapProductDetailBeToFe,
 } from '@/utils/products/product-adapter';
 import { calculateDiscount } from '@/utils/shared/calculateDiscount';
 
+import apiClient from '@/lib/api-client';
+import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
+import { PaginationParams } from '@/types/common/Pagination';
 import { ResponseApi } from '@/types/common/ResponseApi';
 import {
 	BackendPagedResult,
-	BackendProductItem,
 	BackEndProductDetail,
+	BackendProductItem,
 } from '@/types/products/user/productBE';
-import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
-import apiClient from '@/lib/api-client';
-import { PaginationParams } from '@/types/common/Pagination';
+import { ProductFilterPayload } from '@/types/products/user/ProductFilterPayload';
+import { CategoryOption } from '@/types/products/user/CategoryOption';
+import { ShopOption } from '@/types/products/user/ShopOption';
 
 // craw data
 
@@ -131,7 +134,7 @@ export const getProductDetailByIdCraw = async (productId: string): Promise<Produ
 	];
 
 	const shop: ProductShop = {
-		id: "88",
+		id: '88',
 		shopName: 'GreenSpace Official',
 		shopSlug: 'greenspace-official',
 	};
@@ -826,6 +829,34 @@ export const getProductListPagingCraw = async ({
 	});
 };
 
+export const getCategoryListNameForSelectionMocking = async (): Promise<CategoryOption[]> => {
+    return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve([
+				{ id: 'cat_1', name: 'Terrarium Kín' },
+				{ id: 'cat_2', name: 'Terrarium Hở' },
+				{ id: 'cat_3', name: 'Phụ Kiện Terrarium' },
+				{ id: 'cat_4', name: 'Cây Cảnh Mini' },
+				{ id: 'cat_5', name: 'Đất & Rêu' },
+			]);
+		}, 500);
+	});
+}
+
+export const getShopListNameForSelectionMocking = async (): Promise<ShopOption[]> => {
+	// Giả lập thời gian chờ tải dữ liệu từ server (ví dụ: 500ms)
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve([
+				{ id: 'shop_1', name: 'Shop Terra HCM' },
+				{ id: 'shop_2', name: 'Tiệm Cây Xanh' },
+				{ id: 'shop_3', name: 'Green Life Studio' },
+				{ id: 'shop_4', name: 'Khu Vườn Mini' },
+			]);
+		}, 500);
+	});
+};
+
 // get data
 
 /**
@@ -833,7 +864,7 @@ export const getProductListPagingCraw = async ({
  * @param params
  */
 export const getPageProducts = async (
-	params: PaginationParams
+	params: PaginationParams,
 ): Promise<PaginationResponse<ProductUserCard>> => {
 	try {
 		// 1. Dùng apiServer gọi thẳng đến backend .NET
@@ -869,7 +900,7 @@ export const getProductDetailById = async (productId: string): Promise<ProductDe
 		}
 		const res = mapProductDetailBeToFe(response.data.data);
 		console.log(res);
-		return res
+		return res;
 	} catch (error: unknown) {
 		return getProductDetailByIdCraw(productId);
 	}
@@ -918,7 +949,9 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 			// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
 			return getTopSellingProductsCraw();
 		}
-		const res : PaginationResponse<ProductUserCard> = mapBackendPaginationToFrontend(response.data.data);
+		const res: PaginationResponse<ProductUserCard> = mapBackendPaginationToFrontend(
+			response.data.data,
+		);
 		// 3. Đưa qua hàm map để bóc tách vỏ .NET và gọt giũa lại thành ProductUserCard
 		// (Sử dụng hàm mapBackendToFrontendPagination bạn đã tạo ở lượt trước)
 		return res.data;
@@ -928,25 +961,79 @@ export const getTopSellingProducts = async (): Promise<ProductUserCard[]> => {
 	}
 };
 
-
 export const getProductsHome = async (): Promise<ProductUserCard[]> => {
-	try{
-		const params : PaginationParams = {
-			pageNumber : 3,
-			pageSize : 24,
-		}
-		const response = await apiClient.get(
-			`/products`,
-			{
-				params : params
-			}
-		);
+	try {
+		const params: PaginationParams = {
+			pageNumber: 3,
+			pageSize: 24,
+		};
+		const response = await apiClient.get(`/products`, {
+			params: params,
+		});
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return [];
 		}
-		console.log(response.data.data)
+		console.log(response.data.data);
 		return mapBackendToFrontendPagination(response.data.data).data;
-	}catch{
+	} catch {
 		return getProductsHomeCraw();
 	}
-}
+};
+
+export const getProductFilter = async (
+	request?: ProductFilterPayload,
+	pageParams?: PaginationParams,
+): Promise<PaginationResponse<ProductUserCard>> => {
+	try {
+		const flatParams = {
+			...request,
+			...pageParams,
+		};
+
+		const response = await apiClient.get(`/products`, {
+			params: flatParams,
+		});
+
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			return getProductListPagingCraw();
+		}
+
+		console.log(response.data.data);
+
+		return mapBackendToFrontendPagination(response.data.data);
+	} catch {
+		return getProductListPagingCraw();
+	}
+};
+
+export const getCategoryListNameForSelection = async (): Promise<CategoryOption[]> => {
+	try {
+		const response = await apiClient.get(`/category/list-name`);
+
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			return getCategoryListNameForSelectionMocking();
+		}
+
+		console.log(response.data.data);
+
+		return response.data.data;
+	} catch {
+		return getCategoryListNameForSelectionMocking();
+	}
+};
+
+export const getShopListNameForSelection = async (): Promise<ShopOption[]> => {
+	try {
+		const response = await apiClient.get(`/shop/list-name`);
+
+		if (!response.data || !response.data.isSuccess || !response.data.data) {
+			return getShopListNameForSelectionMocking();
+		}
+
+		console.log(response.data.data);
+
+		return response.data.data;
+	} catch {
+		return getShopListNameForSelectionMocking();
+	}
+};

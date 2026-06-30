@@ -1,5 +1,5 @@
-CREATE TABLE [dbo].[ADDRESSES] (
-    [id]          INT                IDENTITY (1, 1) NOT NULL,
+﻿CREATE TABLE [dbo].[ADDRESSES] (
+    [id]          UNIQUEIDENTIFIER   DEFAULT (newsequentialid()) NOT NULL,
     [user_id]     UNIQUEIDENTIFIER   NOT NULL,
     [address_url] NVARCHAR (MAX)     NOT NULL,
     [created_at]  DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
@@ -7,6 +7,8 @@ CREATE TABLE [dbo].[ADDRESSES] (
     CONSTRAINT [PK_ADDRESSES] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_ADDRESSES_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id]) ON DELETE CASCADE
 );
+
+
 
 
 

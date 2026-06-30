@@ -1,25 +1,26 @@
 'use client';
 
 import Pagination from '@/components/layout/share/pagination';
-import ProductFilterSidebar from '@/components/products/user/product-filter-sidebar';
 import ProductList from '@/components/products/user/product-list';
 import { Spinner } from '@/components/ui/spinner';
 import { UsePaginationReturn } from '@/hooks/share/use-pagination';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { JSX } from 'react';
+import { JSX, ReactNode } from 'react';
 
 interface ProductUiProps extends UsePaginationReturn {
 	products: ProductUserCard[];
-    totalPages: number;
+	totalPages: number;
 	isLoading: boolean;
+	sidebar: ReactNode;
 }
 
 export default function ProductUi({
 	products,
-    totalPages,
+	totalPages,
 	isLoading,
 	currentPage,
 	changePage,
+	sidebar,
 }: ProductUiProps): JSX.Element {
 	return (
 		<section className='max-w-7xl mx-auto mt-10 px-4 xl:px-0'>
@@ -28,9 +29,7 @@ export default function ProductUi({
 				{/* CỘT TRÁI: Thanh lọc sản phẩm (Sidebar) */}
 				<aside className='lg:col-span-1'>
 					{/* Class sticky giúp Sidebar bám dính vào màn hình khi cuộn chuột */}
-					<div className='sticky top-24'>
-						<ProductFilterSidebar />
-					</div>
+					<div className='sticky top-24'>{sidebar}</div>
 				</aside>
 
 				{/* CỘT PHẢI: Danh sách sản phẩm & Phân trang */}

@@ -1,7 +1,9 @@
 import { CategoryRevenue } from '@/types/analyst/CategoryRevenue';
 import { RevenueChartItem } from '@/types/analyst/RevenueChartItem';
+import { ResponseApi } from '@/types/common/ResponseApi';
+import { type AxiosInstance } from 'axios';
 
-export async function getDailyRevenueData(
+export async function getDailyRevenueDataMocking(
 	startDate: string,
 	endDate: string,
 ): Promise<RevenueChartItem[]> {
@@ -40,11 +42,51 @@ export async function getDailyRevenueData(
 	];
 }
 
-export async function getCategoryRevenueData(month: string): Promise<CategoryRevenue[]> {
+export async function getCategoryRevenueDataMocking(month: string): Promise<CategoryRevenue[]> {
 	return [
 		{ categoryName: 'Điện tử & Tiện ích', revenue: 125000000, percentage: 45 },
 		{ categoryName: 'Thời trang & Phụ kiện', revenue: 83000000, percentage: 30 },
 		{ categoryName: 'Đồ gia dụng', revenue: 41500000, percentage: 15 },
 		{ categoryName: 'Mỹ phẩm & Chăm sóc cá nhân', revenue: 27800000, percentage: 10 },
 	];
+}
+
+export class RevenueService {
+	constructor(private api: AxiosInstance) {}
+
+	async getDailyRevenueData(startDate: string, endDate: string): Promise<RevenueChartItem[]> {
+		try {
+			const response = await this.api.get<ResponseApi<RevenueChartItem[]>>(
+				`/admin/receipt?startDate=${startDate}&endDate=${endDate}`,
+			);
+
+			console.log('receipt data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getDailyRevenueDataMocking(startDate, endDate);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getDailyRevenueDataMocking(startDate, endDate);
+		}
+	}
+
+	async getCategoryRevenueData(month: string): Promise<CategoryRevenue[]> {
+		try {
+			const response = await this.api.get<ResponseApi<CategoryRevenue[]>>(
+				`/admin/receipt?month=${month}`,
+			);
+
+			console.log('receipt data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getCategoryRevenueDataMocking(month);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getCategoryRevenueDataMocking(month);
+		}
+	}
 }

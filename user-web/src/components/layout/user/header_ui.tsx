@@ -54,6 +54,11 @@ interface RedirectElement {
 /* ---------- Data ---------- */
 export const headerElements: RedirectElement[] = [
 	{
+		key: 'products',
+		label: 'Sản phẩm',
+		href: '/products',
+	},
+	{
 		key: 'terrariums',
 		label: 'Bể kính tiểu cảnh',
 		href: '/terrariums',

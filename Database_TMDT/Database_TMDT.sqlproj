@@ -153,6 +153,9 @@
     <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductVariantListForSelectionGoodsReceipt.sql" />
     <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssuePaging.sql" />
     <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssueDetailByGoodsIssueId.sql" />
+    <Build Include="dbo\Tables\PAYMENTS.sql" />
+    <Build Include="dbo\Tables\DELIVERIES.sql" />
+    <Build Include="dbo\StoredProcedures\Analyst\usp_GetRevenueByProductCategoryInMonth.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
