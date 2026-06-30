@@ -17,10 +17,18 @@ namespace api.Services.Products
         Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default); 
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
-        Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto fillterDto, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ProductResponseDto>>> GetAllProductsAsync(
+            PaginationRequestDto paginationDto,
+            FilterProductQueryDto? fillterDto, 
+            CancellationToken cancellationToken = default);
         Task<Result<ProductDetailResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
-        Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(Guid productId, PaginationRequestDto paginationDto, CancellationToken cancellationToken);
-        Task<Result<PagedResult<ProductResponseDto>>> GetProductOfShopAsync(Guid shopId, PaginationRequestDto paginationDto, ShopParams? param, CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(
+            Guid productId, PaginationRequestDto paginationDto, CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductResponseDto>>> GetProductOfShopAsync(
+            Guid shopId, PaginationRequestDto paginationDto, ShopParams? param, CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductResponseDto>>> SearchProductsAsync(
+            ProductSearchRequestDto request,
+            CancellationToken cancellationToken);
     }
     public class ProductService(
         ILogger<ProductController> logger,
@@ -74,11 +82,7 @@ namespace api.Services.Products
             return Result<ProductDetailResponseDto>.Success(productDto);
         }
        
-        /**
-         * fillter : name, category, price range, rating range, status
-         */
-
-      
+  
         public async Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default)
         {
             var validationResult = productDto.Validate();
@@ -134,9 +138,12 @@ namespace api.Services.Products
             return Result<PagedResult<ProductResponseDto>>.Failure(
                 Error.Create("RelatedProducts.NotFound", "No related products found.", ErrorType.NotFound));
         }
-        public async Task<Result<PagedResult<ProductResponseDto>>> GetAllProducts(PaginationRequestDto paginationDto, FilterProductQueryDto? fillterDto, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductResponseDto>>> GetAllProductsAsync(
+             PaginationRequestDto paginationDto,
+             FilterProductQueryDto? filterDto,
+             CancellationToken cancellationToken = default)
         {
-            // 1. Validate Pagination
+            // 1. Validate Pagination (Fail Fast)
             if (paginationDto == null)
             {
                 return Result<PagedResult<ProductResponseDto>>.Failure(
@@ -144,44 +151,30 @@ namespace api.Services.Products
             }
 
             var paginationResult = paginationDto.ValidData();
-            if (paginationResult.IsFailure) return Result<PagedResult<ProductResponseDto>>.Failure(paginationResult.Error);
+            if (paginationResult.IsFailure)
+                return Result<PagedResult<ProductResponseDto>>.Failure(paginationResult.Error);
 
-            // 2. Validate Filter (Nếu có truyền lên)
-            if (fillterDto != null)
+            // 2. Validate Filter (Nếu thực sự có dữ liệu truyền lên)
+            if (filterDto != null && !filterDto.IsEmpty())
             {
-                var filterResult = fillterDto.ValidData();
-                if (filterResult.IsFailure) return Result<PagedResult<ProductResponseDto>>.Failure(filterResult.Error);
+                var filterResult = filterDto.ValidData();
+                if (filterResult.IsFailure)
+                    return Result<PagedResult<ProductResponseDto>>.Failure(filterResult.Error);
+            }
+            else
+            {
+                filterDto = null; // Đưa về null chuẩn để Repository không chạy qua các block IF vô ích
             }
 
             // 3. Gọi Data Access Layer (I/O)
             var products = await repo.GetAllAsync(
                 paginationDto.PageNumber,
                 paginationDto.PageSize,
-                fillterDto!,
+                filterDto,
                 cancellationToken);
 
-            PagedResult<ProductResponseDto> pagedDtos = products.Map(product => new ProductResponseDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Rating = product.Rating,
-                BasePrice = product.BasePrice,
-                ImageUrls = product.ImageUrls,
-                Status = product.Status.ToString(),
-                Variants = product.Variants.Select(v => new VariantResponseDto
-                (
-                 Id: v.Id,
-                 Sku: v.Sku,
-                 Name: v.Name,
-                 CostPrice: v.CostPrice,
-                 SellPrice: v.SellPrice,
-                 ImageUrl: v.ImageUrl,
-                 Status: v.Status.ToString(),
-                 QuantityInStock: 10
-                )).ToArray()
-            });
+            var pagedDtos = products.Map(product => product.ToResponseDto());
 
-            // Sử dụng Implicit Conversion đã cấu hình trong class Result
             return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);
         }
         public async Task<Result<PagedResult<ProductResponseDto>>> GetProductOfShopAsync(
@@ -215,6 +208,32 @@ namespace api.Services.Products
                 cancellationToken);
 
             // 3. Mapping sạch sẽ qua Extension Method (O trong SOLID - Open/Closed)
+            var pagedDtos = pagedProducts.Map(product => product.ToResponseDto());
+
+            return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);
+        }
+
+        public async Task<Result<PagedResult<ProductResponseDto>>> SearchProductsAsync(
+        ProductSearchRequestDto request,
+        CancellationToken cancellationToken)
+        {
+            // 1. Fail Fast: Kiểm tra DTO hợp lệ
+            if (request == null)
+            {
+                return Result<PagedResult<ProductResponseDto>>.Failure(
+                    new Error("Search.Null", "Search request parameters are required.", ErrorType.BadRequest));
+            }
+
+            var validationResult = request.ValidData();
+            if (validationResult.IsFailure)
+            {
+                return Result<PagedResult<ProductResponseDto>>.Failure(validationResult.Error);
+            }
+
+            // 2. Thực thi I/O tại Repository
+            var pagedProducts = await repo.SearchProductsAsync(request, cancellationToken);
+
+            // 3. Mapping sạch sẽ sang DTO thông qua Extension Method đã viết ở phiên làm việc trước
             var pagedDtos = pagedProducts.Map(product => product.ToResponseDto());
 
             return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);

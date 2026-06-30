@@ -40,7 +40,7 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationRequestDto paginationDto, [FromQuery] FilterProductQueryDto filterDto, CancellationToken cancellationToken = default)
         {
-            var products = await _service.GetAllProducts(paginationDto, filterDto, cancellationToken);
+            var products = await _service.GetAllProductsAsync(paginationDto, filterDto, cancellationToken);
             return HandleResult(products);
         }
         //[HttpGet("/category/{categoryId}")]
@@ -66,7 +66,15 @@ namespace api.Controllers
             var products = await _service.GetProductOfShopAsync(shopId, paginationDto, param, cancellationToken);
             return HandleResult(products);
         }
-    
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] ProductSearchRequestDto request, CancellationToken cancellationToken)
+        {
+            var result = await _service.SearchProductsAsync(request, cancellationToken);
+
+            return HandleResult(result);
+        }
+
     }
     public record ProductQueryDto(string? detail);
 

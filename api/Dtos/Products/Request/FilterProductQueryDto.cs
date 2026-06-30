@@ -5,14 +5,27 @@ namespace api.Dtos.Products.Request
 {
     public record FilterProductQueryDto(
         string? Name,
-        Guid? CategoryId,
         decimal? MinPrice,
         decimal? MaxPrice,
         decimal? MinRating,
         decimal? MaxRating,
+        string? ShopName,
+        string? Category,
         ProductStatus? Status
     )
+
     {
+        public bool IsEmpty()
+        {
+            return string.IsNullOrWhiteSpace(Name) &&
+                   string.IsNullOrWhiteSpace(ShopName) &&
+                   string.IsNullOrWhiteSpace(Category) &&
+                   !MinPrice.HasValue &&
+                   !MaxPrice.HasValue &&
+                   !MinRating.HasValue &&
+                   !MaxRating.HasValue &&
+                   !Status.HasValue;
+        }
         internal Result<FilterProductQueryDto> ValidData()
         {
             // Fail Fast: Kiểm tra tính hợp lý của khoảng giá

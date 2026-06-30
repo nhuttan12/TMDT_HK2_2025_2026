@@ -103,19 +103,25 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 			resolve({
 				invoiceId: invoiceId, // Tự động lấy ID được truyền vào
 				createdAt: '2026-03-12T10:20:00',
-				paidAt: '2026-03-12T10:22:00',
 				status: 'paid',
-				shippingStatus: 'shipping',
-				paymentMethod: 'VNPAY',
-				recipientName: 'Nguyễn Văn A',
-				recipientPhone: '0901234567',
-				address: 'Quận 1, TP Hồ Chí Minh',
-				trackingCode: 'GHN845923452',
-				estimatedDelivery: '2026-03-17T00:00:00',
+				payment: {
+					paidAt: '2026-03-12T10:22:00',
+					paymentMethod: 'VNPAY',
+				},
+				delivery: {
+					shippingStatus: 'shipping',
+					recipientName: 'Nguyễn Văn A',
+					recipientPhone: '0901234567',
+					address: 'Quận 1, TP Hồ Chí Minh',
+					trackingCode: 'GHN845923452',
+					estimatedDelivery: '2026-03-17T00:00:00',
+					// Phí vận chuyển hàng dễ vỡ
+					shippingFee: 40000,
+				},
 				items: [
 					{
 						productId: 101,
-                        variantId: 101,
+						variantId: 101,
 						productName: 'Bể Terrarium Trụ Tròn Size M',
 						imageUrl:
 							'https://bizweb.dktcdn.net/100/181/287/files/ho-kho-bau.jpg?v=1694160724978',
@@ -127,7 +133,7 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 					},
 					{
 						productId: 102,
-                        variantId: 102,
+						variantId: 102,
 						productName: 'Cây Cẩm Nhung Fittonia Đỏ (Chậu Mini)',
 						imageUrl:
 							'https://lanhatreehouse.com/wp-content/uploads/2024/06/cay-cam-nhung-la-do.jpg',
@@ -139,7 +145,7 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 					},
 					{
 						productId: 103,
-                        variantId: 103,
+						variantId: 103,
 						productName: 'Đèn LED Quang Phổ Chiếu Sáng Bể Kính',
 						imageUrl:
 							'https://images.congtydenled.com.vn/haledco/2022/03/den-led-ho-ca-mini.jpg',
@@ -152,8 +158,7 @@ export async function getUserInvoiceDetailByInvoiceId(invoiceId: number): Promis
 				],
 				// Tổng cộng tiền hàng (550k + 70k + 200k)
 				subTotal: 820000,
-				// Phí vận chuyển hàng dễ vỡ
-				shippingFee: 40000,
+
 				// Tổng giảm giá (50k bể + 20k đèn + 30k voucher áp dụng thêm)
 				discountAmount: 100000,
 				// Tổng thanh toán (820k + 40k - 100k)
