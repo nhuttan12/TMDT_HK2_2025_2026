@@ -246,7 +246,7 @@ namespace api.Services.Invoices
                 CouponId = invoice.CouponId,
                 TotalAmount = invoice.TotalAmount,
                 FinalAmount = invoice.FinalAmount,
-                Status = invoice.Status,
+                Status = invoice.Status.ToString(),
                 CreatedAt = invoice.CreatedAt,
                 UpdatedAt = invoice.UpdatedAt,
 

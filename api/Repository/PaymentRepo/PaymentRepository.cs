@@ -8,7 +8,7 @@ namespace api.Repository.PaymentRepo
     public interface IPaymentRepository
     {
         Task<Invoice?> GetInvoiceByIdAsync(Guid invoiceId);
-        Task<Payment?> GetPendingPaymentByInvoiceIdAsync(Guid invoiceId);
+        Task<Payment?> GetUnpaidPaymentByInvoiceIdAsync(Guid invoiceId);
         Task AddPaymentAsync(Payment payment);
         Task UpdateInvoiceAsync(Invoice invoice);
         Task SaveChangesAsync();
@@ -21,11 +21,11 @@ namespace api.Repository.PaymentRepo
             return await context.Invoices.FirstOrDefaultAsync(i => i.Id == invoiceId);
         }
 
-        public async Task<Payment?> GetPendingPaymentByInvoiceIdAsync(Guid invoiceId)
+        public async Task<Payment?> GetUnpaidPaymentByInvoiceIdAsync(Guid invoiceId)
         {
             return await context.Payments.FirstOrDefaultAsync(p =>
                 p.InvoiceId == invoiceId &&
-                p.PaymentStatus == PaymentStatus.Pending);
+                p.PaymentStatus == PaymentStatus.Unpaid);
         }
 
         public async Task AddPaymentAsync(Payment payment)

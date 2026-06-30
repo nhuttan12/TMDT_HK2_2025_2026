@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260630042228_init")]
-    partial class init
+    [Migration("20260630121448_FixInvoicePaymentRelationship")]
+    partial class FixInvoicePaymentRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,7 +198,8 @@ namespace api.Migrations
                         .HasColumnName("sku");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset(7)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -407,9 +408,15 @@ namespace api.Migrations
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("note");
 
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ShopId");
 
                     b.ToTable("GOODS_ISSUES", (string)null);
                 });
@@ -477,6 +484,10 @@ namespace api.Migrations
                         .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("note");
 
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shop_id");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -492,6 +503,8 @@ namespace api.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
 
                     b.HasIndex("SupplierId");
 
@@ -766,15 +779,21 @@ namespace api.Migrations
                     b.Property<decimal>("FinalAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("payment_id");
+
                     b.Property<Guid?>("ShopId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("shop_id");
 
                     b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint")
+                        .HasColumnName("status");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("total_amount");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
@@ -802,22 +821,28 @@ namespace api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("invoice_id");
 
                     b.Property<decimal>("PriceAtPurchase")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("price_at_purchase");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_id");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
 
                     b.Property<Guid>("VariantId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("variant_id");
 
                     b.HasKey("Id");
 
@@ -853,19 +878,25 @@ namespace api.Migrations
                     b.Property<Guid>("InvoiceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
+                    b.Property<byte>("PaymentMethod")
+                        .HasColumnType("tinyint")
                         .HasColumnName("PaymentMethod");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
+                    b.Property<byte>("PaymentStatus")
+                        .HasColumnType("tinyint")
                         .HasColumnName("Status");
+
+                    b.Property<string>("RawResponse")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RawResponse");
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("varchar(255)")
                         .HasColumnName("TransactionId");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
 
@@ -1101,9 +1132,9 @@ namespace api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("rating");
 
-                    b.Property<string>("ShopLogos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ShopLogo")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("shop_logo");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1116,7 +1147,6 @@ namespace api.Migrations
                         .HasColumnName("system_status");
 
                     b.Property<string>("TaxCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("tax_code");
 
@@ -1293,10 +1323,10 @@ namespace api.Migrations
                         .HasColumnName("category_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset")
+                        .HasColumnType("datetimeoffset(7)")
                         .HasColumnName("created_at");
 
-                    b.PrimitiveCollection<string>("ImageUrls")
+                    b.Property<string>("ImageUrls")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("image_urls");
@@ -1325,7 +1355,7 @@ namespace api.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset")
+                        .HasColumnType("datetimeoffset(7)")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
@@ -1333,7 +1363,8 @@ namespace api.Migrations
                     b.HasIndex("CategoryId")
                         .HasDatabaseName("IX_Products_CategoryId");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Products_Name");
 
                     b.HasIndex("ShopId")
                         .HasDatabaseName("IX_Products_ShopId");
@@ -1454,7 +1485,15 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("GoodsIssues")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("api.Models.Inventory.GoodsIssueDetail", b =>
@@ -1478,11 +1517,19 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Inventory.GoodsReceipt", b =>
                 {
+                    b.HasOne("api.Models.Shops.Shop", "Shop")
+                        .WithMany("GoodsReceipts")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("api.Models.Inventory.Supplier", "Supplier")
                         .WithMany("GoodsReceipts")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Shop");
 
                     b.Navigation("Supplier");
                 });
@@ -1612,9 +1659,9 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Payments.Payment", b =>
                 {
                     b.HasOne("api.Models.Orders.Invoice", "Invoice")
-                        .WithOne()
+                        .WithOne("Payment")
                         .HasForeignKey("api.Models.Payments.Payment", "InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Invoice");
@@ -1729,12 +1776,12 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.model.Products.Product", b =>
                 {
-                    b.HasOne("api.Models.Category.Category", null)
+                    b.HasOne("api.Models.Category.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_Products_Categories");
+                        .HasConstraintName("FK_Products_Categories_CategoryId");
 
                     b.HasOne("api.Models.Shops.Shop", "Shop")
                         .WithMany("Products")
@@ -1743,12 +1790,7 @@ namespace api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Products_Shops_ShopId");
 
-                    b.HasOne("api.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_Products_Users_ShopId");
+                    b.Navigation("Category");
 
                     b.Navigation("Shop");
                 });
@@ -1797,6 +1839,9 @@ namespace api.Migrations
                     b.Navigation("Delivery");
 
                     b.Navigation("Items");
+
+                    b.Navigation("Payment")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>
@@ -1815,6 +1860,10 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Shops.Shop", b =>
                 {
+                    b.Navigation("GoodsIssues");
+
+                    b.Navigation("GoodsReceipts");
+
                     b.Navigation("Invoices");
 
                     b.Navigation("Products");

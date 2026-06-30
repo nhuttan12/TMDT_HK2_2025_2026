@@ -66,7 +66,7 @@ namespace api.Services.Payment
 
             // Lấy thực thể từ Database
             var invoice = await paymentRepository.GetInvoiceByIdAsync(invoiceId);
-            var payment = await paymentRepository.GetPendingPaymentByInvoiceIdAsync(invoiceId);
+            var payment = await paymentRepository.GetUnpaidPaymentByInvoiceIdAsync(invoiceId);
 
             if (invoice == null || payment == null)
                 throw new Exception("Không tìm thấy dữ liệu thanh toán đang chờ xử lý.");

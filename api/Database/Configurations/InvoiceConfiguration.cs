@@ -85,10 +85,11 @@ namespace api.Database.Configurations
                 .HasForeignKey(i => i.ShopId)
                 .OnDelete(DeleteBehavior.SetNull); // Nếu xóa Shop, giữ lại Invoice nhưng set ShopId thành Null
 
-            builder.HasOne(i => i.Payment)
-                .WithOne(p => p.Invoice)
-                .HasForeignKey<Invoice>(i => i.PaymentId)
-                .OnDelete(DeleteBehavior.SetNull);
+            //builder.HasOne(i => i.Payment)
+            //    .WithOne(p => p.Invoice)
+            //    .HasForeignKey<Invoice>(i => i.PaymentId)
+            //    .OnDelete(DeleteBehavior.SetNull);
+
 
             //builder.HasOne(i => i.Delivery)
             //    .WithOne(d => d.Invoice)

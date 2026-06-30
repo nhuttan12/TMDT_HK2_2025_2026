@@ -2,63 +2,21 @@
 {
     public enum InvoiceStatus : byte
     {
-        /// <summary>
-        /// Chờ thanh toán (Unpaid). 
-        /// Khách hàng đã tạo đơn nhưng chưa thanh toán qua cổng thanh toán (VNPay, Momo...).
-        /// Nếu hết thời gian quy định (VD: 30 phút), hệ thống sẽ tự động chuyển sang Cancelled.
-        /// </summary>
-        AwaitingPayment = 1, // Luôn bắt đầu từ 1. Số 0 nên dành cho trạng thái Unknown/Lỗi.
+        Unknown = 0,
 
-        /// <summary>
-        /// Chờ xác nhận (Pending). 
-        /// Đã thanh toán thành công hoặc khách chọn thanh toán khi nhận hàng (COD).
-        /// Chờ hệ thống hoặc người bán xác nhận có đủ hàng để xử lý hay không.
-        /// </summary>
-        Pending = 2,
+        /// <summary> Đơn hàng mới tạo, hệ thống ghi nhận nhưng chưa bắt đầu xử lý đóng gói (Có thể đang chờ thanh toán hoặc chờ duyệt). </summary>
+        Pending = 1,
 
-        /// <summary>
-        /// Chờ lấy hàng / Đang chuẩn bị hàng (Processing / To Ship). 
-        /// Người bán đã xác nhận đơn, đang đóng gói và chờ Đơn vị vận chuyển (ĐVVC) đến lấy.
-        /// </summary>
-        Processing = 3,
+        /// <summary> Người bán đã xác nhận và đang trong luồng vận hành (Đóng gói, giao cho ĐVVC, đang luân chuyển). </summary>
+        Processing = 2,
 
-        /// <summary>
-        /// Đang giao hàng (Shipped / Shipping). 
-        /// ĐVVC đã lấy hàng từ người bán và đang trên đường giao cho người mua.
-        /// </summary>
-        Shipped = 4,
+        /// <summary> Khách đã nhận hàng thành công, hết thời gian khiếu nại, dòng tiền đóng lại (Tiền chuyển về ví người bán). </summary>
+        Completed = 3,
 
-        /// <summary>
-        /// Giao hàng thành công (Delivered). 
-        /// Shipper đã giao tới tay khách hàng. 
-        /// LƯU Ý: Ở Shopee, trạng thái này CHƯA KẾT THÚC. Tiền vẫn đang bị giam (Escrow), khách có 3-7 ngày để khiếu nại.
-        /// </summary>
-        Delivered = 5,
+        /// <summary> Đơn bị hủy (Do khách, do shop hết hàng, hoặc do hết hạn thanh toán). </summary>
+        Cancelled = 4,
 
-        /// <summary>
-        /// Hoàn thành (Completed). 
-        /// Khách hàng bấm "Đã nhận được hàng" hoặc hết thời hạn khiếu nại.
-        /// Lúc này, hệ thống mới kích hoạt luồng đối soát và cộng tiền vào ví người bán.
-        /// </summary>
-        Completed = 6,
-
-        /// <summary>
-        /// Đã hủy (Cancelled). 
-        /// Bị hủy bởi người mua, người bán (hết hàng), hoặc hệ thống (hết hạn thanh toán).
-        /// </summary>
-        Cancelled = 7,
-
-        /// <summary>
-        /// Trả hàng / Hoàn tiền (Returned / Refunded). 
-        /// Xảy ra sau khi Delivered, khách hàng khiếu nại (hàng lỗi, sai mẫu) và được chấp nhận hoàn tiền.
-        /// </summary>
-        Returned = 8,
-
-        /// <summary>
-        /// Giao hàng thất bại (Delivery Failed). 
-        /// Shipper gọi khách 3 lần không được, hoặc khách từ chối nhận hàng (Bom hàng).
-        /// Hàng sẽ được hoàn quy trình trả về lại cho người bán.
-        /// </summary>
-        DeliveryFailed = 9
+        /// <summary> Khách khiếu nại thành công, đơn hàng bị đóng lại để hoàn tiền/thu hồi hàng. </summary>
+        Returned = 5
     }
 }

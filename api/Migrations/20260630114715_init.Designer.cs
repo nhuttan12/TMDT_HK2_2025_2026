@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Database;
 
@@ -11,9 +12,11 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260630114715_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -780,6 +783,9 @@ namespace api.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("payment_id");
 
+                    b.Property<Guid>("PaymentId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("ShopId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("shop_id");
@@ -803,6 +809,8 @@ namespace api.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentId1");
 
                     b.HasIndex("ShopId");
 
@@ -1620,6 +1628,12 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
+                    b.HasOne("api.Models.Payments.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("api.Models.Shops.Shop", "Shop")
                         .WithMany("Invoices")
                         .HasForeignKey("ShopId")
@@ -1630,6 +1644,8 @@ namespace api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Payment");
 
                     b.Navigation("Shop");
 
@@ -1656,7 +1672,7 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Payments.Payment", b =>
                 {
                     b.HasOne("api.Models.Orders.Invoice", "Invoice")
-                        .WithOne("Payment")
+                        .WithOne()
                         .HasForeignKey("api.Models.Payments.Payment", "InvoiceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1836,9 +1852,6 @@ namespace api.Migrations
                     b.Navigation("Delivery");
 
                     b.Navigation("Items");
-
-                    b.Navigation("Payment")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>

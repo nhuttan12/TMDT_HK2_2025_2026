@@ -23,7 +23,7 @@ namespace api.Services.Users
         public Task<Result<UserInfoDTO>> UpdateAsync(Guid id, UserUpdateDto userUpdateDto, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetByIdAsync(Guid id, CancellationToken ct = default);
         public ValueTask<Result<bool>> IsExistByEmailAsync(string email, CancellationToken ct = default);
-        public Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default);
+        public Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(PaginationRequestDto query, CancellationToken ct = default);
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
@@ -66,7 +66,7 @@ namespace api.Services.Users
         {
             throw new NotImplementedException();
         }
-        public async Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(UserParameters query, CancellationToken ct = default)
+        public async Task<Result<PagedResult<UserInfoDTO>>> GetAllAsync(PaginationRequestDto query, CancellationToken ct = default)
         {
             // 1. Validation (Có thể đưa vào FluentValidation)
             if (query.PageNumber <= 0 || query.PageSize <= 0)

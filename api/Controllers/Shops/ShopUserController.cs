@@ -1,4 +1,5 @@
-﻿using api.Dtos.Shops.Request;
+﻿using api.Dtos.Common;
+using api.Dtos.Shops.Request;
 using api.Services.Shops;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,7 @@ namespace api.Controllers.Shops
 
             return HandleResult(result);
         }
-        [HttpPost("list-name")]
+        [HttpGet("list-name")]
         public async Task<IActionResult> GetListNameShop(
            CancellationToken cancellationToken)
         {
@@ -29,7 +30,14 @@ namespace api.Controllers.Shops
 
             return HandleResult(result);
         }
+        [HttpGet()]
+        public async Task<IActionResult> GetListShop(
+           [FromQuery] PaginationRequestDto paginationDto,
+           CancellationToken cancellationToken)
+        {
+            var result = await shopUserService.GetListShop(paginationDto,cancellationToken);
 
-
+            return HandleResult(result);
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace api.Models.Payments
                 Amount = amount,
                 PaymentMethod = paymentMethod,
                 InformationCard = informationCard?.Trim(),
-                PaymentStatus = PaymentStatus.Pending,
+                PaymentStatus = PaymentStatus.Unpaid,
                 CreatedAt = DateTimeOffset.UtcNow
             };
         }
@@ -65,7 +65,7 @@ namespace api.Models.Payments
 
         public void FailPayment(string? rawResponse = null)
         {
-            if (PaymentStatus != PaymentStatus.Pending) return; // Chỉ fail khi đang pending
+            if (PaymentStatus != PaymentStatus.Unpaid) return; // Chỉ fail khi đang pending
 
             if (rawResponse != null) RawResponse = rawResponse;
             PaymentStatus = PaymentStatus.Failed;
