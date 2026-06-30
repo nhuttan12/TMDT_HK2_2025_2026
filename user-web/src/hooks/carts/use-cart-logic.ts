@@ -16,7 +16,7 @@ export interface CartLogicReturn {
 	handleToggleSelectAll: () => void;
 	handleUpdateQuantity: (id: string, newQuantity: number) => void;
 	handleRemoveItem: (id: string) => void;
-	handleCheckout: () => void;
+	handlePreviewOrder: () => void;
 	handleRedirectProductDetail: (id: string) => void;
 }
 
@@ -76,13 +76,13 @@ export function useCartLogic(cartItems: CartItem[]): CartLogicReturn {
 		}
 	};
 
-	const handleCheckout = (): void => {
+	const handlePreviewOrder = (): void => {
 		const selectedItems: CartItem[] = cartItems.filter((item: CartItem): boolean =>
 			selectedIds.includes(item.productId),
 		);
 
 		setCheckoutItems(selectedItems);
-		router.push('/checkout');
+		router.push('/order-preview');
 	};
 
 	const handleRedirectProductDetail = (productId: string): void => {
@@ -96,7 +96,7 @@ export function useCartLogic(cartItems: CartItem[]): CartLogicReturn {
 		handleToggleSelectAll,
 		handleUpdateQuantity,
 		handleRemoveItem,
-		handleCheckout,
+		handlePreviewOrder,
 		handleRedirectProductDetail,
 	};
 }

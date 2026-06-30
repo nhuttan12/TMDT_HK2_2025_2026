@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 export interface OrderLogicReturn {
 	items: CartItem[];
 	total: number;
-	handleOrder: () => void;
+	handleCheckout: () => void;
 	handleBack: () => void;
 }
 
@@ -24,13 +24,13 @@ export function useOrderPreviewLogic(): OrderLogicReturn {
 		);
 	}, [items]);
 
-	const handleOrder = (): void => {
-		router.push('/orders/success');
+	const handleCheckout = (): void => {
+		router.push('/checkout');
 	};
 
 	const handleBack = (): void => {
 		router.back();
 	};
 
-	return { items, total, handleOrder, handleBack };
+	return { items, total, handleCheckout, handleBack };
 }

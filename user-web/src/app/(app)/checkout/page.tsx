@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { JSX } from 'react';
-import { CheckoutPaypal } from './_components/check-out-paypal';
+import CheckoutPaypal from './_components/check-out-paypal';
 
 export const metadata: Metadata = {
 	title: 'Thanh toán sản phẩm',
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function OrderReviewPage(): JSX.Element {
 	// 1. Dữ liệu tĩnh giả định tổng tiền của hóa đơn (VND)
 	const totalVND = 500000;
-
+    
 	// 2. Định nghĩa tỷ giá hối đoái (Ví dụ: 1 USD = 25,000 VND)
 	// Trong thực tế, bạn nên gọi API để lấy tỷ giá realtime hoặc cấu hình trong database
 	const exchangeRate = 25000;

@@ -25,7 +25,7 @@ export default function OrderPreviewUI({
 	recipientInfo,
 	paymentInfo,
 	handleBack: onBack,
-	handleOrder: onRedirectToOrder,
+	handleCheckout,
 }: OrderPreviewUIProps): JSX.Element {
 	if (!items.length) {
 		return (
@@ -144,7 +144,7 @@ export default function OrderPreviewUI({
 					Quay lại giỏ hàng
 				</Button>
 
-				<Button onClick={onRedirectToOrder}>Xác nhận đặt hàng</Button>
+				<Button onClick={handleCheckout}>Xác nhận đặt hàng</Button>
 			</div>
 		</div>
 	);

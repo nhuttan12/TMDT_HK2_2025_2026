@@ -1,52 +1,105 @@
 'use client';
 
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { CreateOrderActions, OnApproveActions } from '@paypal/paypal-js';
-import { JSX } from 'react';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useState } from "react";
+// import { useRouter } from "next/navigation"; // Dùng nếu muốn chuyển trang sau khi thanh toán
 
-interface CheckoutPaypalProps {
-	totalAmount: string;
+interface Props {
+    invoiceId: string; // Truyền mã hóa đơn (Guid) từ trang cha vào đây
 }
 
-export function CheckoutPaypal({ totalAmount }: CheckoutPaypalProps): JSX.Element {
-	const initialOptions = {
-		clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
-		currency: 'USD', // Sandbox thường chuộng USD để test
-		intent: 'capture',
-	};
+export default function PayPalCheckoutButton({ invoiceId }: Props) {
+    const [message, setMessage] = useState("");
+    // const router = useRouter(); 
 
-	const handleCreateOrder = (data: Record<string, unknown>, actions: CreateOrderActions): Promise<string> => {
-		return actions.order.create({
-			purchase_units: [
-				{
-					amount: {
-						currency_code: 'USD',
-						value: totalAmount,
-					},
-				},
-			],
-		});
-	};
+    // Cấu hình khởi tạo PayPal
+    const initialOptions = {
+        "clientId": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
+        currency: "USD",
+        intent: "capture",
+    };
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleApprove = (data: Record<string, unknown>, actions: any): Promise<void> => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return actions.order.capture().then((details: any) => {
-			console.log('Thanh toán thành công bởi:', details.payer.name.given_name);
-			alert('Thanh toán thành công!');
-		});
-	};
+    return (
+        <div className="w-full max-w-md mx-auto mt-6">
+            <PayPalScriptProvider options={initialOptions}>
+                <PayPalButtons
+                    style={{ layout: "vertical", shape: "rect", color: "blue" }}
+                    
+                    // BƯỚC 1: Gọi .NET Backend để khởi tạo giao dịch
+                    createOrder={async () => {
+                        try {
+                            setMessage("");
+                            // Đổi URL port khớp với port API .NET của bạn (thường là 5001 hoặc 7xxx)
+                            const response = await fetch("https://localhost:7001/api/payment/create", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ invoiceId: invoiceId }) // Payload khớp với CheckoutRequest ở Backend
+                            });
 
-	return (
-		<div className='w-full max-w-md rounded-lg border bg-background p-6 shadow-sm'>
-			<h2 className='mb-4 text-xl font-bold'>Thanh toán an toàn</h2>
-			<PayPalScriptProvider options={initialOptions}>
-				<PayPalButtons
-					createOrder={handleCreateOrder}
-					onApprove={handleApprove}
-					style={{ layout: 'vertical', shape: 'rect' }}
-				/>
-			</PayPalScriptProvider>
-		</div>
-	);
+                            const data = await response.json();
+
+                            if (!response.ok) {
+                                throw new Error(data.message || "Không thể tạo đơn hàng PayPal.");
+                            }
+
+                            // Trả về orderId do API .NET (PayPalService) tạo ra
+                            // Thư viện sẽ lấy mã này để tự động bật Popup của PayPal
+                            return data.orderId; 
+                        } catch (error: any) {
+                            console.error("Lỗi Create Order:", error);
+                            setMessage(error.message);
+                            throw error;
+                        }
+                    }}
+
+                    // BƯỚC 2: PayPal gọi hàm này khi khách đã login popup và ấn Approve (Đồng ý)
+                    onApprove={async (data, actions) => {
+                        try {
+                            setMessage("Đang xử lý thanh toán, vui lòng đợi...");
+
+                            // data.orderID lúc này chính là paypalOrderId
+                            const response = await fetch(`https://localhost:7001/api/payment/capture/${data.orderID}`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" }
+                            });
+
+                            const result = await response.json();
+
+                            if (!response.ok) {
+                                throw new Error(result.message || "Lỗi khi chốt thanh toán với hệ thống.");
+                            }
+
+                            // Thành công (Database đã update Paid)
+                            setMessage("Thanh toán thành công! Cảm ơn bạn.");
+                            
+                            // Tùy chọn: Chuyển hướng người dùng về trang cảm ơn
+                            // router.push(`/checkout/success?invoiceId=${invoiceId}`);
+                            
+                        } catch (error: any) {
+                            console.error("Lỗi Capture Order:", error);
+                            setMessage("Thanh toán thất bại: " + error.message);
+                        }
+                    }}
+
+                    // Xử lý khi khách hàng đóng cửa sổ Popup ngang chừng
+                    onCancel={() => {
+                        setMessage("Bạn đã hủy phiên thanh toán.");
+                    }}
+
+                    // Xử lý khi có lỗi nội tại từ script của PayPal
+                    onError={(err) => {
+                        console.error("PayPal Script Error:", err);
+                        setMessage("Lỗi kết nối cổng thanh toán. Vui lòng thử lại sau.");
+                    }}
+                />
+            </PayPalScriptProvider>
+
+            {/* Hiển thị thông báo trạng thái */}
+            {message && (
+                <div className="mt-4 p-3 text-center rounded bg-gray-50 text-gray-800 text-sm font-medium">
+                    {message}
+                </div>
+            )}
+        </div>
+    );
 }
