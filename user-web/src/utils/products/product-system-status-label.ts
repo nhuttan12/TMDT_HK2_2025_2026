@@ -1,7 +1,7 @@
 import { ProductSystemStatus } from "@/types/products/admin/variant/ProductSystemStatus";
 
 const PRODUCT_SYSTEM_STATUS_LABEL: Record<ProductSystemStatus, string> = {
-    pending_approval: 'Chờ duyệt',
+	pending_approval: 'Đang Đợi Duyệt',
     approved: 'Đã duyệt',
     rejected: 'Từ chối',
     banned: 'Bi khoá',

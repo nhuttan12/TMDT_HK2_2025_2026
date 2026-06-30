@@ -71,7 +71,7 @@ public class Address
 
     public void SetAsUsed(bool isUsed)
     {
-        IsUsed = isUsed;
+        this.IsUsed = isUsed;
     }
    
 }

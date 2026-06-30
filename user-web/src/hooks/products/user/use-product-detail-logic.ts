@@ -11,6 +11,7 @@ import { CartService } from '@/services/carts/cart-service';
 import apiClient from '@/lib/api-client';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
 import { useQueryClient } from '@tanstack/react-query';
+import { createInvoiceRequestBody } from '@/types/invoices/user/InvoiceCreateDto';
 
 export interface ProductDetailLogicReturn {
 	quantity: number;
@@ -39,7 +40,7 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 	const [quantity, setQuantity] = useState<number>(
 		defaultVariant && defaultVariant.stock === 0 ? 0 : 1,
 	);
-
+	const cartService = new CartService(apiClient);
 	const router = useRouter();
 	const addItem = useCartStore((state) => state.addToCart);
 	const setCheckoutItems = useCheckoutStore((state) => state.setItems);
@@ -110,7 +111,6 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 			return;
 		}
 		try{
-			const cartService = new CartService(apiClient);
 			await cartService.addToCart(item.productId, item.quantity);
 			await queryClient.invalidateQueries({
 				queryKey: ['cart-items'], // Phải trùng khớp với key trong useCartQuery của bạn
@@ -133,8 +133,18 @@ export function useProductDetailLogic(product: ProductDetail): ProductDetailLogi
 			alert('Sản phẩm đã hết hàng');
 			return;
 		}
+
+		const selectedItems = [item];
+
+		const delivery = {
+			address: '123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+			receiverName: 'Nguyễn Văn A',
+			shippingFee: 50000,
+		};
+		const pram = createInvoiceRequestBody(selectedItems, delivery);
+		const invoiceId =  await cartService.CreateInvoice(pram);
 		setCheckoutItems([item]);
-		router.push('/order-preview');
+		router.push(`/order-preview/${invoiceId}`);
 	};
 
 	return {

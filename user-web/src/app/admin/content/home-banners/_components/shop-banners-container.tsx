@@ -35,7 +35,6 @@ export function ShopBannersContainer({ initialBanners }: ShopBannerContainerProp
 		updateMutation.mutate(payload, {
 			onSuccess: (): void => {
 				// Thành công: Có thể show Toast success, Query sẽ tự invalidate nếu setup
-				console.log('Lưu thành công');
 			},
 			onError: (error: Error): void => {
 				// Thất bại: Hiển thị lỗi ra UI

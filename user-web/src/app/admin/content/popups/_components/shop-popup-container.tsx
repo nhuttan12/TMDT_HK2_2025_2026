@@ -37,7 +37,6 @@ export function ShopPopupContainer({ initialPopup }: ShopPopupContainerProps): J
 
 			updateMutation.mutate(payload, {
 				onSuccess: (): void => {
-					console.log('Lưu Popup thành công');
 				},
 				onError: (error: Error): void => {
 					setErrorMsg(error.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');

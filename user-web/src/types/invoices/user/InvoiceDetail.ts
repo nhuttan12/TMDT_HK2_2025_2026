@@ -86,7 +86,7 @@ export interface BackEndUserInvoiceDetail {
 	items: BackEndInvoiceItem[];
 	totalAmount: number;
 	finalAmount: number;
-	status: number; // Ví dụ: 2 tương ứng với trạng thái nào đó trong InvoiceStatus
+	status: string; // Ví dụ: 2 tương ứng với trạng thái nào đó trong InvoiceStatus
 	recipientName: string;
 	recipientPhone: string;
 	address: string;

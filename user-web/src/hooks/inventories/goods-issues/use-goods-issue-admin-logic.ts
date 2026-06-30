@@ -37,7 +37,6 @@ export function useGoodsIssueAdminLogic(): GoodsIssueAdminLogicReturn {
 
 	const handleExecuteDelete = (): void => {
 		if (deleteModal.selectedItem) {
-			console.log('Thực hiện gọi API xóa ID:', deleteModal.selectedItem.id);
 			// TODO: Gọi Mutation Hook API xóa ở đây, sau đó invalidate query
 			deleteModal.closeConfirm();
 		}

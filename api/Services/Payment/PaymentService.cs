@@ -13,7 +13,6 @@ namespace api.Services.Payment
     }
 
     public class PaymentService(
-        ILGenerator iLGenerator,
         IPaymentRepository paymentRepository,
         PayPalService payPalService) : IPaymentService // Inject thêm PayPalService vào đây
     {
@@ -22,7 +21,7 @@ namespace api.Services.Payment
         {
             // Lấy hóa đơn
             var invoice = await paymentRepository.GetInvoiceByIdAsync(invoiceId);
-            if (invoice == null)
+            if (invoice is null)
                 throw new Exception("Không tìm thấy hóa đơn.");
 
             if (invoice.Status != api.Models.Enums.InvoiceStatus.Pending)

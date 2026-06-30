@@ -33,7 +33,9 @@ apiClient.interceptors.request.use(
 		const method: string = config.method?.toUpperCase() || '';
 		if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
 		}
-
+		console.log('=== CHI TIẾT REQUEST GỬI ĐI ===');
+		console.log(`[${config.method?.toUpperCase()}] ${config.baseURL}${config.url}`);
+		console.log('Headers:', config.headers);
 		return config;
 	},
 	(error: AxiosError): Promise<never> => {

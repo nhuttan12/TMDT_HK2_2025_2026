@@ -898,9 +898,7 @@ export const getProductDetailById = async (productId: string): Promise<ProductDe
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return getProductDetailByIdCraw(productId);
 		}
-		const res = mapProductDetailBeToFe(response.data.data);
-		console.log(res);
-		return res;
+		return  mapProductDetailBeToFe(response.data.data);
 	} catch (error: unknown) {
 		return getProductDetailByIdCraw(productId);
 	}
