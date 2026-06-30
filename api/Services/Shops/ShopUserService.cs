@@ -1,4 +1,5 @@
 ﻿using api.Dtos.Shops.Request;
+using api.Dtos.Shops.Response;
 using api.Models;
 using api.Repository.Shops;
 using api.Services.Auths;
@@ -9,10 +10,14 @@ namespace api.Services.Shops
 {
     public class ShopUserService(
         IShopUserRepository shopUserRepository,
-        IAuthService authService,
-        IPasswordHasher<User> passwordHasher
-        ) : IShopUserService
+        IAuthService authService) : IShopUserService
     {
+        public async Task<Result<ShopNameResponse>> GetListNameShop(CancellationToken cancellationToken)
+        {
+            var list = await shopUserRepository.GetListNameShop(cancellationToken);
+            return Result<ShopNameResponse>.Success(list);
+        }
+
         public async Task<Result<Guid>> RegisterShopAsync(ShopRegistrationRequest request, CancellationToken cancellationToken)
         {
             var dummyUser = new User { Email = request.Email };

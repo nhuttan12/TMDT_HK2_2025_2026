@@ -1,10 +1,12 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Products.Request;
 using api.Dtos.Products.Respones;
+using api.Dtos.Shops.Response;
 using api.Excepptions;
 using api.Models.Category;
 using api.Repository;
 using api.Repository.Categories;
+using api.Repository.Shops;
 using api.Utilities;
 using AutoMapper;
 
@@ -17,6 +19,7 @@ namespace api.Services.Categorys
         Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken);
         Task<Result<PagedResult<CategoryResponseDto>>> GetAllAsync(PaginationRequestDto pagination, CancellationToken cancellationToken);
         Task<Result<CategoryResponseDto>> GetByName(string name, CancellationToken cancellationToken);
+        Task<Result<CategoryNameResponse>> GetListNameCategory(CancellationToken cancellationToken);
     }
     public class CategoryService(ICategoryRepo _categoryRepo, IMapper _mapper, IUnitOfWork _unitOfWork) : ICategoryService
     {
@@ -122,5 +125,10 @@ namespace api.Services.Categorys
             return Result<CategoryResponseDto>.Success(_mapper.Map<CategoryResponseDto>(category));
         }
 
+        public async Task<Result<CategoryNameResponse>> GetListNameCategory(CancellationToken cancellationToken)
+        {
+            var list = await _categoryRepo.GetListNameCategory(cancellationToken);
+            return Result<CategoryNameResponse>.Success(list);
+        }
     }
 }

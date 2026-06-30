@@ -1,13 +1,26 @@
-﻿using api.Dtos.Shops.Request;
+﻿using api.Database;
+using api.Dtos.Shops.Request;
+using api.Dtos.Shops.Response;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace api.Repository.Shops
 {
     public class ShopUserRepository(
-        IStoredProcedureRepository storedProcedureRepository
+        IStoredProcedureRepository storedProcedureRepository,
+        MyAppDbContext context
         ) : IShopUserRepository
     {
+        public async Task<ShopNameResponse> GetListNameShop(CancellationToken cancellationToken)
+        {
+            var res = await context.Shops
+                .AsNoTracking()
+                .Select(s => new ShopNameDto(s.Id,s.Name))
+                .ToListAsync(cancellationToken);
+            return new ShopNameResponse(res);
+        }
+
         public async Task<Guid> RegisterShopAsync(ShopRegistrationRequest request, CancellationToken cancellationToken)
         {
             var outUserIdParam = new SqlParameter("@OutUserId", SqlDbType.UniqueIdentifier)

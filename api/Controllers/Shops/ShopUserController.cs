@@ -12,7 +12,7 @@ namespace api.Controllers.Shops
         IShopUserService shopUserService
         ) : BaseController
     {
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterShopAsync(
             [FromBody] ShopRegistrationRequest request,
             CancellationToken cancellationToken)
@@ -21,5 +21,15 @@ namespace api.Controllers.Shops
 
             return HandleResult(result);
         }
+        [HttpPost("list-name")]
+        public async Task<IActionResult> GetListNameShop(
+           CancellationToken cancellationToken)
+        {
+            var result = await shopUserService.GetListNameShop(cancellationToken);
+
+            return HandleResult(result);
+        }
+
+
     }
 }
