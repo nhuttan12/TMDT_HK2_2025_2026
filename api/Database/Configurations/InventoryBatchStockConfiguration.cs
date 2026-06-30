@@ -1,8 +1,10 @@
-﻿using api.Models.Inventory;
-using api.Models.Inventory.Enums;
+﻿using api.Models.Enums.Inventory;
+using api.Models.Enums.Shops;
+using api.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace api.Database.Configurations
 {
@@ -21,9 +23,9 @@ namespace api.Database.Configurations
                 .IsRequired()
                 .HasColumnName("remaining_quantity");
 
-            var typeConverter = new ValueConverter<InventoryBatchStockStatus, string>(
-                v => v.ToString().ToLower(),
-                v => (InventoryBatchStockStatus)Enum.Parse(typeof(InventoryBatchStockStatus), v, true)
+            var typeConverter = new ValueConverter<EInventoryBatchStockStatus, string>(
+                v => JsonNamingPolicy.SnakeCaseLower.ConvertName(v.ToString()),
+                v => (EInventoryBatchStockStatus)Enum.Parse(typeof(EInventoryBatchStockStatus), v.Replace("_", ""), true)
             );
             builder.Property(inventoryBatchStock => inventoryBatchStock.Status)
                 .HasConversion(typeConverter)

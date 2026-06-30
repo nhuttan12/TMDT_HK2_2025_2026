@@ -1,6 +1,4 @@
 import { GoodsIssueItem } from '@/types/inventories/issues/uis/GoodsIssueItem';
-import { GoodsIssueStatus } from '@/types/inventories/issues/uis/GoodsIssueStatus';
-import { GoodsIssuePartner } from '@/types/inventories/issues/uis/GoodsIssuePartner';
 import { GoodsIssueType } from './GoodsIssueType';
 
 export interface GoodsIssueDetail {
@@ -8,18 +6,7 @@ export interface GoodsIssueDetail {
 
 	code: string; // PXK-20260319-001
 
-	partner: GoodsIssuePartner;
-
 	type: GoodsIssueType;
-
-	warehouseID: string;
-
-	createdBy: string; // userId
-	createdByName?: string;
-
-	exportDate: string;
-
-	status: GoodsIssueStatus;
 
 	note?: string;
 
@@ -29,5 +16,4 @@ export interface GoodsIssueDetail {
 	totalAmount: number;
 
 	createdAt: string;
-	updatedAt: string;
 }

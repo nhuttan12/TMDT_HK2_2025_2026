@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 const emptyProduct: ProductDetailInfoAdmin = {
 	id: 0,
 	name: '',
-	slug: '',
 	description: '',
 	supplierName: '',
 

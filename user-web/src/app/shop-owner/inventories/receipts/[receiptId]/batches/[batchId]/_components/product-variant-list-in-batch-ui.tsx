@@ -30,7 +30,7 @@ export default function ProductVariantListInBatchUi({
 	handleRedirectToDetail,
 	handleRedirectToCreateBatchReceipt,
 }: ProductVariantListInBatchTableUIProps): JSX.Element {
-	const isView: boolean = mode === 'view';
+	const isView = mode === 'view';
 
 	return (
 		<div className='space-y-6'>
@@ -64,7 +64,7 @@ export default function ProductVariantListInBatchUi({
 					isView={isView}
 					onUpdate={handleUpdateItem}
 					onRemove={handleRemoveItem}
-					onRedirect={handleRedirectToDetail}
+					onRedirect={isView ? handleRedirectToDetail : undefined}
 				/>
 
 				{mode === 'create' && (

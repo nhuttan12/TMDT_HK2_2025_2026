@@ -18,7 +18,7 @@ export default function SupplierFormContainer({
 	supplier,
 	mode,
 }: SupplierFormContainerProps): JSX.Element {
-	const supplierFormLogic: UseSupplierFormLogicReturn = useSupplierFormLogic({
+	const supplierFormLogic = useSupplierFormLogic({
 		formType: mode,
 		supplier: supplier,
 	});

@@ -19,7 +19,7 @@ export const useWishlistLogic = ({
 	onRemoveFavorite,
 }: WishlistLogicProps): WishlistLogicReturn => {
 	// 1. Tích hợp hook phân trang của bạn
-	const { currentPage, changePage } = usePagination(totalPages);
+	const { currentPage, changePage } = usePagination();
 
 	// 2. Logic xử lý xoá khỏi danh sách yêu thích
 	const handleRemoveFavorite = useCallback(

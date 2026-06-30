@@ -4,7 +4,7 @@
     @Status BIT, 
     @StartAt DATETIMEOFFSET, 
     @EndAt DATETIMEOFFSET, 
-    @Products ProductPromotionType READONLY
+    @Products [udt_ProductPromotionType] READONLY
 AS
 BEGIN
     SET NOCOUNT ON;

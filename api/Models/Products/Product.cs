@@ -1,7 +1,4 @@
-﻿using api.Dtos.Products.Request;
-using api.Models;
-using api.Models.Category;
-using api.Models.Inventory;
+﻿using api.Models.Inventory;
 using api.Models.Products;
 using api.Models.Promotions;
 using api.Models.Shops;

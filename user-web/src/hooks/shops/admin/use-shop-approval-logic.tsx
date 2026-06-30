@@ -26,7 +26,7 @@ export function useShopApprovalLogic({
 }: UseShopApprovalLogicProps): ShopApprovalLogicReturn {
 	const router = useRouter();
 
-	const pagination = usePagination(totalPages);
+	const pagination = usePagination();
 
 	const handleRowClick = (shop: ShopApproval) => {
 		// Nhấn vào dòng sẽ chuyển sang trang chi tiết để duyệt đơn

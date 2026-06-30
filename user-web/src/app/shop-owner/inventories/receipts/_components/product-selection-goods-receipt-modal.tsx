@@ -1,21 +1,20 @@
 'use client';
 
-import React, { JSX, useMemo, useState } from 'react';
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
 import { Package, Search } from 'lucide-react';
+import React, { JSX, useMemo, useState } from 'react';
 
 interface ProductSelectionGoodsReceiptModalProps {
-	products: ProductForGoodsReceipt[];
+	productSelection: ProductForGoodsReceipt[];
 	onSelectProduct: (product: ProductForGoodsReceipt) => void;
 	trigger?: React.ReactNode;
 	open?: boolean;
@@ -23,7 +22,7 @@ interface ProductSelectionGoodsReceiptModalProps {
 }
 
 export function ProductSelectionGoodsReceiptModal({
-	products,
+	productSelection,
 	onSelectProduct,
 	trigger,
 	open: controlledOpen,
@@ -37,10 +36,10 @@ export function ProductSelectionGoodsReceiptModal({
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const filteredProducts: ProductForGoodsReceipt[] = useMemo((): ProductForGoodsReceipt[] => {
-		return products.filter((product: ProductForGoodsReceipt): boolean =>
+		return productSelection.filter((product: ProductForGoodsReceipt): boolean =>
 			product.name.toLowerCase().includes(searchTerm.toLowerCase()),
 		);
-	}, [searchTerm, products]);
+	}, [searchTerm, productSelection]);
 
 	const handleSelectProduct = (product: ProductForGoodsReceipt): void => {
 		onSelectProduct(product);
@@ -97,7 +96,7 @@ export function ProductSelectionGoodsReceiptModal({
 									</div>
 								</div>
 								<div className='flex items-center gap-2'>
-									<Badge
+									{/* <Badge
 										className={
 											product.status
 												? 'bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700 dark:bg-green-950 dark:text-green-300 dark:hover:bg-green-950 dark:hover:text-green-300'
@@ -105,11 +104,11 @@ export function ProductSelectionGoodsReceiptModal({
 										}
 									>
 										{product.status ? 'Đang bán' : 'Ngừng bán'}
-									</Badge>
+									</Badge> */}
 									<Button
 										size='sm'
 										onClick={() => handleSelectProduct(product)}
-										disabled={!product.status}
+										// disabled={!product.status}
 										className='cursor-pointer'
 									>
 										Chọn
@@ -127,7 +126,7 @@ export function ProductSelectionGoodsReceiptModal({
 					</span>
 					<Button
 						variant='outline'
-						onClick={() => setIsOpen}
+						onClick={() => setIsOpen(false)}
 					>
 						Đóng
 					</Button>

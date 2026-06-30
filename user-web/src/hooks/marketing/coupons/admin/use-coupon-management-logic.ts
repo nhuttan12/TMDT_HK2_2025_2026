@@ -45,7 +45,7 @@ export const useCouponManagementLogic = ({
 
 	const sortConfig = useTableSort<CouponSortField>();
 	const { applyFilters } = useQueryFilter<CouponFilterParams & { search?: string }>();
-	const pagination = usePagination(totalPages); // Truyền totalPages vào hook
+	const pagination = usePagination();
 
 	const initialFilters: Partial<CouponFilterParams> = useMemo((): Partial<CouponFilterParams> => {
 		return {

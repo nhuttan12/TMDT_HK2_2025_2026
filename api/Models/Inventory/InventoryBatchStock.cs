@@ -1,5 +1,5 @@
 ﻿using api.model.Products;
-using api.Models.Inventory.Enums;
+using api.Models.Enums.Inventory;
 using api.Models.Products;
 
 namespace api.Models.Inventory
@@ -20,7 +20,7 @@ namespace api.Models.Inventory
         public GoodsReceiptBatch Batch { get; private set; }
 
         public int RemainingQuantity { get; private set; }
-        public InventoryBatchStockStatus Status { get; private set; }
+        public EInventoryBatchStockStatus Status { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
     }

@@ -70,7 +70,13 @@
     <Folder Include="dbo\StoredProcedures\Users" />
     <Folder Include="dbo\UserDefinedTypes\Users" />
     <Folder Include="dbo\StoredProcedures\Coupons" />
-    <Folder Include="dbo\StoredProcedures\Inventory" />
+    <Folder Include="dbo\StoredProcedures\Inventories" />
+    <Folder Include="dbo\StoredProcedures\Inventories\GoodsIssue" />
+    <Folder Include="dbo\StoredProcedures\Inventories\GoodsReceipt" />
+    <Folder Include="dbo\StoredProcedures\Inventories\Stock" />
+    <Folder Include="dbo\StoredProcedures\Inventories\Supplier" />
+    <Folder Include="dbo\UserDefinedTypes\Inventories" />
+    <Folder Include="dbo\StoredProcedures\Analyst" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\GOODS_RECEIPT_BATCH_VARIANTS.sql" />
@@ -96,7 +102,7 @@
     <Build Include="dbo\StoredProcedures\Banners\usp_BulkUpdateBanners.sql" />
     <Build Include="dbo\StoredProcedures\Banners\usp_GetAdminBannersPaging.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_CreatePromotion.sql" />
-    <Build Include="dbo\UserDefinedTypes\Banners\BannerInsertType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Banners\udt_BannerInsertType.sql" />
     <Build Include="dbo\StoredProcedures\Promotions\usp_UpdatePromotion.sql" />
     <Build Include="dbo\StoredProcedures\Users\usp_AddUserBankings.sql" />
     <Build Include="dbo\StoredProcedures\Users\usp_UpdateUserBanking.sql" />
@@ -125,12 +131,28 @@
     <Build Include="dbo\StoredProcedures\Banners\usp_GetShopBanners.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_GetShopCouponForUserSaving.sql" />
     <Build Include="dbo\StoredProcedures\Coupons\usp_CreateUserSavedCoupon.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_CreateGoodsReceipt.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_CreateSupplier.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsSupplierListPaging.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsSupplierDetail.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_CreateGoodsIssue.sql" />
-    <Build Include="dbo\StoredProcedures\Inventory\usp_GetGoodsReceiptList.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_CreateGoodsReceipt.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Supplier\usp_CreateSupplier.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetGoodsReceiptDetail.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetGoodsReceiptPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Stock\usp_GetGoodsStockSummary.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Supplier\usp_GetGoodsSupplierDetail.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Supplier\usp_GetGoodsSupplierListPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Supplier\usp_GetProductPagingBySupplierId.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Stock\usp_GetProductInStockPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductListInBatchPaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Stock\usp_GetProductInStockByVariantNamePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetGoodsReceiptByCodePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\Supplier\usp_GetSupplierByShopId.sql" />
+    <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatch.sql" />
+    <Build Include="dbo\UserDefinedTypes\Inventories\udt_GoodsReceiptBatchVariant.sql" />
+    <Build Include="dbo\StoredProcedures\Analyst\usp_GetRevenueChartByTime.sql" />
+    <Build Include="dbo\Tables\CARTS.sql" />
+    <Build Include="dbo\Tables\CART_ITEMS.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductSelectionForGoodsReceipt.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsReceipt\usp_GetProductVariantListForSelectionGoodsReceipt.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssuePaging.sql" />
+    <Build Include="dbo\StoredProcedures\Inventories\GoodsIssue\usp_GetGoodsIssueDetailByGoodsIssueId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
@@ -139,14 +161,17 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\UserDefinedTypes\Promotions\ProductPromotionType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Promotions\udt_ProductPromotionType.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\UserDefinedTypes\Users\UserBankingInsertType.sql" />
+    <Build Include="dbo\UserDefinedTypes\Users\udt_UserBankingInsertType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Compare_SP_Only.scmp" />
     <None Include="Compare_DB_Structure_Only.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Database_TMDT.refactorlog" />
   </ItemGroup>
   <Import Project="$(NETCoreTargetsPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="'$(NetCoreBuild)' == 'true'" />
   <Target Name="BeforeBuild">

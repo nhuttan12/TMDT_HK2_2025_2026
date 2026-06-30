@@ -1,15 +1,20 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
+import {
+    ProductForGoodsReceiptService
+} from '@/services/inventories/goods-receipt/product-for-goods-receipt-selection-service';
 import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
-import { getProductVariants } from '@/services/inventories/goods-receipt/product-for-goods-receipt-service';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-export const useProductVariantsQuery = (): UseQueryResult<
-	PaginationResponse<ProductVariantRow>,
-	Error
-> => {
+export const useProductVariantsSelectionQuery = (
+	productId: string,
+): UseQueryResult<ProductVariantRow[], Error> => {
+	const productForGoodsReceiptService = new ProductForGoodsReceiptService(apiClient);
+
 	return useQuery({
 		queryKey: ['product-variants'],
-		queryFn: getProductVariants,
+		queryFn: () =>
+			productForGoodsReceiptService.getProductVariantListForSelectionGoodsReceipt(productId),
+        enabled: !!productId,
 		staleTime: 5 * 60 * 1000,
 	});
 };

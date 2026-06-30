@@ -9,8 +9,8 @@
     [updated_at]         DATETIMEOFFSET (7) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_INVENTORY_BATCH_STOCKS] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_INVENTORY_BATCH_STOCKS_GOODS_RECEIPT_BATCHES_batch_id] FOREIGN KEY ([batch_id]) REFERENCES [dbo].[GOODS_RECEIPT_BATCHES] ([id]),
-    CONSTRAINT [FK_INVENTORY_BATCH_STOCKS_Products_product_id] FOREIGN KEY ([product_id]) REFERENCES [dbo].[Products] ([Id]),
-    CONSTRAINT [FK_INVENTORY_BATCH_STOCKS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[Variants] ([Id])
+    CONSTRAINT [FK_INVENTORY_BATCH_STOCKS_Products_product_id] FOREIGN KEY ([product_id]) REFERENCES [dbo].[PRODUCTS] ([id]),
+    CONSTRAINT [FK_INVENTORY_BATCH_STOCKS_Variants_variant_id] FOREIGN KEY ([variant_id]) REFERENCES [dbo].[VARIANTS] ([id])
 );
 
 

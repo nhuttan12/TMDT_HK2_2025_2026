@@ -1,26 +1,36 @@
-﻿CREATE TABLE [dbo].[INVOICE_ITEMS] (
-    [Id]              UNIQUEIDENTIFIER DEFAULT (newsequentialid()) NOT NULL,
-    [InvoiceId]       UNIQUEIDENTIFIER NOT NULL,
-    [ProductId]       UNIQUEIDENTIFIER NOT NULL,
-    [VariantId]       UNIQUEIDENTIFIER NOT NULL,
-    [Quantity]        INT              NOT NULL,
-    [PriceAtPurchase] DECIMAL (18, 2)  NOT NULL,
-    CONSTRAINT [PK_INVOICE_ITEMS] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_INVOICE_ITEMS_INVOICES_InvoiceId] FOREIGN KEY ([InvoiceId]) REFERENCES [dbo].[INVOICES] ([Id]) ON DELETE CASCADE
+CREATE TABLE [dbo].[INVOICE_ITEMS] (
+    [id]                UNIQUEIDENTIFIER DEFAULT (newsequentialid()) NOT NULL,
+    [invoice_id]        UNIQUEIDENTIFIER NOT NULL,
+    [product_id]        UNIQUEIDENTIFIER NOT NULL,
+    [variant_id]        UNIQUEIDENTIFIER NOT NULL,
+    [quantity]          INT              NOT NULL,
+    [price_at_purchase] DECIMAL (18, 2)  NOT NULL,
+    CONSTRAINT [PK_INVOICE_ITEMS] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_INVOICE_ITEMS_INVOICES_invoice_id] FOREIGN KEY ([invoice_id]) REFERENCES [dbo].[INVOICES] ([id]) ON DELETE CASCADE
 );
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_VariantId]
-    ON [dbo].[INVOICE_ITEMS]([VariantId] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_ProductId]
-    ON [dbo].[INVOICE_ITEMS]([ProductId] ASC);
+
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_InvoiceId]
-    ON [dbo].[INVOICE_ITEMS]([InvoiceId] ASC);
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_variant_id]
+    ON [dbo].[INVOICE_ITEMS]([variant_id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_product_id]
+    ON [dbo].[INVOICE_ITEMS]([product_id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_INVOICE_ITEMS_invoice_id]
+    ON [dbo].[INVOICE_ITEMS]([invoice_id] ASC);
 

@@ -16,7 +16,7 @@ import { ProductForGoodsIssue } from '@/types/inventories/issues/uis/ProductForG
 import { useProductSelectionGoodsIssueLogic } from '@/hooks/inventories/goods-issues/use-product-selection-goods-issue-logic';
 
 interface ProductSelectionGoodsIssueModalProps {
-	products: ProductForGoodsIssue[];
+	productSelection: ProductForGoodsIssue[];
 	onSelectProduct: (product: ProductForGoodsIssue) => void;
 	trigger?: React.ReactNode;
 	open?: boolean;
@@ -24,7 +24,7 @@ interface ProductSelectionGoodsIssueModalProps {
 }
 
 export function ProductSelectionGoodsIssueModal({
-	products,
+	productSelection,
 	onSelectProduct,
 	trigger,
 	open,
@@ -39,7 +39,7 @@ export function ProductSelectionGoodsIssueModal({
 		handleSearchChange,
 		handleCloseModal,
 	} = useProductSelectionGoodsIssueLogic({
-		products: products,
+		products: productSelection,
 		onSelectProduct: onSelectProduct,
 		open: open,
 		onOpenChange: onOpenChange,

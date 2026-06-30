@@ -20,7 +20,7 @@ namespace api.Repository.Shops
             {
                 new SqlParameter("@Email", request.Email),
                 new SqlParameter("@Phone", (object?)request.Phone ?? DBNull.Value),
-                new SqlParameter("@PasswordHash", request.PasswordHash),
+                new SqlParameter("@Password", request.Password),
                 new SqlParameter("@ShopName", request.ShopName),
                 new SqlParameter("@Description", (object?)request.Description ?? DBNull.Value),
                 new SqlParameter("@AddressUrl", request.AddressUrl),

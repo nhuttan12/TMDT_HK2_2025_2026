@@ -22,6 +22,12 @@
 
 
 
+
+
+
+
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_Products_CategoryId]
     ON [dbo].[PRODUCTS]([category_id] ASC);
@@ -31,7 +37,7 @@ CREATE NONCLUSTERED INDEX [IX_Products_CategoryId]
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Products_Name]
-    ON [dbo].[Products]([Name] ASC);
+    ON [dbo].[PRODUCTS]([name] ASC);
 
 
 GO

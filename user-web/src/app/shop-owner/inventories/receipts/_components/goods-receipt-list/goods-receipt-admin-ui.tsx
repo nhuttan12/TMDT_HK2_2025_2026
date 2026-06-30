@@ -1,26 +1,24 @@
-import { JSX } from 'react';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import Pagination from '@/components/layout/share/pagination';
+import { JSX } from 'react';
 
 import { GoodsReceiptList } from '@/types/inventories/receipts/uis/GoodsReceiptList';
-import { ReceiptAdminFilterValues } from '@/types/inventories/receipts/uis/ReceiptAdminFilterValues';
 import { GoodsReceiptSortField } from '@/types/inventories/receipts/uis/GoodsReceiptSortField';
 import { ProductForGoodsReceipt } from '@/types/inventories/receipts/uis/ProductForGoodsReceipt';
-import { ProductVariantRow } from '@/types/inventories/receipts/uis/ProductVariantRow';
+import { ReceiptAdminFilterValues } from '@/types/inventories/receipts/uis/ReceiptAdminFilterValues';
 
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { UsePaginationReturn } from '@/hooks/share/use-pagination';
-import { UseTableSortReturn } from '@/hooks/share/use-table-sort';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { UseGoodsReceiptExcelLogicReturn } from '@/hooks/inventories/goods-receipts/use-goods-receipt-excel-logic';
 import { UseGoodsReceiptNavigationLogicReturn } from '@/hooks/inventories/goods-receipts/use-goods-receipt-navigation-logic';
+import { UsePaginationReturn } from '@/hooks/share/use-pagination';
+import { UseTableSortReturn } from '@/hooks/share/use-table-sort';
 import { ProductSelectionGoodsReceiptModal } from '../product-selection-goods-receipt-modal';
-import { ProductBatchItemModal } from './product-batch-item-modal';
 import GoodsReceiptAdminTable from './goods-receipt-admin-table';
 
 interface GoodsReceiptAdminUiProps
@@ -32,27 +30,24 @@ interface GoodsReceiptAdminUiProps
 	// Chỉ cần khai báo thêm Data vì hook không chứa Data Fetching
 	receipts: GoodsReceiptList[];
 	products: ProductForGoodsReceipt[];
-	variants: ProductVariantRow[];
+    totalPages?: number;
 }
 
 export default function GoodsReceiptAdminUi({
 	receipts,
 	products,
-	variants,
 	currentPage,
 	changePage,
 	handleSort,
 	renderSortIcon,
 	isProductModalOpen,
 	setIsProductModalOpen,
-	isVariantModalOpen,
-	setIsVariantModalOpen,
 	handleStartExcelFlow,
 	handleProductSelected,
-	handleVariantsSelected,
 	handleRedirectToAddNewReceiptDetail,
 	handleRedirectToReceiptDetail,
 	handleRedirectToEditReceiptDetail,
+    totalPages = 10
 }: GoodsReceiptAdminUiProps): JSX.Element {
 	return (
 		<div className='space-y-4'>
@@ -78,17 +73,10 @@ export default function GoodsReceiptAdminUi({
 			/>
 
 			<ProductSelectionGoodsReceiptModal
-				products={products}
+				productSelection={products}
 				open={isProductModalOpen}
 				onOpenChange={setIsProductModalOpen}
 				onSelectProduct={handleProductSelected}
-			/>
-
-			<ProductBatchItemModal
-				variants={variants}
-				open={isVariantModalOpen}
-				onOpenChange={setIsVariantModalOpen}
-				onSelect={handleVariantsSelected}
 			/>
 
 			<div className='rounded-xl border bg-white'>
@@ -103,7 +91,7 @@ export default function GoodsReceiptAdminUi({
 
 			<Pagination
 				currentPage={currentPage}
-				totalPages={10}
+				totalPages={totalPages}
 				onPageChange={changePage}
 			/>
 		</div>

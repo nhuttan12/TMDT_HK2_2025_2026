@@ -1,17 +1,12 @@
 export interface GoodsIssueItem {
 	id: string;
 
-	productId: string;
-	productName: string;
+	variantId: string;
+	variantName: string;
 	sku: string;
 
 	quantity: number;
 	unitPrice: number;
 
 	totalPrice: number; // = quantity * unitPrice
-
-	batchNumber?: string;
-	serialNumber?: string;
-
-	note?: string;
 }
