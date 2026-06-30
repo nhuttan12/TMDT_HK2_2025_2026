@@ -1,6 +1,5 @@
 ﻿using api.Database;
 using api.Dtos.Products.Request;
-using api.Dtos.Products.Respones;
 using api.model.Products;
 using api.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +13,7 @@ namespace api.Repository.ProductRepo
         Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto filterDto, CancellationToken cancellationToken);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Product?> GetByIdWithShopAsync(Guid productId, CancellationToken cancellationToken = default);
+        Task<PagedResult<Product>> GetProductOfShopAsync(Guid shopId, int pageNumber, int pageSize, string sortBy, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
     public class ProductRepository : IProductRepository
@@ -153,6 +153,40 @@ namespace api.Repository.ProductRepo
                 .AsNoTracking() // Tối ưu cho truy vấn chỉ đọc
                 .Include(p => p.Shop)
                 .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+        }
+
+        public async Task<PagedResult<Product>> GetProductOfShopAsync(
+          Guid shopId,
+          int pageNumber,
+          int pageSize,
+          string? sortBy,
+          CancellationToken cancellationToken)
+        {
+            // 1. Luôn LỌC THEO SHIOPID ĐẦU TIÊN để thu hẹp phạm vi quét index
+            var query = _context.Products
+                .AsNoTracking()
+                .Where(p => p.ShopId == shopId);
+
+            // 2. Tính tổng số lượng bản ghi sau khi đã lọc theo ShopId
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 3. Xử lý Dynamic Sorting dựa trên yêu cầu mới
+            query = sortBy?.ToLower() switch
+            {
+                "productnew" => query.OrderByDescending(p => p.CreatedAt),
+                "priceasc" => query.OrderBy(p => p.BasePrice),
+                "pricedesc" => query.OrderByDescending(p => p.BasePrice),
+                _ => query.OrderByDescending(p => p.CreatedAt) // Mặc định sắp xếp theo ngày tạo mới nhất
+            };
+
+            // 4. Áp dụng phân trang và Eager Loading các Variant
+            var items = await query
+                .Include(p => p.Variants)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
         }
     }
 }

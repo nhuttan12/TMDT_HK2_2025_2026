@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace api.Database.Migrations
+namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDatabase : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,8 +70,7 @@ namespace api.Database.Migrations
                 name: "ADDRESSES",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     address_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -107,6 +106,26 @@ namespace api.Database.Migrations
                     table.ForeignKey(
                         name: "FK_BANNERS_USERS_user_id",
                         column: x => x.user_id,
+                        principalTable: "USERS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CARTS",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    update_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CARTS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CARTS_USERS_UserId",
+                        column: x => x.UserId,
                         principalTable: "USERS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -313,11 +332,13 @@ namespace api.Database.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<byte>(type: "tinyint", nullable: false),
                     user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     shop_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     coupon_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    delivery_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FinalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSUTCDATETIME()"),
                     updated_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSUTCDATETIME()")
                 },
@@ -403,6 +424,35 @@ namespace api.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DELIVERIES",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    invoice_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    address_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    receiver_phone = table.Column<string>(type: "varchar(255)", nullable: false),
+                    receiver_name = table.Column<string>(type: "nvarchar(255)", nullable: false),
+                    shipping_fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    shipping_status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DELIVERIES", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_DELIVERIES_ADDRESSES_address_id",
+                        column: x => x.address_id,
+                        principalTable: "ADDRESSES",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DELIVERIES_INVOICES_invoice_id",
+                        column: x => x.invoice_id,
+                        principalTable: "INVOICES",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "INVOICE_APPLIED_COUPONS",
                 columns: table => new
                 {
@@ -410,7 +460,8 @@ namespace api.Database.Migrations
                     invoice_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     coupon_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     discount_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    applied_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    applied_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    InvoiceId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -422,6 +473,11 @@ namespace api.Database.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_INVOICE_APPLIED_COUPONS_INVOICES_InvoiceId1",
+                        column: x => x.InvoiceId1,
+                        principalTable: "INVOICES",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_INVOICE_APPLIED_COUPONS_INVOICES_invoice_id",
                         column: x => x.invoice_id,
                         principalTable: "INVOICES",
@@ -430,21 +486,23 @@ namespace api.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "INVOICE_ITEMS",
+                name: "PAYMENTS",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    PriceAtPurchase = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    TransactionId = table.Column<string>(type: "varchar(255)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(19,2)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "varchar(255)", nullable: false),
+                    InformationCard = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_INVOICE_ITEMS", x => x.Id);
+                    table.PrimaryKey("PK_PAYMENTS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_INVOICE_ITEMS_INVOICES_InvoiceId",
+                        name: "FK_PAYMENTS_INVOICES_InvoiceId",
                         column: x => x.InvoiceId,
                         principalTable: "INVOICES",
                         principalColumn: "id",
@@ -520,7 +578,7 @@ namespace api.Database.Migrations
                         column: x => x.product_id,
                         principalTable: "PRODUCTS",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -542,6 +600,34 @@ namespace api.Database.Migrations
                         name: "FK_GOODS_RECEIPTS_SUPPLIERS_supplier_id",
                         column: x => x.supplier_id,
                         principalTable: "SUPPLIERS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CART_ITEMS",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CART_ITEMS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CART_ITEMS_CARTS_CartId",
+                        column: x => x.CartId,
+                        principalTable: "CARTS",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CART_ITEMS_VARIANTS_VariantId",
+                        column: x => x.VariantId,
+                        principalTable: "VARIANTS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -569,6 +655,34 @@ namespace api.Database.Migrations
                     table.ForeignKey(
                         name: "FK_GOODS_ISSUE_DETAILS_VARIANTS_variant_id",
                         column: x => x.variant_id,
+                        principalTable: "VARIANTS",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "INVOICE_ITEMS",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    InvoiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PriceAtPurchase = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_INVOICE_ITEMS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_INVOICE_ITEMS_INVOICES_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "INVOICES",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_INVOICE_ITEMS_VARIANTS_VariantId",
+                        column: x => x.VariantId,
                         principalTable: "VARIANTS",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -672,6 +786,21 @@ namespace api.Database.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CART_ITEMS_CartId",
+                table: "CART_ITEMS",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CART_ITEMS_VariantId",
+                table: "CART_ITEMS",
+                column: "VariantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CARTS_UserId",
+                table: "CARTS",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CATEGORIES_sku",
                 table: "CATEGORIES",
                 column: "sku",
@@ -681,6 +810,22 @@ namespace api.Database.Migrations
                 name: "IX_COUPONS_user_id",
                 table: "COUPONS",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DELIVERIES_address_id",
+                table: "DELIVERIES",
+                column: "address_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DELIVERIES_invoice_id",
+                table: "DELIVERIES",
+                column: "invoice_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DELIVERIES_shipping_status",
+                table: "DELIVERIES",
+                column: "shipping_status");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GOODS_ISSUE_DETAILS_issue_id",
@@ -744,6 +889,13 @@ namespace api.Database.Migrations
                 column: "invoice_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_INVOICE_APPLIED_COUPONS_InvoiceId1",
+                table: "INVOICE_APPLIED_COUPONS",
+                column: "InvoiceId1",
+                unique: true,
+                filter: "[InvoiceId1] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_INVOICE_ITEMS_InvoiceId",
                 table: "INVOICE_ITEMS",
                 column: "InvoiceId");
@@ -772,6 +924,19 @@ namespace api.Database.Migrations
                 name: "IX_INVOICES_user_id",
                 table: "INVOICES",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PAYMENTS_InvoiceId",
+                table: "PAYMENTS",
+                column: "InvoiceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PAYMENTS_TransactionId",
+                table: "PAYMENTS",
+                column: "TransactionId",
+                unique: true,
+                filter: "[TransactionId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PRODUCT_PROMOTIONS_product_id",
@@ -850,10 +1015,13 @@ namespace api.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ADDRESSES");
+                name: "BANNERS");
 
             migrationBuilder.DropTable(
-                name: "BANNERS");
+                name: "CART_ITEMS");
+
+            migrationBuilder.DropTable(
+                name: "DELIVERIES");
 
             migrationBuilder.DropTable(
                 name: "GOODS_ISSUE_DETAILS");
@@ -869,6 +1037,9 @@ namespace api.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "INVOICE_ITEMS");
+
+            migrationBuilder.DropTable(
+                name: "PAYMENTS");
 
             migrationBuilder.DropTable(
                 name: "PRODUCT_DETAILS");
@@ -887,6 +1058,12 @@ namespace api.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "USER_SAVED_COUPONS");
+
+            migrationBuilder.DropTable(
+                name: "CARTS");
+
+            migrationBuilder.DropTable(
+                name: "ADDRESSES");
 
             migrationBuilder.DropTable(
                 name: "GOODS_ISSUES");

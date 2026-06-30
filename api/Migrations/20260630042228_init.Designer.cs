@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Database;
 
@@ -11,9 +12,11 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260630042228_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,12 +27,11 @@ namespace api.Migrations
 
             modelBuilder.Entity("Api.Models.Users.Address", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<string>("AddressUrl")
                         .IsRequired()
@@ -105,6 +107,64 @@ namespace api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BANNERS", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Cards.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("update_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CARTS", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Cards.CartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("VariantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("VariantId");
+
+                    b.ToTable("CART_ITEMS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Category.Category", b =>
@@ -261,11 +321,18 @@ namespace api.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("invoice_id");
 
+                    b.Property<Guid?>("InvoiceId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CouponId");
 
                     b.HasIndex("InvoiceId");
+
+                    b.HasIndex("InvoiceId1")
+                        .IsUnique()
+                        .HasFilter("[InvoiceId1] IS NOT NULL");
 
                     b.ToTable("INVOICE_APPLIED_COUPONS", (string)null);
                 });
@@ -628,6 +695,52 @@ namespace api.Migrations
                     b.ToTable("SUPPLIERS", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Orders.Delivery", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("address_id");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("invoice_id");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("receiver_name");
+
+                    b.Property<string>("ReceiverPhone")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("receiver_phone");
+
+                    b.Property<decimal>("ShippingFee")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("shipping_fee");
+
+                    b.Property<int>("ShippingStatus")
+                        .HasColumnType("int")
+                        .HasColumnName("shipping_status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("InvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("ShippingStatus");
+
+                    b.ToTable("DELIVERIES", (string)null);
+                });
+
             modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
@@ -645,6 +758,13 @@ namespace api.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<Guid?>("DeliveryId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("delivery_id");
+
+                    b.Property<decimal>("FinalAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("ShopId")
                         .HasColumnType("uniqueidentifier")
@@ -708,6 +828,55 @@ namespace api.Migrations
                     b.HasIndex("VariantId");
 
                     b.ToTable("INVOICE_ITEMS", (string)null);
+                });
+
+            modelBuilder.Entity("api.Models.Payments.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(19,2)")
+                        .HasColumnName("Amount");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("InformationCard")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("InformationCard");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("PaymentMethod");
+
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("TransactionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("TransactionId")
+                        .IsUnique()
+                        .HasFilter("[TransactionId] IS NOT NULL");
+
+                    b.ToTable("PAYMENTS", (string)null);
                 });
 
             modelBuilder.Entity("api.Models.Products.ProductDetail", b =>
@@ -1194,6 +1363,36 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.Cards.Cart", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Models.Cards.CartItem", b =>
+                {
+                    b.HasOne("api.Models.Cards.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Products.Variant", "Variant")
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Variant");
+                });
+
             modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
                 {
                     b.HasOne("api.Models.User", "User")
@@ -1218,6 +1417,10 @@ namespace api.Migrations
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("api.Models.Orders.Invoice", null)
+                        .WithOne("AppliedCoupon")
+                        .HasForeignKey("api.Models.Coupons.InvoiceAppliedCoupon", "InvoiceId1");
 
                     b.Navigation("Coupon");
 
@@ -1352,6 +1555,25 @@ namespace api.Migrations
                     b.Navigation("Shop");
                 });
 
+            modelBuilder.Entity("api.Models.Orders.Delivery", b =>
+                {
+                    b.HasOne("Api.Models.Users.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Orders.Invoice", "Invoice")
+                        .WithOne("Delivery")
+                        .HasForeignKey("api.Models.Orders.Delivery", "InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
                     b.HasOne("api.Models.Shops.Shop", "Shop")
@@ -1377,6 +1599,25 @@ namespace api.Migrations
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("api.Models.Products.Variant", "Variant")
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Variant");
+                });
+
+            modelBuilder.Entity("api.Models.Payments.Payment", b =>
+                {
+                    b.HasOne("api.Models.Orders.Invoice", "Invoice")
+                        .WithOne()
+                        .HasForeignKey("api.Models.Payments.Payment", "InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("api.Models.Products.ProductDetail", b =>
@@ -1392,11 +1633,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Products.Variant", b =>
                 {
-                    b.HasOne("api.model.Products.Product", null)
+                    b.HasOne("api.model.Products.Product", "Product")
                         .WithMany("Variants")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("api.Models.Promotions.ProductPromotion", b =>
@@ -1510,6 +1753,11 @@ namespace api.Migrations
                     b.Navigation("Shop");
                 });
 
+            modelBuilder.Entity("api.Models.Cards.Cart", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("api.Models.Coupons.Coupon", b =>
                 {
                     b.Navigation("AppliedInvoices");
@@ -1542,7 +1790,11 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Orders.Invoice", b =>
                 {
+                    b.Navigation("AppliedCoupon");
+
                     b.Navigation("AppliedCoupons");
+
+                    b.Navigation("Delivery");
 
                     b.Navigation("Items");
                 });
