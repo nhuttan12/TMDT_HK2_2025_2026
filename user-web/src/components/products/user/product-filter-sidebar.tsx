@@ -89,10 +89,7 @@ export default function ProductFilterSidebar({
 						</SelectTrigger>
 						<SelectContent>
 							{categories.map((category) => (
-								<SelectItem
-									key={category.id}
-									value={category.id}
-								>
+								<SelectItem key={category.id} value={category.name}>
 									{category.name}
 								</SelectItem>
 							))}
@@ -111,11 +108,8 @@ export default function ProductFilterSidebar({
 							<SelectValue placeholder='Chọn cửa hàng' />
 						</SelectTrigger>
 						<SelectContent>
-							{(Array.isArray(shops) ? shops : []).map((shop) => (
-								<SelectItem
-									key={shop.id}
-									value={shop.id}
-								>
+							{shops.map((shop) => (
+								<SelectItem key={shop.id} value={shop.name}>
 									{shop.name}
 								</SelectItem>
 							))}

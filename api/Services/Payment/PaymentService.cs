@@ -28,7 +28,7 @@ namespace api.Services.Payment
                 throw new Exception("Hóa đơn này không ở trạng thái chờ thanh toán.");
 
             // Gọi PayPal tạo Order (Truyền InvoiceId vào custom_id)
-            var paypalOrderId = await payPalService.CreateOrderAsync(invoice.Id.ToString(), invoice.FinalAmount);
+            var paypalOrderId = await payPalService.CreateOrderAsync(invoice.Id.ToString(), invoice.FinalAmount/50);
 
             // Tạo bản ghi Payment nội bộ lưu DB
             var payment = api.Models.Payments.Payment.Create(

@@ -1,11 +1,25 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
+import {
+    InvoiceAdminService
+} from '@/services/invoices/admin/invoice-admin-service';
+import { PaginationParams } from '@/types/common/Pagination';
 import { UserInvoice } from '@/types/invoices/user/UserInvoice';
-import { getUserInvoiceList } from '@/services/invoices/admin/invoice-admin-servie';
+import { BackendPagedResult } from '@/types/products/user/productBE';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-export function useUserInvoiceListQuery(initialData: UserInvoice[]): UseQueryResult<UserInvoice[]> {
+export function useUserInvoiceListQuery(
+	initialData: BackendPagedResult<UserInvoice>,
+	pagination?: PaginationParams,
+): UseQueryResult<BackendPagedResult<UserInvoice>> {
+	const invoiceAdminService = new InvoiceAdminService(apiClient);
+
 	return useQuery({
-		queryKey: ['user-invoice-list'],
-		queryFn: getUserInvoiceList,
+		queryKey: ['admin-invoice-list'],
+		queryFn: () =>
+			invoiceAdminService.getUserInvoiceList({
+				pageNumber: pagination?.pageNumber,
+				pageSize: pagination?.pageSize,
+			}),
 		initialData: initialData,
 	});
 }

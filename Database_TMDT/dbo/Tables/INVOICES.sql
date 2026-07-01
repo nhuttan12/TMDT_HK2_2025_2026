@@ -4,6 +4,7 @@
     [shop_id]      UNIQUEIDENTIFIER   NULL,
     [coupon_id]    UNIQUEIDENTIFIER   NULL,
     [delivery_id]  UNIQUEIDENTIFIER   NULL,
+    [payment_id]   UNIQUEIDENTIFIER   NULL,
     [total_amount] DECIMAL (18, 2)    NOT NULL,
     [FinalAmount]  DECIMAL (18, 2)    NOT NULL,
     [status]       TINYINT            NOT NULL,
@@ -13,6 +14,8 @@
     CONSTRAINT [FK_INVOICES_SHOPS_shop_id] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]) ON DELETE SET NULL,
     CONSTRAINT [FK_INVOICES_USERS_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[USERS] ([id])
 );
+
+
 
 
 

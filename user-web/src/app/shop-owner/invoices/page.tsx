@@ -1,7 +1,7 @@
-import { JSX } from 'react';
-import { UserInvoice } from '@/types/invoices/user/UserInvoice';
+import apiServer from '@/lib/api-server';
+import { InvoiceAdminService } from '@/services/invoices/admin/invoice-admin-service';
 import { Metadata } from 'next';
-import { getUserInvoiceList } from '@/services/invoices/admin/invoice-admin-servie';
+import { JSX } from 'react';
 import InvoiceAdminContainer from './_components/invoice-admin-container';
 
 export const metadata: Metadata = {
@@ -9,8 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Page(): Promise<JSX.Element> {
+	const invoiceAdminService = new InvoiceAdminService(apiServer);
 	// Gọi service trực tiếp trong Server Component
-	const initialInvoices: UserInvoice[] = await getUserInvoiceList();
+	const initialInvoices = await invoiceAdminService.getUserInvoiceList();
 
 	return <InvoiceAdminContainer initialInvoices={initialInvoices} />;
 }

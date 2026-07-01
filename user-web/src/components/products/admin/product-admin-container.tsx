@@ -25,17 +25,19 @@ export default function ProductAdminContainer({
 	customTitle,
 	customDescription,
 }: ProductAdminContainerProps): JSX.Element {
-	// 1. Data Source
-	const { data, isLoading: isProductsLoading } = useProductListInfoAdminQuery(initialProducts);
-
-	const currentProduct = data?.items || initialProducts.items;
-
-	// 2. Logic Hook
 	const logic = useProductAdminLogic({
 		role,
 		productApproval,
-		totalPage: data?.totalPages || initialProducts.totalPages,
+		totalPage: initialProducts.totalPages,
 	});
+
+	const { data, isLoading: isProductsLoading } = useProductListInfoAdminQuery(initialProducts, {
+		pageNumber: logic.currentPage,
+		pageSize: initialProducts.pageSize,
+	});
+
+	const currentProduct = data?.items || initialProducts.items;
+    const currentTotalPage = data?.totalPages || initialProducts.totalPages;
 
 	const isPageLoading = isProductsLoading;
 

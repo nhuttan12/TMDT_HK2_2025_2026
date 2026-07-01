@@ -1,7 +1,6 @@
-import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
 import { AdminFormType } from '@/types/shared/admin/AdminFormType';
-import { UserRole } from '@/types/users/UserRole';
+import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 
 export interface UseUserAdminFormLogicProps {
 	initialData: UserDetailInfoAdmin;
@@ -13,7 +12,6 @@ export interface UseUserAdminFormLogicReturn {
 	isView: boolean;
 	isCreate: boolean;
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handleStatusChange: (checked: boolean) => void;
 	handleSubmit: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => void;
 }
 
@@ -35,15 +33,6 @@ export function useUserAdminFormLogic(
 		);
 	};
 
-	const handleStatusChange = (checked: boolean): void => {
-		setForm(
-			(prev: UserDetailInfoAdmin): UserDetailInfoAdmin => ({
-				...prev,
-				status: checked,
-			}),
-		);
-	};
-
 	const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>): void => {
 		e.preventDefault();
 		console.log('Call API Submit User:', form);
@@ -54,7 +43,6 @@ export function useUserAdminFormLogic(
 		isView,
 		isCreate,
 		handleInputChange,
-		handleStatusChange,
 		handleSubmit,
 	};
 }

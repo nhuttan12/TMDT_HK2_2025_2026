@@ -3,13 +3,17 @@
     [InvoiceId]       UNIQUEIDENTIFIER   NOT NULL,
     [TransactionId]   VARCHAR (255)      NULL,
     [Amount]          DECIMAL (19, 2)    NOT NULL,
-    [PaymentMethod]   VARCHAR (255)      NOT NULL,
+    [PaymentMethod]   TINYINT            NOT NULL,
     [InformationCard] VARCHAR (50)       NULL,
-    [Status]          VARCHAR (50)       NOT NULL,
+    [RawResponse]     NVARCHAR (MAX)     NULL,
+    [Status]          TINYINT            NOT NULL,
     [CreatedAt]       DATETIMEOFFSET (7) NOT NULL,
+    [UpdatedAt]       DATETIMEOFFSET (7) NULL,
     CONSTRAINT [PK_PAYMENTS] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_PAYMENTS_INVOICES_InvoiceId] FOREIGN KEY ([InvoiceId]) REFERENCES [dbo].[INVOICES] ([id]) ON DELETE CASCADE
+    CONSTRAINT [FK_PAYMENTS_INVOICES_InvoiceId] FOREIGN KEY ([InvoiceId]) REFERENCES [dbo].[INVOICES] ([id])
 );
+
+
 
 
 GO

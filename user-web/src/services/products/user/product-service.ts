@@ -24,6 +24,7 @@ import {
 import { ProductFilterPayload } from '@/types/products/user/ProductFilterPayload';
 import { CategoryOption } from '@/types/products/user/CategoryOption';
 import { ShopOption } from '@/types/products/user/ShopOption';
+import { ListShopName } from '@/types/products/user/ListShopName';
 
 // craw data
 
@@ -140,7 +141,7 @@ export const getProductDetailByIdCraw = async (productId: string): Promise<Produ
 	};
 
 	const rawData: ProductDetailRawUser = {
-		id: 1,
+		id: '1',
 		name: 'Bonsai Tree Ecosystem',
 
 		supplierName: 'Terrafulness',
@@ -204,8 +205,7 @@ export const getProductDetailByIdCraw = async (productId: string): Promise<Produ
 
 		discount: calculateDiscount(1500000, 1250000),
 
-		status: true,
-		categoryId: 1,
+		category: 'bonsai',
 
 		images: [
 			{
@@ -830,7 +830,7 @@ export const getProductListPagingCraw = async ({
 };
 
 export const getCategoryListNameForSelectionMocking = async (): Promise<CategoryOption[]> => {
-    return new Promise((resolve) => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve([
 				{ id: 'cat_1', name: 'Terrarium Kín' },
@@ -841,7 +841,7 @@ export const getCategoryListNameForSelectionMocking = async (): Promise<Category
 			]);
 		}, 500);
 	});
-}
+};
 
 export const getShopListNameForSelectionMocking = async (): Promise<ShopOption[]> => {
 	// Giả lập thời gian chờ tải dữ liệu từ server (ví dụ: 500ms)
@@ -1022,15 +1022,16 @@ export const getCategoryListNameForSelection = async (): Promise<CategoryOption[
 
 export const getShopListNameForSelection = async (): Promise<ShopOption[]> => {
 	try {
-		const response = await apiClient.get(`/shop/list-name`);
+		const response = await apiClient.get<ResponseApi<ListShopName>>(`/shop/list-name`);
 
+		console.log('shop for selection', response.data.data);
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return getShopListNameForSelectionMocking();
 		}
 
 		console.log(response.data.data);
 
-		return response.data.data;
+		return response.data.data.listNames;
 	} catch {
 		return getShopListNameForSelectionMocking();
 	}

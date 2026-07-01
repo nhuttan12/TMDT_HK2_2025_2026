@@ -5,7 +5,6 @@ import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 
 import { UseUserAdminFormLogicReturn } from '@/hooks/users/admin/use-user-admin-form-logic';
 import { formatDate } from '@/utils/shared/date';
@@ -18,7 +17,6 @@ export default function UserAdminFormUi({
 	isView,
 	isCreate,
 	handleInputChange,
-	handleStatusChange,
 	handleSubmit,
 }: UserAdminFormUiProps): JSX.Element {
 	return (
@@ -44,7 +42,7 @@ export default function UserAdminFormUi({
 				<Label>Họ và tên</Label>
 				<Input
 					name='fullName'
-					value={form.fullName}
+					value={form.fullName || ''}
 					onChange={handleInputChange}
 					disabled={isView}
 				/>
@@ -55,7 +53,7 @@ export default function UserAdminFormUi({
 				<Input
 					type='email'
 					name='email'
-					value={form.email}
+					value={form.email || ''}
 					onChange={handleInputChange}
 					disabled={isView}
 				/>
@@ -65,19 +63,10 @@ export default function UserAdminFormUi({
 				<Label>Số điện thoại</Label>
 				<Input
 					name='phone'
-					value={form.phone}
+					value={form.phone || ''}
 					onChange={handleInputChange}
 					disabled={isView}
 				/>
-			</div>
-
-			<div className='flex items-center gap-3'>
-				<Switch
-					checked={form.status}
-					onCheckedChange={handleStatusChange}
-					disabled={isView}
-				/>
-				<span>Hoạt động</span>
 			</div>
 
 			{form.avatar && (
@@ -85,7 +74,10 @@ export default function UserAdminFormUi({
 					<Label>Avatar</Label>
 					<div className='relative w-32 h-32 rounded-full overflow-hidden border'>
 						<Image
-							src={form.avatar}
+							src={
+								form.avatar ||
+								'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg'
+							}
 							alt={form.fullName}
 							fill
 							className='object-cover'
@@ -98,11 +90,19 @@ export default function UserAdminFormUi({
 				<div className='grid grid-cols-2 gap-4 text-sm text-muted-foreground'>
 					<div>
 						<p className='font-medium text-black'>Ngày tạo</p>
-						<p>{formatDate(form.createdAt)}</p>
+						<Input
+							name='phone'
+							value={formatDate(form.createdAt || '')}
+							disabled
+						/>
 					</div>
 					<div>
 						<p className='font-medium text-black'>Cập nhật lần cuối</p>
-						<p>{formatDate(form.updatedAt)}</p>
+						<Input
+							name='phone'
+							value={formatDate(form.updatedAt || '')}
+							disabled
+						/>
 					</div>
 				</div>
 			)}

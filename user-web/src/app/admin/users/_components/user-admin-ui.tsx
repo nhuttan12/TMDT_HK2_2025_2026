@@ -1,10 +1,11 @@
-import { JSX } from 'react';
+import { JSX, ReactNode } from 'react';
 import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { UseUserAdminLogicReturn } from '@/hooks/users/admin/use-user-admin-logic';
 
 import UserAdminTable from '@/app/admin/users/_components/user-admin-table';
 import AdminTableHeader from '@/components/layout/admin/admin-table-header';
 import Pagination from '@/components/layout/share/pagination';
+import { StatusModal } from '@/components/layout/share/status-modal';
 
 interface Props extends UseUserAdminLogicReturn {
 	users: CustomerListAdmin[];
@@ -12,13 +13,15 @@ interface Props extends UseUserAdminLogicReturn {
 
 export default function UserAdminUi({
 	users,
+	modal,
 	currentPage,
-    totalPages,
+	totalPages,
 	changePage,
 	handleSort,
 	renderSortIcon,
 	handleRedirectToCustomerInfoViewMode,
 	handleRedirectToEditCustomerEditMode,
+	handleLockUser,
 }: Props): JSX.Element {
 	return (
 		<div className='space-y-4'>
@@ -37,8 +40,17 @@ export default function UserAdminUi({
 					renderSortIcon={renderSortIcon}
 					onView={handleRedirectToCustomerInfoViewMode}
 					onEdit={handleRedirectToEditCustomerEditMode}
+					onLock={handleLockUser}
 				/>
 			</div>
+
+			<StatusModal
+				isOpen={modal.isOpen}
+				status={modal.status}
+				title='Thông báo' // Or whatever title you prefer
+				description={modal.message} // Pass the message here
+				onClose={modal.closeModal}
+			/>
 
 			{/* Pagination */}
 			<Pagination
