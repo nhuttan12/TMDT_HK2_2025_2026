@@ -1,13 +1,12 @@
-import { JSX } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
+import { JSX } from 'react';
 
-import { useTableSort } from '@/hooks/share/use-table-sort';
 import { usePagination } from '@/hooks/share/use-pagination';
-import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
-import { FilterField } from '@/types/uis/FilterField';
+import { useTableSort } from '@/hooks/share/use-table-sort';
 import { ProductAdminFilterValues } from '@/types/products/admin/ProductAdminFilterValues';
+import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { AppRole } from '@/types/uis/AppRole';
+import { FilterField } from '@/types/uis/FilterField';
 
 export interface UseProductAdminLogicReturn {
 	currentPage: number;

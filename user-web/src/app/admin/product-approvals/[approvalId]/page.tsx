@@ -1,5 +1,8 @@
 import ProductAdminFormContainer from '@/components/products/admin/detail/product-admin-form-container';
-import { getProductDetailAdminByProductId } from '@/services/products/admin/product-admin-service';
+import apiServer from '@/lib/api-server';
+import {
+    ProductAdminService
+} from '@/services/products/admin/product-admin-service';
 import { Metadata } from 'next';
 import { JSX } from 'react';
 
@@ -14,8 +17,11 @@ export const metadata: Metadata = {
 export default async function Index({ params }: Props): Promise<JSX.Element> {
 	const { approvalId } = await params;
 
+	const productAdminService = new ProductAdminService(apiServer);
+
 	// Fetch dữ liệu ở phía server
-	const initialProductAdmin = await getProductDetailAdminByProductId(approvalId);
+	const initialProductAdmin =
+		await productAdminService.getProductDetailAdminByProductId(approvalId);
 
 	return (
 		<ProductAdminFormContainer
@@ -24,7 +30,7 @@ export default async function Index({ params }: Props): Promise<JSX.Element> {
 			productId={approvalId}
 			initialProductAdmin={initialProductAdmin}
 			role={'admin'}
-            productApproval={true}
+			productApproval={true}
 		/>
 	);
 }

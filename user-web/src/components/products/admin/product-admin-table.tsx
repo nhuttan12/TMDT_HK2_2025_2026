@@ -3,8 +3,7 @@ import { DataTable } from '@/components/layout/admin/data-table';
 import { StatusModal } from '@/components/layout/share/status-modal';
 import { Button } from '@/components/ui/button';
 import {
-	useProductAdminTableLogic,
-	UseProductAdminTableLogicReturn,
+    useProductAdminTableLogic
 } from '@/hooks/products/admin/use-product-admin-table-logic';
 import { ProductAdminSortField } from '@/types/products/admin/ProductAdminSort';
 import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
@@ -13,7 +12,6 @@ import { formatDate } from '@/utils/shared/date';
 import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
 import Image from 'next/image';
 import { JSX } from 'react';
-import ProductStatusBadge from './detail/product-status-badge';
 import ProductSystemStatusBadge from './detail/product-system-status-badge';
 
 interface ProductAdminTableProps {
@@ -64,20 +62,16 @@ export default function ProductAdminTable({
 			),
 		},
 		{
-			key: 'status',
+			key: 'system_status',
 			header: (
 				<div className='flex items-center gap-1 cursor-pointer select-none'>
 					<span>Trạng thái</span>
-					{renderSortIcon('status')}
+					{renderSortIcon('system_status')}
 				</div>
 			),
-			onHeaderClick: (): void => handleSort('status'),
+			onHeaderClick: (): void => handleSort('system_status'),
 			render: (row: ProductListInfoAdmin): JSX.Element => {
-				if (productApproval) {
-					return <ProductSystemStatusBadge status={row.systemStatus} />;
-				} else {
-					return <ProductStatusBadge status={row.status} />;
-				}
+				return <ProductSystemStatusBadge status={row.systemStatus} />;
 			},
 		},
 		{

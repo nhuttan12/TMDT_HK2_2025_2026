@@ -1,10 +1,16 @@
-import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
+import { PaginationParams } from '@/types/common/Pagination';
+import { ResponseApi } from '@/types/common/ResponseApi';
+import { BackendProductDetailDto } from '@/types/products/admin/BackendProductDetailDto';
+import { BackendProductDTO } from '@/types/products/admin/BackendProductDTO';
 import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
-import { calculateDiscount } from '@/utils/shared/calculateDiscount';
-import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { ProductListInfoAdmin } from '@/types/products/admin/ProductListInfoAdmin';
 import { BackendPagedResult } from '@/types/products/user/productBE';
+import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { mapBackendPagedProductToAdmin, mapProductDetailToFrontend } from '@/utils/products/admin-product';
+import { calculateDiscount } from '@/utils/shared/calculateDiscount';
+import { type AxiosInstance } from 'axios';
 
-export const getProductListInfoAdmin = async ({
+export const getProductListInfoAdminMocking = async ({
 	page = 1,
 	limit = 10,
 }: PaginationRequest = {}): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
@@ -15,7 +21,6 @@ export const getProductListInfoAdmin = async ({
 					id: '550e8400-e29b-41d4-a716-446655440000',
 					name: 'Bonsai Tree Ecosystem',
 					image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
-					status: true,
 					systemStatus: 'approved',
 					createdAt: '2024-01-10T10:00:00Z',
 					updatedAt: '2024-02-01T15:30:00Z',
@@ -24,7 +29,6 @@ export const getProductListInfoAdmin = async ({
 					id: '123e4567-e89b-12d3-a456-426614174000',
 					name: 'Rainforest Moss Bowl',
 					image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
-					status: true,
 					systemStatus: 'pending_approval',
 					createdAt: '2024-01-10T10:00:00Z',
 					updatedAt: '2024-02-01T15:30:00Z',
@@ -33,7 +37,6 @@ export const getProductListInfoAdmin = async ({
 					id: '987e6543-e21b-34d3-b456-426614174111',
 					name: 'Desert Succulent Oasis',
 					image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
-					status: false,
 					systemStatus: 'rejected',
 					createdAt: '2024-01-10T10:00:00Z',
 					updatedAt: '2024-02-01T15:30:00Z',
@@ -42,7 +45,6 @@ export const getProductListInfoAdmin = async ({
 					id: '111e2222-e33b-44d3-c456-426614174222',
 					name: 'Geometric Glass Terrarium',
 					image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
-					status: true,
 					systemStatus: 'banned',
 					createdAt: '2024-01-10T10:00:00Z',
 					updatedAt: '2024-02-01T15:30:00Z',
@@ -51,7 +53,6 @@ export const getProductListInfoAdmin = async ({
 					id: '333e4444-e55b-66d3-d456-426614174333',
 					name: 'Fittonia Closed Bottle',
 					image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
-					status: false,
 					systemStatus: 'approved',
 					createdAt: '2024-01-10T10:00:00Z',
 					updatedAt: '2024-02-01T15:30:00Z',
@@ -72,81 +73,13 @@ export const getProductListInfoAdmin = async ({
 	});
 };
 
-export const getProductApprovalListAdmin = async ({
-	page = 1,
-	limit = 10,
-}: PaginationRequest = {}): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			const mockProducts: ProductListInfoAdmin[] = [
-				{
-					id: '550e8400-e29b-41d4-a716-446655440000',
-					name: 'Bonsai Tree Ecosystem',
-					image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
-					status: true,
-					systemStatus: 'approved',
-					createdAt: '2024-01-10T10:00:00Z',
-					updatedAt: '2024-02-01T15:30:00Z',
-				},
-				{
-					id: '123e4567-e89b-12d3-a456-426614174000',
-					name: 'Rainforest Moss Bowl',
-					image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
-					status: true,
-					systemStatus: 'pending_approval',
-					createdAt: '2024-01-10T10:00:00Z',
-					updatedAt: '2024-02-01T15:30:00Z',
-				},
-				{
-					id: '987e6543-e21b-34d3-b456-426614174111',
-					name: 'Desert Succulent Oasis',
-					image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
-					status: false,
-					systemStatus: 'rejected',
-					createdAt: '2024-01-10T10:00:00Z',
-					updatedAt: '2024-02-01T15:30:00Z',
-				},
-				{
-					id: '111e2222-e33b-44d3-c456-426614174222',
-					name: 'Geometric Glass Terrarium',
-					image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
-					status: true,
-					systemStatus: 'banned',
-					createdAt: '2024-01-10T10:00:00Z',
-					updatedAt: '2024-02-01T15:30:00Z',
-				},
-				{
-					id: '333e4444-e55b-66d3-d456-426614174333',
-					name: 'Fittonia Closed Bottle',
-					image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
-					status: false,
-					systemStatus: 'approved',
-					createdAt: '2024-01-10T10:00:00Z',
-					updatedAt: '2024-02-01T15:30:00Z',
-				},
-			];
-
-			// 2. Trả về cấu trúc PaginationResponse chuẩn
-			resolve({
-				items: mockProducts,
-				totalCount: mockProducts.length,
-				pageNumber: page,
-				pageSize: limit,
-				totalPages: Math.ceil(mockProducts.length / limit),
-				hasNextPage: page * limit < mockProducts.length,
-				hasPreviousPage: page > 1,
-			});
-		}, 500); // Thêm độ trễ 500ms
-	});
-};
-
-export async function getProductDetailAdminByProductId(
+export async function getProductDetailAdminByProductIdMocking(
 	productId: string,
 ): Promise<ProductDetailInfoAdmin> {
 	return new Promise<ProductDetailInfoAdmin>((resolve) => {
 		setTimeout((): void => {
 			resolve({
-				id: 1,
+				id: '1',
 				name: 'Bonsai Tree Ecosystem',
 
 				supplierName: 'Terrafulness',
@@ -157,9 +90,8 @@ export async function getProductDetailAdminByProductId(
 				importPrice: 850000,
 				discount: calculateDiscount(1500000, 1250000),
 
-				status: true,
 				systemStatus: 'approved',
-				categoryId: 1,
+				category: 'bonsai',
 
 				images: [
 					{
@@ -253,59 +185,54 @@ export async function getProductDetailAdminByProductId(
 	});
 }
 
-export const getProductListInfoByShopId = async (
-    userId: string, // Đã đổi sang string để phù hợp với định dạng GUID
-    { page = 1, limit = 10 }: PaginationRequest = {}
-): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const mockProducts: ProductListInfoAdmin[] = [
-                {
-                    id: '550e8400-e29b-41d4-a716-446655440000',
-                    name: 'Bonsai Tree Ecosystem',
-                    image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
-                    status: true,
-                    systemStatus: 'approved',
-                    createdAt: '2024-01-10T10:00:00Z',
-                    updatedAt: '2024-02-01T15:30:00Z',
-                },
-                {
-                    id: '123e4567-e89b-12d3-a456-426614174000',
-                    name: 'Rainforest Moss Bowl',
-                    image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
-                    status: true,
-                    systemStatus: 'pending_approval',
-                    createdAt: '2024-01-10T10:00:00Z',
-                    updatedAt: '2024-02-01T15:30:00Z',
-                },
-                {
-                    id: '987e6543-e21b-34d3-b456-426614174111',
-                    name: 'Desert Succulent Oasis',
-                    image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
-                    status: false,
-                    systemStatus: 'rejected',
-                    createdAt: '2024-01-10T10:00:00Z',
-                    updatedAt: '2024-02-01T15:30:00Z',
-                },
-                {
-                    id: '111e2222-e33b-44d3-c456-426614174222',
-                    name: 'Geometric Glass Terrarium',
-                    image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
-                    status: true,
-                    systemStatus: 'banned',
-                    createdAt: '2024-01-10T10:00:00Z',
-                    updatedAt: '2024-02-01T15:30:00Z',
-                },
-                {
-                    id: '333e4444-e55b-66d3-d456-426614174333',
-                    name: 'Fittonia Closed Bottle',
-                    image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
-                    status: false,
-                    systemStatus: 'approved',
-                    createdAt: '2024-01-10T10:00:00Z',
-                    updatedAt: '2024-02-01T15:30:00Z',
-                },
-            ];
+export const getProductApprovalListAdminMocking = async ({
+	page = 1,
+	limit = 10,
+}: PaginationRequest = {}): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			const mockProducts: ProductListInfoAdmin[] = [
+				{
+					id: '550e8400-e29b-41d4-a716-446655440000',
+					name: 'Bonsai Tree Ecosystem',
+					image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
+					systemStatus: 'approved',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '123e4567-e89b-12d3-a456-426614174000',
+					name: 'Rainforest Moss Bowl',
+					image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
+					systemStatus: 'pending_approval',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '987e6543-e21b-34d3-b456-426614174111',
+					name: 'Desert Succulent Oasis',
+					image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
+					systemStatus: 'rejected',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '111e2222-e33b-44d3-c456-426614174222',
+					name: 'Geometric Glass Terrarium',
+					image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
+					systemStatus: 'banned',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '333e4444-e55b-66d3-d456-426614174333',
+					name: 'Fittonia Closed Bottle',
+					image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
+					systemStatus: 'approved',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+			];
 
 			// 2. Trả về cấu trúc PaginationResponse chuẩn
 			resolve({
@@ -317,8 +244,70 @@ export const getProductListInfoByShopId = async (
 				hasNextPage: page * limit < mockProducts.length,
 				hasPreviousPage: page > 1,
 			});
-        }, 500); // Giả lập độ trễ mạng 500ms
-    });
+		}, 500); // Thêm độ trễ 500ms
+	});
+};
+
+export const getProductListInfoByShopId = async (
+	{ page = 1, limit = 10 }: PaginationRequest = {},
+): Promise<BackendPagedResult<ProductListInfoAdmin>> => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			const mockProducts: ProductListInfoAdmin[] = [
+				{
+					id: '550e8400-e29b-41d4-a716-446655440000',
+					name: 'Bonsai Tree Ecosystem',
+					image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
+					systemStatus: 'approved',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '123e4567-e89b-12d3-a456-426614174000',
+					name: 'Rainforest Moss Bowl',
+					image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
+					systemStatus: 'pending_approval',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '987e6543-e21b-34d3-b456-426614174111',
+					name: 'Desert Succulent Oasis',
+					image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
+					systemStatus: 'rejected',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '111e2222-e33b-44d3-c456-426614174222',
+					name: 'Geometric Glass Terrarium',
+					image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
+					systemStatus: 'banned',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+				{
+					id: '333e4444-e55b-66d3-d456-426614174333',
+					name: 'Fittonia Closed Bottle',
+					image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
+					systemStatus: 'approved',
+					createdAt: '2024-01-10T10:00:00Z',
+					updatedAt: '2024-02-01T15:30:00Z',
+				},
+			];
+
+			// 2. Trả về cấu trúc PaginationResponse chuẩn
+			resolve({
+				items: mockProducts,
+				totalCount: mockProducts.length,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: Math.ceil(mockProducts.length / limit),
+				hasNextPage: page * limit < mockProducts.length,
+				hasPreviousPage: page > 1,
+			});
+		}, 500); // Giả lập độ trễ mạng 500ms
+	});
 };
 
 export const getProductListInfoAdminForProductApprovals = async (): Promise<
@@ -329,7 +318,6 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			id: '550e8400-e29b-41d4-a716-446655440000', // Đã chuyển sang GUID
 			name: 'Bonsai Tree Ecosystem',
 			image: 'https://cdn.hstatic.net/products/200000968796/p4_4de79927f8ed486fb7b9c1527101c423_large.png',
-			status: true,
 			systemStatus: 'approved',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
@@ -338,7 +326,6 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			id: '123e4567-e89b-12d3-a456-426614174000', // Đã chuyển sang GUID
 			name: 'Rainforest Moss Bowl',
 			image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?w=500&q=80',
-			status: true,
 			systemStatus: 'pending_approval',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
@@ -347,7 +334,6 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			id: '987e6543-e21b-34d3-b456-426614174111', // Đã chuyển sang GUID
 			name: 'Desert Succulent Oasis',
 			image: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=500&q=80',
-			status: false,
 			systemStatus: 'rejected',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
@@ -356,7 +342,6 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			id: '111e2222-e33b-44d3-c456-426614174222', // Đã chuyển sang GUID
 			name: 'Geometric Glass Terrarium',
 			image: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500&q=80',
-			status: true,
 			systemStatus: 'banned',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
@@ -365,7 +350,6 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 			id: '333e4444-e55b-66d3-d456-426614174333', // Đã chuyển sang GUID
 			name: 'Fittonia Closed Bottle',
 			image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=500&q=80',
-			status: false,
 			systemStatus: 'approved',
 			createdAt: '2024-01-10T10:00:00Z',
 			updatedAt: '2024-02-01T15:30:00Z',
@@ -374,3 +358,127 @@ export const getProductListInfoAdminForProductApprovals = async (): Promise<
 
 	return mockProducts;
 };
+
+export class ProductAdminService {
+	constructor(private api: AxiosInstance) {}
+
+	async getProductListInfoAdmin(
+		pagination: PaginationParams,
+	): Promise<BackendPagedResult<ProductListInfoAdmin>> {
+		try {
+			const params = {
+				...pagination,
+			};
+			const response = await this.api.get<
+				ResponseApi<BackendPagedResult<BackendProductDTO>>
+			>(`/products/admin/list`, {
+				params,
+			});
+
+			console.log('supplier list paging data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductListInfoAdminMocking();
+			}
+
+			return mapBackendPagedProductToAdmin(response.data.data);
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductListInfoAdminMocking();
+		}
+	}
+
+	async getProductDetailAdminByProductId(productId: string): Promise<ProductDetailInfoAdmin> {
+		try {
+			const response = await this.api.get<ResponseApi<BackendProductDetailDto>>(
+				`/products/admin/detail?productId=${productId}`,
+			);
+
+			console.log('products  data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductDetailAdminByProductIdMocking(productId);
+			}
+
+			const formattedData = mapProductDetailToFrontend(response.data.data);
+
+			console.log('products  data', formattedData);
+
+			return formattedData;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductDetailAdminByProductIdMocking(productId);
+		}
+	}
+
+	async getProductApprovalListAdmin(
+		pagination: PaginationParams,
+	): Promise<BackendPagedResult<ProductListInfoAdmin>> {
+		try {
+			const params = {
+				...pagination,
+			};
+			const response = await this.api.get<
+				ResponseApi<BackendPagedResult<BackendProductDTO>>
+			>(`/products/admin/list/approval`, {
+				params,
+			});
+
+			console.log('supplier list paging data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductApprovalListAdminMocking();
+			}
+
+			return mapBackendPagedProductToAdmin(response.data.data);
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductApprovalListAdminMocking();
+		}
+	}
+
+	async approveProduct(productId: string): Promise<string> {
+		try {
+			const response = await this.api.patch<ResponseApi<string>>(`/products/admin/approval`, {
+				params: productId,
+			});
+
+			console.log('approve product data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return '';
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return '';
+		}
+	}
+
+	async getProductListInfoByShopId(
+		pagination: PaginationRequest = {},
+	): Promise<BackendPagedResult<ProductListInfoAdmin>> {
+		try {
+			const params = {
+				...pagination,
+			};
+			const response = await this.api.get<
+				ResponseApi<BackendPagedResult<BackendProductDTO>>
+			>(`/products/admin/list/me`, {
+				params,
+			});
+
+			console.log('product list me paging data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return await getProductListInfoByShopId();
+			}
+
+			return mapBackendPagedProductToAdmin(response.data.data);
+		} catch (error: unknown) {
+			console.error(error);
+			return await getProductListInfoByShopId();
+		}
+	}
+}

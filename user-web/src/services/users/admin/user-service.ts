@@ -1,12 +1,18 @@
+import { PaginationParams } from '@/types/common/Pagination';
+import { ResponseApi } from '@/types/common/ResponseApi';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { PaginationRequest } from '@/types/shared/PaginationRequest';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { BackendUserInfoDTO } from '@/types/users/admin/BackendUserInfoDTO';
 import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { UserDetailInfoAdmin } from '@/types/users/admin/UserDetailInfoAdmin';
+import { mapUserInfoToCustomerList } from '@/utils/users/user-admin-mapper';
+import { type AxiosInstance } from 'axios';
 
-export async function getCustomerList({ page = 1, limit = 10 }: PaginationRequest = {}): Promise<
-	PaginationResponse<CustomerListAdmin>
-> {
-	return new Promise<PaginationResponse<CustomerListAdmin>>((resolve) => {
+export async function getCustomerListMocking({
+	page = 1,
+	limit = 10,
+}: PaginationRequest = {}): Promise<BackendPagedResult<CustomerListAdmin>> {
+	return new Promise<BackendPagedResult<CustomerListAdmin>>((resolve) => {
 		setTimeout(() => {
 			// Giả lập trả về danh sách dựa theo mode
 			const mockData: CustomerListAdmin[] = [
@@ -16,8 +22,9 @@ export async function getCustomerList({ page = 1, limit = 10 }: PaginationReques
 					email: 'an.nguyen@gmail.com',
 					phone: '0909123456',
 					avatar: 'https://i.pravatar.cc/150?img=11',
-					status: true,
 					createdAt: '2024-01-05T08:30:00Z',
+					lockTimeStart: '2024-01-05T08:30:00Z',
+					lockTimeEnd: '2024-01-05T08:30:00Z',
 				},
 				{
 					id: 'f1c4d3e5-2b3c-4d5e-6f7a-8b9c0d1e2f3a',
@@ -25,8 +32,9 @@ export async function getCustomerList({ page = 1, limit = 10 }: PaginationReques
 					email: 'binh.tran@gmail.com',
 					phone: '0911222333',
 					avatar: 'https://i.pravatar.cc/150?img=12',
-					status: false,
 					createdAt: '2024-01-10T09:00:00Z',
+					lockTimeStart: '2024-01-05T08:30:00Z',
+					lockTimeEnd: '2024-01-05T08:30:00Z',
 				},
 				{
 					id: 'a2d5e4f6-3c4d-5e6f-7a8b-9c0d1e2f3a4b',
@@ -34,26 +42,30 @@ export async function getCustomerList({ page = 1, limit = 10 }: PaginationReques
 					email: 'tung.do@gmail.com',
 					phone: '0933444555',
 					avatar: 'https://i.pravatar.cc/150?img=13',
-					status: true,
 					createdAt: '2024-01-25T07:20:00Z',
+					lockTimeStart: '2024-01-05T08:30:00Z',
+					lockTimeEnd: '2024-01-05T08:30:00Z',
 				},
 			];
 
-			// Bọc dữ liệu vào dạng PaginationResponse
+			const totalCount = mockData.length; // Tổng số lượng item thực tế (giả lập là 3)
+			const totalPages = Math.ceil(totalCount / limit);
+
+			// Bọc dữ liệu vào dạng BackendPagedResult
 			resolve({
-				data: mockData,
-				meta: {
-					totalItems: 3, // Tổng số lượng item thực tế trong DB (giả lập là 3)
-					totalPages: Math.ceil(3 / limit),
-					currentPage: page,
-					itemsPerPage: limit,
-				},
+				items: mockData,
+				totalCount: totalCount,
+				pageNumber: page,
+				pageSize: limit,
+				totalPages: totalPages,
+				hasNextPage: page < totalPages,
+				hasPreviousPage: page > 1,
 			});
 		}, 500);
 	});
 }
 
-export async function getUserDetailAdminById(id: string): Promise<UserDetailInfoAdmin> {
+export async function getUserDetailAdminByIdMocking(id: string): Promise<UserDetailInfoAdmin> {
 	return new Promise<UserDetailInfoAdmin>((resolve) => {
 		setTimeout((): void => {
 			resolve({
@@ -62,10 +74,81 @@ export async function getUserDetailAdminById(id: string): Promise<UserDetailInfo
 				email: 'nguyenvana@example.com',
 				phone: '0901234567',
 				avatar: 'https://i.pravatar.cc/300',
-				status: true,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
 			});
 		}, 500);
 	});
+}
+
+export class UserAdminService {
+	constructor(private api: AxiosInstance) {}
+
+	async getCustomerList(
+		pagingParam: PaginationParams,
+	): Promise<BackendPagedResult<CustomerListAdmin>> {
+		try {
+			const flatParams = {
+				...pagingParam,
+			};
+			const response = await this.api.get<
+				ResponseApi<BackendPagedResult<BackendUserInfoDTO>>
+			>(`/admin/users`, {
+				params: flatParams,
+			});
+
+			console.log('users data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getCustomerListMocking();
+			}
+
+			const mappedItems: CustomerListAdmin[] = response.data.data.items.map(
+				(item: BackendUserInfoDTO) => mapUserInfoToCustomerList(item),
+			);
+
+			return {
+            ...response.data.data,
+            items: mappedItems,
+        };
+		} catch (error: unknown) {
+			console.error(error);
+			return await getCustomerListMocking();
+		}
+	}
+
+	async getUserDetailAdminById(userId: string): Promise<UserDetailInfoAdmin> {
+		try {
+			const response = await this.api.get<ResponseApi<UserDetailInfoAdmin>>(
+				`/admin/users/${userId}`,
+			);
+
+			console.log('users data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return await getUserDetailAdminByIdMocking(userId);
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return await getUserDetailAdminByIdMocking(userId);
+		}
+	}
+
+	async lockUser(userId: string): Promise<string> {
+		try {
+			const response = await this.api.post<ResponseApi<string>>(
+				`/admin/users/${userId}/lock`,
+			);
+
+			console.log('users data', response.data.data);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return '';
+			}
+
+			return response.data.data;
+		} catch (error: unknown) {
+			console.error(error);
+			return '';
+		}
+	}
 }

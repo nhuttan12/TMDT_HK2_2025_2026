@@ -5,11 +5,9 @@ import { JSX } from 'react';
 import { ShopStorefrontContainer } from './_components/shop-storefront-container';
 
 interface Props {
-	// Kể từ Next.js 15+, params bắt buộc phải là một Promise
 	params: Promise<{ shopId: string }>;
 }
 
-// 1. TẠO META DATA ĐỘNG CHO SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const resolvedParams = await params;
 	const shopId = resolvedParams.shopId;

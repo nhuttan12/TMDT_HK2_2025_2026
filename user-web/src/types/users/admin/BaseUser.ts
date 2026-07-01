@@ -4,5 +4,4 @@ export interface BaseUserAdmin {
 	email: string;
 	phone: string;
 	avatar: string;
-	status: boolean;
 }

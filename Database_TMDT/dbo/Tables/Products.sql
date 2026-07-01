@@ -10,10 +10,11 @@
     [created_at]  DATETIMEOFFSET (7) NOT NULL,
     [updated_at]  DATETIMEOFFSET (7) NOT NULL,
     CONSTRAINT [PK_PRODUCTS] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_Products_Categories] FOREIGN KEY ([category_id]) REFERENCES [dbo].[CATEGORIES] ([id]),
-    CONSTRAINT [FK_Products_Shops_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id]),
-    CONSTRAINT [FK_Products_Users_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[USERS] ([id])
+    CONSTRAINT [FK_Products_Categories_CategoryId] FOREIGN KEY ([category_id]) REFERENCES [dbo].[CATEGORIES] ([id]),
+    CONSTRAINT [FK_Products_Shops_ShopId] FOREIGN KEY ([shop_id]) REFERENCES [dbo].[SHOPS] ([id])
 );
+
+
 
 
 

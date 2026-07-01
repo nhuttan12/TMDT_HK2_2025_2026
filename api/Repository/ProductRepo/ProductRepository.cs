@@ -9,10 +9,15 @@ namespace api.Repository.ProductRepo
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
+        Task<Guid> ApproveProduct(Guid productId, CancellationToken cancellationToken);
         Task<bool> ExistsAsync(Guid productId, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetAllAsync(int pageNumber, int pageSize, FilterProductQueryDto filterDto, CancellationToken cancellationToken);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Product?> GetByIdWithShopAsync(Guid productId, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<Product>>> GetProductAprrovalListInfoAdmin(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<Result<Product>> GetProductDetailInfoAdmin(Guid productId, CancellationToken cancellationToken);
+        Task<Result<PagedResult<Product>>> GetProductListInfoAdmin(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        Task<Result<PagedResult<Product>>> GetProductListInfoAdminMe(Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetProductOfShopAsync(Guid shopId, int pageNumber, int pageSize, string sortBy, CancellationToken cancellationToken);
         Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken);
         Task<PagedResult<Product>> SearchProductsAsync(
@@ -127,7 +132,7 @@ namespace api.Repository.ProductRepo
             return _context.Products.AnyAsync(p => p.Id == productId, cancellationToken);
         }
 
-      
+
 
         public async Task<PagedResult<Product>> GetRelatedProductsAsync(Guid productId, Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
@@ -135,7 +140,7 @@ namespace api.Repository.ProductRepo
                 .AsNoTracking()
                 .Where(p => p.Id != productId && p.Status == ProductStatus.Approved && p.ShopId == shopId);
 
-           
+
 
             var totalCount = await query.CountAsync(cancellationToken);
 
@@ -234,6 +239,118 @@ namespace api.Repository.ProductRepo
                 .ToListAsync(cancellationToken);
 
             return new PagedResult<Product>(items, totalCount, request.PageNumber, request.PageSize);
+        }
+
+        public async Task<Result<PagedResult<Product>>> GetProductListInfoAdmin(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            // 1. Khởi tạo query read-only và Eager Loading các bảng liên quan cần tìm kiếm
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Shop)
+                .Include(p => p.Variants)
+                .AsQueryable();
+
+            // 3. Tính tổng số lượng bản ghi thỏa mãn điều kiện tìm kiếm
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 4. Phân trang và lấy dữ liệu (Luôn OrderBy trước khi Skip/Take)
+            var items = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<Result<Product>> GetProductDetailInfoAdmin(Guid productId, CancellationToken cancellationToken)
+        {
+            // 1. Khởi tạo query read-only và Eager Loading các bảng liên quan cần tìm kiếm
+            var product = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.Shop)
+                .Include(p => p.Category)
+                .Include(p => p.Detail)
+                .Include(p => p.Variants)
+                // 2. Lấy trực tiếp sản phẩm theo Id (bỏ OrderBy và ToList)
+                .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+
+            // 3. Fail Fast: Nếu không tìm thấy sản phẩm, trả về lỗi ngay lập tức
+            if (product == null)
+            {
+                // (Bạn có thể điều chỉnh mã lỗi theo cấu trúc class Error của hệ thống)
+                return Result<Product>.Failure(
+                    Error.Create("Product.NotFound", $"Không tìm thấy sản phẩm với ID: {productId}", ErrorType.NotFound));
+            }
+
+            // 4. Trả về sản phẩm thành công
+            return Result<Product>.Success(product);
+        }
+
+        public async Task<Result<PagedResult<Product>>> GetProductAprrovalListInfoAdmin(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            // 1. Khởi tạo query read-only và Eager Loading các bảng liên quan cần tìm kiếm
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Shop)
+                .Include(p => p.Variants)
+                .Where(p => p.Status == ProductStatus.PendingApproval)
+                .AsQueryable();
+
+            // 3. Tính tổng số lượng bản ghi thỏa mãn điều kiện tìm kiếm
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 4. Phân trang và lấy dữ liệu (Luôn OrderBy trước khi Skip/Take)
+            var items = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<Guid> ApproveProduct(Guid productId, CancellationToken cancellationToken)
+        {
+            var rowsAffected = await _context.Products
+                .Where(p => p.Id == productId)
+                .ExecuteUpdateAsync(s => s.SetProperty(p => p.Status, ProductStatus.Approved), cancellationToken);
+
+            // Xử lý trường hợp không tìm thấy sản phẩm
+            if (rowsAffected == 0)
+            {
+                // Tùy vào thiết kế, bạn có thể quăng lỗi hoặc trả về Guid.Empty
+                throw new KeyNotFoundException($"Không tìm thấy sản phẩm với ID: {productId}");
+            }
+
+            // Trả về ID của sản phẩm đã được duyệt
+            return productId;
+        }
+
+        public async Task<Result<PagedResult<Product>>> GetProductListInfoAdminMe(Guid shopId, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            // 1. Khởi tạo query read-only và Eager Loading các bảng liên quan cần tìm kiếm
+            var query = _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Shop)
+                .Include(p => p.Variants)
+                .Where(p => p.ShopId == shopId)
+                .AsQueryable();
+
+            // 3. Tính tổng số lượng bản ghi thỏa mãn điều kiện tìm kiếm
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 4. Phân trang và lấy dữ liệu (Luôn OrderBy trước khi Skip/Take)
+            var items = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Product>(items, totalCount, pageNumber, pageSize);
         }
     }
 }

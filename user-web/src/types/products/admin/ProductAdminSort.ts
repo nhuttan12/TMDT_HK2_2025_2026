@@ -1,7 +1,7 @@
 export type ProductAdminSortField =
 	| 'name'
 	| 'stock'
-	| 'status'
+	| 'system_status'
 	| 'createdAt'
 	| 'updatedAt'
 	| 'slug';

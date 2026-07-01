@@ -293,30 +293,30 @@ function GetShippingFee(status: number): ShippingStatus {
 	}
 }
 
-// export function GetInvoiceStatus(status: number): InvoiceStatus {
-// 	switch (status) {
-// 		case 1: // AwaitingPayment
-// 			return 'pending_approval'; // Chờ thanh toán / duyệt
-// 		case 2: // Pending
-// 			return 'pending'; // Chờ xác nhận đơn
-// 		case 3: // Processing (Đang đóng gói)
-// 			return 'pending'; // Gom chung vào nhóm chờ xử lý ở FE hoặc tùy bạn quy định
-// 		case 4: // Shipped
-// 			return 'shipping'; // Đang giao hàng
-// 		case 5: // Delivered
-// 			return 'delivered'; // Đã giao hàng (chờ bấm nhận)
-// 		case 6: // Completed
-// 			return 'completed'; // Đơn hàng hoàn thành hoàn toàn
-// 		case 7: // Cancelled
-// 			return 'cancelled'; // Đã hủy đơn
-// 		case 8: // Returned
-// 			return 'returned'; // Trả hàng / Hoàn tiền
-// 		case 9: // DeliveryFailed
-// 			return 'cancelled'; // Giao thất bại, gom về luồng huỷ/hoàn hoặc xử lý riêng
-// 		default:
-// 			return 'pending';
-// 	}
-// }
+export function GetInvoiceStatus(status: number): InvoiceStatus {
+	switch (status) {
+		case 1: // AwaitingPayment
+			return 'pending_approval'; // Chờ thanh toán / duyệt
+		case 2: // Pending
+			return 'pending'; // Chờ xác nhận đơn
+		case 3: // Processing (Đang đóng gói)
+			return 'pending'; // Gom chung vào nhóm chờ xử lý ở FE hoặc tùy bạn quy định
+		case 4: // Shipped
+			return 'shipping'; // Đang giao hàng
+		case 5: // Delivered
+			return 'delivered'; // Đã giao hàng (chờ bấm nhận)
+		case 6: // Completed
+			return 'completed'; // Đơn hàng hoàn thành hoàn toàn
+		case 7: // Cancelled
+			return 'cancelled'; // Đã hủy đơn
+		case 8: // Returned
+			return 'returned'; // Trả hàng / Hoàn tiền
+		case 9: // DeliveryFailed
+			return 'cancelled'; // Giao thất bại, gom về luồng huỷ/hoàn hoặc xử lý riêng
+		default:
+			return 'pending';
+	}
+}
 
 export const getRecipientInfoMocking = async (): Promise<RecipientInfo> => {
     // Giả lập thời gian chờ phản hồi từ server (ví dụ: 500ms)

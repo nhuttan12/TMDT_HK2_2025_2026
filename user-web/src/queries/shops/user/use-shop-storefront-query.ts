@@ -1,4 +1,4 @@
-import { getShopListPagingMocking, getShopPublicCoupons, getShopPublicProducts } from "@/services/shops/user/shop-service";
+import { getShopListPagingMocking, getShopPublicCoupons, getShopPublicProductsMocking } from "@/services/shops/user/shop-service";
 import { PaginationParams } from "@/types/common/Pagination";
 import { UserCoupon } from "@/types/marketing/coupons/user/UserCoupon";
 import { BackendPagedResult } from "@/types/products/user/productBE";
@@ -15,7 +15,7 @@ export const useShopProductsQuery = (
 	return useQuery<PaginationResponse<ProductUserCard>, Error>({
 		// Gắn cả filter vào queryKey để tự động gọi lại API khi bộ lọc thay đổi
 		queryKey: ['storefront-shop-products', shopId, filter],
-		queryFn: () => getShopPublicProducts(shopId, filter),
+		queryFn: () => getShopPublicProductsMocking(shopId, filter),
 		// Giữ lại data cũ khi đang fetch data mới (giúp UI không bị giật nháy)
 		placeholderData: (previousData) => previousData,
 	});

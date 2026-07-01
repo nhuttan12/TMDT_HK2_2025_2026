@@ -1,16 +1,23 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
+import { UserAdminService } from '@/services/users/admin/user-service';
+import { PaginationParams } from '@/types/common/Pagination';
+import { BackendPagedResult } from '@/types/products/user/productBE';
 import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
-import { getCustomerList } from '@/services/users/admin/user-service';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
-import { PaginationRequest } from '@/types/shared/PaginationRequest';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useUserAdminListQuery(
-	initialData: PaginationResponse<CustomerListAdmin>,
-	request?: PaginationRequest,
-): UseQueryResult<PaginationResponse<CustomerListAdmin>> {
+	initialData: BackendPagedResult<CustomerListAdmin>,
+	request?: PaginationParams,
+): UseQueryResult<BackendPagedResult<CustomerListAdmin>> {
+	const userAdminService = new UserAdminService(apiClient);
+
 	return useQuery({
-		queryKey: ['user-admin-list'],
-		queryFn: () => getCustomerList({ page: request?.page, limit: request?.limit }),
+		queryKey: ['user-admin-list', request?.pageNumber, request?.pageSize],
+		queryFn: () =>
+			userAdminService.getCustomerList({
+				pageNumber: request?.pageNumber,
+				pageSize: request?.pageSize,
+			}),
 		initialData: initialData,
 	});
 }

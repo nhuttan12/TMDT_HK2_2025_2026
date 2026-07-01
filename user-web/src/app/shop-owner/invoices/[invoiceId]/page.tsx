@@ -1,7 +1,9 @@
-import { JSX } from 'react';
-import { getUserInvoiceDetailByInvoiceId } from '@/services/invoices/admin/invoice-admin-servie';
-import { InvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
+import apiServer from '@/lib/api-server';
+import {
+    InvoiceAdminService
+} from '@/services/invoices/admin/invoice-admin-service';
 import { Metadata } from 'next';
+import { JSX } from 'react';
 import InvoiceDetailAdminContainer from './_components/invoice-detail-admin-container';
 
 interface PageProps {
@@ -14,14 +16,14 @@ export const metadata: Metadata = {
 
 export default async function Page({ params }: PageProps): Promise<JSX.Element> {
 	const { invoiceId } = await params;
-	const id: number = parseInt(invoiceId);
+	const invoiceAdminService = new InvoiceAdminService(apiServer);
 
 	// Gọi service lấy data tại Server
-	const initialInvoice = await getUserInvoiceDetailByInvoiceId(id);
+	const initialInvoice = await invoiceAdminService.getUserInvoiceDetailByInvoiceId(invoiceId);
 
 	return (
 		<InvoiceDetailAdminContainer
-			invoiceId={id}
+			invoiceId={invoiceId}
 			initialInvoice={initialInvoice}
 		/>
 	);

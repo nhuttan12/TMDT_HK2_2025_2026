@@ -16,6 +16,7 @@ namespace api.Repository.UserRepo
         public Task<User?> GetByEmailAsync(string email, bool trackChanges = false, CancellationToken ct = default);
         Task UpdateAsync(User user, CancellationToken ct);
         public Task<ICollection<Address>?> GetAddressById(Guid id, CancellationToken ct);
+        Task<Guid> Lock(Guid userId, CancellationToken cancellationToken);
     }
     public class UserRepository(MyAppDbContext _context) : IUserRepository
     {
@@ -106,11 +107,27 @@ namespace api.Repository.UserRepo
             _context.Users.Remove(entity);
         }
 
-        public async Task<ICollection< Address>?> GetAddressById(Guid id, CancellationToken ct)
+        public async Task<ICollection<Address>?> GetAddressById(Guid id, CancellationToken ct)
         {
-           return await _context.Address
-                .Where(u => u.UserId == id)
-                .ToListAsync(ct);
-    }
+            return await _context.Address
+                 .Where(u => u.UserId == id)
+                 .ToListAsync(ct);
+        }
+
+        public async Task<Guid> Lock(Guid userId, CancellationToken cancellationToken)
+        {
+            var currentTime = DateTimeOffset.UtcNow;
+
+            var lockUntil = currentTime.AddMonths(6);
+
+            await _context.UserDetails
+                .Where(ud => ud.UserId == userId)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(ud => ud.LockTimeStart, currentTime)
+                    .SetProperty(ud => ud.LockTimeEnd, lockUntil),
+                    cancellationToken);
+
+            return userId;
+        }
     }
 }

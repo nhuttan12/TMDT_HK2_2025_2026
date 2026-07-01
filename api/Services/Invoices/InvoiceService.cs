@@ -1,4 +1,5 @@
-﻿using api.Dtos.Invoice.Requests;
+﻿using api.Dtos.Common;
+using api.Dtos.Invoice.Requests;
 using api.Dtos.Invoice.Response;
 using api.Models;
 using api.Models.Orders;
@@ -16,7 +17,10 @@ namespace api.Services.Invoices
         Task<Result<InvoiceDetailResponseDto>> AddDeliveryToInvoice(Guid? userId, Guid invoiceId, AddDeliveryRequestDto request, CancellationToken cancellationToken);
         Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto requset, CancellationToken cancellationToken);
         Task<Result<InvoiceDetailResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
+        Task<Result<InvoiceDetailResponseDto>> GetShopDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
         Task<Result<PagedResult<InvoiceResponseDto>>> GetListById(Guid? userId, CancellationToken cancellationToken);
+        Task<Result<PagedResult<InvoiceResponseDto>>> GetListForAdmin(PaginationRequestDto requset, CancellationToken cancellationToken);
+        Task<Result<Guid>> ApproveInvoice(Guid userId, Guid invoiceId, CancellationToken cancellationToken);
     }
     public class InvoiceService(
         ILogger<Invoice> logger,
@@ -175,6 +179,16 @@ namespace api.Services.Invoices
             return MapInvoiceToInvoiceDetailDto(res);
         }
 
+        public async Task<Result<InvoiceDetailResponseDto>> GetShopDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
+        {
+            if (invoiceId == Guid.Empty)
+            {
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
+            }
+            var res = await repo.GetDetailShopAsync(userId, invoiceId, cancellationToken);
+            return MapInvoiceToInvoiceDetailDto(res);
+        }
+
         public async Task<Result<PagedResult<InvoiceResponseDto>>> GetListById(Guid? userId, CancellationToken cancellationToken)
         {
             var invoices = await repo.GetListByUserIdAsync(userId, cancellationToken);
@@ -200,6 +214,36 @@ namespace api.Services.Invoices
             ));
         }
 
+        public async Task<Result<PagedResult<InvoiceResponseDto>>> GetListForAdmin(PaginationRequestDto request, CancellationToken cancellationToken)
+        {
+            // 1. Lấy dữ liệu từ repo
+            var pagedData = await repo.GetListForAdmin(request, cancellationToken);
+
+            // 2. Map dữ liệu
+            var dtos = pagedData.Items.Select(p => new InvoiceResponseDto
+            {
+                Id = p.Id,
+                CreatedAt = p.CreatedAt,
+                Status = p.Status.ToString(), // Chuyển Enum sang string
+                PaymentMethod = p.Payment.PaymentMethod.ToString() , // Giả định có thuộc tính Method trong Payment
+
+                // Tính tổng tiền từ danh sách items
+                TotalAmount = p.Items.Sum(x => x.PriceAtPurchase * x.Quantity),
+
+                // Tính tổng số lượng sản phẩm (Tổng quantity của tất cả items)
+                TotalItems = p.Items.Sum(x => x.Quantity)
+            }).ToList();
+
+            // 3. Tạo PagedResult mới
+            var result = new PagedResult<InvoiceResponseDto>(
+                dtos,
+                pagedData.TotalCount,
+                request.PageNumber,
+                request.PageSize
+            );
+
+            return Result<PagedResult<InvoiceResponseDto>>.Success(result);
+        }
         private Result<InvoiceDetailResponseDto> MapInvoiceToInvoiceDetailDto(Invoice invoice)
         {
             if (invoice == null)
@@ -273,6 +317,13 @@ namespace api.Services.Invoices
                 TotalAmount = invoice.TotalAmount,
                 TotalItems = invoice.Items.Count,
             };
+        }
+
+        public async Task<Result<Guid>> ApproveInvoice(Guid shopId, Guid invoiceId, CancellationToken cancellationToken)
+        {
+            var result = await repo.ApproveInvoice(shopId, invoiceId, cancellationToken);
+
+            return Result<Guid>.Success(result);
         }
     }
 }

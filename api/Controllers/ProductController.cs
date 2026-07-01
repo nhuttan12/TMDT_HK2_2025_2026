@@ -1,6 +1,7 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Products.Request;
 using api.Services.Products;
+using api.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -74,7 +75,85 @@ namespace api.Controllers
 
             return HandleResult(result);
         }
+        [HttpGet("admin/list")]
+        public async Task<IActionResult> GetProductListInfoAdmin( [FromQuery] PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var result = await _service.GetProductListInfoAdmin(paginationDto, cancellationToken);
 
+            return HandleResult(result);
+        }
+        [HttpGet("admin/detail")]
+        public async Task<IActionResult> GetProductDetailInfoAdmin([FromQuery] Guid productId, CancellationToken cancellationToken)
+        {
+            var result = await _service.GetProductDetailInfoAdmin(productId, cancellationToken);
+
+            return HandleResult(result);
+        }
+        [HttpGet("admin/list/approval")]
+        public async Task<IActionResult> GetProductAprrovalListInfoAdmin([FromQuery] PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var result = await _service.GetProductAprrovalListInfoAdmin(paginationDto, cancellationToken);
+
+            return HandleResult(result);
+        }
+        [HttpPatch("admin/approval")]
+        public async Task<IActionResult> ApproveProduct([FromBody] Guid productId, CancellationToken cancellationToken)
+        {
+            var result = await _service.ApproveProduct(productId, cancellationToken);
+
+            return HandleResult(result);
+        }
+        [HttpGet("admin/list/me")]
+        public async Task<IActionResult> GetProductListInfoAdminMe([FromQuery] PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var shopId = AuthenticatedUserId;
+            if (shopId == null)
+            {
+                return HandleResult(Result<bool>.Failure(Error.Create("Unauthorized", "You are not authorized.", ErrorType.BadRequest)));
+            }
+            var result = await _service.GetProductListInfoAdminMe(shopId.Value, paginationDto, cancellationToken);
+
+            return HandleResult(result);
+        }
+    }
+
+
+    public sealed record ProductAdminResponseDto
+    {
+        public required Guid id { get; init; }
+        public required string name { get; init; }
+        public required string image { get; init; }
+        public required string status { get; init; }
+        public required string createdAt { get; init; }
+        public required string updatedAt { get; init; }
+    }
+
+    public sealed record ProductDetailAdminResponseDto
+    {
+        public required Guid id { get; init; }
+        public required string name { get; init; }
+        public required string supplierName { get; init; }
+        public required string description { get; init; }
+        public required decimal importPrice { get; init; }
+        public required decimal discount { get; init; }
+        public required string status { get; init; }
+        public required string category { get; init; }
+        public required IReadOnlyCollection<string> imageUrls { get; init; }
+        public required string createdAt { get; init; }
+        public required string updatedAt { get; init; }
+        public required IReadOnlyCollection<VariantAdminResponseDto> variants { get; init; }
+    }
+
+    public sealed record VariantAdminResponseDto
+    {
+        public required Guid id { get; init; }
+        public required Guid productId { get; init; }
+        public required string name { get; init; }
+        public required string sku { get; init; }
+        public required int quantity { get; init; }
+        public required decimal costPrice { get; init; }
+        public required decimal salePrice { get; init; }
+        public required string image { get; init; }
     }
     public record ProductQueryDto(string? detail);
 

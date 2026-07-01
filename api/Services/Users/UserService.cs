@@ -28,6 +28,7 @@ namespace api.Services.Users
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
         Task<Result<object>> ChangePasswordAsync(Guid id, ChangePasswordDto request, CancellationToken ct = default);
+        Task<Result<Guid>> Lock(Guid userId, CancellationToken cancellationToken);
     }
     public class UserService(
         MyAppDbContext context, 
@@ -197,6 +198,13 @@ namespace api.Services.Users
                 }
             });
 
+        }
+
+        public async Task<Result<Guid>> Lock(Guid userId, CancellationToken cancellationToken)
+        {
+            var result = await repo.Lock(userId, cancellationToken);
+
+            return Result<Guid>.Success(result);
         }
     }
 }

@@ -1,17 +1,16 @@
 import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
+import {
+    BackendPagedResult,
+    BackEndProductDetail,
+    BackendProductItem,
+    BackendVariant,
+} from '@/types/products/user/productBE';
 import { ProductDetail } from '@/types/products/user/ProductDetail';
 import { ProductDetailRawUser } from '@/types/products/user/ProductDetailRawUser';
-import { ProductTierVariation } from '@/types/products/user/ProductTierVariation';
-import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
-import {
-	BackendPagedResult,
-	BackendProductItem,
-	BackendVariant,
-	BackEndProductDetail,
-} from '@/types/products/user/productBE';
-import { ProductUserCard } from '@/types/products/user/ProductUserCard';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
 import { ProductShop } from '@/types/products/user/ProductShop';
+import { ProductUserCard } from '@/types/products/user/ProductUserCard';
+import { ProductVariantUser } from '@/types/products/user/ProductVariantUser';
+import { PaginationResponse } from '@/types/shared/PaginationResponse';
 
 export const convertRawUserToProductDetail = (rawData: ProductDetailRawUser): ProductDetail => {
 	// 1. Khởi tạo mảng chứa các tuỳ chọn của từng Tier

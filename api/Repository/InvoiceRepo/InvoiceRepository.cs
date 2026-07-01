@@ -1,6 +1,10 @@
 ﻿using api.Database;
+using api.Dtos.Common;
+using api.Models.Enums;
 using api.Models.Orders;
 using api.Models.Products;
+using api.Models.Shops;
+using api.Utilities;
 using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +15,28 @@ namespace api.Repository.InvoiceRepo
         Task AddInvoiceAsync(Invoice order, CancellationToken cancellationToken);
         Task<Invoice?> getByIdTracking(Guid invoiceId, CancellationToken cancellationToken);
         Task<Invoice?> GetDetailAsync(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
+        Task<Invoice?> GetDetailShopAsync(Guid? userId, Guid invoiceId, CancellationToken cancellationToken);
         Task<IReadOnlyCollection<Invoice>> GetListByUserIdAsync(Guid? userId, CancellationToken cancellationToken);
         void Update(Invoice order);
         Task<Dictionary<Guid, decimal>> GetVariantPricesAsync(IEnumerable<Guid> variantIds, CancellationToken cancellationToken);
         Task<Address> getAddressUsed();
+        Task<PagedResult<Invoice>> GetListForAdmin(PaginationRequestDto requset, CancellationToken cancellationToken);
+        Task<Guid> ApproveInvoice(Guid shopId, Guid invoiceId, CancellationToken cancellationToken);
     }
     public class InvoiceRepository(MyAppDbContext context) : IInvoiceRepository
     {
+        public async Task<Guid> ApproveInvoice(Guid shopId, Guid invoiceId, CancellationToken cancellationToken)
+        {
+            await context.Invoices
+                .Where(i => i.Id == invoiceId && i.ShopId == shopId)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(i => i.Status, (InvoiceStatus)3)
+                    .SetProperty(i => i.UpdatedAt, DateTimeOffset.UtcNow),
+                    cancellationToken);
+
+            return invoiceId;
+        }
+
         public async Task AddInvoiceAsync(Invoice order, CancellationToken cancellationToken)
         {
             // Truyền CancellationToken vào mọi thao tác I/O
@@ -71,6 +90,18 @@ namespace api.Repository.InvoiceRepo
                 .FirstOrDefaultAsync(i => i.Id == invoiceId && i.UserId == userId, cancellationToken);
         }
 
+        public async Task<Invoice?> GetDetailShopAsync(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
+        {
+            return await context.Invoices
+                .AsNoTracking()
+                .Include(i => i.Delivery)
+                    .ThenInclude(i => i.Address)
+                .Include(i => i.Items)
+                    .ThenInclude(ii => ii.Variant)
+                        .ThenInclude(iii => iii.Product)
+                .FirstOrDefaultAsync(i => i.Id == invoiceId, cancellationToken);
+        }
+
         public async Task<IReadOnlyCollection<Invoice>> GetListByUserIdAsync(Guid? userId, CancellationToken cancellationToken)
         {
             // Fail Fast: Tránh gọi DB nếu userId không hợp lệ
@@ -90,6 +121,23 @@ namespace api.Repository.InvoiceRepo
                 .ToListAsync(cancellationToken);
 
             return invoices.AsReadOnly();
+        }
+
+        public async Task<PagedResult<Invoice>> GetListForAdmin(PaginationRequestDto request, CancellationToken cancellationToken)
+        {
+            var query = context.Invoices.AsNoTracking();
+
+            // Lấy tổng số lượng trước khi Skip/Take
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .Include(p => p.Payment)
+                .Include(p => p.Items)
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Invoice>(items, totalCount, request.PageNumber, request.PageSize);
         }
 
         public async Task<Dictionary<Guid, decimal>> GetVariantPricesAsync(IEnumerable<Guid> variantIds, CancellationToken cancellationToken)

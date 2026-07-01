@@ -1,19 +1,18 @@
-import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
-import React, { JSX } from 'react';
-import { Column } from '@/types/uis/Column';
+import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
 import { AdminFormWrapper } from '@/components/layout/admin/admin-form-wrapper';
+import AdminTableAction from '@/components/layout/admin/admin-table-action';
+import { DataTable } from '@/components/layout/admin/data-table';
+import Field from '@/components/layout/admin/field';
+import RichTextEditor from '@/components/layout/admin/rich-text-editor';
+import { StatusModal } from '@/components/layout/share/status-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import RichTextEditor from '@/components/layout/admin/rich-text-editor';
-import { Switch } from '@/components/ui/switch';
-import { DataTable } from '@/components/layout/admin/data-table';
-import Image from 'next/image';
-import { StatusModal } from '@/components/layout/share/status-modal';
-import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
-import Field from '@/components/layout/admin/field';
 import { UseProductAdminFormLogicReturn } from '@/hooks/products/admin/use-product-admin-form-logic';
-import { MultiImageUpload } from '@/components/images/admin/multi-image-upload';
-import AdminTableAction from '@/components/layout/admin/admin-table-action';
+import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
+import { Column } from '@/types/uis/Column';
+import { getStatusModalTitle } from '@/utils/shared/mappers/modalTitleMap';
+import Image from 'next/image';
+import React, { JSX } from 'react';
 
 // Kế thừa toàn bộ interface từ hook
 interface ProductAdminFormUIProps extends UseProductAdminFormLogicReturn {
@@ -36,7 +35,6 @@ export default function ProductAdminFormUI({
 	handleInputChange,
 	handleDescriptionChange,
 	handleImagesChange,
-	handleStatusChange,
 	handleSubmit,
 	handleRedirectToProductVariantDetail,
 	handleAddNewVariant,
@@ -50,7 +48,7 @@ export default function ProductAdminFormUI({
 }: ProductAdminFormUIProps): JSX.Element {
 	const isFieldDisabledForShopOwner = !isView && isShopOwner;
 
-	let productVariantColumns: Column<ProductVariantAdmin>[] = [
+	const productVariantColumns: Column<ProductVariantAdmin>[] = [
 		{ key: 'name', header: 'Tên' },
 		{ key: 'sku', header: 'SKU' },
 		{ key: 'quantity', header: 'Tồn kho' },
@@ -145,7 +143,7 @@ export default function ProductAdminFormUI({
 					<Input
 						type='number'
 						name='categoryId'
-						value={form.categoryId}
+						value={form.category}
 						onChange={handleInputChange}
 						disabled={isView}
 					/>
@@ -167,16 +165,6 @@ export default function ProductAdminFormUI({
 						disabled={isView}
 					/>
 				</Field>
-
-				{isUpdate && (
-					<div className='flex items-center gap-3'>
-						<Switch
-							checked={form.status}
-							onCheckedChange={handleStatusChange}
-						/>
-						<span>Hoạt động</span>
-					</div>
-				)}
 
 				<Field label='Giá nhập'>
 					<Input
@@ -200,7 +188,7 @@ export default function ProductAdminFormUI({
 
 				<Field label='Hình ảnh'>
 					<MultiImageUpload
-						value={form.images}
+						value={form.images || []}
 						isAdmin={isAdmin}
 						onChange={handleImagesChange}
 						disabled={isView}

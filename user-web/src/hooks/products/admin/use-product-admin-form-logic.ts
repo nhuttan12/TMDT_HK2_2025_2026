@@ -1,19 +1,19 @@
-import { ChangeEvent, SetStateAction, SyntheticEvent, useState } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
+import { ChangeEvent, SetStateAction, SyntheticEvent, useState } from 'react';
 
-import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
-import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
 import { SortableImageForm } from '@/types/images/admin/SortableImageForm';
-import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 import { ProductCreateDTO } from '@/types/products/admin/ProductCreateDTO';
+import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import { ProductUpdateDTO } from '@/types/products/admin/ProductUpdateDTO';
+import { ProductVariantAdmin } from '@/types/products/admin/variant/ProductVariantAdmin';
+import { AdminFormType } from '@/types/shared/admin/AdminFormType';
 
-import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/admin-product';
-import { generateSlug } from '@/utils/shared/mappers/slug';
-import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { useStatusModal, UseStatusModalReturn } from '@/hooks/share/use-status-modal';
+import { useTableSelection, UseTableSelectionReturn } from '@/hooks/share/use-table-selection';
 import { AppRole } from '@/types/uis/AppRole';
+import { mapFormToCreateDTO, mapFormToUpdateDTO } from '@/utils/products/admin-product';
+import { useApproveProductMutation } from '@/queries/products/admin/use-approve-product-mutation';
 
 export interface UseProductAdminFormLogicProps {
 	formType: AdminFormType;
@@ -33,7 +33,6 @@ export interface UseProductAdminFormLogicReturn extends UseTableSelectionReturn<
 
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSubmit: (e: SyntheticEvent) => void;
-	handleStatusChange: (checked: boolean) => void;
 	handleImagesChange: (updater: SetStateAction<SortableImageForm[]>) => void;
 	handleDescriptionChange: (val: string) => void;
 
@@ -68,12 +67,25 @@ export function useProductAdminFormLogic({
 	const [form, setForm] = useState<ProductDetailInfoAdmin>(productAdmin);
 
 	// 2. Table Selection State
-	const allKeys: string[] = form.productVariants?.map((p: ProductVariantAdmin): string => p.id) ?? [];
+	const allKeys: string[] =
+		form.productVariants?.map((p: ProductVariantAdmin): string => p.id) ?? [];
 	const selection = useTableSelection<string>(allKeys);
 
 	// 3. Modal & Deletion State
 	const modal: UseStatusModalReturn = useStatusModal();
 	const [deletingId, setDeletingId] = useState<string | null>(null);
+
+	const { mutate: approveProduct } = useApproveProductMutation({
+		onSuccess: () => {
+			// Chỉ chuyển trang khi API báo thành công thay vì chuyển ngay lập tức
+			modal.showSuccess('Duyệt sản phẩm thành công!');
+			router.push('/admin/product-approvals');
+		},
+		onError: (error) => {
+			modal.showError('Đã xảy ra lỗi khi duyệt sản phẩm.');
+			console.error(error);
+		},
+	});
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
 		const { name, value } = e.target;
@@ -88,21 +100,8 @@ export function useProductAdminFormLogic({
 	const handleSubmit = (e: SyntheticEvent): void => {
 		e.preventDefault();
 		if (isCreate) {
-			const dto: ProductCreateDTO = mapFormToCreateDTO(form);
-			console.log('Create DTO:', dto);
 		} else {
-			const dto: ProductUpdateDTO = mapFormToUpdateDTO(form);
-			console.log('Update DTO:', dto);
 		}
-	};
-
-	const handleStatusChange = (checked: boolean): void => {
-		setForm(
-			(prev: ProductDetailInfoAdmin): ProductDetailInfoAdmin => ({
-				...prev,
-				status: checked,
-			}),
-		);
 	};
 
 	const handleImagesChange = (updater: SetStateAction<SortableImageForm[]>): void => {
@@ -155,7 +154,7 @@ export function useProductAdminFormLogic({
 
 	const handleApproveProduct = () => {
 		if (!productApproval) return;
-		router.push('/admin/product-approvals');
+		approveProduct(form.id);
 	};
 
 	const handleRejectProduct = () => {
@@ -174,7 +173,6 @@ export function useProductAdminFormLogic({
 		modal,
 		handleInputChange,
 		handleSubmit,
-		handleStatusChange,
 		handleImagesChange,
 		handleDescriptionChange,
 		handleRedirectToProductVariantDetail,

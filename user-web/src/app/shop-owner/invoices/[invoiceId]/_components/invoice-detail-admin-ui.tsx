@@ -37,7 +37,6 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 						<div>
 							<strong>Thanh toán:</strong>{' '}
-							{/* Đã FIX: invoice.paymentMethod -> invoice.payment.paymentMethod */}
 							{getPaymentMethodLabel(invoice.payment.paymentMethod)}
 						</div>
 
@@ -48,24 +47,20 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 						<div>
 							<strong>Trạng thái giao hàng:</strong>{' '}
-							{/* Đã FIX: invoice.shippingStatus -> invoice.delivery.shippingStatus */}
 							<ShippingStatusBadge status={invoice.delivery.shippingStatus} />
 						</div>
 					</div>
 
 					<div className='space-y-2'>
 						<div>
-							{/* Đã FIX: invoice.trackingCode -> invoice.delivery.trackingCode */}
 							<strong>Mã vận đơn:</strong> {invoice.delivery.trackingCode}
 						</div>
 
 						<div>
-							{/* Đã FIX: invoice.estimatedDelivery -> invoice.delivery.estimatedDelivery */}
 							<strong>Dự kiến giao:</strong>{' '}
 							{new Date(invoice.delivery.estimatedDelivery).toLocaleDateString()}
 						</div>
 
-						{/* Đã FIX: invoice.paidAt -> invoice.payment.paidAt */}
 						{invoice.payment.paidAt && (
 							<div>
 								<strong>Thanh toán lúc:</strong>{' '}
@@ -98,17 +93,14 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 				<CardContent className='space-y-2'>
 					<p>
-						{/* Đã FIX: invoice.recipientName -> invoice.delivery.recipientName */}
 						<strong>Người nhận:</strong> {invoice.delivery.recipientName}
 					</p>
 
 					<p>
-						{/* Đã FIX: invoice.recipientPhone -> invoice.delivery.recipientPhone */}
 						<strong>SĐT:</strong> {invoice.delivery.recipientPhone}
 					</p>
 
 					<p>
-						{/* Đã FIX: invoice.address -> invoice.delivery.address */}
 						<strong>Địa chỉ:</strong> {invoice.delivery.address}
 					</p>
 				</CardContent>
@@ -134,7 +126,7 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 						<TableBody>
 							{invoice.items.map((item) => (
-								<TableRow key={item.productId}>
+								<TableRow key={`${item.productId}-${item.variantId}`}>
 									<TableCell className='flex items-center gap-3'>
 										<Image
 											src={item.imageUrl}
@@ -143,7 +135,6 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 											height={50}
 											className='h-12 w-12 aspect-square object-cover rounded-full border border-gray-200'
 										/>
-
 										<span>{item.productName}</span>
 									</TableCell>
 
@@ -181,7 +172,6 @@ export default function InvoiceDetailAdminUi({ invoice }: Props): JSX.Element {
 
 					<div className='flex justify-between'>
 						<span>Phí vận chuyển</span>
-						{/* Đã FIX: invoice.shippingFee -> invoice.delivery.shippingFee */}
 						<span>{invoice.delivery.shippingFee.toLocaleString()} đ</span>
 					</div>
 

@@ -1,5 +1,6 @@
 ﻿using api.Dtos.Common;
 using api.Dtos.Users.Requests;
+using api.Models;
 using api.Services.Users;
 using api.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -31,15 +32,15 @@ namespace api.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Shop")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        [HttpGet("/api/admin/users/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetById([FromRoute] Guid userId)
         {
-            var user = await UserService.GetByIdAsync(id);
+            var user = await UserService.GetByIdAsync(userId);
             return HandleResult(user);
         }
 
-        [HttpGet]
+        [HttpGet("/api/admin/users")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll([FromQuery] PaginationRequestDto query)
         {
@@ -92,12 +93,12 @@ namespace api.Controllers
         // *********************************************************************
 
     
-        [HttpPost("{id}/lock")]
+        [HttpPost("/api/admin/users/{userId}/lock")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Lock([FromRoute] Guid id, [FromBody] LockInfoDto req)
+        public async Task<IActionResult> Lock([FromRoute] Guid userId, CancellationToken cancellationToken)
         {
-            //TODO: implement method lock user
-            return Ok();
+            var result = await UserService.Lock(userId, cancellationToken);
+            return HandleResult(result);
         }
 
     }

@@ -16,9 +16,8 @@ const emptyProduct: ProductDetailInfoAdmin = {
 	importPrice: 0,
 	discount: 0,
 
-	status: true,
     systemStatus: 'pending_approval',
-	categoryId: 0,
+	category: 0,
 	images: [],
 
 	createdAt: '',

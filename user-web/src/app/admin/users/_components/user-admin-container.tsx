@@ -1,25 +1,23 @@
 'use client';
 
-import { JSX } from 'react';
-import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { useUserAdminLogic } from '@/hooks/users/admin/use-user-admin-logic';
-import UserAdminUi from './user-admin-ui';
 import { useUserAdminListQuery } from '@/queries/users/admin/use-user-admin-list-query';
-import { PaginationResponse } from '@/types/shared/PaginationResponse';
+import { BackendPagedResult } from '@/types/products/user/productBE';
+import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
+import UserAdminUi from './user-admin-ui';
 
 interface Props {
-	initialUsers: PaginationResponse<CustomerListAdmin>;
+	initialUsers: BackendPagedResult<CustomerListAdmin>;
 }
 
 export default function UserAdminContainer({ initialUsers }: Props) {
 	// 1. Data Fetching
 	const { data } = useUserAdminListQuery(initialUsers);
 
-    const currentUsers = data?.data ?? initialUsers.data;
-    const currentMeta = data?.meta ?? initialUsers.meta;
+    const currentUsers = data?.items ?? initialUsers.items;
 
 	// 2. Logic Hook
-	const logic = useUserAdminLogic(currentMeta.totalPages);
+	const logic = useUserAdminLogic(data?.totalPages ?? initialUsers.totalPages);
 
 	// 3. Render
 	return (

@@ -1,8 +1,8 @@
-import { JSX } from 'react';
-import { Metadata } from 'next';
-import { getProductDetailAdminByProductId } from '@/services/products/admin/product-admin-service';
-import { ProductDetailInfoAdmin } from '@/types/products/admin/ProductDetailInfoAdmin';
 import ProductAdminFormContainer from '@/components/products/admin/detail/product-admin-form-container';
+import apiServer from '@/lib/api-server';
+import { ProductAdminService } from '@/services/products/admin/product-admin-service';
+import { Metadata } from 'next';
+import { JSX } from 'react';
 
 interface Props {
 	params: Promise<{ productId: string }>;
@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 export default async function Index({ params }: Props): Promise<JSX.Element> {
 	const { productId } = await params;
 
+	const productAdminService = new ProductAdminService(apiServer);
+
 	// Fetch dữ liệu ở phía server
-	const initialProductAdmin: ProductDetailInfoAdmin =
-		await getProductDetailAdminByProductId(productId);
+	const initialProductAdmin =
+		await productAdminService.getProductDetailAdminByProductId(productId);
 
 	return (
 		<ProductAdminFormContainer

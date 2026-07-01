@@ -1,22 +1,19 @@
-import { JSX } from 'react';
-import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
-import UserStatusBadge from '@/app/admin/users/_components/user-status-badge';
-import { formatDate } from '@/utils/shared/date';
+import { DataTable } from '@/components/layout/admin/data-table';
+import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Ban, MoreHorizontal, Pencil } from 'lucide-react';
+import { useTableSelection } from '@/hooks/share/use-table-selection';
+import { Column } from '@/types/uis/Column';
 import { CustomerListAdmin } from '@/types/users/admin/CustomerListAdmin';
 import { UserAdminSortField } from '@/types/users/admin/UserAdminSort';
-import { Column } from '@/types/uis/Column';
-import { DataTable } from '@/components/layout/admin/data-table';
-import { useTableSelection } from '@/hooks/share/use-table-selection';
-import { getUserRoleLabel } from '@/utils/users/user-role-label';
+import { formatDate } from '@/utils/shared/date';
+import { Ban, MoreHorizontal, Pencil } from 'lucide-react';
+import Image from 'next/image';
+import { JSX } from 'react';
 
 interface Props {
 	users: CustomerListAdmin[];
@@ -25,6 +22,7 @@ interface Props {
 
 	onView: (id: string) => void;
 	onEdit: (id: string) => void;
+	onLock: (id: string) => void;
 }
 
 export default function UserAdminTable({
@@ -33,6 +31,7 @@ export default function UserAdminTable({
 	renderSortIcon,
 	onView,
 	onEdit,
+	onLock,
 }: Props): JSX.Element {
 	const allKeys: string[] = users.map((p: CustomerListAdmin): string => p.id);
 
@@ -55,7 +54,11 @@ export default function UserAdminTable({
 				<div className='flex items-center gap-3'>
 					<div className='relative w-10 h-10 rounded-full overflow-hidden border'>
 						<Image
-							src={row.avatar}
+							src={
+								// Đã sửa thành row.avatar
+								row.avatar ||
+								'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg'
+							}
 							alt={row.fullName}
 							fill
 							className='object-cover'
@@ -83,32 +86,8 @@ export default function UserAdminTable({
 		{
 			key: 'phone',
 			header: <span>SĐT</span>,
-		},
-		{
-			key: 'role',
-			header: (
-				<div
-					className='flex items-center gap-1 cursor-pointer'
-					onClick={() => handleSort('role')}
-				>
-					<span>Vai trò</span>
-					{renderSortIcon('role')}
-				</div>
-			),
-		},
-		{
-			key: 'status',
-			header: (
-				<div
-					className='flex items-center gap-1 cursor-pointer'
-					onClick={() => handleSort('isActive')}
-				>
-					<span>Trạng thái</span>
-					{renderSortIcon('isActive')}
-				</div>
-			),
 			render: (row: CustomerListAdmin): JSX.Element => (
-				<UserStatusBadge status={row.status} />
+				<span className='text-muted-foreground'>{row.phone || '-'}</span>
 			),
 		},
 		{
@@ -123,7 +102,46 @@ export default function UserAdminTable({
 				</div>
 			),
 			render: (row: CustomerListAdmin): JSX.Element => (
-				<span className='text-muted-foreground'>{formatDate(row.createdAt)}</span>
+				// Đã sửa thành row.createdAt
+				<span className='text-muted-foreground'>
+					{row.createdAt ? formatDate(row.createdAt) : '-'}
+				</span>
+			),
+		},
+		{
+			key: 'lockTimeStart',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('lockTimeStart')}
+				>
+					<span>Bắt đầu khóa</span>
+					{renderSortIcon('lockTimeStart')}
+				</div>
+			),
+			render: (row: CustomerListAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>
+					{/* Đã sửa thành row.lockTimeStart */}
+					{row.lockTimeStart ? formatDate(row.lockTimeStart) : '-'}
+				</span>
+			),
+		},
+		{
+			key: 'lockTimeEnd',
+			header: (
+				<div
+					className='flex items-center gap-1 cursor-pointer'
+					onClick={() => handleSort('lockTimeEnd')}
+				>
+					<span>Kết thúc khóa</span>
+					{renderSortIcon('lockTimeEnd')}
+				</div>
+			),
+			render: (row: CustomerListAdmin): JSX.Element => (
+				<span className='text-muted-foreground'>
+					{/* Đã sửa thành row.lockTimeEnd */}
+					{row.lockTimeEnd ? formatDate(row.lockTimeEnd) : '-'}
+				</span>
 			),
 		},
 		{
@@ -153,7 +171,10 @@ export default function UserAdminTable({
 								Chỉnh sửa
 							</DropdownMenuItem>
 
-							<DropdownMenuItem className='text-red-500'>
+							<DropdownMenuItem
+								onClick={() => onLock(row.id)}
+								className='text-red-500'
+							>
 								<Ban
 									size={14}
 									className='mr-2'

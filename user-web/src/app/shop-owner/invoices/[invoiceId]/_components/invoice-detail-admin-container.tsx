@@ -6,7 +6,7 @@ import InvoiceDetailAdminUi from './invoice-detail-admin-ui';
 import { useUserInvoiceDetailQuery } from '@/queries/invoices/admin/use-user-invoice-detail-query';
 
 interface InvoiceDetailAdminContainerProps {
-	invoiceId: number;
+	invoiceId: string;
 	initialInvoice: InvoiceDetail;
 }
 

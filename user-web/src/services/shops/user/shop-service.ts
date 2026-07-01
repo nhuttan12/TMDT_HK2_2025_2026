@@ -1,3 +1,5 @@
+import { apiClient } from '@/lib/api-client';
+import { mapBackendToFrontendPagination } from '@/services/products/user/product-utill';
 import { PaginationParams } from '@/types/common/Pagination';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 import { BackendPagedResult } from '@/types/products/user/productBE';
@@ -43,9 +45,9 @@ export const getShopPublicInfoById = async (shopId: string): Promise<ShopStorefr
 /**
  * Lấy danh sách sản phẩm của cửa hàng
  */
-export const getShopPublicProducts = async (
+export const getShopPublicProductsMocking = async (
 	shopId: string,
-	filter: ShopPublicFilter,
+	filter?: ShopPublicFilter,
 ): Promise<PaginationResponse<ProductUserCard>> => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
@@ -335,3 +337,56 @@ export const getShopListPagingMocking = async (
 		hasPreviousPage: pageNumber > 1,
 	};
 };
+
+export class ShopService {
+	// async getShopListPaging(
+	// 	search: string,
+	// 	pagination?: PaginationParams,
+	// ): Promise<BackendPagedResult<ShopUserCard>> {
+	// 	try {
+	// 		const flatParams = {
+	// 			search,
+	// 		};
+
+	// 		const response = await apiClient.get<ShopUserCard>(`/shop/list-name`, {
+	// 			params: flatParams,
+	// 		});
+
+	// 		if (!response.data || !response.data.isSuccess || !response.data.data) {
+	// 			return getShopListPagingMocking(search, pagination);
+	// 		}
+
+	// 		console.log(response.data.data);
+
+	// 		return response.data.data;
+	// 	} catch {
+	// 		return getShopListPagingMocking(search, pagination);
+	// 	}
+	// }
+
+	async getShopPublicProducts(
+		shopId: string,
+		filter?: ShopPublicFilter,
+	): Promise<PaginationResponse<ProductUserCard>> {
+		try {
+			const flatParams = {
+				shopId,
+				...filter,
+			};
+
+			const response = await apiClient.get(`/products/${shopId}/shop`, {
+				params: flatParams,
+			});
+
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				return getShopPublicProductsMocking(shopId, filter);
+			}
+
+			console.log(response.data.data);
+
+			return mapBackendToFrontendPagination(response.data.data);
+		} catch {
+			return getShopPublicProductsMocking(shopId, filter);
+		}
+	}
+}

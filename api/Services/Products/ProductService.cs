@@ -14,12 +14,12 @@ namespace api.Services.Products
 {
     public interface IProductService
     {
-        Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default); 
+        Task<Result<Product>> CreateProduct(ProductCreateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default);
         Task<Result<bool>> LockProduct(Guid id, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetAllProductsAsync(
             PaginationRequestDto paginationDto,
-            FilterProductQueryDto? fillterDto, 
+            FilterProductQueryDto? fillterDto,
             CancellationToken cancellationToken = default);
         Task<Result<ProductDetailResponseDto>> GetProductById(Guid id, ProductQueryDto queryDto, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<ProductResponseDto>>> GetRelatedProducts(
@@ -29,6 +29,11 @@ namespace api.Services.Products
         Task<Result<PagedResult<ProductResponseDto>>> SearchProductsAsync(
             ProductSearchRequestDto request,
             CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductListInfoAdmin(PaginationRequestDto paginationDto, CancellationToken cancellationToken);
+        Task<Result<ProductDetailAdminResponseDto>> GetProductDetailInfoAdmin(Guid productId, CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductAprrovalListInfoAdmin(PaginationRequestDto paginationDto, CancellationToken cancellationToken);
+        Task<Result<Guid>> ApproveProduct(Guid productId, CancellationToken cancellationToken);
+        Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductListInfoAdminMe(Guid shopId, PaginationRequestDto paginationDto, CancellationToken cancellationToken);
     }
     public class ProductService(
         ILogger<ProductController> logger,
@@ -81,8 +86,8 @@ namespace api.Services.Products
             var productDto = mapper.Map<ProductDetailResponseDto>(product);
             return Result<ProductDetailResponseDto>.Success(productDto);
         }
-       
-  
+
+
         public async Task<Result<bool>> UpdateProduct(Guid id, ProductUpdateDto productDto, CancellationToken cancellationToken = default)
         {
             var validationResult = productDto.Validate();
@@ -237,6 +242,159 @@ namespace api.Services.Products
             var pagedDtos = pagedProducts.Map(product => product.ToResponseDto());
 
             return Result<PagedResult<ProductResponseDto>>.Success(pagedDtos);
+        }
+
+        public async Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductListInfoAdmin(PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var paginationResult = paginationDto.ValidData();
+            if (paginationResult.IsFailure)
+            {
+                return Result<PagedResult<ProductAdminResponseDto>>.Failure(paginationResult.Error);
+            }
+
+            Result<PagedResult<Product>> res = await repo.GetProductListInfoAdmin(paginationDto.PageNumber, paginationDto.PageSize, cancellationToken);
+
+            return MapToAdminResponse(res);
+
+        }
+        public async Task<Result<ProductDetailAdminResponseDto>> GetProductDetailInfoAdmin(Guid productId, CancellationToken cancellationToken)
+        {
+            Result<Product> res = await repo.GetProductDetailInfoAdmin(productId, cancellationToken);
+
+            if (res.IsFailure)
+            {
+                return Result<ProductDetailAdminResponseDto>.Failure(res.Error);
+            }
+
+            // Bạn cần dùng hàm map cho Entity đơn lẻ, ví dụ: MapToDetailAdminResponse
+            return MapToDetailAdminResponse(res.Value);
+        }
+
+        public Result<PagedResult<ProductAdminResponseDto>> MapToAdminResponse(Result<PagedResult<Product>> productResult)
+        {
+            // 1. Nếu Result gốc thất bại, trả về lỗi tương ứng
+            if (productResult.IsFailure)
+            {
+                return Result<PagedResult<ProductAdminResponseDto>>.Failure(productResult.Error);
+            }
+
+            var pagedData = productResult.Value;
+
+            // 2. Map từng Product sang ProductAdminResponseDto
+            var dtos = pagedData.Items.Select(p => new ProductAdminResponseDto
+            {
+                id = p.Id,
+                name = p.Name,
+                image = p.ImageUrls.FirstOrDefault() ?? string.Empty,
+                status = p.Status.ToString(),
+                createdAt = p.CreatedAt.ToString(), // Tùy chỉnh format thời gian bạn muốn
+                updatedAt = p.UpdatedAt.ToString()
+            }).ToList();
+
+            // 3. Khởi tạo lại PagedResult mới cho DTO
+            var pagedDtoResult = new PagedResult<ProductAdminResponseDto>(
+                dtos,
+                pagedData.TotalCount,
+                pagedData.PageNumber,
+                pagedData.PageSize
+            );
+
+            // 4. Trả về Result thành công
+            return Result<PagedResult<ProductAdminResponseDto>>.Success(pagedDtoResult);
+        }
+
+        public Result<ProductDetailAdminResponseDto> MapToDetailAdminResponse(Result<Product> productResult)
+        {
+            // 1. Fail Fast nếu Result gốc bị lỗi
+            if (productResult.IsFailure)
+            {
+                return Result<ProductDetailAdminResponseDto>.Failure(productResult.Error);
+            }
+
+            var p = productResult.Value!;
+
+            // 2. Map trực tiếp từ Entity Product sang DTO (Không dùng PagedResult)
+            var dto = new ProductDetailAdminResponseDto
+            {
+                id = p.Id,
+                name = p.Name,
+
+                // Yêu cầu Entity Framework nạp dữ liệu (Include) cho Shop, Detail, Category
+                supplierName = p.Shop?.Name ?? string.Empty,
+                description = p.Detail?.Summary ?? string.Empty,
+
+                // Tạm lấy CostPrice của biến thể đầu tiên làm ImportPrice, hoặc mặc định là 0
+                importPrice = p.Variants.FirstOrDefault()?.CostPrice ?? 0m,
+
+                // TODO: Tính toán giảm giá từ p.ProductPromotions
+                discount = 0m,
+
+                // Lưu ý: Đảm bảo tên biến (status/variants) khớp với khai báo trong DTO của bạn
+                status = p.Status.ToString(),
+                category = p.Category?.Name ?? string.Empty,
+                imageUrls = p.ImageUrls.ToList(),
+
+                createdAt = p.CreatedAt.ToString(),
+                updatedAt = p.UpdatedAt.ToString(),
+
+                // Map danh sách Variants
+                variants = p.Variants.Select(v => new VariantAdminResponseDto
+                {
+                    id = v.Id,
+                    productId = p.Id, // Map thẳng ID của Product cha 
+                    name = v.Name,
+                    sku = v.Sku,
+
+                    // TODO: Số lượng hiện tại chưa có trong model Variant mẫu, 
+                    // bạn cần join với InventoryBatchStocks hoặc bổ sung thuộc tính này
+                    quantity = 0,
+
+                    costPrice = v.CostPrice,
+                    salePrice = v.SellPrice,
+                    image = v.ImageUrl ?? string.Empty
+                }).ToList()
+            };
+
+            // 3. Trả về kết quả thành công cho 1 object
+            return Result<ProductDetailAdminResponseDto>.Success(dto);
+        }
+
+        public async Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductAprrovalListInfoAdmin(PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var paginationResult = paginationDto.ValidData();
+            if (paginationResult.IsFailure)
+            {
+                return Result<PagedResult<ProductAdminResponseDto>>.Failure(paginationResult.Error);
+            }
+
+            Result<PagedResult<Product>> res = await repo.GetProductAprrovalListInfoAdmin(paginationDto.PageNumber, paginationDto.PageSize, cancellationToken);
+
+            return MapToAdminResponse(res);
+        }
+
+        public async Task<Result<Guid>> ApproveProduct(Guid productId, CancellationToken cancellationToken)
+        {
+            var result = await repo.ApproveProduct(productId, cancellationToken);
+
+            if (result == Guid.Empty)
+            {
+                return Result<Guid>.Failure(Error.Create("Input.Invalid", "Invalid product id.", ErrorType.BadRequest));
+            }
+
+            return Result<Guid>.Success(result);
+        }
+
+        public async Task<Result<PagedResult<ProductAdminResponseDto>>> GetProductListInfoAdminMe(Guid shopId, PaginationRequestDto paginationDto, CancellationToken cancellationToken)
+        {
+            var paginationResult = paginationDto.ValidData();
+            if (paginationResult.IsFailure)
+            {
+                return Result<PagedResult<ProductAdminResponseDto>>.Failure(paginationResult.Error);
+            }
+
+            Result<PagedResult<Product>> res = await repo.GetProductListInfoAdminMe(shopId, paginationDto.PageNumber, paginationDto.PageSize, cancellationToken);
+
+            return MapToAdminResponse(res);
         }
     }
 }
