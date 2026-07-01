@@ -1,33 +1,55 @@
-import { BackEndUser, UserProfileInfoRequset } from '@/types/users/backEndUser';
+import { addressesResponse, BackEndUser, UserProfileInfoRequset } from '@/types/users/backEndUser';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
 
-export const mapToUserProfileInfo = (user: BackEndUser): UserProfileInfo => {
+// Định nghĩa giá trị mặc định cho ô địa chỉ trống để UI không bị lỗi (Uncontrolled input)
+const defaultAddress: addressesResponse = {
+	id: '',
+	addressUrl: '',
+	isUsed: false,
+};
+export const mapBackEndUserToProfileInfo = (user: BackEndUser): UserProfileInfo => {
+	// 1. Lọc bỏ các địa chỉ rác dạng "string" từ hệ thống nếu có
+	const validAddresses = (user.addresses || []).filter(
+		(addr) => addr && addr.addressUrl && addr.addressUrl.toLowerCase() !== 'string',
+	);
+
+	// 2. Map thành cấu trúc phẳng của Frontend
 	return {
-		// Ép kiểu ép buộc do sai lệch thiết kế, khuyên dùng: id: string trong UserProfileInfo
-		id: user.id as unknown as number,
+		// Nếu interface UserProfileInfo của bạn bắt buộc là number, hãy dùng: Number(user.id)
+		// Nhưng khuyến khích bạn đổi kiểu id trong UserProfileInfo thành string vì backend đang trả về chuỗi UUID.
+		id: user.id,
+		fullName: user.fullName ?? '',
+		email: user.email ?? '',
+		phone: user.phone ?? '',
 
-		fullName: user.fullName,
-		email: user.email,
-		phone: user.phone,
+		// Phân phối mảng vào 3 ô địa chỉ độc lập
+		address1: validAddresses[0] ? { ...validAddresses[0] } : { ...defaultAddress },
+		address2: validAddresses[1] ? { ...validAddresses[1] } : { ...defaultAddress },
+		address3: validAddresses[2] ? { ...validAddresses[2] } : { ...defaultAddress },
 
-		// Trích xuất an toàn từ mảng address, nếu không có phần tử thì gán chuỗi rỗng
-		address1: user.address?.[0] || '',
-		address2: user.address?.[1] || '',
-		address3: user.address?.[2] || '',
-
-		// Lấy avatarUrl từ object lồng nhau userDetail (sử dụng optional chaining ?.)
-		avatarUrl: user.userDetail?.avatarUrl || '',
+		// Trích xuất avatarUrl từ object lồng userDetail
+		avatarUrl: user.userDetail?.avatarUrl ?? '',
 	};
 };
-
 export const mapUserProfileToRequest = (profile: UserProfileInfo): UserProfileInfoRequset => {
-	// Gom các địa chỉ lại và loại bỏ những giá trị rỗng (falsy)
-	const validAddresses = [profile.address1, profile.address2, profile.address3].filter(Boolean);
+	// 1. Gom các địa chỉ lại và lọc bỏ các giá trị null/undefined (nếu có)
+	const rawAddresses = [profile.address1, profile.address2, profile.address3].filter(Boolean);
+
+	// 2. Map mảng các object `addressesResponse` sang cấu trúc `addressesChangeRequest`
+	const mappedAddresses = rawAddresses.map((address) => {
+		return {
+			// Lấy trực tiếp id từ object address cũ sang
+			id: address.id ?? '',
+
+			// Lấy trực tiếp chuỗi addressUrl từ object address cũ sang
+			addressUrl: address.addressUrl ?? '',
+		};
+	});
 
 	return {
 		fullname: profile.fullName,
 		phoneNumber: profile.phone,
-		avatarUrl: profile.avatarUrl ?? '', // Sử dụng chuỗi rỗng nếu avatarUrl bị undefined
-		addresses: validAddresses,
+		avatarUrl: profile.avatarUrl ?? '',
+		addresses: mappedAddresses,
 	};
 };

@@ -18,6 +18,7 @@ export default async function HomePage(): Promise<JSX.Element> {
 			getTopSellingProducts(),
 			getPlatformCoupons(),
 		]);
+
 	return (
 		<HomeContainer
 			initialBanners={initialBanners}

@@ -45,7 +45,10 @@ export function ProfileUi({
 							</div>
 						) : (
 							<>
-								<AvatarUpload />
+								<AvatarUpload
+									imageUrl={formData.avatarUrl}
+
+								/>
 
 								{/* Ép kiểu Event chuẩn xác cho Form */}
 								<form
@@ -95,7 +98,11 @@ export function ProfileUi({
 											<Label>Địa chỉ 1</Label>
 											<Input
 												placeholder='Nhập địa chỉ'
-												value={formData.address1}
+												value={
+													formData.address1
+														? formData.address1.addressUrl
+														: ''
+												}
 												onChange={(
 													e: React.ChangeEvent<HTMLInputElement>,
 												) => handleChange('address1', e.target.value)}
@@ -107,7 +114,11 @@ export function ProfileUi({
 											<Label>Địa chỉ 2</Label>
 											<Input
 												placeholder='Nhập địa chỉ'
-												value={formData.address2}
+												value={
+													formData.address2
+														? formData.address2.addressUrl
+														: ''
+												}
 												onChange={(
 													e: React.ChangeEvent<HTMLInputElement>,
 												) => handleChange('address2', e.target.value)}
@@ -119,7 +130,11 @@ export function ProfileUi({
 											<Label>Địa chỉ 3</Label>
 											<Input
 												placeholder='Nhập địa chỉ'
-												value={formData.address3}
+												value={
+													formData.address3
+														? formData.address3.addressUrl
+														: ''
+												}
 												onChange={(
 													e: React.ChangeEvent<HTMLInputElement>,
 												) => handleChange('address3', e.target.value)}
