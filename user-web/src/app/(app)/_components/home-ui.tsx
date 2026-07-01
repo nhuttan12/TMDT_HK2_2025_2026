@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useEffect } from 'react';
 import { ProductUserCard } from '@/types/products/user/ProductUserCard';
 import { HomeBannerLogicReturn } from '@/hooks/contents/home-banners/user/use-home-logic';
 import HomeBannerCarouselUi from '@/app/(app)/_components/home-banner-carousel-ui';
@@ -10,6 +10,8 @@ import { Flame } from 'lucide-react';
 import { CouponListUi } from '@/components/marketing/coupons/user/coupon-list-ui';
 import { UserCoupon } from '@/types/marketing/coupons/user/UserCoupon';
 import { HomeBanner } from '@/types/contents/banners/HomeBanner';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth.store';
 
 interface HomeUiProps extends HomeBannerLogicReturn {
 	banners: HomeBanner[];
@@ -39,6 +41,19 @@ export function HomeUi({
 	handleRedirectToProducts,
 	handleClaimCoupon,
 }: HomeUiProps): JSX.Element {
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const syncAuth = useAuthStore((state) => state.syncAuth);
+
+	useEffect(() => {
+		const email = searchParams.get('email');
+		if (email) {
+			// Cập nhật vào Zustand Store ngay lập tức
+			syncAuth(email);
+			// Xóa sạch param trên URL cho đẹp
+			router.replace('/');
+		}
+	}, [searchParams, router, syncAuth]);
 	return (
 		<>
 			{/* HERO BANNER SECTION */}

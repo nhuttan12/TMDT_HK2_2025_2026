@@ -12,6 +12,7 @@ using api.Services.Mail;
 using api.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Org.BouncyCastle.Ocsp;
 using System.Security.Claims;
 
 namespace api.Services.Auths
@@ -25,6 +26,7 @@ namespace api.Services.Auths
         public Task<Result<TokenResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<TokenResponse>> HandleGoogleLogin(GoogleInfoResponse googleInfo);
         public Task<Result<UserInfoDTO>> RegisterAsync(RegisterRequest registerRequest, CancellationToken ct = default);
+        Task<Result<TokenResponse>> LoginWithEmailAsync(string email, CancellationToken ct);
     }
     public class AuthService(
        IPasswordHasher<User> passwordHasher,
@@ -234,6 +236,21 @@ namespace api.Services.Auths
                     _logger.LogError(ex, "Background email execution failed for User Email: {Email}", email);
                 }
             }, CancellationToken.None);
+        }
+
+        public async Task<Result<TokenResponse>> LoginWithEmailAsync(string email, CancellationToken ct)
+        {
+            // 1. Fail Fast - Kiểm tra đầu vào cực kỳ khắt khe
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return Result<TokenResponse>.Failure(Error.Create("AUTH_001", "Email và mật khẩu không được để trống", ErrorType.Validation));
+            }
+
+            // 2. Truy vấn dữ liệu với CancellationToken
+            var user = await _authRepo.GetUserByEmailAsync(email, ct);
+
+            // 4. Sinh Token
+            return GenerateTokenResponse(user);
         }
     }
 }
