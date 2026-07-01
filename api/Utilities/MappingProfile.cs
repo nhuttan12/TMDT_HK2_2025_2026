@@ -15,6 +15,7 @@ using api.Models.Category;
 using api.Models.Products;
 using api.Models.Shops;
 using api.Models.Users;
+using Api.Models.Users;
 using AutoMapper;
 
 namespace api.Utilities
@@ -51,7 +52,10 @@ namespace api.Utilities
 
             // user to dto
             CreateMap<User, UserInfoDTO>()
+                .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
                 .ForMember(dest => dest.UserExternalLogin, opt => opt.MapFrom(src => src.UserExternalLogin.Provider));
+
+            CreateMap<Address, UserAddressResponseDto>();
         }
         private void UserDetailMapping()
         {

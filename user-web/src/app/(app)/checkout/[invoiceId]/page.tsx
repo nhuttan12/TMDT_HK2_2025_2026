@@ -5,11 +5,14 @@ import CheckoutPaypal from './_components/check-out-paypal';
 export const metadata: Metadata = {
 	title: 'Thanh toán sản phẩm',
 };
-
-export default function OrderReviewPage(): JSX.Element {
+interface PropsOrderReviewPage {
+	params: Promise<{ invoiceId: string }>;
+}
+export default async function OrderReviewPage({ params }: PropsOrderReviewPage): Promise<JSX.Element> {
 	// 1. Dữ liệu tĩnh giả định tổng tiền của hóa đơn (VND)
 	const totalVND = 500000;
-    
+	const resolvedParams = await params;
+	const invoiceId = resolvedParams.invoiceId;
 	// 2. Định nghĩa tỷ giá hối đoái (Ví dụ: 1 USD = 25,000 VND)
 	// Trong thực tế, bạn nên gọi API để lấy tỷ giá realtime hoặc cấu hình trong database
 	const exchangeRate = 25000;
@@ -54,7 +57,7 @@ export default function OrderReviewPage(): JSX.Element {
 				{/* Khối chứa nút thanh toán PayPal */}
 				<div className='flex flex-col items-center justify-start'>
 					{/* Gọi component bạn đã viết và truyền tiền USD vào prop */}
-					<CheckoutPaypal totalAmount={totalUSD} />
+					<CheckoutPaypal invoiceId={invoiceId} />
 				</div>
 			</div>
 		</div>

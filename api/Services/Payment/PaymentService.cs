@@ -13,7 +13,6 @@ namespace api.Services.Payment
     }
 
     public class PaymentService(
-        ILGenerator iLGenerator,
         IPaymentRepository paymentRepository,
         PayPalService payPalService) : IPaymentService // Inject thêm PayPalService vào đây
     {
@@ -22,14 +21,14 @@ namespace api.Services.Payment
         {
             // Lấy hóa đơn
             var invoice = await paymentRepository.GetInvoiceByIdAsync(invoiceId);
-            if (invoice == null)
+            if (invoice is null)
                 throw new Exception("Không tìm thấy hóa đơn.");
 
             if (invoice.Status != api.Models.Enums.InvoiceStatus.Pending)
                 throw new Exception("Hóa đơn này không ở trạng thái chờ thanh toán.");
 
             // Gọi PayPal tạo Order (Truyền InvoiceId vào custom_id)
-            var paypalOrderId = await payPalService.CreateOrderAsync(invoice.Id.ToString(), invoice.FinalAmount);
+            var paypalOrderId = await payPalService.CreateOrderAsync(invoice.Id.ToString(), invoice.FinalAmount/50);
 
             // Tạo bản ghi Payment nội bộ lưu DB
             var payment = api.Models.Payments.Payment.Create(

@@ -1,13 +1,27 @@
 'use client';
 
-import { useRef, useState, ChangeEvent } from 'react';
+import { useRef, useState, ChangeEvent, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 
-export function AvatarUpload() {
-	const [preview, setPreview] = useState<string | null>(null);
+// 1. Định nghĩa Interface cho Props nhận vào
+interface AvatarUploadProps {
+	imageUrl?: string | null;
+	onChangeImage?: (file: File) => void; // Option thêm: callback gửi file lên component cha khi user đổi ảnh
+}
+
+export function AvatarUpload({ imageUrl, onChangeImage }: AvatarUploadProps) {
+	// 2. Sử dụng imageUrl làm giá trị khởi tạo cho preview
+	const [preview, setPreview] = useState<string | null>(imageUrl || null);
 	const [isSmallImage, setIsSmallImage] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	// 3. Đồng bộ lại preview nếu imageUrl từ cha thay đổi (ví dụ khi API vừa load xong)
+	useEffect(() => {
+		if (imageUrl) {
+			setPreview(imageUrl);
+		}
+	}, [imageUrl]);
 
 	const handleOpenFile = () => {
 		fileInputRef.current?.click();
@@ -40,8 +54,14 @@ export function AvatarUpload() {
 			return;
 		}
 
-		const imageUrl = URL.createObjectURL(file);
-		setPreview(imageUrl);
+		// Tạo URL preview tạm thời từ file local vừa chọn
+		const localImageUrl = URL.createObjectURL(file);
+		setPreview(localImageUrl);
+
+		// Kích hoạt callback báo cho component cha biết nếu có truyền vào
+		if (onChangeImage) {
+			onChangeImage(file);
+		}
 	};
 
 	const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -67,6 +87,7 @@ export function AvatarUpload() {
 
 			<Button
 				variant='outline'
+				type='button' // Đảm bảo không bị trigger submit nhầm nếu nằm trong thẻ <form>
 				onClick={handleOpenFile}
 			>
 				Đổi ảnh đại diện
@@ -74,7 +95,7 @@ export function AvatarUpload() {
 
 			<input
 				type='file'
-				accept='image/*'
+				accept='image/png, image/jpeg, image/jpg' // Giới hạn trực tiếp tại hội thoại chọn file
 				ref={fileInputRef}
 				onChange={handleChange}
 				className='hidden'

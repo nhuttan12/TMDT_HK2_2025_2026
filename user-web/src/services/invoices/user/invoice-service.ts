@@ -9,12 +9,12 @@ import { type AxiosInstance } from 'axios';
 import { ResponseApi } from '@/types/common/ResponseApi';
 import { BackendPagedResult } from '@/types/products/user/productBE';
 import { PaymentMethod } from '@/types/invoices/user/PaymentMethod';
-import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 import {InvoiceItem} from "@/types/invoices/user/InvoiceItem";
 import {ShippingStatus} from "@/types/invoices/user/ShippingStatus";
 import { RecipientInfo } from '@/types/invoices/user/RecipientInfo';
 import { PaymentInfo } from '@/types/invoices/user/PaymentInfo';
 import { mapBackendInvoiceStatus } from '@/utils/invoices/invoice-mapping';
+import {InvoiceStatus} from "@/types/invoices/user/InvoiceStatus";
 
 
 export async function getInvoiceDetailByInvoiceIdCraw(invoiceId: number | string): Promise<InvoiceDetail> {
@@ -227,10 +227,10 @@ export function mapBackEndInvoiceDetailToFe(data: BackEndUserInvoiceDetail): Inv
 	// 2. Ép kiểu hoặc map status từ number sang InvoiceStatus Enum của FE
 	// Ở đây tôi ép kiểu trực tiếp, bạn có thể dùng switch-case nếu giá trị mapping khác nhau
 	// const invoiceStatus = data.status as unknown as InvoiceStatus;
-	const invoiceStatus = GetInvoiceStatus(data.status);
+	const invoiceStatus = data.status as InvoiceStatus;
 
 	// Giả định mapping shippingStatus dựa trên status tổng của đơn hàng
-	const shippingStatus: ShippingStatus = GetShippingFee(data.status);
+	const shippingStatus: ShippingStatus = data.status as ShippingStatus ;
 
 	return {
 		invoiceId: data.id,
@@ -277,44 +277,6 @@ function mapPaymentMethod(backendMethod: string): PaymentMethod {
 			return 'bank_transfer';
 		default:
 			return 'COD'; // Giá trị mặc định nếu không khớp
-	}
-}
-
-function GetShippingFee(status: number): ShippingStatus {
-	switch (status) {
-		case 1:
-			return 'preparing';
-		case 2:
-			return 'shipping';
-		case 3:
-			return 'delivered';
-		default:
-			return 'delivered';
-	}
-}
-
-export function GetInvoiceStatus(status: number): InvoiceStatus {
-	switch (status) {
-		case 1: // AwaitingPayment
-			return 'pending_approval'; // Chờ thanh toán / duyệt
-		case 2: // Pending
-			return 'pending'; // Chờ xác nhận đơn
-		case 3: // Processing (Đang đóng gói)
-			return 'pending'; // Gom chung vào nhóm chờ xử lý ở FE hoặc tùy bạn quy định
-		case 4: // Shipped
-			return 'shipping'; // Đang giao hàng
-		case 5: // Delivered
-			return 'delivered'; // Đã giao hàng (chờ bấm nhận)
-		case 6: // Completed
-			return 'completed'; // Đơn hàng hoàn thành hoàn toàn
-		case 7: // Cancelled
-			return 'cancelled'; // Đã hủy đơn
-		case 8: // Returned
-			return 'returned'; // Trả hàng / Hoàn tiền
-		case 9: // DeliveryFailed
-			return 'cancelled'; // Giao thất bại, gom về luồng huỷ/hoàn hoặc xử lý riêng
-		default:
-			return 'pending';
 	}
 }
 

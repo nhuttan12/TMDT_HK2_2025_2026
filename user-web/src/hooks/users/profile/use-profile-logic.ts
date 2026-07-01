@@ -17,9 +17,22 @@ const defaultFormData: UserProfileInfo = {
 	fullName: '',
 	email: '',
 	phone: '',
-	address1: '',
-	address2: '',
-	address3: '',
+	address1: {
+		id: '',
+		addressUrl: '',
+		isUsed: true,
+	},
+	address2: {
+		id: '',
+		addressUrl: '',
+		isUsed: true,
+	},
+	address3: {
+		id: '',
+		addressUrl: '',
+		isUsed: true,
+	},
+	avatarUrl: '',
 };
 
 export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
@@ -35,10 +48,24 @@ export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 	}, [profile]);
 
 	const handleChange = (field: keyof UserProfileInfo, value: string): void => {
-		setFormData((prev: UserProfileInfo) => ({
-			...prev,
-			[field]: value,
-		}));
+		setFormData((prev: UserProfileInfo) => {
+			// Xử lý riêng biệt nếu field là một trong 3 địa chỉ
+			if (field === 'address1' || field === 'address2' || field === 'address3') {
+				return {
+					...prev,
+					[field]: {
+						...prev[field], // Giữ nguyên các thuộc tính cũ như id, isUsed
+						addressUrl: value, // Chỉ đè giá trị mới vào trường addressUrl
+					},
+				};
+			}
+
+			// Xử lý chung cho các trường cơ bản dạng string (fullName, phone, email...)
+			return {
+				...prev,
+				[field]: value,
+			};
+		});
 	};
 
 	const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>): Promise<void> => {
@@ -46,10 +73,8 @@ export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 
 		try {
 			setIsSubmitting(true);
-			// TODO: Gọi Mutation Hook để gửi formData lên server lưu lại
 			console.log('Dữ liệu chuẩn bị cập nhật:', formData);
 
-			// await new Promise((resolve) => setTimeout(resolve, 1000)); // Giả lập loading
 			await userService.updateProfile(formData);
 			// TODO: Hiển thị Toast thành công
 		} catch (error) {
@@ -60,9 +85,9 @@ export function useProfileLogic(profile?: UserProfileInfo): ProfileLogicReturn {
 	};
 
 	return {
-		formData: formData,
-		isSubmitting: isSubmitting,
-		handleChange: handleChange,
-		handleSubmit: handleSubmit,
+		formData,
+		isSubmitting,
+		handleChange,
+		handleSubmit,
 	};
 }
