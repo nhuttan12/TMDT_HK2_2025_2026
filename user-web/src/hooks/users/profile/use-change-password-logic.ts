@@ -1,3 +1,4 @@
+import { useChangePasswordMutation } from '@/queries/auth/use-change-password-mutation';
 import { SyntheticEvent, useState } from 'react';
 
 export interface ChangePasswordLogicReturn {
@@ -33,6 +34,8 @@ export function useChangePasswordLogic(): ChangePasswordLogicReturn {
 	const [dialogMessage, setDialogMessage] = useState<string>('');
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+    const changePasswordMutation = useChangePasswordMutation(); 
+
 	const openDialog = (message: string): void => {
 		setDialogMessage(message);
 		setDialogOpen(true);
@@ -51,38 +54,31 @@ export function useChangePasswordLogic(): ChangePasswordLogicReturn {
 	const handleConfirmPasswordChange = (val: string): void => setConfirmPassword(val);
 
 	const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>): Promise<void> => {
-		e.preventDefault();
+        e.preventDefault();
 
-		if (!oldPassword || !newPassword || !confirmPassword) {
-			openDialog('Vui lòng nhập đầy đủ thông tin');
-			return;
-		}
+        setIsSubmitting(true);
 
-		if (newPassword.length < 6) {
-			openDialog('Mật khẩu mới phải ít nhất 6 ký tự');
-			return;
-		}
+        try {
+            // 4. Gọi API thông qua mutateAsync
+            await changePasswordMutation.mutateAsync({
+                oldPassword,
+                newPassword
+            });
 
-		if (newPassword !== confirmPassword) {
-			openDialog('Mật khẩu xác nhận không khớp');
-			return;
-		}
-
-		try {
-			setIsSubmitting(true);
-			// Giả lập call API mất 1 giây
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-
-			openDialog('Đổi mật khẩu thành công!');
-			// Reset form
-			setOldPassword('');
-			setNewPassword('');
-			setConfirmPassword('');
-		} catch (error) {
-			openDialog('Đã có lỗi xảy ra, vui lòng thử lại sau.');
-		} finally {
-			setIsSubmitting(false);
-		}
+            // 5. Xử lý khi thành công
+            openDialog('Đổi mật khẩu thành công!');
+            
+            // Xóa rỗng các ô input
+            setOldPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error) {
+            // 6. Xử lý khi thất bại (Bắt lỗi từ backend trả về)
+            console.error(error);
+        } finally {
+            // 7. Tắt trạng thái loading
+            setIsSubmitting(false);
+        }
 	};
 
 	return {

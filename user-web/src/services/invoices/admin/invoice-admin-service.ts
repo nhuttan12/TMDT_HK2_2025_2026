@@ -41,7 +41,7 @@ export async function getUserInvoiceListMocking(
 					id: 'd4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a',
 					createdAt: '2026-03-11T13:15:00',
 					status: 'processing', // Thay thế 'paid' bằng 'processing' [cite: 1]
-					paymentMethod: 'credit_card',
+					paymentMethod: 'CreditCard',
 					totalAmount: 980000,
 					totalItems: 2,
 				},
@@ -89,7 +89,7 @@ export async function getUserInvoiceListMocking(
 					id: '3a4b5c6d-7e8f-4a9b-0c1d-2e3f4a5b6c7d',
 					createdAt: '2026-03-14T11:05:00',
 					status: 'completed', // Giữ nguyên [cite: 2]
-					paymentMethod: 'credit_card',
+					paymentMethod: 'CreditCard',
 					totalAmount: 2500000,
 					totalItems: 4,
 				},

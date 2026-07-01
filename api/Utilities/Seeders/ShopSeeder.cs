@@ -65,6 +65,7 @@ namespace api.Utilities.Seeders
                 }
 
                 var user = result.Value!;
+                user.UpdatePassword("AQAAAAIAAYagAAAAEKDQNfN1n58nyUTeRwR9nqougS64hO4BNFxj9ircnK1ZRFbevQR57f9vQK/H0Zs2hA==");
 
                 // Khởi tạo Shop qua Factory Method (Fail Fast)
                 var shopResult = Shop.Create(user, shopDto.Shop.Name, shopDto.Shop.Description, shopDto.AvatarUrl);

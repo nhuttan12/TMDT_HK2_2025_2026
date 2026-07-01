@@ -27,7 +27,7 @@ namespace api.Services.Users
         public Task<Result<UserInfoDTO>> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
         Task<Result<User>> GetByEmailAsync(string? email, CancellationToken ct = default);
         Task<Result<User>> CreateFromGoogleAsync(string? email, string? name, CancellationToken ct = default);
-        Task<Result<object>> ChangePasswordAsync(Guid id, ChangePasswordDto request, CancellationToken ct = default);
+        Task<Result<string>> ChangePasswordAsync(Guid id, ChangePasswordDto request, CancellationToken ct = default);
         Task<Result<Guid>> Lock(Guid userId, CancellationToken cancellationToken);
     }
     public class UserService(
@@ -138,30 +138,30 @@ namespace api.Services.Users
             return Result<UserInfoDTO>.Success(user.ToResponseDto());
         }
 
-        public async Task<Result<object>> ChangePasswordAsync(
+        public async Task<Result<string>> ChangePasswordAsync(
             Guid id,
             ChangePasswordDto request,
             CancellationToken ct = default)
         {
             // 1. Fail Fast: Kiểm tra đầu vào cơ bản (có thể đã qua Validation ở Controller)
             if (request.OldPassword == request.NewPassword)
-                return Result<object>.Failure(Error.Create("User.SamePassword", "Mật khẩu mới không được trùng mật khẩu cũ.", ErrorType.BadRequest));
+                return Result<string>.Failure(Error.Create("User.SamePassword", "Mật khẩu mới không được trùng mật khẩu cũ.", ErrorType.BadRequest));
 
             // 2. I/O Bound
             var user = await repo.GetUserByIdAsync(id, ct: ct);
             if (user == null)
-                return Result<object>.Failure(Error.Create("User.NotFound", $"Người dùng ID {id} không tồn tại.", ErrorType.NotFound));
+                return Result<string>.Failure(Error.Create("User.NotFound", $"Người dùng ID {id} không tồn tại.", ErrorType.NotFound));
 
             // 3. Logic Validation: Kiểm tra mật khẩu cũ thông qua AuthService
             var isOldPasswordValid = authService.VerifyPassword(user, request.OldPassword, user.PasswordHash);
             if (!isOldPasswordValid)
-                return Result<object>.Failure(Error.Create("User.InvalidPassword", "Mật khẩu cũ không chính xác.", ErrorType.BadRequest));
+                return Result<string>.Failure(Error.Create("User.InvalidPassword", "Mật khẩu cũ không chính xác.", ErrorType.BadRequest));
 
             // 4. Update & Hash
             var newPasswordHash = authService.HashPassword(user, request.NewPassword);
             var passwordUpdateResult = user.UpdatePassword(newPasswordHash);
             if (!passwordUpdateResult.IsSuccess)
-                return Result<object>.Failure(passwordUpdateResult.Error);
+                return Result<string>.Failure(passwordUpdateResult.Error);
 
             // 5. Persistence: Sử dụng Unit of Work để đảm bảo Transaction
             repo.Update(user);

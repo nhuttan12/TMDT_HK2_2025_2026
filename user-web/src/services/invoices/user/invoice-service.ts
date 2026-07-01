@@ -114,7 +114,7 @@ export async function getUserInvoicesByUserIdCraw(
 					id: '111e2222-e33b-44d3-c456-426614174004',
 					createdAt: '2026-02-10T16:20:00',
 					status: 'processing', // Sửa từ 'paid' sang 'processing'
-					paymentMethod: 'credit_card',
+					paymentMethod: 'CreditCard',
 					totalAmount: 2350000,
 					totalItems: 4,
 				},
@@ -266,7 +266,7 @@ export function mapBackEndInvoiceDetailToFe(data: BackEndUserInvoiceDetail): Inv
 function mapPaymentMethod(backendMethod: string): PaymentMethod {
 	switch (backendMethod) {
 		case 'CreditCard':
-			return 'credit_card';
+			return 'CreditCard';
 		case 'COD':
 			return 'COD';
 		case 'VNPay':

@@ -14,7 +14,7 @@ export function useDailyRevenueQuery(
 	return useQuery({
 		queryKey: ['dailyRevenue', startDate, endDate],
 		queryFn: (): Promise<RevenueChartItem[]> =>
-			analystService.getDailyRevenueData({ startDate, endDate }),
+			analystService.getDailyRevenueData({ StartDate: startDate, EndDate: endDate }),
 		staleTime: 1000 * 60 * 5, // Dữ liệu cũ hợp lệ trong 5 phút
 	});
 }

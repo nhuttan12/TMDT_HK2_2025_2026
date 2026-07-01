@@ -1,6 +1,7 @@
 import { UserModel } from '@/stores/auth.store';
 import apiClient from '@/lib/api-client';
 import { ResponseApi } from '../../types/common/ResponseApi';
+import { ChangePasswordDTO } from '@/types/users/user/ChangePasswordDTO';
 
 export interface LoginPayload {
 	email: string;
@@ -85,4 +86,15 @@ export const authService = {
 		console.log('refreshToken');
 		return apiClient.post('/auth/refresh-token');
 	},
+    changePassword: (request: ChangePasswordDTO): Promise<string> => {
+        console.log('changePassword');
+        const flatParams = {
+            ...request,
+        }
+        console.log('flatParams change password ', flatParams);
+
+        return apiClient.patch('users/me/change-password', 
+            flatParams
+        );
+    },
 };

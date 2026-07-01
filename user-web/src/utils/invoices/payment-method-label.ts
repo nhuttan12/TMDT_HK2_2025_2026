@@ -4,7 +4,7 @@ const PAYMENT_METHOD_LABEL: Record<PaymentMethod, string> = {
 	COD: 'Thanh toán khi nhận hàng',
 	VNPAY: 'VNPAY',
 	MoMo: 'Ví MoMo',
-	credit_card: 'Thẻ tín dụng',
+	CreditCard: 'Thẻ tín dụng',
 	bank_transfer: 'Chuyển khoản ngân hàng',
 };
 

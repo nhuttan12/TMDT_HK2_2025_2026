@@ -25,7 +25,7 @@ namespace api.Database.Configurations
                 .IsRequired();
 
             builder.HasOne(i => i.Variant)
-                   .WithMany() 
+                   .WithMany()
                    .HasForeignKey(i => i.VariantId)
                    .OnDelete(DeleteBehavior.Restrict); // Defensive Programming: Ngăn chặn xóa Variant nếu đã có Invoice
 
@@ -48,6 +48,11 @@ namespace api.Database.Configurations
 
             // Phục vụ cho việc thống kê chính xác theo biến thể (VD: Áo màu đỏ bán được bao nhiêu)
             builder.HasIndex(ii => ii.VariantId);
+
+            builder.HasOne(ii => ii.Invoice)
+               .WithMany(i => i.Items) // Trỏ ngược về collection Items của Invoice
+               .HasForeignKey(ii => ii.InvoiceId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -12,8 +12,8 @@ using api.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20260630163323_init")]
-    partial class init
+    [Migration("20260701045101_UpdateInvoiceItem")]
+    partial class UpdateInvoiceItem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1641,7 +1641,7 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Orders.InvoiceItem", b =>
                 {
-                    b.HasOne("api.Models.Orders.Invoice", null)
+                    b.HasOne("api.Models.Orders.Invoice", "Invoice")
                         .WithMany("Items")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1652,6 +1652,8 @@ namespace api.Migrations
                         .HasForeignKey("VariantId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Invoice");
 
                     b.Navigation("Variant");
                 });

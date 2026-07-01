@@ -13,6 +13,8 @@ namespace api.Models.Orders
         public int Quantity { get; private set; }
         public decimal PriceAtPurchase { get; private set; }
 
+        public Invoice Invoice { get; private set; }
+
         // EF Core Constructor
         private InvoiceItem() { }
 

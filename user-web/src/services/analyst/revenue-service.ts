@@ -60,19 +60,27 @@ export class AnalystService {
 				...request,
 			};
 
+			console.log('daily revenue flatParams', flatParams);
+
 			const response = await this.api.get(`/admin/analyst/revenue-by-time`, {
 				params: flatParams,
 			});
 
-			console.log('receipt data', response.data.data);
+			console.log('daily revenue data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
-				return await getDailyRevenueDataMocking(request.startDate, request.endDate);
+				return await getDailyRevenueDataMocking(request.StartDate, request.EndDate);
 			}
 
-			return response.data.data;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const mappedData: RevenueChartItem[] = response.data.data.map((item: any) => ({
+				label: item.label || item.Label || '', // Sẽ tự động bắt được item.label
+				revenue: Number(item.revenue || item.Revenue || 0), // Sẽ tự động bắt được item.revenue
+			}));
+
+			return mappedData;
 		} catch (error) {
 			console.error(error);
-			return await getDailyRevenueDataMocking(request.startDate, request.endDate);
+			return await getDailyRevenueDataMocking(request.StartDate, request.EndDate);
 		}
 	}
 
@@ -82,11 +90,13 @@ export class AnalystService {
 				month,
 			};
 
+			console.log('flatParams', flatParams);
+
 			const response = await this.api.get(`/admin/analyst/category-revenue`, {
 				params: flatParams,
 			});
 
-			console.log('receipt data', response.data.data);
+			console.log('category month revenue data', response.data.data);
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
 				return await getCategoryRevenueDataMocking(month);
 			}

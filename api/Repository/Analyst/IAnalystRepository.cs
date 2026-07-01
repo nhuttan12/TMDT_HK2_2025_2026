@@ -11,8 +11,8 @@ namespace api.Repository.Analyst
 
         Task<List<RevenueChartByTimeResponse>> GetRevenueChartByTimeAsync(
             Guid shopId,
-            DateTime startDate,
-            DateTime endDate,
+            DateTimeOffset startDate,
+            DateTimeOffset endDate,
             CancellationToken cancellationToken = default);
     }
 }
