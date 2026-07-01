@@ -80,7 +80,9 @@ namespace api.Services.Users
 
             // 3. Mapping sang DTOs
             var userDtos = mapper.Map<IEnumerable<UserInfoDTO>>(users);
+
             IReadOnlyList<UserInfoDTO> userDtosList = userDtos.ToList();
+
 
             // 4. Trả về kết quả phân trang
             return Result<PagedResult<UserInfoDTO>>.Success(new PagedResult<UserInfoDTO>(userDtosList, totalCount, query.PageNumber, query.PageSize));

@@ -11,6 +11,7 @@ interface AuthState {
 	login: (user?: UserModel) => void;
 	logout: () => void;
 	setHasHydrated: (state: boolean) => void;
+	syncAuth: (email: string) => void;
 }
 // quản lý đang nhập của người dùng
 export const useAuthStore = create<AuthState>()(
@@ -31,6 +32,9 @@ export const useAuthStore = create<AuthState>()(
 					localStorage.removeItem('auth-storage');
 				},
 				setHasHydrated: (state) => set({ _hasHydrated: state }),
+				syncAuth: (email: string) => {
+					set({ isAuthenticated: true, user: { username: email } });
+				},
 			}),
 			{
 				name: 'auth-storage', // Key duy nhất trong LocalStorage

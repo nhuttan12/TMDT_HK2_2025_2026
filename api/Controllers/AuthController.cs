@@ -2,6 +2,7 @@
 using api.Services.Auths;
 using api.Utilities;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
@@ -81,34 +82,35 @@ namespace api.Controllers
         /// google sẽ redirect về endpoint này sau khi người dùng hoàn tất xác thực trên Google,  
         /// </summary>
         /// <returns></returns>
-        [HttpGet("google-response")]
+        [HttpGet("/api/auth/google-token")]
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             if (!result.Succeeded) return BadRequest("Xác thực thất bại");
 
             var email = result.Principal.FindFirstValue(ClaimTypes.Email);
             var name = result.Principal.FindFirstValue(ClaimTypes.Name);
             var sub = result.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var avatarUrl = result.Principal.FindFirstValue("picture") ?? result.Principal.FindFirstValue("image");
+
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sub) || string.IsNullOrEmpty(avatarUrl))
                 return BadRequest("Thông tin Google không đầy đủ");
 
             var googleInfo = new GoogleInfoResponse(name, email, sub, avatarUrl);
+
+            // BE đã gen token ở đây rồi
             var token = await _authService.HandleGoogleLogin(googleInfo);
-            if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.AccessToken) || string.IsNullOrEmpty(token.Value.RefreshToken))
+            if (token == null || token.Value == null || string.IsNullOrEmpty(token.Value.AccessToken))
                 return BadRequest("Failed to generate tokens from Google info");
-            SetTokenCookie(token.Value);
 
-            // Xóa Cookie ngay lập tức để duy trì tính Stateless cho API
-            await HttpContext.SignOutAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Redirect về Frontend kèm Token
-            // TODO: cần thay đổi cách redirect
             var frontendUrl = _config["AllowedOrigins:0"] ?? "http://localhost:3000";
-            return Redirect($"{frontendUrl}/login_success");
+
+            // Truyền trực tiếp token về Next.js thay vì chỉ truyền email
+            // Thêm email vào chuỗi redirect
+            return Redirect($"{frontendUrl}/api/auth/googleSuccess?accessToken={token.Value.AccessToken}&refreshToken={token.Value.RefreshToken}&email={email}");
         }
 
         [HttpPost("register")]
@@ -117,6 +119,19 @@ namespace api.Controllers
             var res = await _authService.RegisterAsync(req, ct); 
             return HandleResult(res);
         }
+
+        //[HttpPost("google-token")]
+        //public async Task<IActionResult> GoogleToken([FromBody] GoogleTokenRequestDto request, CancellationToken ct = default)
+        //{
+        //    var result = await _authService.LoginWithEmailAsync(request.Email, ct);
+        //    var token = result.Value;
+        //    if (token == null || string.IsNullOrEmpty(token.AccessToken) || string.IsNullOrEmpty(token.RefreshToken))
+        //    {
+        //        return HandleResult(Result<string>.Failure(Error.Create("InvalidCredentials", "Email hoặc mật khẩu không đúng", ErrorType.Unauthorized)));
+        //    }
+        //    SetTokenCookie(token);
+        //    return HandleResult(result);
+        //}
 
         private void SetTokenCookie(TokenResponse token)
         {
@@ -155,4 +170,5 @@ namespace api.Controllers
         string Password
         );
     public record GoogleInfoResponse(string Name, string Email, string Sub, string Avatar_url);
+    public record GoogleTokenRequestDto(string Email);
 }

@@ -1,6 +1,7 @@
 ﻿using api.Database;
 using api.Models.Orders;
 using api.Models.Products;
+using api.Models.Users;
 using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,13 @@ namespace api.Repository.InvoiceRepo
         Task<IReadOnlyCollection<Invoice>> GetListByUserIdAsync(Guid? userId, CancellationToken cancellationToken);
         void Update(Invoice order);
         Task<Dictionary<Guid, decimal>> GetVariantPricesAsync(IEnumerable<Guid> variantIds, CancellationToken cancellationToken);
-        Task<Address> getAddressUsed();
+        Task<Address> GetAddressUsed();
+
+        Task<Dictionary<Guid, Guid>> GetProductIdsMapByVariantIdsAsync(
+            IEnumerable<Guid> variantIds,
+            CancellationToken cancellationToken);
+        Task AddAddressAsync(Address newAddress, CancellationToken cancellationToken);
+        Task<bool> UpdateAddressInUserDetailAsync(Guid userId, Guid addressId, CancellationToken cancellationToken);
     }
     public class InvoiceRepository(MyAppDbContext context) : IInvoiceRepository
     {
@@ -25,7 +32,7 @@ namespace api.Repository.InvoiceRepo
             await context.Invoices.AddAsync(order, cancellationToken);
         }
 
-        public async Task<Address> getAddressUsed()
+        public async Task<Address> GetAddressUsed()
         {
             return await context.Address.AsNoTracking()
                  .FirstOrDefaultAsync(a => a.IsUsed);
@@ -105,6 +112,55 @@ namespace api.Repository.InvoiceRepo
             // Khi dùng AsNoTracking ở tầng Service, hàm này sẽ attach thực thể lại 
             // và đánh dấu trạng thái là Modified để EF Core sinh lệnh UPDATE khi Commit
             context.Invoices.Update(order);
+        }
+
+        public async Task<Dictionary<Guid, Guid>> GetProductIdsMapByVariantIdsAsync(
+        IEnumerable<Guid> variantIds,
+        CancellationToken cancellationToken)
+        {
+            if (variantIds == null || !variantIds.Any())
+            {
+                return new Dictionary<Guid, Guid>();
+            }
+
+            return await context.Variants
+                .AsNoTracking()
+                .Where(pv => variantIds.Contains(pv.Id))
+                .Select(pv => new { pv.Id, pv.ProductId }) // Chỉ lấy 2 trường cần thiết
+                .ToDictionaryAsync(
+                    pv => pv.Id,         // Key là VariantId
+                    pv => pv.ProductId,  // Value là ProductId
+                    cancellationToken
+                );
+        }
+
+        public async Task AddAddressAsync(Address newAddress, CancellationToken cancellationToken)
+        {
+            await context.Address.AddAsync(newAddress, cancellationToken);
+        }
+
+        public async Task<bool> UpdateAddressInUserDetailAsync(Guid userId, Guid addressId, CancellationToken cancellationToken)
+        {
+            // Nạp User kèm theo UserDetail của họ lên RAM
+            var user = await context.Users
+                .Include(u => u.UserDetail)
+                .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+            if (user == null)
+                return false;
+
+            // Nếu User chưa khởi tạo UserDetail thì tạo mới (phòng ngừa dữ liệu cũ bị null)
+            if (user.UserDetail == null)
+            {
+                user.UserDetail = new UserDetail { UserId = userId };
+            }
+
+            // Gán Id của Address vào thuộc tính AddressId của UserDetail
+            // (Vì trường AddressId trong model của bạn đang là kiểu string? nên ta dùng .ToString())
+            user.UserDetail.AddressId = addressId.ToString();
+
+            // Chỉ cập nhật trạng thái thực thể trên RAM, không gọi SaveChanges ở đây để UnitOfWork quản lý
+            return true;
         }
     }
 }

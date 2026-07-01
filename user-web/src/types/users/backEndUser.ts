@@ -10,7 +10,7 @@ export interface BackEndUser {
 	fullName: string;
 	email: string;
 	phone: string;
-	address: string[];
+	addresses: addressesResponse[];
 	dateOfBirth: string | null;
 	createAt: string;
 	updateAt: string;
@@ -22,5 +22,14 @@ export interface UserProfileInfoRequset {
 	fullname: string;
 	phoneNumber: string;
 	avatarUrl: string;
-	addresses: string[];
+	addresses: addressesChangeRequest[];
+}
+export interface addressesResponse {
+	id: string;
+	addressUrl: string;
+	isUsed: boolean;
+}
+export interface addressesChangeRequest {
+	id: string;
+	addressUrl: string;
 }

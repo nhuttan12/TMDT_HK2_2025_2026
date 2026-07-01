@@ -13,7 +13,6 @@ using api.Utilities;
 using Api.Models.Users;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Diagnostics.Contracts;
 
 namespace api.Models
 {

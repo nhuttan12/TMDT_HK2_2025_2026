@@ -12,6 +12,7 @@ using api.Repository.Categories;
 using api.Repository.Coupons;
 using api.Repository.Inventory;
 using api.Repository.InvoiceRepo;
+using api.Repository.PaymentRepo;
 using api.Repository.ProductRepo;
 using api.Repository.Promotions;
 using api.Repository.RoleRepo;
@@ -26,6 +27,7 @@ using api.Services.Coupons;
 using api.Services.Inventory;
 using api.Services.Invoices;
 using api.Services.Mail;
+using api.Services.Payment;
 using api.Services.Products;
 using api.Services.Promotions;
 using api.Services.Shops;
@@ -106,6 +108,7 @@ namespace api.Extensions
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IAnalystRepository, AnalystRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             return services;
         }
@@ -134,6 +137,8 @@ namespace api.Extensions
             services.AddScoped<IGoodsIssueService, GoodsIssueService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IAnalystService, AnalystService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
 
 
             // Đăng ký Data Seeders

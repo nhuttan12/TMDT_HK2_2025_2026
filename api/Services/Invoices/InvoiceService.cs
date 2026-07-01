@@ -26,6 +26,52 @@ namespace api.Services.Invoices
         IDeliveryRepository deliveryRepository,
         IInvoiceRepository repo) : IInvoiceService
     {
+        public async Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto request, CancellationToken cancellationToken)
+        {
+            Guid id = idGenerator.NewId();
+            Invoice order = Invoice.Create(id, userId: userId);
+
+            if (request == null || request.Items == null)
+            {
+                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
+            }
+
+            var variantIds = request.Items.Select(x => x.VariantId).Distinct().ToList();
+            var pricesDict = await repo.GetVariantPricesAsync(variantIds, cancellationToken);
+            var listVaiantId = request.Items.Select(v => v.VariantId).ToList();
+            var listProductId = await repo.GetProductIdsMapByVariantIdsAsync(listVaiantId, cancellationToken);
+
+            foreach (var item in request.Items)
+            {
+                // Bắt lỗi nếu VariantId truyền lên không có thật trong DB
+                if (!pricesDict.TryGetValue(item.VariantId, out var cost))
+                {
+                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "variant not found", ErrorType.BadRequest));
+                }
+
+                order.AddItem(listProductId[item.VariantId], item.VariantId, item.Quantity, cost);
+            }
+
+            // --- GỌI HÀM TÁCH XỬ LÝ DELIVERY TẠI ĐÂY ---
+            var deliveryResult = await ProcessDeliveryAsync(id, userId, request, cancellationToken);
+            if (deliveryResult.IsFailure)
+            {
+                return Result<InvoiceDetailResponseDto>.Failure(deliveryResult.Error);
+            }
+
+            // Gán thông tin Delivery vào Order gộp chung 1 mối quan hệ
+            order.AddDelivery(deliveryResult.Value);
+
+            // Gọi các hàm chuẩn đã có hậu tố Async và nhận CancellationToken bên Repo
+            await repo.AddInvoiceAsync(order, cancellationToken);
+            await unitOfWork.CommitAsync(cancellationToken);
+
+            // Lấy lại order từ DB để map vào DTO (bao gồm Tên và Hình ảnh)
+            var savedOrder = await repo.GetDetailAsync(userId, id, cancellationToken);
+            var res = MapInvoiceToInvoiceDetailDto(savedOrder!);
+            return res;
+        }
+
         public async Task<Result<InvoiceDetailResponseDto>> AddDeliveryToInvoice(
             Guid? userId,
             Guid invoiceId,
@@ -108,61 +154,6 @@ namespace api.Services.Invoices
             await unitOfWork.CommitAsync(cancellationToken);
 
             return MapInvoiceToInvoiceDetailDto(iv);
-        }
-
-        public async Task<Result<InvoiceDetailResponseDto>> CreateInvoice(Guid? userId, InvoiceCreateRequestDto request, CancellationToken cancellationToken)
-        {
-            Guid id = idGenerator.NewId();
-            Invoice order = Invoice.Create(id, userId: userId);
-
-            if (request == null || request.Items == null)
-            {
-                return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "request data is null", ErrorType.BadRequest));
-            }
-
-            var variantIds = request.Items.Select(x => x.VariantId).Distinct().ToList();
-            var pricesDict = await repo.GetVariantPricesAsync(variantIds, cancellationToken);
-
-            foreach (var item in request.Items)
-            {
-                // Bắt lỗi nếu VariantId truyền lên không có thật trong DB
-                if (!pricesDict.TryGetValue(item.VariantId, out var cost))
-                {
-                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("invoice.request", "variant not found", ErrorType.BadRequest));
-                }
-
-                order.AddItem(item.ProductId, item.VariantId, item.Quantity, cost);
-            }
-            if (request.DeliveryRequest != null)
-            {
-                //Delivery delivery = Delivery.Create
-                ////order.AddDelivery(request.newAddress);
-            }
-            else
-            {
-                User u = await userRepository.GetUserByIdAsync(userId.Value);
-                if(u is null)
-                {
-                    return Result<InvoiceDetailResponseDto>.Failure(Error.Unauthorized());
-                }
-                Address address = await repo.getAddressUsed();
-                if(address is null)
-                {
-                    return Result<InvoiceDetailResponseDto>.Failure(Error.Create("Invoice.address", "khong co ia chi", ErrorType.BadRequest));
-                }
-                decimal shippngFee = 50000;
-                Delivery delivery = Delivery.CreateNoId(id, address.Id, u.FullName, u.Phone, shippngFee);
-                order.AddDelivery(delivery);
-            }
-
-            // Gọi các hàm chuẩn đã có hậu tố Async và nhận CancellationToken bên Repo
-            await repo.AddInvoiceAsync(order, cancellationToken);
-            await unitOfWork.CommitAsync(cancellationToken);
-
-            // Lấy lại order từ DB để map vào DTO (bao gồm Tên và Hình ảnh)
-            var savedOrder = await repo.GetDetailAsync(userId, id, cancellationToken);
-            var res = MapInvoiceToInvoiceDetailDto(savedOrder!);
-            return res;
         }
 
         public async Task<Result<InvoiceDetailResponseDto>> GetDetail(Guid? userId, Guid invoiceId, CancellationToken cancellationToken)
@@ -273,6 +264,68 @@ namespace api.Services.Invoices
                 TotalAmount = invoice.TotalAmount,
                 TotalItems = invoice.Items.Count,
             };
+        }
+
+
+        private async Task<Result<Delivery>> ProcessDeliveryAsync(
+            Guid orderId,
+            Guid? userId,
+            InvoiceCreateRequestDto request,
+            CancellationToken cancellationToken)
+        {
+            User u = await userRepository.GetUserByIdAsync(userId.Value);
+            if (u is null)
+            {
+                return Result<Delivery>.Failure(Error.Unauthorized());
+            }
+            // TRƯỜNG HỢP 1: Có thông tin DeliveryRequest từ Client gửi lên
+            if (request.DeliveryRequest != null)
+            {
+                var newAddressId = idGenerator.NewId();
+                // 1. Tạo mới một Address dựa trên thông tin client nhập
+                var newAddress = Address.Create(
+                    userId!.Value,
+                    newAddressId,
+                    request.DeliveryRequest.Address
+                );
+                newAddress.SetAsUsed(true);
+                await repo.AddAddressAsync(newAddress, cancellationToken); // Chỉ Add vào change tracker, chưa commit
+                bool isUpdated = await repo.UpdateAddressInUserDetailAsync(userId.Value, newAddressId, cancellationToken);
+
+                if (!isUpdated)
+                {
+                    return Result<Delivery>.Failure(Error.Create("User.Detail", "Không thể cập nhật thông tin địa chỉ cho người dùng", ErrorType.BadRequest));
+                }
+                // 2. Tạo Delivery liên kết với Address vừa tạo
+                var delivery = Delivery.CreateNoId(
+                    orderId,
+                    newAddress.Id,
+                    request.DeliveryRequest.ReceiverName,
+                    u.Phone,
+                    request.DeliveryRequest.ShippingFee
+                );
+
+                return Result<Delivery>.Success(delivery);
+            }
+
+            // TRƯỜNG HỢP 2: Không truyền (Mặc định lấy thông tin cá nhân của User)
+            if (!userId.HasValue)
+            {
+                return Result<Delivery>.Failure(Error.Unauthorized());
+            }
+
+          
+
+            Address address = await repo.GetAddressUsed(); // Giả sử lấy địa chỉ mặc định
+            if (address is null)
+            {
+                return Result<Delivery>.Failure(Error.Create("Invoice.address", "Không tìm thấy địa chỉ của người dùng", ErrorType.BadRequest));
+            }
+
+            decimal shippingFee = 50000; // Phí ship mặc định cố định 
+            var defaultDelivery = Delivery.CreateNoId(orderId, address.Id, u.FullName, u.Phone, shippingFee);
+
+            return Result<Delivery>.Success(defaultDelivery);
         }
     }
 }

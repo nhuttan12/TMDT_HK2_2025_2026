@@ -9,11 +9,13 @@ import OrderPreviewUI from './order-preview-ui';
 interface OrderPreviewContainerProps {
 	recipientInfo: RecipientInfo;
 	paymentInfo: PaymentInfo;
+	invoiceId: string;
 }
 
 export default function OrderPreviewContainer({
 	recipientInfo,
 	paymentInfo,
+	invoiceId,
 }: OrderPreviewContainerProps): JSX.Element {
 	const logic = useOrderPreviewLogic();
 
@@ -22,6 +24,7 @@ export default function OrderPreviewContainer({
 			{...logic}
 			recipientInfo={recipientInfo}
 			paymentInfo={paymentInfo}
+			invoiceId={invoiceId}
 		/>
 	);
 }

@@ -9,17 +9,21 @@ import OrderPreviewContainer from './_components/order-preview-container';
 export const metadata: Metadata = {
 	title: 'Xác nhận sản phẩm',
 };
-
-export default async function Page(): Promise<JSX.Element> {
+interface OrderPreviewProps {
+	params: Promise<{ invoiceId: string }>;
+}
+export default async function Page({ params }: OrderPreviewProps): Promise<JSX.Element> {
 	const [recipientData, paymentData] = await Promise.all([
 		getRecipientInfoMocking(),
 		getPaymentInfoMocking(),
 	]);
-
+	const resolvedParams = await params;
+	const invoiceId = resolvedParams.invoiceId;
 	return (
 		<OrderPreviewContainer
 			recipientInfo={recipientData}
 			paymentInfo={paymentData}
+			invoiceId={invoiceId}
 		/>
 	);
 }

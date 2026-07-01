@@ -2,23 +2,22 @@
   {
     "Name": "quà tặng sếp, đối tác",
     "Sku": "DM002",
-    "ImageUrl": "https://example.com/image2.jpg"
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo2_90cd97089ecc451ca20779c42bdaa1c3.png"
   },
-
   {
     "Name": "zen terrarium",
     "Sku": "DM004",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://cdn.hstatic.net/products/200000968796/nuoc_thac_2_27bf11e61c5c43959bc37392ad927936.png"
   },
   {
     "Name": "moss terrarium",
     "Sku": "DM005",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://cdn.hstatic.net/products/200000968796/hh_1_37e2ef90ce974747b6e5157dfdbc9621.png"
   },
   {
     "Name": "tropical terrarium",
     "Sku": "DM006",
-    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo2_90cd97089ecc451ca20779c42bdaa1c3.png"
+    "ImageUrl": "https://cdn.hstatic.net/products/200000968796/giua_2_056700b7e81246c299941718b0f1beb7.png"
   },
   {
     "Name": "rain forest terrarium",
@@ -33,17 +32,17 @@
   {
     "Name": "binh-terrarium",
     "Sku": "binh-terrarium",
-    "ImageUrl": "https://file.hstatic.net/200000968796/file/binh-terrarium.jpg"
+    "ImageUrl": "https://cdn.hstatic.net/products/200000968796/3_463f740c86a649df9343c9236a5aa452.png"
   },
   {
     "Name": "Quà tặng sinh nhật",
     "Sku": "qua-tang-sinh-nhat",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://file.hstatic.net/200000968796/file/demo3_6ba90a06a7a6492a9407221c9ade0290.png"
   },
   {
     "Name": "Quà tặng sếp - đối tác",
     "Sku": "qua-tang-sep-doi-tac",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.ofXqrlVK13SJK9OpqOjlIwHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Quà tặng tân gia",
@@ -53,86 +52,86 @@
   {
     "Name": "Tiểu cảnh phật giáo",
     "Sku": "tieu-canh-phat-giao",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://duyhoanggreennatural.com/wp-content/uploads/2025/11/4386e3ff-9f7b-49cb-a82b-a6ee48db2950-1.jpg"
   },
   {
     "Name": "Quà tặng độc đáo",
     "Sku": "qua-tang-doc-dao",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lxkw12s4qy1l61"
   },
   {
     "Name": "Hồ chuyên nuôi bò sát",
     "Sku": "ho-chuyen-nuoi-bo-sat",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.YWjVGORybFpo2BotiPt05gHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Đất nền - giá thể",
     "Sku": "dat-nen-gia-the",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.YXfs6y42pRYgpB2sFh8qrAHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Đá lụa tạo bố cục",
     "Sku": "da-lua-tao-bo-cuc",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://down-vn.img.susercontent.com/file/38bd803044ee78679fec368fe0207d50"
   },
   {
     "Name": "Đèn quang hợp",
     "Sku": "den-quang-hop",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse2.mm.bing.net/th/id/OIP.XCdeU7w8TdPVfXrT3mMADgHaJ4?cb=thfvnextfalcon2&w=1200&h=1600&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Mô hình",
     "Sku": "mo-hinh",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.GWPqSKwuspNLgOCfMR7-agHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Rêu",
     "Sku": "reu",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://down-vn.img.susercontent.com/file/7f55db77f39fc6d4e459503afe6b1446"
   },
   {
     "Name": "Cây không cần đất",
     "Sku": "cay-khong-can-dat",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.-Zr3sYW7RNJKx-rWgncg-gHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Bon sai mini",
     "Sku": "bon-sai-mini",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://wikicaycanh.com/wp-content/uploads/2023/04/cay-loc-vung-bonsai-mini.jpg"
   },
   {
     "Name": "Cây thủy canh thả rễ",
     "Sku": "cay-thuy-canh-tha-re",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://pos.nvncdn.com/524fc3-178700/ps/20240725_RCInk5oEFe.jpeg?v=1721879408"
   },
   {
     "Name": "Cỏ mini",
     "Sku": "co-mini",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://down-vn.img.susercontent.com/file/sg-11134201-23020-ow4d1nkqwsnvbb"
   },
   {
     "Name": "Cây màu sắc",
     "Sku": "cay-mau-sac",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://down-vn.img.susercontent.com/file/41e79e1b0326d45280cfa7cbb62ec06e"
   },
   {
     "Name": "Dương xỉ",
     "Sku": "duong-xi",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.Oh4oX61OQTZe-6hs8yR2MwHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "Name": "Thực vật bắt mồi",
     "Sku": "thuc-vat-bat-moi",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://shopcaytrong.com/wp-content/uploads/2022/09/cay-bat-moi-voi-mau-sac-ruc-ro-640x400.jpg"
   },
   {
     "Name": "Combo tự làm",
     "Sku": "combo-tu-lam",
     "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
   },
-  { 
+  {
     "Name": "Tranh rêu",
     "Sku": "tranh-reu",
-    "ImageUrl": "https://cdn.hstatic.net/200000968796/file/banner_copy_d44c5befb50744ec92b85e23a8c3392a.png"
+    "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.hf9Rrq6t1YTMaRJPxyc4lAHaHa?cb=thfvnextfalcon2&rs=1&pid=ImgDetMain&o=7&rm=3"
   }
 ]

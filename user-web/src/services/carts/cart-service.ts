@@ -3,6 +3,8 @@ import { BackEndCart } from '@/types/carts/BeackEndCart';
 import { mapCartBe2Fe } from '@/utils/cart/cartAdapter';
 import { ResponseApi } from '@/types/common/ResponseApi';
 import {type AxiosInstance } from 'axios';
+import { InvoiceRequestBody } from '@/types/invoices/user/InvoiceCreateDto';
+import { BackEndUserInvoiceDetail } from '@/types/invoices/user/InvoiceDetail';
 
 export async function getUserCartByUserIdCraw(): Promise<CartItem[]> {
 	// Giả lập độ trễ của API
@@ -46,8 +48,7 @@ export class CartService {
 
 	async getMyUserCart(): Promise<CartItem[]> {
 		try {
-			const response =
-				await this.api.get<ResponseApi<BackEndCart>>(`/carts/me`);
+			const response = await this.api.get<ResponseApi<BackEndCart>>(`/carts/me`);
 
 			if (!response.data || !response.data.isSuccess || !response.data.data) {
 				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
@@ -67,7 +68,7 @@ export class CartService {
 		try {
 			const response = await this.api.post<ResponseApi<never>>(
 				`/carts/items/${variantId}`,
-				quantity
+				quantity,
 			);
 
 			// Kiểm tra kết quả trả về từ API của bạn
@@ -82,13 +83,32 @@ export class CartService {
 		try {
 			// Đúng theo Swagger: Dùng phương thức PUT và truyền variantId lên URL công thức xóa
 			const response = await this.api.put<ResponseApi<never>>(
-				`/carts/items/remove/${variantId}`
+				`/carts/items/remove/${variantId}`,
 			);
 
 			// Kiểm tra trạng thái phản hồi thành công từ BackEnd
 			return response.data?.isSuccess ?? false;
 		} catch (error: unknown) {
 			console.error('Lỗi khi gọi API remove cart item:', error);
+			throw error; // Quăng lỗi ra ngoài để Zustand Store hoặc Component UI có thể catch và thông báo lỗi
+		}
+	}
+
+	async CreateInvoice(pram: InvoiceRequestBody): Promise<string> {
+		try {
+			console.log(pram);
+			const response = await this.api.post<ResponseApi<BackEndUserInvoiceDetail>>(
+				`invoices`,
+				pram,
+			);
+			if (!response.data || !response.data.isSuccess || !response.data.data) {
+				// Trả về dữ liệu rỗng an toàn thay vì làm sập trang
+				return "";
+			}
+			// Kiểm tra trạng thái phản hồi thành công từ BackEnd
+			return response.data.data.id;
+		} catch (error: unknown) {
+			console.error('Lỗi khi gọi API tao invoice:', error);
 			throw error; // Quăng lỗi ra ngoài để Zustand Store hoặc Component UI có thể catch và thông báo lỗi
 		}
 	}

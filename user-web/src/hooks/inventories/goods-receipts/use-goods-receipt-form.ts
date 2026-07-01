@@ -100,9 +100,6 @@ export function useGoodsReceiptForm({ formType, goodsReceipt }: UseGoodsReceiptF
 		const latestStore = useBatchReceiptStore.getState();
 		const latestForm = latestStore.receiptForm || formToRender;
 
-        console.log('latestForm', latestForm);
-        console.log('latestStore', latestStore);
-
 		const payload = mapToGoodsReceiptRequest(latestForm, latestStore.batchItemsByBatchId);
 
         console.log('payload', payload);

@@ -1,10 +1,12 @@
+import { addressesResponse } from '@/types/users/backEndUser';
+
 export interface UserProfileInfo {
-	id: number;
+	id: number | string;
 	fullName: string;
 	email: string;
 	phone: string;
-	address1: string;
-	address2: string;
-	address3: string;
+	address1: addressesResponse;
+	address2: addressesResponse;
+	address3: addressesResponse;
 	avatarUrl?: string;
 }

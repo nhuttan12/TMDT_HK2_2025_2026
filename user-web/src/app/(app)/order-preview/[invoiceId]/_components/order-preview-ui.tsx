@@ -10,13 +10,14 @@ import {
 } from '@/components/ui/table';
 import Image from 'next/image';
 import { JSX } from 'react';
-import { OrderLogicReturn } from '@/hooks/carts/use-checkout-preview-logic';
-import { RecipientInfo } from '@/types/invoices/user/RecipientInfo';
 import { PaymentInfo } from '@/types/invoices/user/PaymentInfo';
+import { RecipientInfo } from '@/types/invoices/user/RecipientInfo';
+import { OrderLogicReturn } from '@/hooks/carts/use-checkout-preview-logic';
 
 interface OrderPreviewUIProps extends OrderLogicReturn {
 	recipientInfo: RecipientInfo;
 	paymentInfo: PaymentInfo;
+	invoiceId: string;
 }
 
 export default function OrderPreviewUI({
@@ -26,6 +27,7 @@ export default function OrderPreviewUI({
 	paymentInfo,
 	handleBack: onBack,
 	handleCheckout,
+	invoiceId,
 }: OrderPreviewUIProps): JSX.Element {
 	if (!items.length) {
 		return (
@@ -143,8 +145,7 @@ export default function OrderPreviewUI({
 				>
 					Quay lại giỏ hàng
 				</Button>
-
-				<Button onClick={handleCheckout}>Xác nhận đặt hàng</Button>
+				<button onClick={() => handleCheckout(invoiceId)}>Xác nhận đặt hàng</button>
 			</div>
 		</div>
 	);
