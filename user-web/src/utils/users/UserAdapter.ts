@@ -1,4 +1,9 @@
-import { addressesResponse, BackEndUser, UserProfileInfoRequset } from '@/types/users/backEndUser';
+import {
+	addressesChangeRequest,
+	addressesResponse,
+	BackEndUser,
+	UserProfileInfoRequset,
+} from '@/types/users/backEndUser';
 import { UserProfileInfo } from '@/types/users/user/UserProfileInfo';
 
 // Định nghĩa giá trị mặc định cho ô địa chỉ trống để UI không bị lỗi (Uncontrolled input)
@@ -35,16 +40,21 @@ export const mapUserProfileToRequest = (profile: UserProfileInfo): UserProfileIn
 	// 1. Gom các địa chỉ lại và lọc bỏ các giá trị null/undefined (nếu có)
 	const rawAddresses = [profile.address1, profile.address2, profile.address3].filter(Boolean);
 
-	// 2. Map mảng các object `addressesResponse` sang cấu trúc `addressesChangeRequest`
-	const mappedAddresses = rawAddresses.map((address) => {
-		return {
-			// Lấy trực tiếp id từ object address cũ sang
-			id: address.id ?? '',
+	// 2. Map mảng các object `C` sang cấu trúc `addressesChangeRequest`
+	// const mappedAddresses = rawAddresses.map((address) => {
+	// 	return {
+	// 		// Lấy trực tiếp id từ object address cũ sang
+	// 		id: address.id ?? '',
 
-			// Lấy trực tiếp chuỗi addressUrl từ object address cũ sang
-			addressUrl: address.addressUrl ?? '',
-		};
-	});
+	// 		// Lấy trực tiếp chuỗi addressUrl từ object address cũ sang
+	// 		addressUrl: address.addressUrl ?? '',
+	// 	};
+	// });
+	const mappedAddresses = [
+		{
+			addressUrl: '123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+		},
+	] as addressesChangeRequest[];
 
 	return {
 		fullname: profile.fullName,

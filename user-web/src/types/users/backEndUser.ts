@@ -30,6 +30,6 @@ export interface addressesResponse {
 	isUsed: boolean;
 }
 export interface addressesChangeRequest {
-	id: string;
+	id?: string;
 	addressUrl: string;
 }

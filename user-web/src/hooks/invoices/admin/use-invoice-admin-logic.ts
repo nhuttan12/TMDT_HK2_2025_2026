@@ -37,7 +37,7 @@ export function useInvoiceAdminLogic(): UseInvoiceAdminLogicReturn {
 		'COD',
 		'VNPAY',
 		'MoMo',
-		'credit_card',
+		'CreditCard',
 		'bank_transfer',
 	];
 

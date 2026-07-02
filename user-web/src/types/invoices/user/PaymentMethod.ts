@@ -1,1 +1,1 @@
-export type PaymentMethod = 'COD' | 'VNPAY' | 'MoMo' | 'credit_card' | 'bank_transfer';
+export type PaymentMethod = 'COD' | 'VNPAY' | 'MoMo' | 'CreditCard' | 'bank_transfer';

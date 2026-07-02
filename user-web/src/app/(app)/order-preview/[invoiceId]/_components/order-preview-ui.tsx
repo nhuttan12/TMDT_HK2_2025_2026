@@ -111,7 +111,7 @@ export default function OrderPreviewUI({
 				</div>
 
 				{/* Thông tin tiền của đơn hàng */}
-				<div className='space-y-3'>
+				{/* <div className='space-y-3'>
 					<h3 className='text-lg font-bold text-slate-800 border-b pb-2 md:text-right'>
 						Chi tiết thanh toán
 					</h3>
@@ -135,7 +135,7 @@ export default function OrderPreviewUI({
 							</span>
 						</div>
 					</div>
-				</div>
+				</div> */}
 			</div>
 
 			<div className='mt-6 flex justify-end gap-3'>

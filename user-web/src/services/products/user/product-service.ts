@@ -25,6 +25,7 @@ import { ProductFilterPayload } from '@/types/products/user/ProductFilterPayload
 import { CategoryOption } from '@/types/products/user/CategoryOption';
 import { ShopOption } from '@/types/products/user/ShopOption';
 import { ListShopName } from '@/types/products/user/ListShopName';
+import { ListCategoryName } from '@/types/products/user/ListCategoryName';
 
 // craw data
 
@@ -1006,7 +1007,7 @@ export const getProductFilter = async (
 
 export const getCategoryListNameForSelection = async (): Promise<CategoryOption[]> => {
 	try {
-		const response = await apiClient.get(`/category/list-name`);
+		const response = await apiClient.get<ResponseApi<ListCategoryName>>(`categories/list-name`);
 
 		if (!response.data || !response.data.isSuccess || !response.data.data) {
 			return getCategoryListNameForSelectionMocking();
@@ -1014,7 +1015,7 @@ export const getCategoryListNameForSelection = async (): Promise<CategoryOption[
 
 		console.log(response.data.data);
 
-		return response.data.data;
+		return response.data.data.listNames;
 	} catch {
 		return getCategoryListNameForSelectionMocking();
 	}

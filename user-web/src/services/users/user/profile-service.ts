@@ -54,11 +54,14 @@ export class UserService {
 	async updateProfile(userprofile: UserProfileInfo): Promise<UserProfileInfo> {
 		try {
 			const userProfileRequest : UserProfileInfoRequset = mapUserProfileToRequest(userprofile);
+			console.log("userProfileRequest");
+            
 			console.log(userProfileRequest);
 			const response = await this.api.put<ResponseApi<BackEndUser>>(
 				`/users/me`,
 				userProfileRequest,
 			);
+            
 			if (!response.data) {
 				return getUserProfileCraw(userprofile.id);
 			}

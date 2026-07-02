@@ -21,7 +21,7 @@ namespace api.Repository.Analyst
                 parameters);
         }
 
-        public async Task<List<RevenueChartByTimeResponse>> GetRevenueChartByTimeAsync(Guid shopId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+        public async Task<List<RevenueChartByTimeResponse>> GetRevenueChartByTimeAsync(Guid shopId, DateTimeOffset startDate, DateTimeOffset endDate, CancellationToken cancellationToken = default)
         {
             var parameters = new[]
             {

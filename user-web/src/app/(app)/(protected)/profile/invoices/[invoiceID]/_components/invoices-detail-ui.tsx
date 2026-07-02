@@ -5,6 +5,7 @@ import { getInvoiceStatusLabel } from '@/utils/invoices/invoice-status-label';
 import { getShippingStatusLabel } from '@/utils/invoices/shipping-status-label';
 import { formatMoney } from '@/utils/shared/money';
 import { formatDateTimeWithBrackets } from '@/utils/shared/date';
+import { InvoiceStatus } from '@/types/invoices/user/InvoiceStatus';
 
 interface InvoicesDetailUiProps {
 	invoice?: InvoiceDetail;
@@ -45,7 +46,7 @@ export function InvoicesDetailUi(props: InvoicesDetailUiProps): JSX.Element {
 				</div>
 
 				<span className='px-4 py-2 rounded-lg bg-slate-100 text-slate-700 font-medium'>
-					{getInvoiceStatusLabel(invoice.status) || 'Không xác định'}
+					{getInvoiceStatusLabel(invoice.status.toLowerCase() as InvoiceStatus) || 'Không xác định'}
 				</span>
 			</div>
 

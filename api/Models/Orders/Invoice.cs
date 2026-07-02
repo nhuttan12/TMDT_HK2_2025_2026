@@ -148,6 +148,11 @@ namespace api.Models.Orders
             this.Status = InvoiceStatus.Completed;
             this.UpdatedAt = DateTimeOffset.UtcNow;
         }
+
+        internal void setShopId(Guid shopId)
+        {
+            this.ShopId = shopId;
+        }
     }
 
 }

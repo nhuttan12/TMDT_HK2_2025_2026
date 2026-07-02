@@ -1,4 +1,4 @@
 export interface GetRevenueByDayParams {
-    startDate: string;
-    endDate: string;
+    StartDate: string;
+    EndDate: string;
 }

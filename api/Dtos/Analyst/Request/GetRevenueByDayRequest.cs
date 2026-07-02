@@ -4,10 +4,8 @@ namespace api.Dtos.Analyst.Request
 {
     public class GetRevenueByDayRequest
     {
-        [FromQuery(Name = "startDate")]
-        public DateTime StartDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
 
-        [FromQuery(Name = "endDate")]
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
     }
 }

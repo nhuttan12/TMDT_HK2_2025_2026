@@ -2,13 +2,8 @@
 using api.Dtos.Common;
 using api.Models.Enums;
 using api.Models.Orders;
-using api.Models.Products;
-<<<<<<< HEAD
-using api.Models.Shops;
 using api.Utilities;
-=======
 using api.Models.Users;
->>>>>>> 0d5899cd766372b12ca903da29d1afdd92333f0e
 using Api.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +26,7 @@ namespace api.Repository.InvoiceRepo
             CancellationToken cancellationToken);
         Task AddAddressAsync(Address newAddress, CancellationToken cancellationToken);
         Task<bool> UpdateAddressInUserDetailAsync(Guid userId, Guid addressId, CancellationToken cancellationToken);
+        Task<Guid> GetShopIdByVariantId(Guid guid, CancellationToken cancellationToken);
     }
     public class InvoiceRepository(MyAppDbContext context) : IInvoiceRepository
     {
@@ -211,6 +207,14 @@ namespace api.Repository.InvoiceRepo
 
             // Chỉ cập nhật trạng thái thực thể trên RAM, không gọi SaveChanges ở đây để UnitOfWork quản lý
             return true;
+        }
+
+        public async Task<Guid> GetShopIdByVariantId(Guid guid, CancellationToken cancellationToken)
+        {
+            var p = await context.Products.AsNoTracking()
+                .Include(i => i.Variants)
+                .FirstOrDefaultAsync(i => i.Variants.First().Id == guid);
+            return p.ShopId;
         }
     }
 }

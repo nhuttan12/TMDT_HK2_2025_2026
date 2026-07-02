@@ -109,6 +109,7 @@ namespace api.Extensions
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IAnalystRepository, AnalystRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IVariantRepository, VariantRepository>();
 
             return services;
         }
@@ -138,8 +139,7 @@ namespace api.Extensions
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IAnalystService, AnalystService>();
             services.AddScoped<IPaymentService, PaymentService>();
-
-
+            services.AddScoped<IVariantService, VariantService>();
 
             // Đăng ký Data Seeders
             services.AddScoped<IDataSeeder, CategorySeeder>();

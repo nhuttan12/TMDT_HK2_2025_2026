@@ -44,6 +44,7 @@ namespace api.Services.Invoices
             var pricesDict = await repo.GetVariantPricesAsync(variantIds, cancellationToken);
             var listVaiantId = request.Items.Select(v => v.VariantId).ToList();
             var listProductId = await repo.GetProductIdsMapByVariantIdsAsync(listVaiantId, cancellationToken);
+            var ShopId = await repo.GetShopIdByVariantId(variantIds.First(), cancellationToken);
 
             foreach (var item in request.Items)
             {
@@ -63,6 +64,7 @@ namespace api.Services.Invoices
                 return Result<InvoiceDetailResponseDto>.Failure(deliveryResult.Error);
             }
 
+            order.setShopId(ShopId);
             // Gán thông tin Delivery vào Order gộp chung 1 mối quan hệ
             order.AddDelivery(deliveryResult.Value);
 

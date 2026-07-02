@@ -71,7 +71,7 @@ namespace api.Database.Configurations
 
             // 5. Mối quan hệ (1-N) với InvoiceItem
             builder.HasMany(i => i.Items)
-                .WithOne() // InvoiceItem không cần Navigation Property trỏ ngược về Invoice để tránh lặp vòng (Circular reference)
+                .WithOne(ii => ii.Invoice) // InvoiceItem không cần Navigation Property trỏ ngược về Invoice để tránh lặp vòng (Circular reference)
                 .HasForeignKey(ii => ii.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade); // Nếu xóa Invoice, xóa luôn Items (Thực tế nên dùng Soft Delete cho Invoice)
 
