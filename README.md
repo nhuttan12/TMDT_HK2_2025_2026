@@ -63,3 +63,7 @@ Trong một nền tảng Marketplace, lượng dữ liệu sinh ra từ giao d�
   * *Thu hồi hàng loạt các sản phẩm vi phạm.*
   ...sẽ được viết thành các Stored Procedures trong dự án SSDT.
 * **Tích hợp trơn tru:** .NET Backend gọi trực tiếp các SP này thông qua EF Core (`FromSqlRaw`) để nhận về các DTOs (Data Transfer Objects) một cách nhanh chóng, tận dụng tối đa sức mạnh tối ưu hóa Query Execution Plan của SQL Server.
+
+## Use case
+<img width="3970" height="4337" alt="image" src="https://github.com/user-attachments/assets/69a0c077-add7-4e19-a261-4325ed346c2a" />
+
